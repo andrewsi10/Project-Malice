@@ -7,68 +7,60 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Malice;
 
-public class MainMenu implements Screen {
-
-	// TODO, figure out how to make sure of more of this stuff
+public class MainMenu implements Screen
+{
 
 	private final Malice game;
 
-	private TextureAtlas atlas;
-
 	private Stage stage;
 
-	private Table table;
-
-	private TextButton playButton, exitButton, leaderButton;
-
-	private BitmapFont white, black;
-
-	private Label heading;
+	private TextButton playButton, exitButton;
 
 	private Skin skin;
 
-	public MainMenu(Malice g) {
+	public MainMenu(Malice g)
+	{
 		game = g;
 	}
 
 	// copied from online
-	private void createBasicSkin() {
+	private void createBasicSkin()
+	{
 		// Create a font
 		BitmapFont font = new BitmapFont();
 		skin = new Skin();
-		skin.add("default", font);
+		skin.add( "default", font );
 
 		// Create a texture
-		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4,
-				(int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
-		pixmap.setColor(Color.WHITE);
+		Pixmap pixmap = new Pixmap( (int) Gdx.graphics.getWidth() / 4,
+				(int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888 );
+		pixmap.setColor( Color.WHITE );
 		pixmap.fill();
-		skin.add("background", new Texture(pixmap));
+		skin.add( "background", new Texture( pixmap ) );
 
 		// Create a button style
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
-		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.checked = skin.newDrawable("background",
-				Color.DARK_GRAY);
-		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
-		textButtonStyle.font = skin.getFont("default");
-		skin.add("default", textButtonStyle);
+		textButtonStyle.up = skin.newDrawable( "background", Color.GRAY );
+		textButtonStyle.down = skin.newDrawable( "background", Color.DARK_GRAY );
+		textButtonStyle.checked = skin.newDrawable( "background",
+				Color.DARK_GRAY );
+		textButtonStyle.over = skin
+				.newDrawable( "background", Color.LIGHT_GRAY );
+		textButtonStyle.font = skin.getFont( "default" );
+		skin.add( "default", textButtonStyle );
 
 	}
 
 	@Override
-	public void show() {
+	public void show()
+	{
 		// Stage stage = new Stage();
 		// // atlas = new TextureAtlas( "ui/button.pack" );
 		// skin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
@@ -84,72 +76,83 @@ public class MainMenu implements Screen {
 		// black = new BitmapFont( Gdx.files.internal( "fonts/black.fnt" ),
 		// false );
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);// Make the stage consume events
+		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
 		createBasicSkin();
-		playButton = new TextButton("Play", skin); // Use
-													// the
-													// initialized
-													// skin
+		playButton = new TextButton( "Play", skin ); // Use
+														// the
+														// initialized
+														// skin
 		playButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 2);
-		playButton.addListener(new ClickListener() {
+				Gdx.graphics.getHeight() / 2 );
+		playButton.addListener( new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				super.clicked(event, x, y);
+			public void clicked(InputEvent event, float x, float y)
+			{
+				// create a new screen for playing the actual game
+				super.clicked( event, x, y );
 			}
-		});
+		} );
 
-		exitButton = new TextButton("Exit", skin);
+		exitButton = new TextButton( "Exit", skin );
 		exitButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 4);
-		exitButton.addListener(new ClickListener() {
+				Gdx.graphics.getHeight() / 4 );
+		exitButton.addListener( new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				Gdx.app.exit();
 			}
-		});
+		} );
 
-		stage.addActor(playButton);
-		stage.addActor(exitButton);
+		stage.addActor( playButton );
+		stage.addActor( exitButton );
 	}
 
 	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+	public void render(float delta)
+	{
+		Gdx.gl.glClearColor( 0, 0, 0, 1 );
+		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		stage.act();
 		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(int width, int height)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void pause() {
+	public void pause()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void resume() {
+	public void resume()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void hide() {
+	public void hide()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		// TODO Auto-generated method stub
 
 	}
