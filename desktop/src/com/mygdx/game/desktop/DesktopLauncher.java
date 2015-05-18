@@ -3,6 +3,7 @@ package com.mygdx.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.Malice;
+import com.mygdx.game.player.WarriorWalking;
 
 public class DesktopLauncher
 {
@@ -13,6 +14,6 @@ public class DesktopLauncher
 		config.vSyncEnabled = true;
 		config.width = 1600;
 		config.height = 900;
-		new LwjglApplication( new Malice(), config );
+		new LwjglApplication( new WarriorWalking()/*Malice()*/, config );
 	}
 }
