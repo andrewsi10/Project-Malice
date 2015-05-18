@@ -27,7 +27,7 @@ public class WarriorWalking implements Screen
 		batch = new SpriteBatch();
 		textureAtlas = new TextureAtlas(
 				Gdx.files.internal( "img/WarriorWalking.atlas" ) );
-		animation = new Animation( 1 / 15f, textureAtlas.getRegions() );
+		animation = new Animation( 1 / 5f, textureAtlas.getRegions() );
 	}
 
 	@Override
