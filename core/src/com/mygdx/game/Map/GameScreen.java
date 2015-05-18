@@ -9,7 +9,7 @@ public class GameScreen extends ScreenAdapter
 {
     private Map map = new Map( 25, 25 ); // TODO change to be dynamic
     private OrthographicCamera cam = new OrthographicCamera(320,480);
-    private Sprite player = new Sprite( new Texture( "Mine.png" ) );
+    private Sprite player = new Sprite( new Texture( "map/Mine.png" ) );
     
     
     @Override

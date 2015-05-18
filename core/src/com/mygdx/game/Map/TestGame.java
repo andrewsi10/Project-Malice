@@ -36,8 +36,8 @@ public class TestGame extends ApplicationAdapter {
    @Override
    public void create() {
       // load the images for the droplet and the bucket, 64x64 pixels each
-      dropImage = new Texture("droplet.png");
-      spriteImage = new Texture("Mine.png");
+      dropImage = new Texture("map/droplet.png");
+      spriteImage = new Texture("map/Mine.png");
 
       // load the drop sound effect and the rain background "music"
 //      sound = Gdx.audio.newSound(Gdx.files.internal("*.wav"));

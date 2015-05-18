@@ -21,8 +21,8 @@ public class Map
     
     public Map( int rows, int cols)
     {
-        block = new Texture( "DarkGreen.png" );
-        space = new Texture( "background.png" );
+        block = new Texture( "map/DarkGreen.png" );
+        space = new Texture( "map/background.png" );
         areSpaces = new boolean[25][25];
 //      for ( int r = 0; r < areSpaces.length; r++ )
 //      {

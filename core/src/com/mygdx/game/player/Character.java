@@ -1,12 +1,20 @@
 package com.mygdx.game.player;
 
-public abstract class Character
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+public abstract class Character extends Sprite
 {
+    public static final int NORTH = 0;
+    public static final int EAST = 1;
+    public static final int SOUTH = 2;
+    public static final int WEST = 3;
+    public static final int NUMDIRECTIONS = 4;
+    
 	private int maxHp; // max health
 	private int currentHp; // current health
 	private int baseDmg; // base damage
 	private int randMod; // random damage modifier
-	private char direction;
+	private int direction;
 
 	/**
 	 * TODO: animations, sprites, coordinates
@@ -33,24 +41,12 @@ public abstract class Character
 		baseDmg += i;
 	}
 
-	public void changeDirection(char dir)
+	public void changeDirection(int dir)
 	{
-		if ( dir == 'w' )
-		{
-			direction = 'w';
-		}
-		if ( dir == 'n' )
-		{
-			direction = 'n';
-		}
-		if ( dir == 'e' )
-		{
-			direction = 'e';
-		}
-		if ( dir == 's' )
-		{
-			direction = 's';
-		}
+	    if ( dir >= 0 || dir < NUMDIRECTIONS )
+	    {
+	        direction = dir;
+	    }
 	}
 
 	public void takeDamage(int bdmg, int rdm)
@@ -95,7 +91,7 @@ public abstract class Character
 		return randMod;
 	}
 
-	public char direction()
+	public int direction()
 	{
 		return direction;
 	}
