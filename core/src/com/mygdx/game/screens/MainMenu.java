@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Malice;
+import com.mygdx.game.player.WarriorWalking;
 
 public class MainMenu implements Screen
 {
@@ -91,8 +92,8 @@ public class MainMenu implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				// create a new screen for playing the actual game
-				super.clicked( event, x, y );
+				game.setScreen( new WarriorWalking() );
+				// game.setScreen( new Splash(game) );
 			}
 		} );
 
@@ -153,8 +154,8 @@ public class MainMenu implements Screen
 	@Override
 	public void dispose()
 	{
-		// TODO Auto-generated method stub
-
+		skin.dispose();
+		stage.dispose();
 	}
 
 }
