@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  *  Current Testing Class for functions: change desktopLauncher to create 
@@ -20,9 +20,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  *  @author  Period: 4
  *  @author  Assignment: TestGame-core
  *
- *  @author  Sources: TODO
+ *  @author  Sources: 
  */
-public class TestGame implements ApplicationListener {
+public class TestGame extends ApplicationAdapter {
    private Texture dropImage;
    private Texture spriteImage;
    // private Sound sound;
@@ -31,17 +31,13 @@ public class TestGame implements ApplicationListener {
    private OrthographicCamera camera;
    private Sprite sprite;
    private Map map;
-//   private TextureRegion background;
-//   private Texture[][] tiles = new Texture[25][25];
-//   private Array<Rectangle> raindrops;
 //   private long lastDropTime;
 
    @Override
    public void create() {
       // load the images for the droplet and the bucket, 64x64 pixels each
-       Texture t = new Texture(/*Gdx.files.internal(*/"background.png");
-      dropImage = new Texture(Gdx.files.internal("droplet.png"));
-      spriteImage = new Texture(Gdx.files.internal("Mine.png"));
+      dropImage = new Texture("droplet.png");
+      spriteImage = new Texture("Mine.png");
 
       // load the drop sound effect and the rain background "music"
 //      sound = Gdx.audio.newSound(Gdx.files.internal("*.wav"));
@@ -50,9 +46,6 @@ public class TestGame implements ApplicationListener {
       // start the playback of the background music immediately
 //      music.setLooping(true);
 //      music.play();
-//      background = new TextureRegion(t, 0, 0);
-//      background.setRegionHeight( 64 );
-//      background.setRegionWidth( 64 );
       map = new Map();
       map.generate();
       // create the camera and the SpriteBatch
@@ -62,8 +55,8 @@ public class TestGame implements ApplicationListener {
 
       // Sprite
       sprite = new Sprite( spriteImage );
-      sprite.setCenterX( camera.position.x ); // center the sprite horizontally
-      sprite.setCenterY( camera.position.y );
+      sprite.setCenterX( map.getX( 1 ) );
+      sprite.setCenterY( map.getY( 1 ) );
    }
 
    @Override
@@ -88,14 +81,6 @@ public class TestGame implements ApplicationListener {
       // all drops
       batch.begin();
       map.draw( batch );
-//      batch.draw( background, 0, 0, 1000, 700);
-//      for ( int i = 0; i < tiles.length; i++ )
-//      {
-//          for ( int j = 0; j < tiles[i].length; j++ )
-//          {
-//              batch.draw( background, i*background.getRegionWidth(), j*background.getRegionHeight() );
-//          }
-//      }
       sprite.draw( batch );
 //      batch.draw(spriteImage, sprite.getX(), sprite.getY() );
       batch.end();
@@ -108,9 +93,10 @@ public class TestGame implements ApplicationListener {
 
       // make sure the bucket stays within the screen bounds
       if(sprite.getX() < 0) sprite.setX( 0 );
-      if(sprite.getX() > 800 - sprite.getWidth()) sprite.setX( 800 - sprite.getWidth() );
+//      if(sprite.getX() > 800 - sprite.getWidth()) sprite.setX( 800 - sprite.getWidth() );
       if(sprite.getY() < 0) sprite.setY( 0 );
-      if(sprite.getY() > 800 - sprite.getHeight()) sprite.setY( 800 - sprite.getHeight() );
+//      if(sprite.getY() > 800 - sprite.getHeight()) sprite.setY( 800 - sprite.getHeight() );
+//      if(map.isCollidingWithWall( sprite ))
    }
 
    @Override
@@ -121,17 +107,18 @@ public class TestGame implements ApplicationListener {
 //      sound.dispose();
 //      music.dispose();
       batch.dispose();
+      map.dispose();
    }
 
-   @Override
-   public void resize(int width, int height) {
-   }
-
-   @Override
-   public void pause() {
-   }
-
-   @Override
-   public void resume() {
-   }
+//   @Override
+//   public void resize(int width, int height) {
+//   }
+//
+//   @Override
+//   public void pause() {
+//   }
+//
+//   @Override
+//   public void resume() {
+//   }
 }
