@@ -5,7 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -66,7 +66,7 @@ public class TestGame extends ApplicationAdapter {
       // blue and alpha component in the range [0,1]
       // of the color to be used to clear the screen.
       Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
       // tell the camera to update its matrices.
       camera.position.x = sprite.getX();
