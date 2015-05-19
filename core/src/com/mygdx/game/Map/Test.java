@@ -1,4 +1,4 @@
-package com.mygdx.game.Map;
+package com.mygdx.game.map;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -13,13 +13,15 @@ import com.badlogic.gdx.utils.XmlWriter;
  *  @author  Period: 4
  *  @author  Assignment: TestGame-core
  *
- *  @author  Sources: TODO
+ *  @author  Sources:
  */
 public class Test
 {
     public Test()
     {
         StringWriter writer = new StringWriter();
+        
+        @SuppressWarnings("resource")
         XmlWriter xml = new XmlWriter(writer);
         try
         {
@@ -36,7 +38,6 @@ public class Test
         }
         catch ( IOException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println(writer);

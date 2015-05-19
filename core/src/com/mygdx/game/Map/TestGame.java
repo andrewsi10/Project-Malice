@@ -1,8 +1,7 @@
-package com.mygdx.game.Map;
+package com.mygdx.game.map;
 
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,38 +22,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *  @author  Sources: 
  */
 public class TestGame extends ApplicationAdapter {
-   private Texture dropImage;
-   private Texture spriteImage;
-   // private Sound sound;
-   // private Music music;
    private SpriteBatch batch;
    private OrthographicCamera camera;
    private Sprite sprite;
    private Map map;
-//   private long lastDropTime;
 
    @Override
    public void create() {
-      // load the images for the droplet and the bucket, 64x64 pixels each
-      dropImage = new Texture("map/droplet.png");
-      spriteImage = new Texture("map/Mine.png");
-
-      // load the drop sound effect and the rain background "music"
-//      sound = Gdx.audio.newSound(Gdx.files.internal("*.wav"));
-//      music = Gdx.audio.newMusic(Gdx.files.internal("*.mp3"));
-
-      // start the playback of the background music immediately
-//      music.setLooping(true);
-//      music.play();
       map = new Map( 25, 25 );
       map.generate( Map.ARENA );
       // create the camera and the SpriteBatch
       camera = new OrthographicCamera();
-      camera.setToOrtho(true, 1000, 700);
+      camera.setToOrtho(true, 960, 720);
       batch = new SpriteBatch();
 
       // Sprite
-      sprite = new Sprite( spriteImage );
+      sprite = new Sprite( new Texture("map/Mine.png") );
       sprite.setCenterX( map.getX( 1 ) );
       sprite.setCenterY( map.getY( 1 ) );
    }
@@ -77,12 +60,10 @@ public class TestGame extends ApplicationAdapter {
       // coordinate system specified by the camera.
       batch.setProjectionMatrix(camera.combined);
 
-      // begin a new batch and draw the bucket and
-      // all drops
+      // begin a new batch and draw
       batch.begin();
       map.draw( batch );
       sprite.draw( batch );
-//      batch.draw(spriteImage, sprite.getX(), sprite.getY() );
       batch.end();
 
       // process user input
@@ -102,23 +83,7 @@ public class TestGame extends ApplicationAdapter {
    @Override
    public void dispose() {
       // dispose of all the native resources
-      dropImage.dispose();
-      spriteImage.dispose();
-//      sound.dispose();
-//      music.dispose();
       batch.dispose();
       map.dispose();
    }
-
-//   @Override
-//   public void resize(int width, int height) {
-//   }
-//
-//   @Override
-//   public void pause() {
-//   }
-//
-//   @Override
-//   public void resume() {
-//   }
 }
