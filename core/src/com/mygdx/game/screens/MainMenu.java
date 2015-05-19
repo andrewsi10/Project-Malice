@@ -2,21 +2,28 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 import com.mygdx.game.player.WarriorWalking;
 
 public class MainMenu implements Screen
 {
+
+	Image background;
 
 	private final Malice game;
 
@@ -26,17 +33,24 @@ public class MainMenu implements Screen
 
 	private Skin skin;
 
-	public MainMenu(Malice g)
+	Music music;
+
+	public MainMenu(Malice g, Music m)
 	{
 		game = g;
+		music = m;
 	}
 
 	// copied from online
-	private void createBasicSkin()
+	private void createSkin()
 	{
 		// Create a font
 		BitmapFont font = new BitmapFont();
-		skin = new Skin();
+
+		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
+				new Texture( "img/titlescreen.png" ) ) ) );
+
+		skin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
 		skin.add( "default", font );
 
 		// Create a texture
@@ -79,7 +93,7 @@ public class MainMenu implements Screen
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
-		createBasicSkin();
+		createSkin();
 		playButton = new TextButton( "Play", skin ); // Use
 														// the
 														// initialized
@@ -92,8 +106,8 @@ public class MainMenu implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				music.stop();
 				game.setScreen( new WarriorWalking() );
-				// game.setScreen( new Splash(game) );
 			}
 		} );
 
@@ -110,6 +124,7 @@ public class MainMenu implements Screen
 			}
 		} );
 
+		stage.addActor( background );
 		stage.addActor( playButton );
 		stage.addActor( exitButton );
 	}
