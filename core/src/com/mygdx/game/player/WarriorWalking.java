@@ -9,16 +9,26 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class WarriorWalking implements Screen {
 	private SpriteBatch batch;
-	private Texture texture;
+//	private Texture texture;
+	private TextureAtlas textureAtlas;
 	private Sprite sprite;
+	private int currentFrame = 0;
+	private String currentAtlasKey = new String("0");
+//	TextureRegion[] frames;
+//	float stateTime;
+//	Animation animation;
+	
+	private int col = 4;
+	private int row = 2;
 	
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
+		textureAtlas.dispose();
 	}
 
 	@Override
@@ -26,9 +36,23 @@ public class WarriorWalking implements Screen {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
-		texture = new Texture(Gdx.files.internal("img/sprites/WarriorWalking/WarriorWalking.png"));
-		sprite = new Sprite(texture);
+		textureAtlas = new TextureAtlas(Gdx.files.internal("img/sprites/WhiteMonk/WhiteMonk.atlas"));
+//		TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth() / col,
+//						texture.getHeight() / row);
+//		frames = new TextureRegion[col * row];
+//
+//		int index = 0;
+//		for (int i = 0; i < row; i++) {
+//			for (int j = 0; j < col; j++) {
+//				frames[index++] = tmp[i][j];
+//			}
+//		}
+//		
+//		animation = new Animation(1f, frames);
+//		stateTime = 0f;
+		sprite = new Sprite(textureAtlas.findRegion("6"));
 		sprite.setPosition(w/2 - sprite.getWidth()/2, h/2 - sprite.getHeight()/2);
+		sprite.scale(1.5f);
 	}
 
 	@Override
@@ -36,17 +60,33 @@ public class WarriorWalking implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
         
+        if (currentFrame < 29) {
+        	currentFrame++;
+        }
+        else {
+        	currentFrame = 0;
+        }
+        
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             sprite.translateX(-5f);
+            currentAtlasKey = String.format("%01d", currentFrame/15);
+            sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
         }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             sprite.translateX(5f);
+            currentAtlasKey = String.format("%01d", currentFrame/15 + 4);
+            sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
         	sprite.translateY(-5f);
+        	currentAtlasKey = String.format("%01d", currentFrame/15 + 6);
+        	System.out.println(currentAtlasKey);
+            sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
         	sprite.translateY(5f);
+        	currentAtlasKey = String.format("%01d", currentFrame/15 + 2);
+            sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
         }
         batch.begin();
         sprite.draw(batch);
