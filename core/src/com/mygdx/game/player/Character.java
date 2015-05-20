@@ -85,7 +85,7 @@ public abstract class Character extends Sprite
 
 	abstract void die();
 
-	abstract Projectile shoot(int dir);
+	abstract Projectile shoot();
 
 	/**
 	 * TODO: methods for determining and changing coordinates, sprites, and so

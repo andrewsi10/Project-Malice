@@ -1,5 +1,7 @@
 package com.mygdx.game.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -10,7 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Malice;
+import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
+import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.world.Map;
 
 public class GameScreen implements Screen
@@ -24,6 +28,8 @@ public class GameScreen implements Screen
     private Map map;
     private OrthographicCamera cam;
 	private Player player;
+	private ArrayList<Enemy> enemies;
+	private ArrayList<Projectile> projectiles;
 	
 	Music music;
 
@@ -36,6 +42,7 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
+		projectiles = new ArrayList<Projectile>();
 		player = new Player();
 		batch = new SpriteBatch();
 		
@@ -78,8 +85,20 @@ public class GameScreen implements Screen
 		{
 			player.move();
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+		{
+			projectiles.add(player.shoot());
+			for (Projectile projectile : projectiles)
+			{
+				projectile.move();
+			}
+		}
 		if ( map.isCollidingWithWall( player )) player.setPosition( x, y );
 		player.draw( batch );
+		for (Projectile projectile : projectiles)
+		{
+			projectile.draw(batch);
+		}
 		batch.end();
 	}
 

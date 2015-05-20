@@ -19,6 +19,7 @@ public class Projectile extends Sprite {
 	}
 
 	public void move() {
+		System.out.println("test");
 		// north
 		if (DIRECTION == 0) {
 			translateY(5f);

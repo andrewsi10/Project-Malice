@@ -19,7 +19,7 @@ public class Player extends Character {
 	}
 
 	public void move() {
-		if (currentFrame < animationSpeed*2 - 1) {
+		if (currentFrame < animationSpeed* 2 - 1) {
 			currentFrame++;
 		} else {
 			currentFrame = 0;
@@ -31,7 +31,8 @@ public class Player extends Character {
 			setDirection(1);
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southeast
@@ -40,7 +41,8 @@ public class Player extends Character {
 			setDirection(3);
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southwest
@@ -49,7 +51,8 @@ public class Player extends Character {
 			setDirection(5);
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// northwest
@@ -58,35 +61,40 @@ public class Player extends Character {
 			setDirection(7);
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			setDirection(0);
 			translateY(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 2);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed + 2);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			setDirection(2);
 			translateX(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			setDirection(4);
 			translateY(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 6);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed + 6);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			setDirection(6);
 			translateX(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 	}
@@ -158,19 +166,22 @@ public class Player extends Character {
 	}
 
 	public void strafeRightSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
+				+ 4);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeUpSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 2);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
+				+ 2);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeDownSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 6);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
+				+ 6);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 	}
 
@@ -180,8 +191,8 @@ public class Player extends Character {
 	}
 
 	@Override
-	Projectile shoot(int dir) {
-		return null;
+	public Projectile shoot() {
+		return new Projectile(getDirection(), getBdmg(), getRandDmg());
 	}
 
 }
