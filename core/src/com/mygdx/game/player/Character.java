@@ -87,11 +87,6 @@ public abstract class Character extends Sprite
 
 	abstract Projectile shoot();
 
-	/**
-	 * TODO: methods for determining and changing coordinates, sprites, and so
-	 * on
-	 * **/
-
 	public TextureAtlas getAtlas()
 	{
 		return textureAtlas;
@@ -107,14 +102,9 @@ public abstract class Character extends Sprite
 		return currentHp;
 	}
 
-	public int getBdmg()
+	public int getDamage()
 	{
-		return baseDmg;
-	}
-
-	public int getRandDmg()
-	{
-		return randMod;
+		return baseDmg + (int)(randMod * Math.random());
 	}
 
 	public int getDirection()

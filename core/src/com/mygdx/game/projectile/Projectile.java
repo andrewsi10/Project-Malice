@@ -1,6 +1,7 @@
 package com.mygdx.game.projectile;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -10,8 +11,10 @@ public class Projectile extends Sprite {
 	final private int speed = 10;
 	final private int baseDmg; // base damage
 	final private int randMod; // random damage modifier
+	Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/sound/fireball.wav"));
 
 	public Projectile(int direction, int baseDamage, int randomModifier) {
+		sound.play();
 		this.set(new Sprite(new Texture(Gdx.files
 				.internal("img/sprites/Fireball/0.png"))));
 		DIRECTION = direction;
@@ -57,4 +60,15 @@ public class Projectile extends Sprite {
 			translateY((float) (speed / Math.sqrt(2)));
 		}
 	}
+	
+	public int getBdmg()
+	{
+		return baseDmg;
+	}
+	
+	public int getRandDmg()
+	{
+		return randMod;
+	}
+	
 }

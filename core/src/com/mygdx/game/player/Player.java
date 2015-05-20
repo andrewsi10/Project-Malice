@@ -28,7 +28,7 @@ public class Player extends Character {
 		// northeast
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(1);
+			setDirection(NORTHEAST);
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
@@ -38,7 +38,7 @@ public class Player extends Character {
 		// southeast
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)
 				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-			setDirection(3);
+			setDirection(SOUTHEAST);
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
@@ -48,7 +48,7 @@ public class Player extends Character {
 		// southwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-			setDirection(5);
+			setDirection(SOUTHWEST);
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
@@ -58,7 +58,7 @@ public class Player extends Character {
 		// northwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(7);
+			setDirection(NORTHWEST);
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
@@ -67,7 +67,7 @@ public class Player extends Character {
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(0);
+			setDirection(NORTH);
 			translateY(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
 					/ animationSpeed + 2);
@@ -75,7 +75,7 @@ public class Player extends Character {
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			setDirection(2);
+			setDirection(EAST);
 			translateX(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
 					/ animationSpeed + 4);
@@ -83,7 +83,7 @@ public class Player extends Character {
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			setDirection(4);
+			setDirection(SOUTH);
 			translateY(-moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
 					/ animationSpeed + 6);
@@ -91,7 +91,7 @@ public class Player extends Character {
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			setDirection(6);
+			setDirection(WEST);
 			translateX(-moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
 					/ animationSpeed);
@@ -192,7 +192,7 @@ public class Player extends Character {
 
 	@Override
 	public Projectile shoot() {
-		return new Projectile(getDirection(), getBdmg(), getRandDmg());
+		return new Projectile(getDirection(), getDamage(), getDamage());
 	}
 
 }

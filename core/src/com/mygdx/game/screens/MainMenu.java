@@ -90,6 +90,8 @@ public class MainMenu implements Screen
 		// false );
 		// black = new BitmapFont( Gdx.files.internal( "fonts/black.fnt" ),
 		// false );
+		
+		music.setVolume( 0.7f );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 

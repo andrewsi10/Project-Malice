@@ -28,12 +28,16 @@ public class GameScreen implements Screen {
 	private Player player;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
+	
+	private int shootingSpeed = 20;
+	private int shotCounter = shootingSpeed;
 
 	Music music;
 
 	public GameScreen(Malice g, Music m) {
 		game = g;
 		music = m;
+		music.setVolume( 0.4f );
 	}
 
 	@Override
@@ -77,7 +81,7 @@ public class GameScreen implements Screen {
 		} else {
 			player.move();
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && shotCounter >= shootingSpeed) {
 			Projectile p = player.shoot();
 			projectiles.add(p);
 			p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
@@ -85,6 +89,11 @@ public class GameScreen implements Screen {
 			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 			// TODO fix size of projectiles
 			p.scale(0.5f);
+			shotCounter = 0;
+		}
+		else
+		{
+			shotCounter++;
 		}
 		for (Projectile projectile : projectiles) {
 			projectile.move();
