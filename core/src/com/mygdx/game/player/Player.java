@@ -151,24 +151,24 @@ public class Player extends Character {
 	}
 
 	public void strafeLeftSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame % 2);
+		currentAtlasKey = String.format("%01d", currentFrame / 15);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 	}
 
 	public void strafeRightSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame % 2 + 4);
+		currentAtlasKey = String.format("%01d", currentFrame / 15 + 4);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeUpSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame % 2 + 2);
+		currentAtlasKey = String.format("%01d", currentFrame / 15 + 2);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeDownSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame % 2 + 6);
+		currentAtlasKey = String.format("%01d", currentFrame / 15 + 6);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 	}
 
