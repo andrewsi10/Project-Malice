@@ -106,6 +106,7 @@ public class MainMenu implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				// TODO buttons are still working properly
 				playButton.setDisabled(true);
 				exitButton.setDisabled(true);
 				game.setScreen( new GameScreen( game, music ) );
