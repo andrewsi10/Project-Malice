@@ -1,4 +1,4 @@
-package com.mygdx.game.map;
+package com.mygdx.game.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -41,18 +41,17 @@ public class Map
      */
     public void generate( int type )
     {
-        this.randomGeneration();
-//        switch ( type )
-//        {
-//            case ARENA:
-//                spawnX = 1;
-//                spawnY = 1;
-//                createRoom( 0, 0, areSpaces.length, areSpaces[0].length );
-//                break;
-//            case DUNGEON:
-//                randomGeneration();
-//                break;
-//        }
+//        this.randomGeneration();
+        switch ( type )
+        {
+            case ARENA:
+                setSpawn();
+                createRoom( 0, 0, areSpaces.length, areSpaces[0].length );
+                break;
+            case DUNGEON:
+                randomGeneration();
+                break;
+        }
 //        createRoom( 0, 0, areSpaces.length, areSpaces[0].length );
 //        createRoom( 0, 0, 5, 5 );
 //        createRoom( 5, 4, 5, 5 );
@@ -80,17 +79,6 @@ public class Map
         createRoom( x, y + 1, w, h - 1 );
     }
     
-//    private void createRoom( int x, int y, int w, int h, boolean fillRight )
-//    {
-//        if ( w <= 0 || x >= areSpaces.length - 1
-//          || h <= 0 || y >= areSpaces[0].length - 1 ) return;
-//        if ( x <= 0 ) { createRoom( 1, y, w + x - 1, h, true ); return; }
-//        if ( y <= 0 ) { createRoom( x, 1, w, h + y - 1, true ); return; }
-//        this.areSpaces[x][y] = true;
-//        if ( fillRight ) createRoom( x + 1, y, w - 1, h, true );
-//        createRoom( x, y + 1, w, h - 1, false );
-//    }
-    
     /**
      * Randomly Generates "rooms" in map
      */
@@ -100,8 +88,6 @@ public class Map
         int y = randomCoordinate();
         int w = randomNumber( this.areSpaces.length / 3 ) + 3;
         int h = randomNumber( this.areSpaces.length / 3 ) + 3;
-        spawnX = x;
-        spawnY = y;
         
         int count = 0;
         do {
@@ -113,6 +99,7 @@ public class Map
             count++;
         } while ( x != this.areSpaces.length - 1
                || count < this.areSpaces.length / 3 );
+        this.setSpawn();
         System.out.println( x );
     }
     
@@ -123,7 +110,7 @@ public class Map
      */
     private int randomCoordinate()
     {
-        return randomNumber( this.areSpaces.length );
+        return randomNumber( this.areSpaces.length - 1 ) + 1;
     }
 
     /**
@@ -131,7 +118,7 @@ public class Map
      * @param limit 
      * @return random number
      */
-    private int randomNumber( int limit )
+    private static int randomNumber( int limit )
     {
         return (int)( Math.random() * limit );
     }
@@ -160,10 +147,6 @@ public class Map
         return false;
     }
     
-    public boolean inTileBounds( int x, int y )
-    {
-        return ( x >= 0 && x < areSpaces.length && y >= 0 && y < areSpaces[0].length );
-    }
     
     /**
      * Draws the map
@@ -189,6 +172,8 @@ public class Map
         this.space.dispose();
     }
     
+    
+    // ----------------- x,y -coordinate conversions ---------------------//
     /**
      * Get Real x value based on x Tile location
      * @param x Tile Location
@@ -218,6 +203,24 @@ public class Map
     {
         return (int)( y / PIXELS_TO_METERS );
     }
+    
+    public boolean inTileBounds( int x, int y )
+    {
+        return ( x >= 0 && x < areSpaces.length && y >= 0 && y < areSpaces[0].length );
+    }
+
+    // -------------- Spawn methods -------------------- //
+    /**
+     * Sets the spawnX and spawnY, called with the generate(int) method
+     */
+    public void setSpawn()
+    {
+        do {
+            spawnX = this.randomCoordinate();
+            spawnY = this.randomCoordinate();
+        } while ( !areSpaces[spawnX][spawnY] );
+    }
+    
     /**
      * Returns suggested spawn location for player
      * @return x-coordinate of spawn location
