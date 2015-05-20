@@ -106,6 +106,8 @@ public class MainMenu implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
+				playButton.setDisabled(true);
+				exitButton.setDisabled(true);
 				game.setScreen( new GameScreen( game, music ) );
 			}
 		} );
