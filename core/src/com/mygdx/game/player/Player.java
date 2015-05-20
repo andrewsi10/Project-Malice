@@ -10,6 +10,8 @@ public class Player extends Character {
 	private String currentAtlasKey = new String("0");
 	private TextureAtlas textureAtlas;
 	private int currentFrame;
+	private int animationSpeed = 15;
+	private float moveSpeed = 5;
 
 	public Player() {
 		super("img/sprites/WhiteMonk/WhiteMonk.atlas", "6");
@@ -17,7 +19,7 @@ public class Player extends Character {
 	}
 
 	public void move() {
-		if (currentFrame < 29) {
+		if (currentFrame < animationSpeed*2 - 1) {
 			currentFrame++;
 		} else {
 			currentFrame = 0;
@@ -27,64 +29,64 @@ public class Player extends Character {
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
 			setDirection(1);
-			translateX((float) (5 / Math.sqrt(2)));
-			translateY((float) (5 / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / 15 + 4);
+			translateX((float) (moveSpeed / Math.sqrt(2)));
+			translateY((float) (moveSpeed / Math.sqrt(2)));
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southeast
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)
 				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
 			setDirection(3);
-			translateX((float) (5 / Math.sqrt(2)));
-			translateY((float) (-5 / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / 15 + 4);
+			translateX((float) (moveSpeed / Math.sqrt(2)));
+			translateY((float) (-moveSpeed / Math.sqrt(2)));
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
 			setDirection(5);
-			translateX((float) (-5 / Math.sqrt(2)));
-			translateY((float) (-5 / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / 15);
+			translateX((float) (-moveSpeed / Math.sqrt(2)));
+			translateY((float) (-moveSpeed / Math.sqrt(2)));
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// northwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
 			setDirection(7);
-			translateX((float) (-5 / Math.sqrt(2)));
-			translateY((float) (5 / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame / 15);
+			translateX((float) (-moveSpeed / Math.sqrt(2)));
+			translateY((float) (moveSpeed / Math.sqrt(2)));
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			setDirection(0);
-			translateY(5f);
-			currentAtlasKey = String.format("%01d", currentFrame / 15 + 2);
+			translateY(moveSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 2);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			setDirection(2);
-			translateX(5f);
-			currentAtlasKey = String.format("%01d", currentFrame / 15 + 4);
+			translateX(moveSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			setDirection(4);
-			translateY(-5f);
-			currentAtlasKey = String.format("%01d", currentFrame / 15 + 6);
+			translateY(-moveSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 6);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			setDirection(6);
-			translateX(-5f);
-			currentAtlasKey = String.format("%01d", currentFrame / 15);
+			translateX(-moveSpeed);
+			currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 	}
@@ -99,42 +101,42 @@ public class Player extends Character {
 		// northeast
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateX((float) (5 / Math.sqrt(2)));
-			translateY((float) (5 / Math.sqrt(2)));
+			translateX((float) (moveSpeed / Math.sqrt(2)));
+			translateY((float) (moveSpeed / Math.sqrt(2)));
 		}
 		// southeast
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)
 				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-			translateX((float) (5 / Math.sqrt(2)));
-			translateY((float) (-5 / Math.sqrt(2)));
+			translateX((float) (moveSpeed / Math.sqrt(2)));
+			translateY((float) (-moveSpeed / Math.sqrt(2)));
 		}
 		// southwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-			translateX((float) (-5 / Math.sqrt(2)));
-			translateY((float) (-5 / Math.sqrt(2)));
+			translateX((float) (-moveSpeed / Math.sqrt(2)));
+			translateY((float) (-moveSpeed / Math.sqrt(2)));
 		}
 		// northwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateX((float) (-5 / Math.sqrt(2)));
-			translateY((float) (5 / Math.sqrt(2)));
+			translateX((float) (-moveSpeed / Math.sqrt(2)));
+			translateY((float) (moveSpeed / Math.sqrt(2)));
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateY(5f);
+			translateY(moveSpeed);
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			translateX(5f);
+			translateX(moveSpeed);
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			translateY(-5f);
+			translateY(-moveSpeed);
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			translateX(-5f);
+			translateX(-moveSpeed);
 		}
 
 		if (getDirection() == 0) {
@@ -144,31 +146,31 @@ public class Player extends Character {
 			strafeRightSprite();
 		} else if (getDirection() == 4) {
 			strafeDownSprite();
-		} else if (getDirection() == 5 || getDirection() == 6
+		} else if (getDirection() == moveSpeed || getDirection() == 6
 				|| getDirection() == 7) {
 			strafeLeftSprite();
 		}
 	}
 
 	public void strafeLeftSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / 15);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 	}
 
 	public void strafeRightSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / 15 + 4);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 4);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeUpSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / 15 + 2);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 2);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 
 	}
 
 	public void strafeDownSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / 15 + 6);
+		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 6);
 		setRegion(textureAtlas.findRegion(currentAtlasKey));
 	}
 

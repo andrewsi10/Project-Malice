@@ -27,14 +27,7 @@ public abstract class Character extends Sprite
 	private int randMod; // random damage modifier
 	private int direction = -1;
 
-	private static final int COL = 4;
-	private static final int ROW = 2;
 	private TextureAtlas textureAtlas;
-	Animation animation;
-	Texture playerTexture;
-	TextureRegion[] frames;
-	TextureRegion frame;
-	float stateTime;
 
 	/**
 	 * TODO: animations, sprites, coordinates
