@@ -39,29 +39,12 @@ public abstract class Character extends Sprite
 	/**
 	 * TODO: animations, sprites, coordinates
 	 * */
-	public Character()
+	public Character(String filePath, String frame)
 	{
 		textureAtlas = new TextureAtlas(
-				Gdx.files.internal( "img/sprites/WhiteMonk/WhiteMonk.atlas" ) );
-		set( new Sprite( textureAtlas.findRegion( "6" ) ) );
-		// playerTexture = new Texture(
-		// Gdx.files.internal( "img/sprites/WhiteMonk/WhiteMonk.png" ) );
-		// TextureRegion[][] tmp = TextureRegion
-		// .split( playerTexture, playerTexture.getWidth() / COL,
-		// playerTexture.getHeight() / ROW );
-		// frames = new TextureRegion[COL * ROW];
-		//
-		// int index = 0;
-		// for ( int i = 0; i < ROW; i++ )
-		// {
-		// for ( int j = 0; j < COL; j++ )
-		// {
-		// frames[index++] = tmp[i][j];
-		// }
-		// }
-		//
-		// animation = new Animation( 1f, frames );
-		// stateTime = 0f;
+				Gdx.files.internal( filePath ) );
+		set( new Sprite( textureAtlas.findRegion( frame ) ) );
+
 	}
 
 	abstract void move();

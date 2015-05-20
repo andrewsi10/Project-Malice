@@ -12,7 +12,7 @@ public class Player extends Character {
 	private int currentFrame;
 
 	public Player() {
-		super();
+		super("img/sprites/WhiteMonk/WhiteMonk.atlas", "6");
 		textureAtlas = getAtlas();
 	}
 
