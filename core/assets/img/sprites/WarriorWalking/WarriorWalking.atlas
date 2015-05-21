@@ -4,22 +4,57 @@ filter: Linear,Linear
 repeat: none
 0
   rotate: false
-  xy: 41, 2
-  size: 32, 48
-  orig: 32, 48
+  xy: 1, 1
+  size: 28, 32
+  orig: 28, 32
   offset: 0, 0
   index: -1
 1
   rotate: false
-  xy: 2, 2
-  size: 37, 48
-  orig: 37, 48
+  xy: 31, 1
+  size: 29, 32
+  orig: 29, 32
   offset: 0, 0
   index: -1
 2
   rotate: false
-  xy: 75, 2
-  size: 32, 48
-  orig: 32, 48
+  xy: 62, 1
+  size: 28, 32
+  orig: 28, 32
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 92, 1
+  size: 29, 32
+  orig: 29, 32
+  offset: 0, 0
+  index: -1
+4
+  rotate: false
+  xy: 1, 35
+  size: 29, 32
+  orig: 29, 32
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 32, 35
+  size: 29, 32
+  orig: 29, 32
+  offset: 0, 0
+  index: -1
+6
+  rotate: false
+  xy: 63, 35
+  size: 28, 32
+  orig: 28, 32
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 93, 35
+  size: 29, 32
+  orig: 29, 32
   offset: 0, 0
   index: -1
