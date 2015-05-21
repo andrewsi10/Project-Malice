@@ -17,14 +17,16 @@ public class Enemy extends Character {
 	private int animationSpeed = 15;
 	private float moveSpeed = 3;
 	private int aggroDistance = 50;
+	private int travelTimeScalar = 100;
 
 	public Enemy() {
 		super("img/sprites/WarriorWalking/WarriorWalking.atlas", "1");
 		textureAtlas = getAtlas();
 		direction = (int) (Math.random() * 8);
+		travelTime = (int) (4 + Math.random() * travelTimeScalar);
 	}
 
-	void move(Player player) {
+	public void move(Player player) {
 		if (!inRange(player)) {
 			move();
 		} else {
@@ -33,7 +35,7 @@ public class Enemy extends Character {
 	}
 
 	@Override
-	void move() {
+	public void move() {
 		// if (!inRange(player)) {
 
 		// lengthens the animation cycle
@@ -45,7 +47,7 @@ public class Enemy extends Character {
 
 		if (travelTime < 1) {
 			direction = (int) (Math.random() * 8);
-			travelTime = (int) (4 + Math.random() * 10);
+			travelTime = (int) (4 + Math.random() * travelTimeScalar);
 		}
 		travelTime--;
 
@@ -90,7 +92,7 @@ public class Enemy extends Character {
 			setDirection(0);
 			translateY(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// east
@@ -98,7 +100,7 @@ public class Enemy extends Character {
 			setDirection(2);
 			translateX(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// south
@@ -106,7 +108,7 @@ public class Enemy extends Character {
 			setDirection(4);
 			translateY(-moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// west
@@ -124,19 +126,19 @@ public class Enemy extends Character {
 	}
 
 	@Override
-	void strafe() {
+	public void strafe() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	void die() {
+	public void die() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	Projectile shoot() {
+	public Projectile shoot() {
 		// TODO Auto-generated method stub
 		return null;
 	}

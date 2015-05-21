@@ -29,8 +29,11 @@ public class GameScreen implements Screen {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
 	
+	private int enemyMaxCount = 6;
+	
 	private int shootingSpeed = 20;
 	private int shotCounter = shootingSpeed;
+	
 
 	Music music;
 
@@ -45,6 +48,13 @@ public class GameScreen implements Screen {
 		projectiles = new ArrayList<Projectile>();
 		player = new Player();
 		batch = new SpriteBatch();
+		
+		//initializes enemies and puts in a random amount of enemies
+		enemies = new ArrayList<Enemy>();
+		int enemyCount = 1 + (int)(Math.random()*enemyMaxCount);
+		for (int i = 0; i < enemyCount; i++){
+			enemies.add(new Enemy());
+		}
 
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, 960, 720);
@@ -57,6 +67,17 @@ public class GameScreen implements Screen {
 		// player.setBounds( map.getSpawnX(), map.getSpawnY(), 60, 60 );
 		player.setPosition(map.getSpawnX(), map.getSpawnY());
 		player.scale(0.5f);
+		
+		for (Enemy e : enemies) {
+//			int x;
+//			int y;
+//			do {
+//				x = map.randomCoordinate();
+//				y = map.randomCoordinate();
+//			} while (!map.isSpace(x, y));
+//			e.setPosition(x, y);
+			e.setPosition(map.getSpawnX(), map.getSpawnY());
+		}
 	}
 
 	@Override
@@ -103,6 +124,15 @@ public class GameScreen implements Screen {
 		player.draw(batch);
 		for (Projectile projectile : projectiles) {
 			projectile.draw(batch);
+		}
+		for (Enemy enemy : enemies) {
+			float eX = enemy.getX();
+			float eY = enemy.getY();
+			enemy.move(player);
+			if (map.isCollidingWithWall(enemy)) {
+				enemy.setPosition(eX, eY);
+			}
+			enemy.draw(batch);
 		}
 		batch.end();
 	}
