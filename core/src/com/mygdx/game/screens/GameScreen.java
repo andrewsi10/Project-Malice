@@ -63,7 +63,6 @@ public class GameScreen implements Screen {
 		// float h = Gdx.graphics.getHeight();
 		// player.setBounds( map.getSpawnX(), map.getSpawnY(), 60, 60 );
 		player.setPosition(map.getSpawnX(), map.getSpawnY());
-		player.scale(0.5f);
 		
 		for (Enemy e : enemies) {
 //			int x;
@@ -108,7 +107,6 @@ public class GameScreen implements Screen {
 				p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
 						+ player.getHeight() / 3);
 				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-				p.scale(0.5f);
 			}
 		}
 		for (Projectile projectile : projectiles) {

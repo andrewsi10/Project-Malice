@@ -18,12 +18,14 @@ public class Enemy extends Character {
 	private float moveSpeed = 3;
 	private int aggroDistance = 200;
 	private int travelTimeScalar = 100;
+	private int marginOfDelta = 20;
 
 	public Enemy() {
 		super("img/sprites/WarriorWalking/WarriorWalking.atlas", "4");
 		textureAtlas = getAtlas();
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (4 + Math.random() * travelTimeScalar);
+		setReloadSpeed(getReloadSpeed() * 2);
 	}
 
 	public void move(Player player, ArrayList<Projectile> projectiles) {
@@ -48,7 +50,7 @@ public class Enemy extends Character {
 			travelTime--;
 
 			// northeast
-			if (deltaX < 0 && deltaY < 0) {
+			if (deltaX < -marginOfDelta && deltaY < -marginOfDelta) {
 				setDirection(NORTHEAST);
 				translateX((float) (moveSpeed / Math.sqrt(2)));
 				translateY((float) (moveSpeed / Math.sqrt(2)));
@@ -61,12 +63,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// southeast
-			else if (deltaX < 0 && deltaY > 0) {
+			else if (deltaX < -marginOfDelta && deltaY > marginOfDelta) {
 				setDirection(SOUTHEAST);
 				translateX((float) (moveSpeed / Math.sqrt(2)));
 				translateY((float) (-moveSpeed / Math.sqrt(2)));
@@ -79,12 +81,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// southwest
-			else if (deltaX > 0 && deltaY > 0) {
+			else if (deltaX > marginOfDelta && deltaY > marginOfDelta) {
 				setDirection(SOUTHWEST);
 				translateX((float) (-moveSpeed / Math.sqrt(2)));
 				translateY((float) (-moveSpeed / Math.sqrt(2)));
@@ -97,12 +99,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// northwest
-			else if (deltaX > 0 && deltaY < 0) {
+			else if (deltaX > marginOfDelta && deltaY < -marginOfDelta) {
 				setDirection(NORTHWEST);
 				translateX((float) (-moveSpeed / Math.sqrt(2)));
 				translateY((float) (moveSpeed / Math.sqrt(2)));
@@ -115,12 +117,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// north
-			else if (deltaX == 0 && deltaY < 0) {
+			else if (Math.abs( deltaX ) < marginOfDelta && deltaY < -marginOfDelta) {
 				setDirection(NORTH);
 				translateY(moveSpeed);
 				currentAtlasKey = String.format("%01d", currentFrame
@@ -132,12 +134,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// east
-			else if (deltaX < 0 && deltaY == 0) {
+			else if (deltaX < -marginOfDelta && Math.abs( deltaX ) < marginOfDelta) {
 				setDirection(EAST);
 				translateX(moveSpeed);
 				currentAtlasKey = String.format("%01d", currentFrame
@@ -149,12 +151,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// south
-			else if (deltaX == 0 && deltaY > 0) {
+			else if (Math.abs( deltaX ) < marginOfDelta && deltaY > marginOfDelta) {
 				setDirection(SOUTH);
 				translateY(-moveSpeed);
 				currentAtlasKey = String.format("%01d", currentFrame
@@ -166,12 +168,12 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}
 			// west
-			else if (deltaX > 0 && deltaY == 0) {
+			else if (deltaX > marginOfDelta && Math.abs( deltaY ) < marginOfDelta) {
 				setDirection(WEST);
 				translateX(-moveSpeed);
 				currentAtlasKey = String.format("%01d", currentFrame
@@ -183,7 +185,7 @@ public class Enemy extends Character {
 					p.setPosition(getX() + getWidth() / 2, getY()
 							+ getHeight() / 3);
 					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					p.scale(0.5f);
+					
 					projectiles.add( p );
 				}
 			}

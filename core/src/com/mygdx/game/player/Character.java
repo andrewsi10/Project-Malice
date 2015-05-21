@@ -26,8 +26,8 @@ public abstract class Character extends Sprite
 	private int baseDmg; // base damage
 	private int randMod; // random damage modifier
 	private int direction = -1;
-	private int shootingSpeed = 20;
-	private int shotCounter = shootingSpeed;
+	private int reloadSpeed = 20;
+	private int shotCounter = reloadSpeed;
 
 	private TextureAtlas textureAtlas;
 
@@ -74,9 +74,9 @@ public abstract class Character extends Sprite
 		}
 	}
 	
-	public void increaseShootingSpeed(int increment)
+	public void setReloadSpeed(int newReloadSpeed)
 	{
-		shootingSpeed += increment;
+		reloadSpeed = newReloadSpeed;
 	}
 
 	public void takeDamage(int bdmg, int rdm)
@@ -93,7 +93,7 @@ public abstract class Character extends Sprite
 
 	public Projectile shoot()
 	{
-		if (shotCounter >= shootingSpeed)
+		if (shotCounter >= reloadSpeed)
 		{
 			shotCounter = 0;
 			return new Projectile( getDirection(), getDamage() );
@@ -105,9 +105,9 @@ public abstract class Character extends Sprite
 		}
 	}
 	
-	public int getShootingSpeed()
+	public int getReloadSpeed()
 	{
-		return shootingSpeed;
+		return reloadSpeed;
 	}
 
 	public TextureAtlas getAtlas()
