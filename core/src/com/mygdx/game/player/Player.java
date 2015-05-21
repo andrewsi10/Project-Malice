@@ -190,9 +190,4 @@ public class Player extends Character {
 
 	}
 
-	@Override
-	public Projectile shoot() {
-		return new Projectile(getDirection(), getDamage(), getDamage());
-	}
-
 }

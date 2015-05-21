@@ -31,9 +31,6 @@ public class GameScreen implements Screen {
 	
 	private int enemyMaxCount = 6;
 	
-	private int shootingSpeed = 20;
-	private int shotCounter = shootingSpeed;
-	
 
 	Music music;
 
@@ -76,6 +73,7 @@ public class GameScreen implements Screen {
 //				y = map.randomCoordinate();
 //			} while (!map.isSpace(x, y));
 //			e.setPosition(x, y);
+			map.setSpawn();
 			e.setPosition(map.getSpawnX(), map.getSpawnY());
 		}
 	}
@@ -102,19 +100,16 @@ public class GameScreen implements Screen {
 		} else {
 			player.move();
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && shotCounter >= shootingSpeed) {
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 			Projectile p = player.shoot();
-			projectiles.add(p);
-			p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
-					+ player.getHeight() / 3);
-			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-			// TODO fix size of projectiles
-			p.scale(0.5f);
-			shotCounter = 0;
-		}
-		else
-		{
-			shotCounter++;
+			if (p != null)
+			{
+				projectiles.add(p);
+				p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
+						+ player.getHeight() / 3);
+				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+				p.scale(0.5f);
+			}
 		}
 		for (Projectile projectile : projectiles) {
 			projectile.move();
@@ -128,7 +123,7 @@ public class GameScreen implements Screen {
 		for (Enemy enemy : enemies) {
 			float eX = enemy.getX();
 			float eY = enemy.getY();
-			enemy.move(player);
+			enemy.move(player, projectiles);
 			if (map.isCollidingWithWall(enemy)) {
 				enemy.setPosition(eX, eY);
 			}
