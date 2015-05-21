@@ -11,8 +11,7 @@ public class Projectile extends Sprite {
 
 	final private int DIRECTION;
 	final private int speed = 10;
-	final private int baseDmg; // base damage
-	final private int randMod; // random damage modifier
+	final private int damage;
 	Sound sound = Gdx.audio.newSound(Gdx.files
 			.internal("audio/sound/fireball.wav"));
 
@@ -25,7 +24,7 @@ public class Projectile extends Sprite {
 	TextureRegion[] frames;
 	float stateTime;
 
-	public Projectile(int direction, int baseDamage, int randomModifier) {
+	public Projectile(int direction, int damage) {
 		sound.play();
 
 		projectileTexture = new Texture(
@@ -49,8 +48,7 @@ public class Projectile extends Sprite {
 		currentFrame = animation.getKeyFrame(0);
 
 		DIRECTION = direction;
-		baseDmg = baseDamage;
-		randMod = randomModifier;
+		this.damage = damage;
 	}
 
 	public void move() {
@@ -101,12 +99,8 @@ public class Projectile extends Sprite {
 		}
 	}
 
-	public int getBdmg() {
-		return baseDmg;
-	}
-
-	public int getRandDmg() {
-		return randMod;
+	public int getDamage() {
+		return damage;
 	}
 
 }

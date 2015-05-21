@@ -26,6 +26,8 @@ public abstract class Character extends Sprite
 	private int baseDmg; // base damage
 	private int randMod; // random damage modifier
 	private int direction = -1;
+	private int shootingSpeed = 20;
+	private int shotCounter = shootingSpeed;
 
 	private TextureAtlas textureAtlas;
 
@@ -34,8 +36,7 @@ public abstract class Character extends Sprite
 	 * */
 	public Character(String filePath, String frame)
 	{
-		textureAtlas = new TextureAtlas(
-				Gdx.files.internal( filePath ) );
+		textureAtlas = new TextureAtlas( Gdx.files.internal( filePath ) );
 		set( new Sprite( textureAtlas.findRegion( frame ) ) );
 
 	}
@@ -72,6 +73,11 @@ public abstract class Character extends Sprite
 			direction = dir;
 		}
 	}
+	
+	public void increaseShootingSpeed(int increment)
+	{
+		shootingSpeed += increment;
+	}
 
 	public void takeDamage(int bdmg, int rdm)
 	{
@@ -85,7 +91,24 @@ public abstract class Character extends Sprite
 
 	abstract void die();
 
-	abstract Projectile shoot();
+	public Projectile shoot()
+	{
+		if (shotCounter >= shootingSpeed)
+		{
+			shotCounter = 0;
+			return new Projectile( getDirection(), getDamage() );
+		}
+		else
+		{
+			shotCounter++;
+			return null;
+		}
+	}
+	
+	public int getShootingSpeed()
+	{
+		return shootingSpeed;
+	}
 
 	public TextureAtlas getAtlas()
 	{
@@ -104,7 +127,7 @@ public abstract class Character extends Sprite
 
 	public int getDamage()
 	{
-		return baseDmg + (int)(randMod * Math.random());
+		return baseDmg + (int) ( randMod * Math.random() );
 	}
 
 	public int getDirection()
