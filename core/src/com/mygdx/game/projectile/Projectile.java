@@ -3,7 +3,9 @@ package com.mygdx.game.projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Projectile extends Sprite {
 
@@ -11,18 +13,56 @@ public class Projectile extends Sprite {
 	final private int speed = 10;
 	final private int baseDmg; // base damage
 	final private int randMod; // random damage modifier
-	Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/sound/fireball.wav"));
+	Sound sound = Gdx.audio.newSound(Gdx.files
+			.internal("audio/sound/fireball.wav"));
+
+	private static final int col = 4;
+	private static final int row = 1;
+
+ 	Animation animation;
+	Texture projectileTexture;
+	TextureRegion currentFrame;
+	TextureRegion[] frames;
+	float stateTime;
 
 	public Projectile(int direction, int baseDamage, int randomModifier) {
 		sound.play();
-		this.set(new Sprite(new Texture(Gdx.files
-				.internal("img/sprites/Fireball/0.png"))));
+
+		projectileTexture = new Texture(
+				Gdx.files.internal("img/sprites/Fireball/fireball.png"));
+		TextureRegion[][] temp = TextureRegion.split(projectileTexture,
+				projectileTexture.getWidth() / col,
+				projectileTexture.getHeight() / row);
+		frames = new TextureRegion[col * row];
+		
+		int index = 0;
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				frames[index++] = temp[i][j];
+			}
+		}
+		
+		this.set(new Sprite(frames[0]));
+		
+		animation = new Animation(.2f, frames);
+		stateTime = 0f;
+		currentFrame = animation.getKeyFrame(0);
+
 		DIRECTION = direction;
 		baseDmg = baseDamage;
 		randMod = randomModifier;
 	}
 
 	public void move() {
+		if (!animation.isAnimationFinished(stateTime)) {
+			stateTime += Gdx.graphics.getDeltaTime();
+		}
+		else {
+			stateTime = 0;
+		}
+		
+		this.setRegion(animation.getKeyFrame(stateTime));
+
 		// north
 		if (DIRECTION == 0) {
 			translateY(speed);
@@ -60,15 +100,13 @@ public class Projectile extends Sprite {
 			translateY((float) (speed / Math.sqrt(2)));
 		}
 	}
-	
-	public int getBdmg()
-	{
+
+	public int getBdmg() {
 		return baseDmg;
 	}
-	
-	public int getRandDmg()
-	{
+
+	public int getRandDmg() {
 		return randMod;
 	}
-	
+
 }

@@ -29,15 +29,100 @@ public class Enemy extends Character {
 	public void move(Player player) {
 		if (!inRange(player)) {
 			move();
-		} else {
-			move(); //temporary
+		} 
+		// moves towards the player
+		else {		
+			float deltaX = getX() - player.getX();
+			float deltaY = getY() - player.getY();
+			// lengthens the animation cycle
+			if (currentFrame < animationSpeed * 3 - 1) {
+				currentFrame++;
+			} else {
+				currentFrame = 0;
+			}
+
+			if (travelTime < 1) {
+				direction = (int) (Math.random() * 8);
+				travelTime = (int) (4 + Math.random() * travelTimeScalar);
+			}
+			travelTime--;
+
+			// northeast
+			if (deltaX < 0 && deltaY < 0) {
+				setDirection(1);
+				translateX((float) (moveSpeed / Math.sqrt(2)));
+				translateY((float) (moveSpeed / Math.sqrt(2)));
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// southeast
+			else if (deltaX < 0 && deltaY > 0) {
+				setDirection(3);
+				translateX((float) (moveSpeed / Math.sqrt(2)));
+				translateY((float) (-moveSpeed / Math.sqrt(2)));
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// southwest
+			else if (deltaX > 0 && deltaY > 0) {
+				setDirection(5);
+				translateX((float) (-moveSpeed / Math.sqrt(2)));
+				translateY((float) (-moveSpeed / Math.sqrt(2)));
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// northwest
+			else if (deltaX > 0 && deltaY < 0) {
+				setDirection(7);
+				translateX((float) (-moveSpeed / Math.sqrt(2)));
+				translateY((float) (moveSpeed / Math.sqrt(2)));
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// north
+			else if (deltaX == 0 && deltaY < 0) {
+				setDirection(0);
+				translateY(moveSpeed);
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// east
+			else if (deltaX < 0 && deltaY == 0) {
+				setDirection(2);
+				translateX(moveSpeed);
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// south
+			else if (deltaX == 0 && deltaY > 0) {
+				setDirection(4);
+				translateY(-moveSpeed);
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			// west
+			else if (deltaX > 0 && deltaY == 0) {
+				setDirection(6);
+				translateX(-moveSpeed);
+				currentAtlasKey = String.format("%01d", currentFrame
+						/ animationSpeed);
+				setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+			else {
+				move();
+			}
 		}
 	}
 
 	@Override
 	public void move() {
-		// if (!inRange(player)) {
-
 		// lengthens the animation cycle
 		if (currentFrame < animationSpeed * 3 - 1) {
 			currentFrame++;
@@ -70,7 +155,7 @@ public class Enemy extends Character {
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southwest
-		else if (direction == moveSpeed) {
+		else if (direction == 5) {
 			setDirection(5);
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
@@ -119,10 +204,6 @@ public class Enemy extends Character {
 					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
-		// }
-		// else {
-		//
-		// }
 	}
 
 	@Override
