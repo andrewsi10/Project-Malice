@@ -19,12 +19,13 @@ public class Enemy extends Character {
 	private int aggroDistance = 200;
 	private int travelTimeScalar = 100;
 	private int marginOfDelta = 30;
+	private int minTravelTime = 4;
 
-	public Enemy() {
-		super("img/sprites/WarriorWalking/WarriorWalking.atlas", "4");
+	public Enemy(String file, String startFrame) {
+		super(file, startFrame);
 		textureAtlas = getAtlas();
 		setDirection((int) (Math.random() * 8));
-		travelTime = (int) (4 + Math.random() * travelTimeScalar);
+		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setReloadSpeed(getReloadSpeed() * 2);
 	}
 
@@ -45,7 +46,7 @@ public class Enemy extends Character {
 
 			if (travelTime < 1) {
 				setDirection((int) (Math.random() * 8));
-				travelTime = (int) (4 + Math.random() * travelTimeScalar);
+				travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 			}
 			travelTime--;
 

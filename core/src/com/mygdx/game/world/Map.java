@@ -126,6 +126,8 @@ public class Map
         sizeOfRoom( x, y, areSpaces );
     }
     
+    // -----------------------Collision ------------------ //
+    
     /**
      * Returns true if Sprite is in a wall
      * @param s Sprite to check

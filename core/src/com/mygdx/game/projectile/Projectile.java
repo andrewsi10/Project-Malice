@@ -6,9 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.player.Character;
 
 public class Projectile extends Sprite {
 
+    private Character myCharacter;
+    
 	final private int DIRECTION;
 	final private int speed = 10;
 	final private int damage;
@@ -24,11 +28,12 @@ public class Projectile extends Sprite {
 	TextureRegion[] frames;
 	float stateTime;
 
-	public Projectile(int direction, int damage) {
+	public Projectile(Character c, int direction, int damage) {
+	    this.myCharacter = c;
 		sound.play();
 
 		projectileTexture = new Texture(
-				Gdx.files.internal("img/sprites/Fireball/fireball.png"));
+				Gdx.files.internal("img/sprites/Projectiles/Fireball/fireball.png"));
 		TextureRegion[][] temp = TextureRegion.split(projectileTexture,
 				projectileTexture.getWidth() / col,
 				projectileTexture.getHeight() / row);
@@ -97,6 +102,15 @@ public class Projectile extends Sprite {
 			translateX((float) (-1 * speed / Math.sqrt(2)));
 			translateY((float) (speed / Math.sqrt(2)));
 		}
+	}
+	
+	public boolean hitCharacter( Character c )
+	{
+	    if ( c == this.myCharacter ) return false;
+	    Rectangle projectile = new Rectangle();
+	    Rectangle charBounds = new Rectangle();
+	    c.takeDamage( this.damage );
+	    return true;
 	}
 
 	public int getDamage() {
