@@ -59,19 +59,10 @@ public class GameScreen implements Screen {
 		map = new Map(50, 50);
 		map.generate(Map.DUNGEON);
 
-		// float w = Gdx.graphics.getWidth();
-		// float h = Gdx.graphics.getHeight();
 		// player.setBounds( map.getSpawnX(), map.getSpawnY(), 60, 60 );
 		player.setPosition(map.getSpawnX(), map.getSpawnY());
 		
 		for (Enemy e : enemies) {
-//			int x;
-//			int y;
-//			do {
-//				x = map.randomCoordinate();
-//				y = map.randomCoordinate();
-//			} while (!map.isSpace(x, y));
-//			e.setPosition(x, y);
 			map.setSpawn();
 			e.setPosition(map.getSpawnX(), map.getSpawnY());
 		}
@@ -92,8 +83,6 @@ public class GameScreen implements Screen {
 
 		batch.begin();
 		map.draw(batch);
-		float x = player.getX();
-		float y = player.getY();
 		if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
 			player.strafe();
 		} else {
@@ -109,21 +98,34 @@ public class GameScreen implements Screen {
 				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 			}
 		}
-		for (Projectile projectile : projectiles) {
-			projectile.move();
-		}
+//		for (Projectile projectile : projectiles) {
+//            projectile.move();
+//		}
+        float x = player.getX();
+        float y = player.getY();
 		if (map.isCollidingWithWall(player))
 			player.setPosition(x, y);
 		player.draw(batch);
-		for (Projectile projectile : projectiles) {
-			projectile.draw(batch);
+		
+		for ( int i = 0; i < projectiles.size(); i++ ) {
+		    Projectile projectile = projectiles.get( i );
+            projectile.move();
+            projectile.draw(batch);
+            x = projectile.getX();
+            y = projectile.getY();
+            
+            if ( map.isCollidingWithWall( projectile ) ) {
+                projectiles.remove( i );
+                i--;
+            }
 		}
+		
 		for (Enemy enemy : enemies) {
-			float eX = enemy.getX();
-			float eY = enemy.getY();
+			x = enemy.getX();
+			y = enemy.getY();
 			enemy.move(player, projectiles);
 			if (map.isCollidingWithWall(enemy)) {
-				enemy.setPosition(eX, eY);
+				enemy.setPosition(x, y);
 			}
 			enemy.draw(batch);
 		}
