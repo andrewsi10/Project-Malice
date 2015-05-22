@@ -9,94 +9,72 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Projectile extends Sprite {
 
-	final private int DIRECTION;
+	final private float xDistance;
+	final private float yDistance;
+	final private double angle;
 	final private int speed = 10;
 	final private int damage;
-	Sound sound = Gdx.audio.newSound(Gdx.files
-			.internal("audio/sound/fireball.wav"));
+	private String projectileType;
+	private Sound sound;
 
 	private static final int col = 4;
 	private static final int row = 1;
 
- 	Animation animation;
+	Animation animation;
 	Texture projectileTexture;
 	TextureRegion currentFrame;
 	TextureRegion[] frames;
 	float stateTime;
 
-	public Projectile(int direction, int damage) {
+	public Projectile(int direction, int damage, String type, float distanceX,
+			float distanceY) {
+
+		xDistance = distanceX;
+		yDistance = distanceY;
+		angle = Math.atan(yDistance / xDistance);
+		projectileType = type;
+		sound = Gdx.audio.newSound(Gdx.files.internal("audio/sound/"
+				+ projectileType + ".wav"));
 		sound.play();
 
 		projectileTexture = new Texture(
-				Gdx.files.internal("img/sprites/Fireball/fireball.png"));
+				Gdx.files.internal("img/sprites/Projectiles/"
+						+ projectileType.charAt(0)
+						+ projectileType.substring(1) + "/" + projectileType
+						+ ".png"));
 		TextureRegion[][] temp = TextureRegion.split(projectileTexture,
 				projectileTexture.getWidth() / col,
 				projectileTexture.getHeight() / row);
 		frames = new TextureRegion[col * row];
-		
+
 		int index = 0;
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				frames[index++] = temp[i][j];
 			}
 		}
-		
+
 		this.set(new Sprite(frames[0]));
-		
+
 		animation = new Animation(.2f, frames);
 		stateTime = 0f;
 		currentFrame = animation.getKeyFrame(0);
 
-		DIRECTION = direction;
 		this.damage = damage;
 	}
 
 	public void move() {
 		if (!animation.isAnimationFinished(stateTime)) {
 			stateTime += Gdx.graphics.getDeltaTime();
-		}
-		else {
+		} else {
 			stateTime = 0;
 		}
-		
+
 		this.setRegion(animation.getKeyFrame(stateTime));
 
-		// north
-		if (DIRECTION == 0) {
-			translateY(speed);
-		}
-		// northeast
-		else if (DIRECTION == 1) {
-			translateX((float) (speed / Math.sqrt(2)));
-			translateY((float) (speed / Math.sqrt(2)));
-		}
-		// east
-		else if (DIRECTION == 2) {
-			translateX(speed);
-		}
-		// southeast
-		else if (DIRECTION == 3) {
-			translateX((float) (speed / Math.sqrt(2)));
-			translateY((float) (-1 * speed / Math.sqrt(2)));
-		}
-		// south
-		else if (DIRECTION == 4) {
-			translateY(-1 * speed);
-		}
-		// southwest
-		else if (DIRECTION == 5) {
-			translateX((float) (-1 * speed / Math.sqrt(2)));
-			translateY((float) (-1 * speed / Math.sqrt(2)));
-		}
-		// west
-		else if (DIRECTION == 6) {
-			translateX(-1 * speed);
-		}
-		// northwest
-		else if (DIRECTION == 7) {
-			translateX((float) (-1 * speed / Math.sqrt(2)));
-			translateY((float) (speed / Math.sqrt(2)));
-		}
+		translateY((float) (speed * Math.sin(angle)));
+		translateX((float) (speed * Math.cos(angle)));
+
 	}
 
 	public int getDamage() {

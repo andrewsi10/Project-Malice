@@ -79,10 +79,9 @@ public abstract class Character extends Sprite
 		reloadSpeed = newReloadSpeed;
 	}
 
-	public void takeDamage(int bdmg, int rdm)
+	public void takeDamage(int damage)
 	{
-		currentHp -= bdmg;
-		currentHp -= (int) ( Math.random() * rdm );
+		currentHp -= damage;
 		if ( currentHp <= 0 )
 		{
 			die();
@@ -91,12 +90,12 @@ public abstract class Character extends Sprite
 
 	abstract void die();
 
-	public Projectile shoot()
+	public Projectile shoot(float xDistance, float yDistance)
 	{
 		if (shotCounter >= reloadSpeed)
 		{
 			shotCounter = 0;
-			return new Projectile( getDirection(), getDamage() );
+			return new Projectile( getDirection(), getDamage(), "fireball", xDistance, yDistance );
 		}
 		else
 		{
