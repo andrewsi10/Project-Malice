@@ -1,5 +1,8 @@
 package com.mygdx.game.world;
 
+import java.awt.Point;
+import java.util.LinkedList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,23 +19,29 @@ public class Map
     private Texture space;
     private int spawnX;
     private int spawnY;
-//    public Map()
-//    {
-//        this( 25,25 );
-//    }
     
+    /**
+     * Constructs a map filled with walls
+     * @param rows number of rows in map
+     * @param cols number of columns in map
+     */
     public Map( int rows, int cols)
     {
         block = new Texture( "map/DarkGreen.png" );
         space = new Texture( "map/background.png" );
-        areSpaces = new boolean[25][25];
-//      for ( int r = 0; r < areSpaces.length; r++ )
-//      {
-//          for ( int c = 0; c < areSpaces[r].length; c++ )
-//          {
-//              areSpaces[r][c] = ( r + c ) % 2 == 0 ? true : false;
-//          }
-//      }
+        areSpaces = new boolean[rows][cols];
+    }
+
+    /**
+     * Constructs a map and generates it according to type
+     * @param rows number of rows in map
+     * @param cols number of columns in map
+     * @param generation type of generation
+     */
+    public Map( int rows, int cols, int generation)
+    {
+        this( rows, cols );
+        generate( generation );
     }
     
     /**
@@ -41,7 +50,6 @@ public class Map
      */
     public void generate( int type )
     {
-//        this.randomGeneration();
         switch ( type )
         {
             case ARENA:
@@ -52,11 +60,6 @@ public class Map
                 randomGeneration();
                 break;
         }
-//        createRoom( 0, 0, areSpaces.length, areSpaces[0].length );
-//        createRoom( 0, 0, 5, 5 );
-//        createRoom( 5, 4, 5, 5 );
-//        createRoom( 10, 8, 5, 5 );
-//        createRoom( 15, 12, 5, 5 );
     }
 
     /**
@@ -80,50 +83,54 @@ public class Map
     }
     
     /**
-     * Randomly Generates "rooms" in map
+     * Returns the size of a room
+     * @param x starting x coordinate
+     * @param y starting y coordinate
+     * @return number of spaces in room
      */
-    public void randomGeneration()
+    public int sizeOfRoom( int x, int y )
     {
-        int x = randomCoordinate();
-        int y = randomCoordinate();
-        int w = randomNumber( this.areSpaces.length / 3 ) + 3;
-        int h = randomNumber( this.areSpaces.length / 3 ) + 3;
-        
-        int count = 0;
-        do {
-            createRoom( x, y, w, h );
-            x = randomCoordinate();
-            y = randomCoordinate();
-            w = randomNumber( this.areSpaces.length / 3 ) + 3;
-            h = randomNumber( this.areSpaces.length / 3 ) + 3;
-            count++;
-        } while ( x != this.areSpaces.length - 1
-               || count < this.areSpaces.length / 3 );
-        this.setSpawn();
-        System.out.println( x );
-    }
-    
-    /**
-     * Generates Random number from 0 inclusive to width in meters of map 
-     * exclusive
-     * @return random number
-     */
-    private int randomCoordinate()
-    {
-        return randomNumber( this.areSpaces.length - 1 ) + 1;
+        boolean[][] b = new boolean[areSpaces.length][areSpaces[0].length];
+        for ( int i = 0; i < b.length; i++ )
+            for ( int j = 0; j < b[i].length; j++ )
+                b[i][j] = areSpaces[i][j];
+        return sizeOfRoom( x, y, b );
+        // did not work as above code
+//        return sizeOfRoom( x, y, areSpaces.clone() );
     }
 
     /**
-     * Generates Random number from 0 inclusive to given limit exclusive
-     * @param limit 
-     * @return random number
+     * Returns the size of a room recursively
+     * @param x starting x coordinate
+     * @param y starting y coordinate
+     * @param map Map to flood fill
+     * @return number of spaces in room
      */
-    private static int randomNumber( int limit )
+    private static int sizeOfRoom( int x, int y, boolean[][] map )
     {
-        return (int)( Math.random() * limit );
+        if ( !map[x][y] ) return 0;
+        map[x][y] = false;
+        return sizeOfRoom( x - 1, y, map ) 
+             + sizeOfRoom( x + 1, y, map )
+             + sizeOfRoom( x, y - 1, map )
+             + sizeOfRoom( x, y + 1, map ) + 1;
     }
     
+    /**
+     * Fills up all the spaces in a room (uses sizeOfRoom() method)
+     * @param x starting x coordinate
+     * @param y starting y coordinate
+     */
+    public void fillRoom( int x, int y )
+    {
+        sizeOfRoom( x, y, areSpaces );
+    }
     
+    /**
+     * Returns true if Sprite is in a wall
+     * @param s Sprite to check
+     * @return true if Sprite is in a wall
+     */
     public boolean isCollidingWithWall( Sprite s )
     {
         Rectangle sprite = new Rectangle( s.getX(), s.getY(), s.getWidth(), s.getHeight() );
@@ -142,12 +149,11 @@ public class Map
                 }
             }
         }
-        
-        
         return false;
     }
     
-    
+
+    // ---------------------Libgdx management--------------------//
     /**
      * Draws the map
      * @param batch SpriteBatch used to draw the map
@@ -209,6 +215,73 @@ public class Map
         return ( x >= 0 && x < areSpaces.length && y >= 0 && y < areSpaces[0].length );
     }
 
+    // --------------------Random Generators----------------//
+    
+    /**
+     * Generates Random number from 0 inclusive to width in meters of map 
+     * exclusive
+     * @return random number
+     */
+    private int randomTileCoordinate()
+    {
+        return randomNumber( this.areSpaces.length - 1 ) + 1;
+    }
+
+    /**
+     * Generates Random number from 0 inclusive to given limit exclusive
+     * @param limit 
+     * @return random number
+     */
+    public static int randomNumber( int limit )
+    {
+        return (int)( Math.random() * limit );
+    }
+    
+    /**
+     * Randomly Generates "rooms" in map where all the edges of areSpaces[][] 
+     * remain "false" or walls
+     */
+    public void randomGeneration()
+    {
+        int x = randomTileCoordinate();
+        int y = randomTileCoordinate();
+        int w = randomNumber( this.areSpaces.length / 3 ) + 3;
+        int h = randomNumber( this.areSpaces.length / 3 ) + 3;
+        
+        LinkedList<Point> list = new LinkedList<Point>();
+        int count = 0;
+        do {
+            createRoom( x, y, w, h );
+            x = randomTileCoordinate();
+            y = randomTileCoordinate();
+            w = randomNumber( this.areSpaces.length / 3 ) + 3;
+            h = randomNumber( this.areSpaces.length / 3 ) + 3;
+            list.add( new Point( x, y ) );
+            count++;
+        } while ( x != this.areSpaces.length - 1
+               || count < this.areSpaces.length / 5 );
+        System.out.println( x ); // TODO remove
+        // TODO options: connect rooms not part of the big room or remove them.
+        int largest = 0;
+        Point point = new Point();
+        for ( Point p : list )
+        {
+            int size = sizeOfRoom( p.x, p.y );
+            if ( size > largest )
+            {
+                largest = size;
+                fillRoom( point.x, point.y );
+                point = p;
+                
+            }
+            else if ( size < largest ) {
+                fillRoom( p.x, p.y );
+            }
+        }
+        this.setSpawn();
+        System.out.println( this ); // TODO remove
+    }
+
     // -------------- Spawn methods -------------------- //
     /**
      * Sets the spawnX and spawnY, called with the generate(int) method
@@ -216,8 +289,8 @@ public class Map
     public void setSpawn()
     {
         do {
-            spawnX = this.randomCoordinate();
-            spawnY = this.randomCoordinate();
+            spawnX = this.randomTileCoordinate();
+            spawnY = this.randomTileCoordinate();
         } while ( !areSpaces[spawnX][spawnY] );
     }
     
@@ -238,4 +311,54 @@ public class Map
     {
         return getY( spawnY );
     }
+    
+    // --------------------For Testing ------------------ //
+    @Override
+    public String toString()
+    {
+        String s = "";
+        char[][] map = this.showMap();
+        for ( char[] array : map ) {
+            for ( char c : array )
+                s += c + " ";
+            s += "\n";
+        }
+        return s;
+    }
+    
+    public char[][] showMap() // TODO remove getter method
+    {
+        char[][] map = new char[areSpaces.length][areSpaces[0].length];
+        for ( int i = 0; i < areSpaces.length; i++ )
+            for ( int j = 0; j < areSpaces[0].length; j++ )
+                map[i][j] = areSpaces[i][j] ? ' ' : 'X';
+        return map;
+    }
+    
+    // -----------------Deprecating methods ------------------//
+
+    
+//  public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
+//  {
+//      boolean[][] b = new boolean[areSpaces.length][areSpaces[0].length];
+//      for ( int i = 0; i < b.length; i++ )
+//          for ( int j = 0; j < b[i].length; j++ )
+//              b[i][j] = areSpaces[i][j];
+//      return hasPath( x1, y1, x2, y2, asSpace, b );
+//      // does not work as above code
+////      return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
+//  }
+//  
+//  private static boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
+//  {
+//      if ( map[x1][y1] != asSpace
+//        || x1 < 1 || x1 >= map.length - 1
+//        || y1 < 1 || y1 >= map[0].length - 1 ) return false;
+//      if ( x1 == x2 && y1 == y2 ) return true;
+//      map[x1][y1] = !asSpace;
+//      return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
+//          || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
+//          || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
+//          || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
+//  }
 }
