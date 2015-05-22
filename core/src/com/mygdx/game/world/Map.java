@@ -260,7 +260,7 @@ public class Map
             count++;
         } while ( x != this.areSpaces.length - 1
                || count < this.areSpaces.length / 5 );
-        System.out.println( x ); // TODO remove
+        // System.out.println( x ); // TODO remove
         // TODO options: connect rooms not part of the big room or remove them.
         int largest = 0;
         Point point = new Point();
@@ -279,7 +279,7 @@ public class Map
             }
         }
         this.setSpawn();
-        System.out.println( this ); // TODO remove
+        // System.out.println( this ); // TODO remove
     }
 
     // -------------- Spawn methods -------------------- //

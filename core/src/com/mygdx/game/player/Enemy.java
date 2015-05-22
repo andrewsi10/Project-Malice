@@ -18,7 +18,7 @@ public class Enemy extends Character {
 	private float moveSpeed = 3;
 	private int aggroDistance = 200;
 	private int travelTimeScalar = 100;
-	private int marginOfDelta = 20;
+	private int marginOfDelta = 30;
 
 	public Enemy() {
 		super("img/sprites/WarriorWalking/WarriorWalking.atlas", "4");
