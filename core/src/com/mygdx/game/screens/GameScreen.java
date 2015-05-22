@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
 	
-	private int enemyMaxCount = 6;
+	private int enemyMaxCount = 20;
 	
 
 	Music music;
@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
 		enemies = new ArrayList<Enemy>();
 		int enemyCount = 1 + (int)(Math.random()*enemyMaxCount);
 		for (int i = 0; i < enemyCount; i++){
-			enemies.add(new Enemy());
+			enemies.add(new Enemy("img/sprites/WarriorWalking/WarriorWalking.atlas", "4"));
 		}
 
 		cam = new OrthographicCamera();

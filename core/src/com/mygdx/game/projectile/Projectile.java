@@ -28,7 +28,7 @@ public class Projectile extends Sprite {
 		sound.play();
 
 		projectileTexture = new Texture(
-				Gdx.files.internal("img/sprites/Fireball/fireball.png"));
+				Gdx.files.internal("img/sprites/Projectiles/Fireball/fireball.png"));
 		TextureRegion[][] temp = TextureRegion.split(projectileTexture,
 				projectileTexture.getWidth() / col,
 				projectileTexture.getHeight() / row);
