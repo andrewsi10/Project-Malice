@@ -13,8 +13,8 @@ public class Player extends Character {
 	private int animationSpeed = 15;
 	private float moveSpeed = 5;
 
-	public Player() {
-		super("img/sprites/WhiteMonk/WhiteMonk.atlas", "6");
+	public Player(String file, String startFrame) {
+		super(file, startFrame);
 		textureAtlas = getAtlas();
 	}
 
@@ -32,7 +32,7 @@ public class Player extends Character {
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
+					/ animationSpeed + 2);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southeast
@@ -42,7 +42,7 @@ public class Player extends Character {
 			translateX((float) (moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
+					/ animationSpeed + 2);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// southwest
@@ -52,7 +52,7 @@ public class Player extends Character {
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (-moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed);
+					/ animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// northwest
@@ -62,7 +62,7 @@ public class Player extends Character {
 			translateX((float) (-moveSpeed / Math.sqrt(2)));
 			translateY((float) (moveSpeed / Math.sqrt(2)));
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed);
+					/ animationSpeed + 6);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// north
@@ -70,7 +70,7 @@ public class Player extends Character {
 			setDirection(NORTH);
 			translateY(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
+					/ animationSpeed);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// east
@@ -78,7 +78,7 @@ public class Player extends Character {
 			setDirection(EAST);
 			translateX(moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
+					/ animationSpeed + 2);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// south
@@ -86,7 +86,7 @@ public class Player extends Character {
 			setDirection(SOUTH);
 			translateY(-moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
+					/ animationSpeed + 4);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 		// west
@@ -94,7 +94,7 @@ public class Player extends Character {
 			setDirection(WEST);
 			translateX(-moveSpeed);
 			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed);
+					/ animationSpeed + 6);
 			setRegion(textureAtlas.findRegion(currentAtlasKey));
 		}
 	}

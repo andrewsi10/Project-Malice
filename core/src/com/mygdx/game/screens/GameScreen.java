@@ -28,29 +28,32 @@ public class GameScreen implements Screen {
 	private Player player;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
-	
-	private int enemyMaxCount = 20;
-	
+
+	private int enemyMaxCount = 50;
+	private int enemyMinCount = 10;
+	private int numEnemies = 1;
 
 	Music music;
 
 	public GameScreen(Malice g, Music m) {
 		game = g;
 		music = m;
-		music.setVolume( 0.4f );
+		music.setVolume(0.4f);
 	}
 
 	@Override
 	public void show() {
 		projectiles = new ArrayList<Projectile>();
-		player = new Player();
+		player = new Player("img/sprites/RedMage/RedMage.atlas", "6");
 		batch = new SpriteBatch();
-		
-		//initializes enemies and puts in a random amount of enemies
+
+		// initializes enemies and puts in a random amount of enemies
 		enemies = new ArrayList<Enemy>();
-		int enemyCount = 1 + (int)(Math.random()*enemyMaxCount);
-		for (int i = 0; i < enemyCount; i++){
-			enemies.add(new Enemy("img/sprites/WarriorWalking/WarriorWalking.atlas", "4"));
+		int enemyCount = enemyMinCount + (int) (Math.random() * enemyMaxCount);
+		for (int i = 0; i < enemyCount; i++) {
+			int index = 1 + (int) Math.random() * numEnemies;
+			enemies.add(new Enemy("img/sprites/Enemies/Enemy" + index
+					+ "/Enemy" + index + ".atlas", "0"));
 		}
 
 		cam = new OrthographicCamera();
@@ -63,15 +66,15 @@ public class GameScreen implements Screen {
 		// float h = Gdx.graphics.getHeight();
 		// player.setBounds( map.getSpawnX(), map.getSpawnY(), 60, 60 );
 		player.setPosition(map.getSpawnX(), map.getSpawnY());
-		
+
 		for (Enemy e : enemies) {
-//			int x;
-//			int y;
-//			do {
-//				x = map.randomCoordinate();
-//				y = map.randomCoordinate();
-//			} while (!map.isSpace(x, y));
-//			e.setPosition(x, y);
+			// int x;
+			// int y;
+			// do {
+			// x = map.randomCoordinate();
+			// y = map.randomCoordinate();
+			// } while (!map.isSpace(x, y));
+			// e.setPosition(x, y);
 			map.setSpawn();
 			e.setPosition(map.getSpawnX(), map.getSpawnY());
 		}
@@ -101,11 +104,10 @@ public class GameScreen implements Screen {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 			Projectile p = player.shoot();
-			if (p != null)
-			{
+			if (p != null) {
 				projectiles.add(p);
-				p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
-						+ player.getHeight() / 3);
+				p.setPosition(player.getX() + player.getWidth() / 2,
+						player.getY() + player.getHeight() / 3);
 				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 			}
 		}

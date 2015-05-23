@@ -5,28 +5,37 @@ import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
 public class Enemy extends Character {
 
-	private String currentAtlasKey = new String("0");
 	private TextureAtlas textureAtlas;
-	private int currentFrame;
 	private int travelTime;
-	private int animationSpeed = 15;
 	private float moveSpeed = 3;
 	private int aggroDistance = 200;
 	private int travelTimeScalar = 100;
 	private int marginOfDelta = 30;
 	private int minTravelTime = 4;
+	Animation animation;
+	Array<TextureAtlas.AtlasRegion> frames;
+	float stateTime;
 
 	public Enemy(String file, String startFrame) {
 		super(file, startFrame);
 		textureAtlas = getAtlas();
+		
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
+		
 		setReloadSpeed(getReloadSpeed() * 2);
+		
+		frames = textureAtlas.getRegions();
+		animation = new Animation(.2f, frames);
+		stateTime = 0f;
 	}
 
 	public void move(Player player, ArrayList<Projectile> projectiles) {
@@ -37,12 +46,15 @@ public class Enemy extends Character {
 		else {		
 			float deltaX = getX() - player.getX();
 			float deltaY = getY() - player.getY();
-			// lengthens the animation cycle
-			if (currentFrame < animationSpeed * 2 - 1) {
-				currentFrame++;
-			} else {
-				currentFrame = 0;
+			
+			if (!animation.isAnimationFinished(stateTime)) {
+				stateTime += Gdx.graphics.getDeltaTime();
 			}
+			else {
+				stateTime = 0;
+			}
+			
+			this.setRegion(animation.getKeyFrame(stateTime));
 
 			if (travelTime < 1) {
 				setDirection((int) (Math.random() * 8));
@@ -52,142 +64,74 @@ public class Enemy extends Character {
 
 			// northeast
 			if (deltaX < -marginOfDelta && deltaY < -marginOfDelta) {
-				setDirection(NORTHEAST);
-				translateX((float) (moveSpeed / Math.sqrt(2)));
-				translateY((float) (moveSpeed / Math.sqrt(2)));
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 6);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				strafeEast();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// southeast
 			else if (deltaX < -marginOfDelta && deltaY > marginOfDelta) {
-				setDirection(SOUTHEAST);
-				translateX((float) (moveSpeed / Math.sqrt(2)));
-				translateY((float) (-moveSpeed / Math.sqrt(2)));
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 6);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				strafeEast();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// southwest
 			else if (deltaX > marginOfDelta && deltaY > marginOfDelta) {
-				setDirection(SOUTHWEST);
-				translateX((float) (-moveSpeed / Math.sqrt(2)));
-				translateY((float) (-moveSpeed / Math.sqrt(2)));
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 2);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				strafeWest();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// northwest
 			else if (deltaX > marginOfDelta && deltaY < -marginOfDelta) {
-				setDirection(NORTHWEST);
-				translateX((float) (-moveSpeed / Math.sqrt(2)));
-				translateY((float) (moveSpeed / Math.sqrt(2)));
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 2);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				strafeWest();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// north
 			else if (Math.abs( deltaX ) < marginOfDelta && deltaY < -marginOfDelta) {
-				setDirection(NORTH);
-				translateY(moveSpeed);
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				moveNorth();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// east
 			else if (deltaX < -marginOfDelta && Math.abs( deltaX ) < marginOfDelta) {
-				setDirection(EAST);
-				translateX(moveSpeed);
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 6);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				moveEast();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// south
 			else if (Math.abs( deltaX ) < marginOfDelta && deltaY > marginOfDelta) {
-				setDirection(SOUTH);
-				translateY(-moveSpeed);
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 4);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				moveSouth();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			// west
 			else if (deltaX > marginOfDelta && Math.abs( deltaY ) < marginOfDelta) {
-				setDirection(WEST);
-				translateX(-moveSpeed);
-				currentAtlasKey = String.format("%01d", currentFrame
-						/ animationSpeed + 2);
-				setRegion(textureAtlas.findRegion(currentAtlasKey));
+				moveWest();
 				Projectile p = shoot();
 				if (p != null)
 				{
-					p.setPosition(getX() + getWidth() / 2, getY()
-							+ getHeight() / 3);
-					p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-					
-					projectiles.add( p );
+					setProjectile(p, projectiles);
 				}
 			}
 			else {
@@ -198,12 +142,15 @@ public class Enemy extends Character {
 
 	@Override
 	public void move() {
-		// lengthens the animation cycle
-		if (currentFrame < animationSpeed * 2 - 1) {
-			currentFrame++;
-		} else {
-			currentFrame = 0;
+		
+		if (!animation.isAnimationFinished(stateTime)) {
+			stateTime += Gdx.graphics.getDeltaTime();
 		}
+		else {
+			stateTime = 0;
+		}
+		
+		this.setRegion(animation.getKeyFrame(stateTime));
 
 		if (travelTime < 1) {
 			setDirection((int) (Math.random() * 8));
@@ -213,67 +160,73 @@ public class Enemy extends Character {
 
 		// northeast
 		if (getDirection() == NORTHEAST) {
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			strafeEast();
 		}
 		// southeast
 		else if (getDirection() == SOUTHEAST) {
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			strafeEast();
 		}
 		// southwest
 		else if (getDirection() == SOUTHWEST) {
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			strafeWest();
 		}
 		// northwest
 		else if (getDirection() == NORTHWEST) {
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			strafeWest();
 		}
 		// north
 		else if (getDirection() % 8 == NORTH) {
-			setDirection(NORTH);
-			translateY(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			moveNorth();
 		}
 		// east
 		else if (getDirection() == EAST) {
-			translateX(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			moveEast();
 		}
 		// south
 		else if (getDirection() == SOUTH) {
-			translateY(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			moveSouth();
 		}
 		// west
 		else if (getDirection() == WEST) {
-			translateX(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+			moveWest();
 		}
 	}
 
+	public void moveNorth() {
+		setDirection(NORTH);
+		translateY(moveSpeed);
+	}
+	
+	public void moveEast() {
+		translateX(moveSpeed);
+	}
+	
+	public void moveSouth() {
+		translateY(-moveSpeed);
+	}
+	
+	public void moveWest() {
+		translateX(-moveSpeed);;
+	}
+	
+	public void strafeEast() {
+		translateX((float) (moveSpeed / Math.sqrt(2)));
+		translateY((float) (-moveSpeed / Math.sqrt(2)));
+	}
+	
+	public void strafeWest() {
+		translateX((float) (-moveSpeed / Math.sqrt(2)));
+		translateY((float) (moveSpeed / Math.sqrt(2)));
+	}
+	
+	public void setProjectile(Projectile p, ArrayList<Projectile> projectiles) {
+		p.setPosition(getX() + getWidth() / 2, getY()
+				+ getHeight() / 3);
+		p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+		
+		projectiles.add( p );
+	}
+	
 	@Override
 	public void strafe() {
 		// TODO Auto-generated method stub
