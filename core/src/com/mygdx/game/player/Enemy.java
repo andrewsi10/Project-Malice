@@ -39,8 +39,8 @@ public class Enemy extends Character {
 		}
 		// moves towards the player
 		else {
-			float deltaX = getX() - player.getX();
-			float deltaY = getY() - player.getY();
+            float deltaX = player.getX() - getX();
+            float deltaY = player.getY() - getY();
 
 			if (!animation.isAnimationFinished(stateTime)) {
 				stateTime += Gdx.graphics.getDeltaTime();
