@@ -39,8 +39,6 @@ public class Enemy extends Character {
 		}
 		// moves towards the player
 		else {
-            float deltaX = player.getX() - getX();
-            float deltaY = player.getY() - getY();
 
 			if (!animation.isAnimationFinished(stateTime)) {
 				stateTime += Gdx.graphics.getDeltaTime();
@@ -57,46 +55,12 @@ public class Enemy extends Character {
 			}
 			travelTime--;
 
-			// northeast
-			if (deltaX < -marginOfDelta && deltaY < -marginOfDelta) {
-                move( NORTHEAST ); // strafe east
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// southeast
-			else if (deltaX < -marginOfDelta && deltaY > marginOfDelta) {
-                move( SOUTHEAST ); // strafe east
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// southwest
-			else if (deltaX > marginOfDelta && deltaY > marginOfDelta) {
-                move( SOUTHWEST ); // strafe west
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// northwest
-			else if (deltaX > marginOfDelta && deltaY < -marginOfDelta) {
-                move( NORTHWEST ); // strafe west
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// north
-			else if (Math.abs(deltaX) < marginOfDelta
-					&& deltaY < -marginOfDelta) {
-                move( NORTH );
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// east
-			else if (deltaX < -marginOfDelta
-					&& Math.abs(deltaX) < marginOfDelta) {
-                move( EAST );
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// south
-			else if (Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta) {
-                move( SOUTH );
-                shoot( projectiles, deltaX, deltaY, time);
-			}
-			// west
-			else if (deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta) {
-                move( WEST );
+            float deltaX = player.getX() - getX();
+            float deltaY = player.getY() - getY();
+			int newDir = this.getDirection( -deltaX, -deltaY );
+			if ( newDir != -1 )
+			{
+			    move( newDir );
                 shoot( projectiles, deltaX, deltaY, time);
 			} else {
 				move();
@@ -129,6 +93,27 @@ public class Enemy extends Character {
 	public void strafe() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private int getDirection( float deltaX, float deltaY )
+	{
+	    if (deltaX < -marginOfDelta && deltaY < -marginOfDelta)
+	        return NORTHEAST;
+        if (deltaX < -marginOfDelta && deltaY > marginOfDelta)
+            return SOUTHEAST;
+        if (deltaX > marginOfDelta && deltaY > marginOfDelta)
+            return SOUTHWEST;
+        if (deltaX > marginOfDelta && deltaY < -marginOfDelta)
+            return NORTHWEST;
+        if (Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta)
+            return NORTH;
+        if (deltaX < -marginOfDelta && Math.abs(deltaX) < marginOfDelta)
+            return EAST;
+        if (Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta)
+            return SOUTH;
+        if (deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta)
+            return WEST;
+        return -1;
 	}
 
 	public boolean inRange(Player player) {
