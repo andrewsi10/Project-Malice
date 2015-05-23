@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
 	
 	private int enemyMaxCount = -2;
 	private int enemyMinCount = 10;
-	private int numEnemies = 2;
+	private int numEnemies = 3;
 
 	Music music;
 
@@ -50,10 +50,10 @@ public class GameScreen implements Screen {
 		
 		//initializes enemies and puts in a random amount of enemies
 		enemies = new ArrayList<Enemy>();
-		int enemyCount = 1 + (int)(Math.random()*enemyMaxCount);
+		int enemyCount = enemyMinCount + (int)(Math.random()*enemyMaxCount);
 		for (int i = 0; i < enemyCount; i++){
-			int index = 1 + (int) Math.random() * numEnemies;
-			if (index == numEnemies + 1) index = numEnemies;
+			int index = 1 + (int) (Math.random() * numEnemies);
+			if (index == numEnemies + 1) index--;
 			enemies.add(new Enemy("img/sprites/Enemies/Enemy" + index
 					+ "/Enemy" + index + ".atlas", "0"));
 		}
