@@ -24,42 +24,10 @@ public class Player extends Character {
 		} else {
 			currentFrame = 0;
 		}
-
-		// northeast
-		if (Gdx.input.isKeyPressed(Input.Keys.D)
-				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-            move( NORTHEAST, 2 );
-		}
-		// southeast
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)
-				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-            move( SOUTHEAST, 2 );
-		}
-		// southwest
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-            move( SOUTHWEST, 6 );
-		}
-		// northwest
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-            move( NORTHWEST, 6 );
-		}
-		// north
-		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            move( NORTH, 0 );
-		}
-		// east
-		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            move( EAST, 2 );
-		}
-		// south
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            move( SOUTH, 4 );
-		}
-		// west
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            move( WEST, 6 );
+		int dir = getInputDirection();
+		if ( dir != -1 )
+		{
+		    move( dir );
 		}
 	}
 
@@ -69,44 +37,14 @@ public class Player extends Character {
 		} else {
 			currentFrame = 0;
 		}
-
-		// northeast
-		if (Gdx.input.isKeyPressed(Input.Keys.D)
-				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-            translate( 1, 1 );
+		
+		int dir = getInputDirection();
+		if ( dir != -1 )
+		{
+	        int direction = this.getDirection();
+		    super.move( dir );
+	        setDirection( direction );
 		}
-		// southeast
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)
-				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-            translate( 1, -1 );
-		}
-		// southwest
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-            translate( -1, -1 );
-		}
-		// northwest
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-            translate( -1, 1 );
-		}
-		// north
-		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translate( 0, 1 );
-		}
-		// east
-		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			translate( 1, 0 );
-		}
-		// south
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			translate( 0, -1 );
-		}
-		// west
-		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			translate( -1, 0 );
-		}
-
 		if (getDirection() == 0) {
             strafeSprite( 0 );
 		} else if (getDirection() == 1 || getDirection() == 2
@@ -132,11 +70,61 @@ public class Player extends Character {
                 + change);
     }
 	
-
-    private void move( int dir, int atlas )
+    @Override
+    protected void move( int dir )
     {
-        move( dir );
-        strafeSprite( atlas );
+        super.move( dir );
+        strafeSprite( getAtlasNumber( dir ) );
+    }
+    
+    private int getInputDirection()
+    {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)
+                        && Gdx.input.isKeyPressed(Input.Keys.W))
+            return NORTHEAST;
+        if (Gdx.input.isKeyPressed(Input.Keys.S) 
+                        && Gdx.input.isKeyPressed(Input.Keys.D))
+            return SOUTHEAST;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)
+                        && Gdx.input.isKeyPressed(Input.Keys.S))
+            return SOUTHWEST;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)
+                        && Gdx.input.isKeyPressed(Input.Keys.W))
+            return NORTHWEST;
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
+            return NORTH;
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+            return EAST;
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            return SOUTH;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) 
+            return WEST;
+        return -1;
+    }
+    
+    /**
+     * Returns atlas number for animation based on direction
+     * @param dir Direction represented by an int
+     * @return atlas number
+     */
+    private int getAtlasNumber( int dir )
+    {
+        switch ( dir )
+        {
+            case NORTH:
+                return 0;
+            case NORTHEAST:
+            case SOUTHEAST:
+            case EAST:
+                return 2;
+            case SOUTH:
+                return 4;
+            case NORTHWEST:
+            case SOUTHWEST:
+            case WEST:
+                return 6;
+        }
+        return -1;
     }
 
 }
