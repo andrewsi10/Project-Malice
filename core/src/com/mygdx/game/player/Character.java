@@ -27,7 +27,7 @@ public abstract class Character extends Sprite
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
-    protected float moveSpeed;
+    private float moveSpeed;
 
     private TextureAtlas textureAtlas;
 
@@ -124,39 +124,22 @@ public abstract class Character extends Sprite
 		}
 	}
 
-	public void setReloadSpeed(int newReloadSpeed)
-	{
-		reloadSpeed = newReloadSpeed;
-	}
-
 	public void update(float deltaTime)
 	{
 		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 	}
-	
-	public Projectile shoot(float xDistance, float yDistance, long time)
-	{
-		if ( time - previousTime >= reloadSpeed )
-		{
-			previousTime = time;
-			return new Projectile( this, getDirection(), getDamage(), "fireball",
-					xDistance, yDistance );
-		} else
-		{
-			return null;
-		}
-	}
 
     public void shoot( ArrayList<Projectile> projectiles, float xDistance, float yDistance, long time )
     {
-        Projectile p = shoot( xDistance, yDistance, time );
-
-        if (p != null)
+        if ( time - previousTime >= reloadSpeed )
         {
+            previousTime = time;
+            Projectile p = new Projectile( this, getDirection(), getDamage(), "fireball",
+                    xDistance, yDistance );
             p.setPosition(getX() + getWidth() / 2, getY()
-                    + getHeight() / 3);
+                + getHeight() / 3);
             p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-            
+
             projectiles.add( p );
         }
     }
@@ -173,6 +156,16 @@ public abstract class Character extends Sprite
             translateX((float) (moveSpeed * dx / Math.sqrt(2)));
             translateY((float) (moveSpeed * dy / Math.sqrt(2)));
         }
+    }
+    
+    public void setSpeed( int speed )
+    {
+        moveSpeed = speed;
+    }
+
+    public void setReloadSpeed(int newReloadSpeed)
+    {
+        reloadSpeed = newReloadSpeed;
     }
 
 	public int getReloadSpeed()

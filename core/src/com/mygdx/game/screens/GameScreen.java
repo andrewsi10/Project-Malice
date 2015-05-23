@@ -102,12 +102,9 @@ public class GameScreen implements Screen {
         
         if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
         {
-            System.out.println( "mouse x: " + Gdx.input.getX() + " mouse y: " + Gdx.input.getY() );
-            System.out.println( "width: " + Gdx.graphics.getWidth() + " height: " + Gdx.graphics.getHeight() );
-            System.out.println( "player x: " + player.getX() + " player y: " + player.getY() );
             player.shoot(projectiles, 
-                player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), 
-                player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), 
+                Gdx.input.getX() - Gdx.graphics.getWidth() / 2, 
+                Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
                 System.currentTimeMillis());
         }
         

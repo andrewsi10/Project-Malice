@@ -30,7 +30,7 @@ public class Enemy extends Character {
 		frames = getAtlas().getRegions();
 		animation = new Animation(.2f, frames);
 		stateTime = 0f;
-        moveSpeed = 3;
+		setSpeed( 3 );
 	}
 
 	public void move(Player player, ArrayList<Projectile> projectiles, long time) {
@@ -121,38 +121,7 @@ public class Enemy extends Character {
 		}
 		travelTime--;
 
-		// northeast
-		if (getDirection() == NORTHEAST) {
-            move( NORTHEAST ); // strafe east
-		}
-		// southeast
-		else if (getDirection() == SOUTHEAST) {
-            move( SOUTHEAST );
-		}
-		// southwest
-		else if (getDirection() == SOUTHWEST) {
-            move( SOUTHWEST );
-		}
-		// northwest
-		else if (getDirection() == NORTHWEST) {
-            move( NORTHWEST );
-		}
-		// north
-		else if (getDirection() % 8 == NORTH) {
-            move( NORTH );
-		}
-		// east
-		else if (getDirection() == EAST) {
-            move( EAST );
-		}
-		// south
-		else if (getDirection() == SOUTH) {
-            move( SOUTH );
-		}
-		// west
-		else if (getDirection() == WEST) {
-            move( WEST );
-		}
+		move( getDirection() ); // note % NUMDIRECTION if errors
 	}
 	
 

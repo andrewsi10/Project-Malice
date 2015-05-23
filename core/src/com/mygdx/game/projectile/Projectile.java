@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.player.Character;
 
 public class Projectile extends Sprite
@@ -98,6 +97,12 @@ public class Projectile extends Sprite
             c.takeDamage( this.damage );
         return overlaps;
     }
+    
+//    private boolean sameTeam( Character c1, Character c2 )
+//    {
+//        return ( c1 instanceof Enemy && c2 instanceof Enemy )
+//            || ( c1 instanceof Player && c2 instanceof Player );
+//    }
 
 	public int getDamage()
 	{

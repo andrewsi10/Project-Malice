@@ -15,7 +15,7 @@ public class Player extends Character {
 	public Player(String file, String startFrame) {
 		super(file, startFrame);
 		textureAtlas = getAtlas();
-        moveSpeed = 5;
+		setSpeed( 5 );
 	}
 
 	public void move() {
@@ -92,19 +92,19 @@ public class Player extends Character {
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateY(moveSpeed);
+			translate( 0, 1 );
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			translateX(moveSpeed);
+			translate( 1, 0 );
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			translateY(-moveSpeed);
+			translate( 0, -1 );
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			translateX(-moveSpeed);
+			translate( -1, 0 );
 		}
 
 		if (getDirection() == 0) {
@@ -114,7 +114,7 @@ public class Player extends Character {
             strafeSprite( 2 );
 		} else if (getDirection() == 4) {
             strafeSprite( 4 );
-		} else if (getDirection() == moveSpeed || getDirection() == 6
+		} else if (getDirection() == 5 || getDirection() == 6
 				|| getDirection() == 7) {
             strafeSprite( 6 );
 		}
