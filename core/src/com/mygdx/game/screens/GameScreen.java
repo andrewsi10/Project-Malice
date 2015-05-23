@@ -31,7 +31,8 @@ public class GameScreen implements Screen {
 	private ArrayList<Projectile> projectiles;
 	
 	private int enemyMaxCount = -2;
-	
+	private int enemyMinCount = 10;
+	private int numEnemies = 2;
 
 	Music music;
 
@@ -44,14 +45,17 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		projectiles = new ArrayList<Projectile>();
-		player = new Player();
+		player = new Player("img/sprites/RedMage/RedMage.atlas", "6");
 		batch = new SpriteBatch();
 		
 		//initializes enemies and puts in a random amount of enemies
 		enemies = new ArrayList<Enemy>();
 		int enemyCount = 1 + (int)(Math.random()*enemyMaxCount);
 		for (int i = 0; i < enemyCount; i++){
-			enemies.add(new Enemy("img/sprites/WarriorWalking/WarriorWalking.atlas", "4"));
+			int index = 1 + (int) Math.random() * numEnemies;
+			if (index == numEnemies + 1) index = numEnemies;
+			enemies.add(new Enemy("img/sprites/Enemies/Enemy" + index
+					+ "/Enemy" + index + ".atlas", "0"));
 		}
 
 		cam = new OrthographicCamera();

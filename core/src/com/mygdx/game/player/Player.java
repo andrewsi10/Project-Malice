@@ -13,8 +13,8 @@ public class Player extends Character {
 	private int animationSpeed = 15;
 	private float moveSpeed = 5;
 
-	public Player() {
-		super("img/sprites/WhiteMonk/WhiteMonk.atlas", "6");
+	public Player(String file, String startFrame) {
+		super(file, startFrame);
 		textureAtlas = getAtlas();
 	}
 
