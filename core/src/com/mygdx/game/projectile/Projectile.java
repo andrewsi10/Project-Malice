@@ -109,7 +109,7 @@ public class Projectile extends Sprite {
 	    if ( c == this.myCharacter ) return false;
 	    Rectangle projectile = new Rectangle();
 	    Rectangle charBounds = new Rectangle();
-	    c.takeDamage( this.damage );
+	    c.takeDamage( this.damage, 5 ); //5 is temporary placement
 	    return true;
 	}
 

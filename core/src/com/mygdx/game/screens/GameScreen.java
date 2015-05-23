@@ -29,9 +29,9 @@ public class GameScreen implements Screen {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
 
-	private int enemyMaxCount = 50;
+	private int enemyMaxCount = 35;
 	private int enemyMinCount = 10;
-	private int numEnemies = 1;
+	private int numEnemies = 2;
 
 	Music music;
 
@@ -52,6 +52,7 @@ public class GameScreen implements Screen {
 		int enemyCount = enemyMinCount + (int) (Math.random() * enemyMaxCount);
 		for (int i = 0; i < enemyCount; i++) {
 			int index = 1 + (int) Math.random() * numEnemies;
+			if (index == numEnemies + 1) index = numEnemies;
 			enemies.add(new Enemy("img/sprites/Enemies/Enemy" + index
 					+ "/Enemy" + index + ".atlas", "0"));
 		}
@@ -66,16 +67,6 @@ public class GameScreen implements Screen {
 		player.setPosition(map.getSpawnX(), map.getSpawnY());
 
 		for (Enemy e : enemies) {
-<<<<<<< HEAD
-			// int x;
-			// int y;
-			// do {
-			// x = map.randomCoordinate();
-			// y = map.randomCoordinate();
-			// } while (!map.isSpace(x, y));
-			// e.setPosition(x, y);
-=======
->>>>>>> 0d7a7ac8e08818d95124b10dbe9851e009b8c6ec
 			map.setSpawn();
 			e.setPosition(map.getSpawnX(), map.getSpawnY());
 		}

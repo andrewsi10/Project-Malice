@@ -96,7 +96,7 @@ public abstract class Character extends Sprite
 		if (shotCounter >= reloadSpeed)
 		{
 			shotCounter = 0;
-			return new Projectile( getDirection(), getDamage() );
+			return new Projectile( this, getDirection(), getDamage() );
 		}
 		else
 		{
