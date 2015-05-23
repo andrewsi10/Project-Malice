@@ -11,11 +11,11 @@ public class Player extends Character {
 	private TextureAtlas textureAtlas;
 	private int currentFrame;
 	private int animationSpeed = 15;
-	private float moveSpeed = 5;
 
 	public Player(String file, String startFrame) {
 		super(file, startFrame);
 		textureAtlas = getAtlas();
+        moveSpeed = 5;
 	}
 
 	public void move() {
@@ -28,74 +28,38 @@ public class Player extends Character {
 		// northeast
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(NORTHEAST);
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( NORTHEAST, 2 );
 		}
 		// southeast
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)
 				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-			setDirection(SOUTHEAST);
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( SOUTHEAST, 2 );
 		}
 		// southwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-			setDirection(SOUTHWEST);
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( SOUTHWEST, 6 );
 		}
 		// northwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(NORTHWEST);
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( NORTHWEST, 6 );
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			setDirection(NORTH);
-			translateY(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( NORTH, 0 );
 		}
 		// east
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			setDirection(EAST);
-			translateX(moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 2);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( EAST, 2 );
 		}
 		// south
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			setDirection(SOUTH);
-			translateY(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 4);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( SOUTH, 4 );
 		}
 		// west
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			setDirection(WEST);
-			translateX(-moveSpeed);
-			currentAtlasKey = String.format("%01d", currentFrame
-					/ animationSpeed + 6);
-			setRegion(textureAtlas.findRegion(currentAtlasKey));
+            move( WEST, 6 );
 		}
 	}
 
@@ -109,26 +73,22 @@ public class Player extends Character {
 		// northeast
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
+            translate( 1, 1 );
 		}
 		// southeast
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)
 				&& Gdx.input.isKeyPressed(Input.Keys.D)) {
-			translateX((float) (moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
+            translate( 1, -1 );
 		}
 		// southwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.S)) {
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (-moveSpeed / Math.sqrt(2)));
+            translate( -1, -1 );
 		}
 		// northwest
 		else if (Gdx.input.isKeyPressed(Input.Keys.A)
 				&& Gdx.input.isKeyPressed(Input.Keys.W)) {
-			translateX((float) (-moveSpeed / Math.sqrt(2)));
-			translateY((float) (moveSpeed / Math.sqrt(2)));
+            translate( -1, 1 );
 		}
 		// north
 		else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -148,41 +108,36 @@ public class Player extends Character {
 		}
 
 		if (getDirection() == 0) {
-			strafeUpSprite();
+            strafeSprite( 0 );
 		} else if (getDirection() == 1 || getDirection() == 2
 				|| getDirection() == 3) {
-			strafeRightSprite();
+            strafeSprite( 2 );
 		} else if (getDirection() == 4) {
-			strafeDownSprite();
+            strafeSprite( 4 );
 		} else if (getDirection() == moveSpeed || getDirection() == 6
 				|| getDirection() == 7) {
-			strafeLeftSprite();
+            strafeSprite( 6 );
 		}
 	}
+    
+    private void strafeSprite( int atlas )
+    {
+        setAtlas( atlas );
+        setRegion(textureAtlas.findRegion(currentAtlasKey));
+    }
+    
+    private void setAtlas( int change )
+    {
+        currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
+                + change);
+    }
+	
 
-	public void strafeLeftSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed + 6);
-		setRegion(textureAtlas.findRegion(currentAtlasKey));
-	}
-
-	public void strafeRightSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
-				+ 2);
-		setRegion(textureAtlas.findRegion(currentAtlasKey));
-
-	}
-
-	public void strafeUpSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed);
-		setRegion(textureAtlas.findRegion(currentAtlasKey));
-
-	}
-
-	public void strafeDownSprite() {
-		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
-				+ 4);
-		setRegion(textureAtlas.findRegion(currentAtlasKey));
-	}
+    private void move( int dir, int atlas )
+    {
+        move( dir );
+        strafeSprite( atlas );
+    }
 
 	@Override
 	void die() {

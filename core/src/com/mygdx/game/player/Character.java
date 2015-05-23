@@ -25,9 +25,13 @@ public abstract class Character extends Sprite
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
+    protected float moveSpeed = 5;
 
-	private TextureAtlas textureAtlas;
-	
+    private TextureAtlas textureAtlas;
+
+    protected int currentFrame;
+    protected int animationSpeed = 15;
+    
 	public Vector2 position = new Vector2();
 	
 	public Vector2 velocity;
@@ -41,6 +45,37 @@ public abstract class Character extends Sprite
 
 	abstract void move();
 
+
+    protected void move( int dir )
+    {
+        setDirection(dir);
+        int dx = 0;
+        int dy = 0;
+        switch ( dir )
+        {
+            case NORTHWEST:
+                dx = -1;
+            case NORTH:
+                dy = 1;
+                break;
+            case NORTHEAST:
+                dy = 1;
+            case EAST:
+                dx = 1;
+                break;
+            case SOUTHEAST:
+                dx = 1;
+            case SOUTH:
+                dy = -1;
+                break;
+            case SOUTHWEST:
+                dy = -1;
+            case WEST:
+                dx = -1;
+                break;
+        }
+        translate( dx, dy );
+    }
 	abstract void strafe();
 
 	public void increaseMaxHp(int i)
@@ -66,7 +101,7 @@ public abstract class Character extends Sprite
 
 	public void setDirection(int dir)
 	{
-		if ( dir >= 0 || dir < NUMDIRECTIONS )
+		if ( dir >= 0 && dir < NUMDIRECTIONS )
 		{
 			direction = dir;
 		}
@@ -105,6 +140,20 @@ public abstract class Character extends Sprite
 			return null;
 		}
 	}
+    
+    protected void translate( int dx, int dy )
+    {
+        if ( dx == 0 || dy == 0 )
+        {
+            translateX((float) (moveSpeed * dx));
+            translateY((float) (moveSpeed * dy));
+        }
+        else
+        {
+            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+        }
+    }
 
 	public int getReloadSpeed()
 	{

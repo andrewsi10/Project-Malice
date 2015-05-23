@@ -13,7 +13,6 @@ import com.mygdx.game.projectile.Projectile;
 
 public class Enemy extends Character {
 
-	private TextureAtlas textureAtlas;
 	private int travelTime;
 	private float moveSpeed = 3;
 	private int aggroDistance = 200;
@@ -26,16 +25,16 @@ public class Enemy extends Character {
 
 	public Enemy(String file, String startFrame) {
 		super(file, startFrame);
-		textureAtlas = getAtlas();
 
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 
 		setReloadSpeed(getReloadSpeed() * 2);
 
-		frames = textureAtlas.getRegions();
+		frames = getAtlas().getRegions();
 		animation = new Animation(.2f, frames);
 		stateTime = 0f;
+        moveSpeed = 3;
 	}
 
 	public void move(Player player, ArrayList<Projectile> projectiles, long time) {
@@ -64,73 +63,45 @@ public class Enemy extends Character {
 
 			// northeast
 			if (deltaX < -marginOfDelta && deltaY < -marginOfDelta) {
-				setDirection(NORTHEAST);
-				strafeEast();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( NORTHEAST ); // strafe east
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// southeast
 			else if (deltaX < -marginOfDelta && deltaY > marginOfDelta) {
-				setDirection(SOUTHEAST);
-				strafeEast();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( SOUTHEAST ); // strafe east
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// southwest
 			else if (deltaX > marginOfDelta && deltaY > marginOfDelta) {
-				setDirection(SOUTHWEST);
-				strafeWest();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( SOUTHWEST ); // strafe west
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// northwest
 			else if (deltaX > marginOfDelta && deltaY < -marginOfDelta) {
-				setDirection(NORTHWEST);
-				strafeWest();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( NORTHWEST ); // strafe west
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// north
 			else if (Math.abs(deltaX) < marginOfDelta
 					&& deltaY < -marginOfDelta) {
-				moveNorth();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( NORTH );
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// east
 			else if (deltaX < -marginOfDelta
 					&& Math.abs(deltaX) < marginOfDelta) {
-				moveEast();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( EAST );
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// south
 			else if (Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta) {
-				moveSouth();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( SOUTH );
+                shoot(deltaX, deltaY, time, projectiles);
 			}
 			// west
 			else if (deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta) {
-				moveWest();
-				Projectile p = shoot(deltaX, deltaY, time);
-				if (p != null) {
-					setProjectile(p, projectiles);
-				}
+                move( WEST );
+                shoot(deltaX, deltaY, time, projectiles);
 			} else {
 				move();
 			}
@@ -156,70 +127,36 @@ public class Enemy extends Character {
 
 		// northeast
 		if (getDirection() == NORTHEAST) {
-			setDirection(NORTHEAST);
-			strafeEast();
+            move( NORTHEAST ); // strafe east
 		}
 		// southeast
 		else if (getDirection() == SOUTHEAST) {
-			setDirection(SOUTHEAST);
-			strafeEast();
+            move( SOUTHEAST );
 		}
 		// southwest
 		else if (getDirection() == SOUTHWEST) {
-			setDirection(SOUTHWEST);
-			strafeWest();
+            move( SOUTHWEST );
 		}
 		// northwest
 		else if (getDirection() == NORTHWEST) {
-			setDirection(NORTHWEST);
-			strafeWest();
+            move( NORTHWEST );
 		}
 		// north
 		else if (getDirection() % 8 == NORTH) {
-			moveNorth();
+            move( NORTH );
 		}
 		// east
 		else if (getDirection() == EAST) {
-			moveEast();
+            move( EAST );
 		}
 		// south
 		else if (getDirection() == SOUTH) {
-			moveSouth();
+            move( SOUTH );
 		}
 		// west
 		else if (getDirection() == WEST) {
-			moveWest();
+            move( WEST );
 		}
-	}
-
-	public void moveNorth() {
-		setDirection(NORTH);
-		translateY(moveSpeed);
-	}
-
-	public void moveEast() {
-		setDirection(EAST);
-		translateX(moveSpeed);
-	}
-
-	public void moveSouth() {
-		setDirection(SOUTH);
-		translateY(-moveSpeed);
-	}
-
-	public void moveWest() {
-		setDirection(WEST);
-		translateX(-moveSpeed);
-	}
-
-	public void strafeEast() {
-		translateX((float) (moveSpeed / Math.sqrt(2)));
-		translateY((float) (-moveSpeed / Math.sqrt(2)));
-	}
-
-	public void strafeWest() {
-		translateX((float) (-moveSpeed / Math.sqrt(2)));
-		translateY((float) (moveSpeed / Math.sqrt(2)));
 	}
 
 	public void setProjectile(Projectile p, ArrayList<Projectile> projectiles) {
@@ -228,6 +165,21 @@ public class Enemy extends Character {
 
 		projectiles.add(p);
 	}
+	
+
+    public void shoot(float xDistance, float yDistance, long time, ArrayList<Projectile> projectiles )
+    {
+        Projectile p = shoot( xDistance, yDistance, time );
+
+        if (p != null)
+        {
+            p.setPosition(getX() + getWidth() / 2, getY()
+                    + getHeight() / 3);
+            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+            
+            projectiles.add( p );
+        }
+    }
 
 	@Override
 	public void strafe() {
