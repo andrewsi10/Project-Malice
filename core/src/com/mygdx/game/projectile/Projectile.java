@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.player.Character;
 
 public class Projectile extends Sprite
 {
+    private Character myCharacter;
 
 	final private float xDistance;
 	final private float yDistance;
@@ -27,9 +30,10 @@ public class Projectile extends Sprite
 	TextureRegion[] frames;
 	float stateTime;
 
-	public Projectile(int direction, int damage, String type, float distanceX,
-			float distanceY)
+	public Projectile(Character c, int direction, int damage, String type, 
+	    float distanceX, float distanceY)
 	{
+        this.myCharacter = c;
 
 		xDistance = distanceX;
 		yDistance = distanceY;
@@ -84,6 +88,19 @@ public class Projectile extends Sprite
 		translateX( (float) ( speed * Math.cos( angle ) ) );
 
 	}
+    
+    public boolean hitCharacter( Character c )
+    {
+        System.out.println( "check" );
+        if ( c == this.myCharacter ) return false;
+        Rectangle projectile = this.getBoundingRectangle();
+        System.out.println( "projectile " + projectile );
+        Rectangle charBounds = c.getBoundingRectangle();
+        System.out.println( "cBounds " + charBounds );
+        if ( projectile.overlaps( charBounds ) )
+            c.takeDamage( this.damage );
+        return true;
+    }
 
 	public int getDamage()
 	{

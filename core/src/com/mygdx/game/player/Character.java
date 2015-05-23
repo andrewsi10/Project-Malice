@@ -98,7 +98,7 @@ public abstract class Character extends Sprite
 		if ( time - previousTime >= reloadSpeed )
 		{
 			previousTime = time;
-			return new Projectile( getDirection(), getDamage(), "fireball",
+			return new Projectile( this, getDirection(), getDamage(), "fireball",
 					xDistance, yDistance );
 		} else
 		{

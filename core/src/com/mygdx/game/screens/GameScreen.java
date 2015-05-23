@@ -87,60 +87,66 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(cam.combined);
 
 		batch.begin();
-		map.draw(batch);
-		if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-			player.strafe();
-		} else {
-			player.move();
-		}
-		
-		if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
-		{
-			System.out.println( "mouse x: " + Gdx.input.getX() + " mouse y: " + Gdx.input.getY() );
-			System.out.println( "width: " + Gdx.graphics.getWidth() + " height: " + Gdx.graphics.getHeight() );
-			System.out.println( "player x: " + player.getScaleX() + " player y: " + player.getScaleY() );
-			Projectile p = player.shoot(player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), System.currentTimeMillis());
-			if (p != null)
-			{
-				projectiles.add(p);
-				p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
-						+ player.getHeight() / 3);
-				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-			}
-		}
-		
-//		for (Projectile projectile : projectiles) {
-//            projectile.move();
-//		}
+        map.draw(batch);
+        
         float x = player.getX();
         float y = player.getY();
-		if (map.isCollidingWithWall(player))
-			player.setPosition(x, y);
-		player.draw(batch);
-		
-		for ( int i = 0; i < projectiles.size(); i++ ) {
-		    Projectile projectile = projectiles.get( i );
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+            player.strafe();
+        } else {
+            player.move();
+        }
+        if (map.isCollidingWithWall(player))
+            player.setPosition(x, y);
+        player.draw(batch);
+        
+        if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
+        {
+            System.out.println( "mouse x: " + Gdx.input.getX() + " mouse y: " + Gdx.input.getY() );
+            System.out.println( "width: " + Gdx.graphics.getWidth() + " height: " + Gdx.graphics.getHeight() );
+            System.out.println( "player x: " + player.getX() + " player y: " + player.getY() );
+            Projectile p = player.shoot(player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), System.currentTimeMillis());
+            if (p != null)
+            {
+                projectiles.add(p);
+                p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
+                        + player.getHeight() / 3);
+                p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+            }
+        }
+        
+        for (Enemy enemy : enemies) {
+            
+            x = enemy.getX();
+            y = enemy.getY();
+            enemy.move(player, projectiles, System.currentTimeMillis());
+            if (map.isCollidingWithWall(enemy)) {
+                enemy.setPosition(x, y);
+            }
+            enemy.draw(batch);
+        }
+        for ( int i = 0; i < projectiles.size(); i++ ) {
+            Projectile projectile = projectiles.get( i );
             projectile.move();
             projectile.draw(batch);
             x = projectile.getX();
             y = projectile.getY();
-            
-            if ( map.isCollidingWithWall( projectile ) ) {
+
+            boolean hasHit = false;
+            if ( projectile.hitCharacter( player ) )
+                hasHit = true;
+            else
+            for (Enemy enemy : enemies) {
+                if ( hasHit && projectile.hitCharacter( enemy ) )
+                     hasHit = true;
+            }
+            if ( hasHit || map.isCollidingWithWall( projectile ) ) {
                 projectiles.remove( i );
                 i--;
             }
-		}
-		
-		for (Enemy enemy : enemies) {
-			x = enemy.getX();
-			y = enemy.getY();
-			enemy.move(player, projectiles, System.currentTimeMillis());
-			if (map.isCollidingWithWall(enemy)) {
-				enemy.setPosition(x, y);
-			}
-			enemy.draw(batch);
-		}
-		batch.end();
+        }
+        
+        batch.end();
 	}
 
 	@Override
