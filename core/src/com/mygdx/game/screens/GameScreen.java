@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL30;
@@ -29,7 +30,7 @@ public class GameScreen implements Screen {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
 	
-	private int enemyMaxCount = 20;
+	private int enemyMaxCount = -2;
 	
 
 	Music music;
@@ -88,8 +89,13 @@ public class GameScreen implements Screen {
 		} else {
 			player.move();
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			Projectile p = player.shoot();
+		
+		if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
+		{
+			System.out.println( "mouse x: " + Gdx.input.getX() + " mouse y: " + Gdx.input.getY() );
+			System.out.println( "width: " + Gdx.graphics.getWidth() + " height: " + Gdx.graphics.getHeight() );
+			System.out.println( "player x: " + player.getScaleX() + " player y: " + player.getScaleY() );
+			Projectile p = player.shoot(player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), System.currentTimeMillis());
 			if (p != null)
 			{
 				projectiles.add(p);
@@ -98,6 +104,7 @@ public class GameScreen implements Screen {
 				p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 			}
 		}
+		
 //		for (Projectile projectile : projectiles) {
 //            projectile.move();
 //		}
@@ -123,7 +130,7 @@ public class GameScreen implements Screen {
 		for (Enemy enemy : enemies) {
 			x = enemy.getX();
 			y = enemy.getY();
-			enemy.move(player, projectiles);
+			enemy.move(player, projectiles, System.currentTimeMillis());
 			if (map.isCollidingWithWall(enemy)) {
 				enemy.setPosition(x, y);
 			}

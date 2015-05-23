@@ -29,7 +29,7 @@ public class Enemy extends Character {
 		setReloadSpeed(getReloadSpeed() * 2);
 	}
 
-	public void move(Player player, ArrayList<Projectile> projectiles) {
+	public void move(Player player, ArrayList<Projectile> projectiles, long time) {
 		if (!inRange(player)) {
 			move();
 		} 
@@ -58,7 +58,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 6);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -76,7 +76,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 6);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -94,7 +94,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 2);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -112,7 +112,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 2);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -129,7 +129,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -146,7 +146,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 6);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -163,7 +163,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 4);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()
@@ -180,7 +180,7 @@ public class Enemy extends Character {
 				currentAtlasKey = String.format("%01d", currentFrame
 						/ animationSpeed + 2);
 				setRegion(textureAtlas.findRegion(currentAtlasKey));
-				Projectile p = shoot();
+				Projectile p = shoot(deltaX, deltaY, time);
 				if (p != null)
 				{
 					p.setPosition(getX() + getWidth() / 2, getY()

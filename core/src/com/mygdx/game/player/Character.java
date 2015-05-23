@@ -1,12 +1,9 @@
 package com.mygdx.game.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.projectile.Projectile;
 
 public abstract class Character extends Sprite
@@ -26,19 +23,20 @@ public abstract class Character extends Sprite
 	private int baseDmg; // base damage
 	private int randMod; // random damage modifier
 	private int direction = -1;
-	private int reloadSpeed = 20;
-	private int shotCounter = reloadSpeed;
+	private int reloadSpeed = 500;
+	private double previousTime = 0;
 
 	private TextureAtlas textureAtlas;
+	
+	public Vector2 position = new Vector2();
+	
+	public Vector2 velocity;
 
-	/**
-	 * TODO: animations, sprites, coordinates
-	 * */
 	public Character(String filePath, String frame)
 	{
+		position = new Vector2();
 		textureAtlas = new TextureAtlas( Gdx.files.internal( filePath ) );
 		set( new Sprite( textureAtlas.findRegion( frame ) ) );
-
 	}
 
 	abstract void move();
@@ -73,16 +71,15 @@ public abstract class Character extends Sprite
 			direction = dir;
 		}
 	}
-	
+
 	public void setReloadSpeed(int newReloadSpeed)
 	{
 		reloadSpeed = newReloadSpeed;
 	}
 
-	public void takeDamage(int bdmg, int rdm)
+	public void takeDamage(int damage)
 	{
-		currentHp -= bdmg;
-		currentHp -= (int) ( Math.random() * rdm );
+		currentHp -= damage;
 		if ( currentHp <= 0 )
 		{
 			die();
@@ -91,20 +88,24 @@ public abstract class Character extends Sprite
 
 	abstract void die();
 
-	public Projectile shoot()
+	public void update(float deltaTime)
 	{
-		if (shotCounter >= reloadSpeed)
+		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
+	}
+	
+	public Projectile shoot(float xDistance, float yDistance, long time)
+	{
+		if ( time - previousTime >= reloadSpeed )
 		{
-			shotCounter = 0;
-			return new Projectile( getDirection(), getDamage() );
-		}
-		else
+			previousTime = time;
+			return new Projectile( getDirection(), getDamage(), "fireball",
+					xDistance, yDistance );
+		} else
 		{
-			shotCounter++;
 			return null;
 		}
 	}
-	
+
 	public int getReloadSpeed()
 	{
 		return reloadSpeed;

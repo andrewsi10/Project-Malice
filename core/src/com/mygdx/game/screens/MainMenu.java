@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
-import com.mygdx.game.player.WarriorWalking;
 
 public class MainMenu implements Screen
 {
@@ -90,7 +89,7 @@ public class MainMenu implements Screen
 		// false );
 		// black = new BitmapFont( Gdx.files.internal( "fonts/black.fnt" ),
 		// false );
-		
+
 		music.setVolume( 0.7f );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
@@ -108,9 +107,8 @@ public class MainMenu implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				// TODO buttons are still working properly
-				playButton.setDisabled(true);
-				exitButton.setDisabled(true);
+				playButton.remove();
+				exitButton.remove();
 				game.setScreen( new GameScreen( game, music ) );
 			}
 		} );
