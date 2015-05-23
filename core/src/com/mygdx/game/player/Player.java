@@ -139,9 +139,4 @@ public class Player extends Character {
         strafeSprite( atlas );
     }
 
-	@Override
-	void die() {
-
-	}
-
 }

@@ -1,5 +1,7 @@
 package com.mygdx.game.player;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,7 +27,7 @@ public abstract class Character extends Sprite
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
-    protected float moveSpeed = 5;
+    protected float moveSpeed;
 
     private TextureAtlas textureAtlas;
 
@@ -94,6 +96,21 @@ public abstract class Character extends Sprite
 		}
 	}
 
+    public boolean die()
+    {
+        return true;
+    }
+
+    public boolean takeDamage(int damage)
+    {
+        currentHp -= damage;
+        if ( currentHp <= 0 )
+        {
+            return die();
+        }
+        else return false;
+    }
+
 	public void increaseBdmg(int i)
 	{
 		baseDmg += i;
@@ -112,17 +129,6 @@ public abstract class Character extends Sprite
 		reloadSpeed = newReloadSpeed;
 	}
 
-	public void takeDamage(int damage)
-	{
-		currentHp -= damage;
-		if ( currentHp <= 0 )
-		{
-			die();
-		}
-	}
-
-	abstract void die();
-
 	public void update(float deltaTime)
 	{
 		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
@@ -140,6 +146,20 @@ public abstract class Character extends Sprite
 			return null;
 		}
 	}
+
+    public void shoot( ArrayList<Projectile> projectiles, float xDistance, float yDistance, long time )
+    {
+        Projectile p = shoot( xDistance, yDistance, time );
+
+        if (p != null)
+        {
+            p.setPosition(getX() + getWidth() / 2, getY()
+                    + getHeight() / 3);
+            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+            
+            projectiles.add( p );
+        }
+    }
     
     protected void translate( int dx, int dy )
     {
@@ -183,5 +203,18 @@ public abstract class Character extends Sprite
 	public int getDirection()
 	{
 		return direction;
+	}
+	
+	// --------------------For Testing --------------//
+	@Override
+	public String toString()
+	{
+	    String s = "HP: " + currentHp + "/" + maxHp + "; Base Damage: " 
+	              + baseDmg + ", RandomMod: " + randMod + ", " 
+	              + "Direction: " + direction + ", Reload; " + reloadSpeed
+	              + ", previousTime: " + previousTime 
+	              + ", moveSpeed: " + moveSpeed;
+
+	    return s;
 	}
 }

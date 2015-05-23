@@ -1,20 +1,16 @@
 package com.mygdx.game.player;
 
 import java.util.ArrayList;
-import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
 public class Enemy extends Character {
 
 	private int travelTime;
-	private float moveSpeed = 3;
 	private int aggroDistance = 200;
 	private int travelTimeScalar = 100;
 	private int marginOfDelta = 30;
@@ -64,44 +60,44 @@ public class Enemy extends Character {
 			// northeast
 			if (deltaX < -marginOfDelta && deltaY < -marginOfDelta) {
                 move( NORTHEAST ); // strafe east
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// southeast
 			else if (deltaX < -marginOfDelta && deltaY > marginOfDelta) {
                 move( SOUTHEAST ); // strafe east
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// southwest
 			else if (deltaX > marginOfDelta && deltaY > marginOfDelta) {
                 move( SOUTHWEST ); // strafe west
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// northwest
 			else if (deltaX > marginOfDelta && deltaY < -marginOfDelta) {
                 move( NORTHWEST ); // strafe west
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// north
 			else if (Math.abs(deltaX) < marginOfDelta
 					&& deltaY < -marginOfDelta) {
                 move( NORTH );
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// east
 			else if (deltaX < -marginOfDelta
 					&& Math.abs(deltaX) < marginOfDelta) {
                 move( EAST );
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// south
 			else if (Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta) {
                 move( SOUTH );
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			}
 			// west
 			else if (deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta) {
                 move( WEST );
-                shoot(deltaX, deltaY, time, projectiles);
+                shoot( projectiles, deltaX, deltaY, time);
 			} else {
 				move();
 			}
@@ -158,37 +154,10 @@ public class Enemy extends Character {
             move( WEST );
 		}
 	}
-
-	public void setProjectile(Projectile p, ArrayList<Projectile> projectiles) {
-		p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
-		p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-
-		projectiles.add(p);
-	}
 	
-
-    public void shoot(float xDistance, float yDistance, long time, ArrayList<Projectile> projectiles )
-    {
-        Projectile p = shoot( xDistance, yDistance, time );
-
-        if (p != null)
-        {
-            p.setPosition(getX() + getWidth() / 2, getY()
-                    + getHeight() / 3);
-            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-            
-            projectiles.add( p );
-        }
-    }
 
 	@Override
 	public void strafe() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void die() {
 		// TODO Auto-generated method stub
 
 	}

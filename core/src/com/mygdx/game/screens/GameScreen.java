@@ -105,14 +105,10 @@ public class GameScreen implements Screen {
             System.out.println( "mouse x: " + Gdx.input.getX() + " mouse y: " + Gdx.input.getY() );
             System.out.println( "width: " + Gdx.graphics.getWidth() + " height: " + Gdx.graphics.getHeight() );
             System.out.println( "player x: " + player.getX() + " player y: " + player.getY() );
-            Projectile p = player.shoot(player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), System.currentTimeMillis());
-            if (p != null)
-            {
-                projectiles.add(p);
-                p.setPosition(player.getX() + player.getWidth() / 2, player.getY()
-                        + player.getHeight() / 3);
-                p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-            }
+            player.shoot(projectiles, 
+                player.getX() - Gdx.graphics.getWidth() - Gdx.input.getX(), 
+                player.getY() - Gdx.graphics.getHeight() - Gdx.input.getY(), 
+                System.currentTimeMillis());
         }
         
         for (Enemy enemy : enemies) {

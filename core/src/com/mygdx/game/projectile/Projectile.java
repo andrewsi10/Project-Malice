@@ -91,15 +91,12 @@ public class Projectile extends Sprite
     
     public boolean hitCharacter( Character c )
     {
-        System.out.println( "check" );
         if ( c == this.myCharacter ) return false;
-        Rectangle projectile = this.getBoundingRectangle();
-        System.out.println( "projectile " + projectile );
-        Rectangle charBounds = c.getBoundingRectangle();
-        System.out.println( "cBounds " + charBounds );
-        if ( projectile.overlaps( charBounds ) )
+        boolean overlaps = c.getBoundingRectangle().overlaps( 
+                            this.getBoundingRectangle() );
+        if ( overlaps )
             c.takeDamage( this.damage );
-        return true;
+        return overlaps;
     }
 
 	public int getDamage()
