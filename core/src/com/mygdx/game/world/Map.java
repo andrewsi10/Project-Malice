@@ -12,7 +12,7 @@ public class Map
 {
     public static final int ARENA = 0;
     public static final int DUNGEON = 1;
-    public static final int PIXELS_TO_METERS = 64;
+    public static final int PIXELS_TO_METERS = 49;
     
     private boolean[][] areSpaces;
     private Texture block;
@@ -27,8 +27,8 @@ public class Map
      */
     public Map( int rows, int cols)
     {
-        block = new Texture( "map/DarkGreen.png" );
-        space = new Texture( "map/background.png" );
+        block = new Texture( "map/Trees/Tree1.png" );
+        space = new Texture( "map/GrassTile.png" );
         areSpaces = new boolean[rows][cols];
     }
 
@@ -162,13 +162,55 @@ public class Map
      */
     public void draw( SpriteBatch batch )
     {
-        for ( int i = 0; i < areSpaces.length; i++ )
-        {
-            for ( int j = 0; j < areSpaces[i].length; j++ )
-            {
-                batch.draw( areSpaces[i][j]?space:block, i*PIXELS_TO_METERS,j*PIXELS_TO_METERS);
-            }
-        }
+    	initialDraw(batch);
+    	drawBlocks(batch);
+    	
+//        for ( int i = 0; i < areSpaces.length; i++ )
+//        {
+//            for ( int j = 0; j < areSpaces[i].length; j++ )
+//            {
+//                if (areSpaces[i][j])
+//                {
+//                	batch.draw(space, i*space.getWidth(), j*space.getHeight());
+//                }
+//                else {
+//                	batch.draw(block, i*block.getWidth(), j*space.getHeight());
+//                }
+//            }
+//        }
+    }
+    
+    /**
+     * covers the map in the texture used for spaces
+     * @param batch used to draw the map
+     */
+    void initialDraw(SpriteBatch batch)
+    {
+    	for (int i = 0; i < areSpaces.length; i++)
+    	{
+    		for (int j = 0; j < areSpaces[i].length; j++)
+    		{
+    			batch.draw(space, i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+    		}
+    	}
+    }
+    
+    /**
+     * places blocks where necessary
+     * @param batch
+     */
+    void drawBlocks(SpriteBatch batch)
+    {
+    	for (int i = 0; i < areSpaces.length; i++)
+    	{
+    		for (int j = 0; j < areSpaces[i].length; j++)
+    		{
+    			if (!areSpaces[i][j])
+    			{
+    				batch.draw(block, i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+    			}
+    		}
+    	}
     }
     
     /**
