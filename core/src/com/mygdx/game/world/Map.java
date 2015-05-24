@@ -11,16 +11,27 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Map
 {
+    /**
+     * Package for all images
+     */
+    public static final String PACKAGE = "map/";
     public static final int ARENA = 0;
     public static final int DUNGEON = 1;
+    /**
+     * Conversion number from pixels to meters
+     */
     public static final int PIXELS_TO_METERS = 64;
-    public static final String PACKAGE = "map/";
+    /**
+     * Spawn distance from player in meters
+     */
+    public static final int SPAWN_DISTANCE = 5;
     
     private boolean[][] areSpaces;
     private Texture[] blocks;
     private Texture[] spaces;
     private int spawnX;
     private int spawnY;
+    private int randomModifier;
     
     /**
      * Constructs a map filled with walls
@@ -41,6 +52,8 @@ public class Map
 //        		blocks[i*trees.length + j] = trees[i][j].getTexture();
 //        	}
 //        }
+        
+        randomModifier = randomNumber( PIXELS_TO_METERS );
     }
 
     /**
@@ -64,8 +77,8 @@ public class Map
         switch ( type )
         {
             case ARENA:
-                setSpawn();
                 createRoom( 0, 0, areSpaces.length, areSpaces[0].length );
+                setSpawn( -1, -1 );
                 break;
             case DUNGEON:
                 randomGeneration();
@@ -180,7 +193,7 @@ public class Map
                 batch.draw(spaces[0], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
                 if (!areSpaces[i][j])
                 {
-                    batch.draw(blocks[(i+j)%blocks.length], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+                    batch.draw(blocks[(i+j)*randomModifier%blocks.length], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
                 }
             }
         }
@@ -229,9 +242,18 @@ public class Map
         return (int)( y / PIXELS_TO_METERS );
     }
     
+    public boolean inPixelBounds( float x, float y )
+    {
+        return x >= 0 
+            && y >= 0 
+            && ( x <= areSpaces.length * PIXELS_TO_METERS )
+            && ( y <= areSpaces[0].length * PIXELS_TO_METERS );
+    }
+    
     public boolean inTileBounds( int x, int y )
     {
-        return ( x >= 0 && x < areSpaces.length && y >= 0 && y < areSpaces[0].length );
+        return ( x >= 0 && x < areSpaces.length 
+              && y >= 0 && y < areSpaces[0].length );
     }
 
     // --------------------Random Generators----------------//
@@ -279,8 +301,6 @@ public class Map
             count++;
         } while ( x != this.areSpaces.length - 1
                || count < this.areSpaces.length / 5 );
-        // System.out.println( x ); // TODO remove
-        // TODO options: connect rooms not part of the big room or remove them.
         int largest = 0;
         Point point = new Point();
         for ( Point p : list )
@@ -296,21 +316,46 @@ public class Map
             else if ( size < largest ) {
                 fillRoom( p.x, p.y );
             }
+            else if ( !hasPath(point.x, point.y, p.x, p.y, true) )// && ( size == largest )
+            {
+                x = Math.min( point.x, p.x );
+                y = Math.min( point.y, p.y );
+                w = Math.abs( point.x - p.x );
+                h = Math.abs( point.y - p.y );
+                createRoom( x, y, w, 2 );
+                createRoom( x + w, y, 2, h );
+            }
         }
-        this.setSpawn();
+        this.setSpawn( -1, -1 );
         // System.out.println( this ); // TODO remove
     }
 
     // -------------- Spawn methods -------------------- //
+    
+    /**
+     * Sets the spawnX and spawnY, should be called before calling 
+     * getSpawnX() and getSpawnY()
+     * @param x float location based on pixels to avoid
+     * @param y float location based on pixels to avoid
+     */
+    public void setSpawn( float x, float y )
+    {
+        setSpawn( getTileX( x ), getTileY( y ) );
+    }
+    
     /**
      * Sets the spawnX and spawnY, called with the generate(int) method
+     * @param x int Tile location to avoid
+     * @param y int Tile location to avoid
      */
-    public void setSpawn()
+    private void setSpawn( int x, int y )
     {
         do {
             spawnX = this.randomTileCoordinate();
             spawnY = this.randomTileCoordinate();
-        } while ( !areSpaces[spawnX][spawnY] );
+        } while ( !areSpaces[spawnX][spawnY] 
+               || ( Math.abs( spawnX - x ) < SPAWN_DISTANCE 
+                 && Math.abs( spawnY - y ) < SPAWN_DISTANCE ) );
     }
     
     /**
@@ -356,28 +401,33 @@ public class Map
     
     // -----------------Deprecating methods ------------------//
 
-    
-//  public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
-//  {
-//      boolean[][] b = new boolean[areSpaces.length][areSpaces[0].length];
-//      for ( int i = 0; i < b.length; i++ )
-//          for ( int j = 0; j < b[i].length; j++ )
-//              b[i][j] = areSpaces[i][j];
-//      return hasPath( x1, y1, x2, y2, asSpace, b );
-//      // does not work as above code
-////      return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
-//  }
-//  
-//  private static boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
-//  {
-//      if ( map[x1][y1] != asSpace
-//        || x1 < 1 || x1 >= map.length - 1
-//        || y1 < 1 || y1 >= map[0].length - 1 ) return false;
-//      if ( x1 == x2 && y1 == y2 ) return true;
-//      map[x1][y1] = !asSpace;
-//      return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
-//          || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
-//          || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
-//          || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
-//  }
+    /**
+     * convenience method
+     * @param p1
+     * @param p2
+     * @return
+     */
+  public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
+  {
+      boolean[][] b = new boolean[areSpaces.length][areSpaces[0].length];
+      for ( int i = 0; i < b.length; i++ )
+          for ( int j = 0; j < b[i].length; j++ )
+              b[i][j] = areSpaces[i][j];
+      return hasPath( x1, y1, x2, y2, asSpace, b );
+      // does not work as above code
+//      return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
+  }
+  
+  private static boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
+  {
+      if ( map[x1][y1] != asSpace
+        || x1 < 1 || x1 >= map.length - 1
+        || y1 < 1 || y1 >= map[0].length - 1 ) return false;
+      if ( x1 == x2 && y1 == y2 ) return true;
+      map[x1][y1] = !asSpace;
+      return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
+          || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
+          || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
+          || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
+  }
 }
