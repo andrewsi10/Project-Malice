@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL30;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Malice;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
@@ -21,15 +21,27 @@ import com.mygdx.game.world.Map;
 public class GameScreen implements Screen {
 
 	private SpriteBatch batch;
+	private SpriteBatch batchPause;
 
 	private final Malice game;
 
 	private Map map;
+	private Texture pauseScreen;
+	private Sprite pauseSprite;
 	private OrthographicCamera cam;
 	private Player player;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Projectile> projectiles;
 	
+	public enum State
+	{
+		PAUSE,
+	    RUN,
+	    RESUME,
+	    STOPPED
+	}
+	
+	private State state = State.RUN;
 	private int enemyMaxCount = -2;
 	private int enemyMinCount = 10;
 	private int numEnemies = 3;
@@ -37,6 +49,7 @@ public class GameScreen implements Screen {
 	Music music;
 
 	public GameScreen(Malice g, Music m) {
+		new Stage();
 		game = g;
 		music = m;
 		music.setVolume( 0.4f );
@@ -47,6 +60,9 @@ public class GameScreen implements Screen {
 		projectiles = new ArrayList<Projectile>();
 		player = new Player("img/sprites/RedMage/RedMage.atlas");
 		batch = new SpriteBatch();
+		batchPause = new SpriteBatch();
+		pauseScreen = new Texture( "img/pausescreen.png" );
+		pauseSprite = new Sprite(pauseScreen);
 		
 		//initializes enemies and puts in a random amount of enemies
 		enemies = new ArrayList<Enemy>();
@@ -73,8 +89,39 @@ public class GameScreen implements Screen {
 		}
 	}
 
+	
+	
 	@Override
 	public void render(float delta) {
+		switch (state)
+		{
+		case RUN:
+			renderRun(delta);
+			break;
+		case PAUSE:
+			renderPaused(delta);
+			break;
+		case RESUME:
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void renderPaused(float delta)
+	{
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		batchPause.begin();
+		pauseSprite.draw( batchPause );
+		batchPause.end();
+		if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
+        {
+        	state = State.RUN;
+        }
+	}
+
+	public void renderRun(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
@@ -130,7 +177,7 @@ public class GameScreen implements Screen {
                 hasHit = true;
             else
             for (Enemy enemy : enemies) {
-                if ( hasHit && projectile.hitCharacter( enemy ) )
+                if ( hasHit || projectile.hitCharacter( enemy ) )
                      hasHit = true;
             }
             if ( hasHit || map.isCollidingWithWall( projectile ) ) {
@@ -140,8 +187,14 @@ public class GameScreen implements Screen {
         }
         
         batch.end();
+        
+        if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
+        {
+        	state = State.PAUSE;
+        	// game.setScreen( new PauseMenu(game, music, this) );
+        }
 	}
-
+	
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -170,6 +223,11 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		map.dispose();
 		batch.dispose();
+	}
+	
+	public State getState()
+	{
+		return state;
 	}
 
 }
