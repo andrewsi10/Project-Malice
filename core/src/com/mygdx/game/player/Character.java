@@ -23,10 +23,10 @@ public abstract class Character extends Sprite {
 	public static final int NORTHWEST = 7;
 	public static final int NUMDIRECTIONS = 8;
 
-	private int maxHp = 1; // max health
+	private int maxHp = 50; // max health
 	private int currentHp = maxHp; // current health
-	private int baseDmg = 1; // base damage
-	private int randMod = 0; // random damage modifier
+	private int baseDmg = 10; // base damage
+	private int randMod = 4; // random damage modifier
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
@@ -115,6 +115,8 @@ public abstract class Character extends Sprite {
 	public abstract void move( Character character, 
 	                           ArrayList<Projectile> projectiles, 
 	                           long time);
+	
+	public abstract String getType();
 
 	protected void move(int dir) {
 

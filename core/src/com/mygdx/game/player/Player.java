@@ -79,4 +79,10 @@ public class Player extends Character {
 		return -1;
 	}
 
+	@Override
+	public String getType()
+	{
+		return "player";
+	}
+
 }

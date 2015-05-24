@@ -6,9 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -36,6 +38,7 @@ public class GameScreen implements Screen {
 	private Player player;
     private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
+	private BitmapFont font;
 	
 	public enum State
 	{
@@ -45,10 +48,11 @@ public class GameScreen implements Screen {
 	    STOPPED
 	}
 	
-	private State state = State.RUN;
-	private int enemyMaxCount = -2;
-	private int enemyMinCount = 10;
-	private int numEnemies = 3;
+	private State state;
+	private int enemyMaxCount;
+	private int enemyMinCount;
+	private int numEnemies;
+	private int playerPoints;
 
 	Music music;
 
@@ -67,6 +71,12 @@ public class GameScreen implements Screen {
 		batchPause = new SpriteBatch();
 		pauseScreen = new Texture( "img/pausescreen.png" );
 		pauseSprite = new Sprite(pauseScreen);
+		state = State.RUN;
+		enemyMaxCount = -2;
+		enemyMinCount = 10;
+		numEnemies = 3;
+		playerPoints = 0;
+		font = new BitmapFont();
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 960, 720);
@@ -104,6 +114,7 @@ public class GameScreen implements Screen {
 	
 	public void renderPaused(float delta)
 	{
+		music.pause();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 		batchPause.begin();
@@ -112,6 +123,7 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
         {
         	state = State.RUN;
+        	music.play();
         }
 	}
 
@@ -155,6 +167,15 @@ public class GameScreen implements Screen {
                     if (sprite.isDead())
                     {
                     	sprites.remove( sprite );
+                    	if (sprite.getType().equals( "enemy" ))
+                    	{
+                    		playerPoints += 10;
+                    	}
+                    	else if (sprite.getType().equals( "player" ))
+                    	{
+                    		music.stop();
+                    		game.setScreen( new GameOver(game, music, playerPoints) );
+                    	}
                     }
                     break;
                 }
@@ -164,14 +185,14 @@ public class GameScreen implements Screen {
                 i--;
             }
         }
-        
+        font.setColor( Color.BLACK );
+        font.draw( batch, "POINTS: " + playerPoints, cam.position.x - cam.viewportWidth / 2, cam.position.y + cam.viewportHeight / 2 );
         batch.end();
         renderer.end();
         
         if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
         {
         	state = State.PAUSE;
-        	// game.setScreen( new PauseMenu(game, music, this) );
         }
 	}
 	
@@ -183,7 +204,7 @@ public class GameScreen implements Screen {
             if (index == numEnemies + 1) index--;
             Enemy e = new Enemy("img/sprites/Enemies/Enemy" + index
                 + "/Enemy" + index + ".atlas");
-            e.increaseBdmg( -1 );
+            e.increaseBdmg( -5 );
             // set spawn for enemy
             map.setSpawn();
             e.setPosition(map.getSpawnX(), map.getSpawnY());
@@ -230,6 +251,7 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		map.dispose();
 		batch.dispose();
+		font.dispose();
 	}
 	
 	public State getState()

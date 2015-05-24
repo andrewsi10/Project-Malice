@@ -85,4 +85,11 @@ public class Enemy extends Character {
 		return distance <= aggroDistance;
 	}
 
+	@Override
+	public String getType()
+	{
+		return "enemy";
+		
+	}
+
 }
