@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
         
         //initializes enemies and puts in a random amount of enemies
         sprites = new ArrayList<Character>();
-        player = new Player("img/sprites/RedMage/RedMage.atlas");
+        player = new Player("img/sprites/RedMage/RedMage.atlas", "fireball");
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         

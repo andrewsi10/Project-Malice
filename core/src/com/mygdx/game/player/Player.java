@@ -11,7 +11,9 @@ import com.mygdx.game.projectile.Projectile;
 
 public class Player extends Character {
 
-	public Player(String file) {
+	private String projectile;
+	
+	public Player(String file, String proj) {
 		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
 				new TextureAtlas(Gdx.files.internal(file)).findRegion("0"),
 				new TextureAtlas(Gdx.files.internal(file)).findRegion("1") }),
@@ -34,6 +36,7 @@ public class Player extends Character {
 								new TextureAtlas(Gdx.files.internal(file))
 										.findRegion("7") }));
 		setSpeed(5);
+		projectile = proj;
 	}
 
     @Override
@@ -51,7 +54,7 @@ public class Player extends Character {
             this.shoot(projectiles, 
                 Gdx.input.getX() - Gdx.graphics.getWidth() / 2, 
                 Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
-                System.currentTimeMillis(), "fireball" );
+                System.currentTimeMillis(), projectile );
         }
     }
 
