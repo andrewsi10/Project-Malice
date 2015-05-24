@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Malice;
 import com.mygdx.game.player.Character;
@@ -30,6 +32,7 @@ public class GameScreen implements Screen {
 	private Texture pauseScreen;
 	private Sprite pauseSprite;
 	private OrthographicCamera cam;
+    private ShapeRenderer renderer;
 	private Player player;
     private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
@@ -59,6 +62,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
         projectiles = new ArrayList<Projectile>();
+        renderer = new ShapeRenderer();
 		batch = new SpriteBatch();
 		batchPause = new SpriteBatch();
 		pauseScreen = new Texture( "img/pausescreen.png" );
@@ -122,9 +126,10 @@ public class GameScreen implements Screen {
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(cam.combined);
-
+		renderer.setProjectionMatrix( cam.combined );
 
         batch.begin();
+        renderer.begin( ShapeType.Filled );
         map.draw(batch);
         
         if (sprites.size() < 3)
@@ -134,6 +139,7 @@ public class GameScreen implements Screen {
         
         for (Character sprite : sprites) {
             moveSprite(sprite);
+            sprite.drawHp( renderer );
         }
         for ( int i = 0; i < projectiles.size(); i++ ) {
             Projectile projectile = projectiles.get( i );
@@ -160,6 +166,7 @@ public class GameScreen implements Screen {
         }
         
         batch.end();
+        renderer.end();
         
         if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
         {
