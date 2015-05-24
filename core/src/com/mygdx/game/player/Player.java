@@ -51,7 +51,7 @@ public class Player extends Character {
             this.shoot(projectiles, 
                 Gdx.input.getX() - Gdx.graphics.getWidth() / 2, 
                 Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
-                System.currentTimeMillis() );
+                System.currentTimeMillis(), "fireball" );
         }
     }
 

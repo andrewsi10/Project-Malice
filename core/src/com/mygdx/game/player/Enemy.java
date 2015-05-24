@@ -41,7 +41,7 @@ public class Enemy extends Character {
 			int newDir = this.getDirection(-deltaX, -deltaY);
 			if (newDir != -1) {
 				move(newDir);
-				shoot(projectiles, deltaX, deltaY, time);
+				shoot(projectiles, deltaX, deltaY, time, "sword");
 			} else {
 		        move(getDirection()); // note % NUMDIRECTION if errors
 			}

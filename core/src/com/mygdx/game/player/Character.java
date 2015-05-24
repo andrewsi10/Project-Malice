@@ -195,11 +195,11 @@ public abstract class Character extends Sprite {
 	}
 
 	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-			float yDistance, long time) {
+			float yDistance, long time, String spriteType) {
 		if ( time - previousTime >= reloadSpeed ) {
 			previousTime = time;
 			Projectile p = new Projectile(this, getDirection(), getDamage(),
-					"sword", xDistance, yDistance);
+					spriteType, xDistance, yDistance);
 			p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
 			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 
