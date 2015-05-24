@@ -13,6 +13,7 @@ public class Enemy extends Character {
 	private int travelTimeScalar = 100;
 	private int marginOfDelta = 30;
 	private int minTravelTime = 4;
+	private String projectile;
 
 	public Enemy(String file) {
 		super(new TextureAtlas(Gdx.files.internal(file)).getRegions());
@@ -21,6 +22,7 @@ public class Enemy extends Character {
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
+		projectile = "sword";
 		setType("enemy");
 	}
 
@@ -42,7 +44,7 @@ public class Enemy extends Character {
 			int newDir = this.getDirection(-deltaX, -deltaY);
 			if (newDir != -1) {
 				move(newDir);
-				shoot(projectiles, deltaX, deltaY, time, "sword");
+				shoot(projectiles, deltaX, deltaY, time, projectile);
 			} else {
 		        move(getDirection()); // note % NUMDIRECTION if errors
 			}
