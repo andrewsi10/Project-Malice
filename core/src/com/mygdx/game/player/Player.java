@@ -78,11 +78,4 @@ public class Player extends Character {
 			return WEST;
 		return -1;
 	}
-
-	@Override
-	public String getType()
-	{
-		return "player";
-	}
-
 }

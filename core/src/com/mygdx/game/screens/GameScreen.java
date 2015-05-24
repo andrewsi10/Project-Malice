@@ -232,11 +232,11 @@ public class GameScreen implements Screen {
                     if (sprite.isDead())
                     {
                     	sprites.remove( sprite );
-                    	if (sprite.getType().equals( "enemy" ))
+                    	if (sprite instanceof Enemy)
                     	{
                     		playerPoints += 10;
                     	}
-                    	else if (sprite.getType().equals( "player" ))
+                    	else if (sprite instanceof Player )
                     	{
                     		music.stop();
                     		game.setScreen( new GameOver(game, music, playerPoints) );

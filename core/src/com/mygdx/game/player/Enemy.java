@@ -84,12 +84,4 @@ public class Enemy extends Character {
 		int distance = (int)Math.sqrt( dx * dx + dy * dy );
 		return distance <= aggroDistance;
 	}
-
-	@Override
-	public String getType()
-	{
-		return "enemy";
-		
-	}
-
 }
