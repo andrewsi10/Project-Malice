@@ -17,7 +17,7 @@ public class Projectile extends Sprite
 	final private float xDistance;
 	final private float yDistance;
 	final private double angle;
-	final private int speed = 10;
+	final private int speed = 8;
 	final private int damage;
 	private String projectileType;
 	private Sound sound;
