@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
 	private int enemyMinCount;
 	private int numEnemies;
 	private int playerPoints;
+	private long timeResumed;
 
 	Music music;
 
@@ -108,6 +109,7 @@ public class GameScreen implements Screen {
 			renderPaused(delta);
 			break;
 		case RESUME:
+			renderResume(delta);
 			break;
 		default:
 			break;
@@ -124,8 +126,64 @@ public class GameScreen implements Screen {
 		batchPause.end();
 		if (Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ))
         {
+        	state = State.RESUME;
+        	timeResumed = System.currentTimeMillis();
+        }
+	}
+	
+	// identical to renderRun except nothing moves and thus the screen is static
+	public void renderResume(float delta)
+	{
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+
+		cam.position.x = player.getX();
+		cam.position.y = player.getY();
+		cam.update();
+		
+		// tell the SpriteBatch to render in the
+		// coordinate system specified by the camera.
+		batch.setProjectionMatrix(cam.combined);
+		renderer.setProjectionMatrix( cam.combined );
+
+        batch.begin();
+        renderer.begin( ShapeType.Filled );
+        map.draw(batch);
+        
+        if (sprites.size() < 3)
+        {
+        	spawnEnemies();
+        }
+        
+        for (Character sprite : sprites) {
+        	sprite.draw( batch );
+            sprite.drawHp( renderer );
+        }
+        for ( int i = 0; i < projectiles.size(); i++ ) {
+            Projectile projectile = projectiles.get( i );
+            projectile.draw(batch);
+        }
+        float fontX = cam.position.x - cam.viewportWidth / 2;
+        float fontY = cam.position.y + cam.viewportHeight / 2;
+        if ( fontX < 0 || fontY < 0 
+                       || fontX > MAP_SIZE * Map.PIXELS_TO_METERS 
+                       || fontY > MAP_SIZE * Map.PIXELS_TO_METERS)
+        {
+            font.setColor( Color.WHITE );
+        }
+        else
+        {
+            font.setColor( Color.BLACK );
+        }
+        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
+        font.setColor( Color.BLACK );
+        font.draw( batch, "Game resumes in " + (2000 - System.currentTimeMillis() + timeResumed) + " milliseconds", cam.position.x - 100, cam.position.y + cam.viewportHeight / 3 );
+        batch.end();
+        renderer.end();
+        
+        if (System.currentTimeMillis() - timeResumed > 2000)
+        {
         	state = State.RUN;
-        	music.play();
         }
 	}
 
@@ -136,6 +194,11 @@ public class GameScreen implements Screen {
 		cam.position.x = player.getX();
 		cam.position.y = player.getY();
 		cam.update();
+		
+		if (!music.isPlaying())
+		{
+			music.play();
+		}
 
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
