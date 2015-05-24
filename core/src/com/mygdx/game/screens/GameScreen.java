@@ -259,15 +259,13 @@ public class GameScreen implements Screen {
         }
         float fontX = cam.position.x - cam.viewportWidth / 2;
         float fontY = cam.position.y + cam.viewportHeight / 2;
-        if ( fontX < 0 || fontY < 0 
-                       || fontX > MAP_SIZE * Map.PIXELS_TO_METERS 
-                       || fontY > MAP_SIZE * Map.PIXELS_TO_METERS)
+        if ( map.inPixelBounds( fontX, fontY ) )
         {
-            font.setColor( Color.WHITE );
+            font.setColor( Color.BLACK );
         }
         else
         {
-            font.setColor( Color.BLACK );
+            font.setColor( Color.WHITE );
         }
         font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
         batch.end();
@@ -289,7 +287,7 @@ public class GameScreen implements Screen {
                 + "/Enemy" + index + ".atlas");
             e.increaseBdmg( -5 );
             // set spawn for enemy
-            map.setSpawn();
+            map.setSpawn(player.getX(), player.getY());
             e.setPosition(map.getSpawnX(), map.getSpawnY());
             sprites.add(e);
         }
