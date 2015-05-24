@@ -21,6 +21,7 @@ public class Enemy extends Character {
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
+		setType("enemy");
 	}
 
 	@Override
@@ -83,13 +84,6 @@ public class Enemy extends Character {
 	    float dy = character.getY() - this.getY();
 		int distance = (int)Math.sqrt( dx * dx + dy * dy );
 		return distance <= aggroDistance;
-	}
-
-	@Override
-	public String getType()
-	{
-		return "enemy";
-		
 	}
 
 }

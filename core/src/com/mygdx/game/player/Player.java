@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
 public class Player extends Character {
-
+	
 	public Player(String file) {
 		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
 				new TextureAtlas(Gdx.files.internal(file)).findRegion("0"),
@@ -34,6 +34,7 @@ public class Player extends Character {
 								new TextureAtlas(Gdx.files.internal(file))
 										.findRegion("7") }));
 		setSpeed(5);
+		setType("player");
 	}
 
     @Override
@@ -77,12 +78,6 @@ public class Player extends Character {
 		if (Gdx.input.isKeyPressed(Input.Keys.A))
 			return WEST;
 		return -1;
-	}
-
-	@Override
-	public String getType()
-	{
-		return "player";
 	}
 
 }

@@ -43,6 +43,7 @@ public abstract class Character extends Sprite {
 	Array<AtlasRegion> rightFrames;
 	Array<AtlasRegion> downFrames;
 	Array<AtlasRegion> leftFrames;
+	private String type;
 
 	// constructor for enemies
 	public Character(Array<AtlasRegion> frames) {
@@ -113,7 +114,15 @@ public abstract class Character extends Sprite {
 	                           ArrayList<Projectile> projectiles, 
 	                           long time);
 	
-	public abstract String getType();
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
 
 	protected void move(int dir) {
 
