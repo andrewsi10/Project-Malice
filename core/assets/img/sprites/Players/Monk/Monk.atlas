@@ -1,0 +1,60 @@
+Monk.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+0
+  rotate: false
+  xy: 1, 1
+  size: 27, 32
+  orig: 27, 32
+  offset: 0, 0
+  index: -1
+1
+  rotate: false
+  xy: 30, 1
+  size: 27, 32
+  orig: 27, 32
+  offset: 0, 0
+  index: -1
+2
+  rotate: false
+  xy: 59, 1
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 85, 1
+  size: 22, 32
+  orig: 22, 32
+  offset: 0, 0
+  index: -1
+4
+  rotate: false
+  xy: 1, 35
+  size: 27, 32
+  orig: 27, 32
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 30, 35
+  size: 27, 32
+  orig: 27, 32
+  offset: 0, 0
+  index: -1
+6
+  rotate: false
+  xy: 59, 35
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 85, 35
+  size: 22, 32
+  orig: 22, 32
+  offset: 0, 0
+  index: -1
