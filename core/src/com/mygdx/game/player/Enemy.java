@@ -19,7 +19,7 @@ public class Enemy extends Character {
 
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
-
+		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
 	}
 

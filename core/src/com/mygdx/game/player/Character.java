@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
@@ -46,14 +45,8 @@ public abstract class Character extends Sprite {
 	Array<AtlasRegion> downFrames;
 	Array<AtlasRegion> leftFrames;
 
-	public Vector2 position = new Vector2();
-
-	public Vector2 velocity;
-
 	// constructor for enemies
 	public Character(Array<AtlasRegion> frames) {
-		position = new Vector2();
-
 		upFrames = frames;
 		rightFrames = frames;
 		downFrames = frames;
@@ -65,8 +58,6 @@ public abstract class Character extends Sprite {
 	// constructor for player
 	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
 			Array<AtlasRegion> down, Array<AtlasRegion> left) {
-		position = new Vector2();
-
 		upFrames = up;
 		rightFrames = right;
 		downFrames = down;
@@ -161,10 +152,6 @@ public abstract class Character extends Sprite {
 		if (dir >= 0 && dir < NUMDIRECTIONS) {
 			direction = dir;
 		}
-	}
-
-	public void update(float deltaTime) {
-		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 	}
 
 	public void shoot(ArrayList<Projectile> projectiles, float xDistance,

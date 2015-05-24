@@ -30,6 +30,7 @@ public class Player extends Character {
 										.findRegion("6"),
 								new TextureAtlas(Gdx.files.internal(file))
 										.findRegion("7") }));
+		setSpeed(5);
 	}
 
 	public void move() {

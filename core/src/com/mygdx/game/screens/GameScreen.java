@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
 //        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
 //            player.strafe();
 //        } else {
-            player.move();
+        player.move();
 //        }
         if (map.isCollidingWithWall(player))
             player.setPosition(x, y);
