@@ -23,40 +23,39 @@ public class Enemy extends Character {
 		setReloadSpeed(getReloadSpeed() * 2);
 	}
 
-	public void move(Player player, ArrayList<Projectile> projectiles, long time) {
-		if (!inRange(player)) {
-			move();
+	@Override
+	public void move( Character character, 
+	                  ArrayList<Projectile> projectiles, 
+	                  long time) 
+	{
+		if (!inRange(character)) {
+            setRandomDirection();
+	        move(getDirection()); // note % NUMDIRECTION if errors
 		}
 		// moves towards the player
 		else {
-			if (travelTime < 1) {
-				setDirection((int) (Math.random() * 8));
-				travelTime = (int) (minTravelTime + Math.random()
-						* travelTimeScalar);
-			}
-			travelTime--;
+		    setRandomDirection();
 
-			float deltaX = player.getX() - getX();
-			float deltaY = player.getY() - getY();
+			float deltaX = character.getX() - getX();
+			float deltaY = character.getY() - getY();
 			int newDir = this.getDirection(-deltaX, -deltaY);
 			if (newDir != -1) {
 				move(newDir);
 				shoot(projectiles, deltaX, deltaY, time);
 			} else {
-				move();
+		        move(getDirection()); // note % NUMDIRECTION if errors
 			}
 		}
 	}
-
-	@Override
-	public void move() {
-		if (travelTime < 1) {
-			setDirection((int) (Math.random() * 8));
-			travelTime = (int) (4 + Math.random() * travelTimeScalar);
-		}
-		travelTime--;
-
-		move(getDirection()); // note % NUMDIRECTION if errors
+	
+	private void setRandomDirection()
+	{
+        if (travelTime < 1) {
+            setDirection((int) (Math.random() * 8));
+            travelTime = (int) (minTravelTime + Math.random()
+                    * travelTimeScalar);
+        }
+        travelTime--;
 	}
 
 	private int getDirection(float deltaX, float deltaY) {
@@ -79,10 +78,10 @@ public class Enemy extends Character {
 		return -1;
 	}
 
-	public boolean inRange(Player player) {
-		int distance = (int) Math.sqrt((player.getX() - this.getX())
-				* (player.getX() - this.getX()) + (player.getY() - this.getY())
-				* (player.getY() - this.getY()));
+	public boolean inRange(Character character) {
+	    float dx = character.getX() - this.getX();
+	    float dy = character.getY() - this.getY();
+		int distance = (int)Math.sqrt( dx * dx + dy * dy );
 		return distance <= aggroDistance;
 	}
 

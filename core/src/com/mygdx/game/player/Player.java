@@ -1,10 +1,13 @@
 package com.mygdx.game.player;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.projectile.Projectile;
 
 public class Player extends Character {
 
@@ -33,60 +36,24 @@ public class Player extends Character {
 		setSpeed(5);
 	}
 
-	public void move() {
-		// if (currentFrame < animationSpeed* 2 - 1) {
-		// currentFrame++;
-		// } else {
-		// currentFrame = 0;
-		// }
-		int dir = getInputDirection();
-		if (dir != -1) {
-			move(dir);
-		}
-	}
-
-	// public void strafe() {
-	// if (currentFrame < 29) {
-	// currentFrame++;
-	// } else {
-	// currentFrame = 0;
-	// }
-	//
-	// int dir = getInputDirection();
-	// if ( dir != -1 )
-	// {
-	// int direction = this.getDirection();
-	// super.move( dir );
-	// setDirection( direction );
-	// }
-	// if (getDirection() == 0) {
-	// strafeSprite( 0 );
-	// } else if (getDirection() == 1 || getDirection() == 2
-	// || getDirection() == 3) {
-	// strafeSprite( 2 );
-	// } else if (getDirection() == 4) {
-	// strafeSprite( 4 );
-	// } else if (getDirection() == 5 || getDirection() == 6
-	// || getDirection() == 7) {
-	// strafeSprite( 6 );
-	// }
-	// }
-
-//	private void strafeSprite(int atlas) {
-//		setAtlas(atlas);
-//		setRegion(textureAtlas.findRegion(currentAtlasKey));
-//	}
-//
-//	private void setAtlas(int change) {
-//		currentAtlasKey = String.format("%01d", currentFrame / animationSpeed
-//				+ change);
-//	}
-
-	@Override
-	protected void move(int dir) {
-		super.move(dir);
-//		strafeSprite(getAtlasNumber(dir));
-	}
+    @Override
+    public void move( Character character, 
+                      ArrayList<Projectile> projectiles, 
+                      long time )
+    {
+        int dir = getInputDirection();
+        if (dir != -1) {
+            move(dir);
+        }
+        
+        if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
+        {
+            this.shoot(projectiles, 
+                Gdx.input.getX() - Gdx.graphics.getWidth() / 2, 
+                Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
+                System.currentTimeMillis() );
+        }
+    }
 
 	private int getInputDirection() {
 		if (Gdx.input.isKeyPressed(Input.Keys.D)
@@ -111,30 +78,5 @@ public class Player extends Character {
 			return WEST;
 		return -1;
 	}
-
-	/**
-	 * Returns atlas number for animation based on direction
-	 * 
-	 * @param dir
-	 *            Direction represented by an int
-	 * @return atlas number
-	 */
-//	private int getAtlasNumber(int dir) {
-//		switch (dir) {
-//		case NORTH:
-//			return 0;
-//		case NORTHEAST:
-//		case SOUTHEAST:
-//		case EAST:
-//			return 2;
-//		case SOUTH:
-//			return 4;
-//		case NORTHWEST:
-//		case SOUTHWEST:
-//		case WEST:
-//			return 6;
-//		}
-//		return -1;
-//	}
 
 }

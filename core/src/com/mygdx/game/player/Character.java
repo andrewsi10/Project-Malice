@@ -74,13 +74,49 @@ public abstract class Character extends Sprite {
 		leftAnimation = new Animation(.2f, leftFrames);
 		stateTime = 0f;
 	}
+    
+    /**
+     * Sets animation based on direction
+     * @param dir
+     */
+    private void setAnimations( int dir )
+    {
+        Animation animation = downAnimation;
+        switch ( dir )
+        {
+            case NORTH:
+                animation = upAnimation;
+                break;
+            case NORTHEAST:
+            case SOUTHEAST:
+            case EAST:
+                animation = rightAnimation;
+                break;
+            case SOUTH:
+                animation = downAnimation;
+                break;
+            case NORTHWEST:
+            case SOUTHWEST:
+            case WEST:
+                animation = leftAnimation;
+                break;
+        }
 
-	abstract void move();
+        if (!animation.isAnimationFinished(stateTime)) {
+            stateTime += Gdx.graphics.getDeltaTime();
+        } else {
+            stateTime = 0;
+        }
+        this.setRegion(animation.getKeyFrame(stateTime));
+    }
+
+	public abstract void move( Character character, 
+	                           ArrayList<Projectile> projectiles, 
+	                           long time);
 
 	protected void move(int dir) {
 
 		setDirection(dir);
-		Animation animation = downAnimation;
 		int dx = 0;
 		int dy = 0;
 		switch (dir) {
@@ -88,37 +124,36 @@ public abstract class Character extends Sprite {
 			dx = -1;
 		case NORTH:
 			dy = 1;
-			animation = upAnimation;
 			break;
 		case NORTHEAST:
 			dy = 1;
 		case EAST:
 			dx = 1;
-			animation = rightAnimation;
 			break;
 		case SOUTHEAST:
 			dx = 1;
 		case SOUTH:
 			dy = -1;
-			animation = downAnimation;
 			break;
 		case SOUTHWEST:
 			dy = -1;
 		case WEST:
 			dx = -1;
-			animation = leftAnimation;
 			break;
 		}
-
-		if (!animation.isAnimationFinished(stateTime)) {
-			stateTime += Gdx.graphics.getDeltaTime();
-		} else {
-			stateTime = 0;
-		}
-		this.setRegion(animation.getKeyFrame(stateTime));
-
+		setAnimations( dir );
 		translate(dx, dy);
 	}
+
+    protected void translate(int dx, int dy) {
+        if (dx == 0 || dy == 0) {
+            translateX((float) (moveSpeed * dx));
+            translateY((float) (moveSpeed * dy));
+        } else {
+            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+        }
+    }
 
 	public void increaseMaxHp(int i) {
 		maxHp += i;
@@ -148,15 +183,9 @@ public abstract class Character extends Sprite {
 		baseDmg += i;
 	}
 
-	public void setDirection(int dir) {
-		if (dir >= 0 && dir < NUMDIRECTIONS) {
-			direction = dir;
-		}
-	}
-
 	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
 			float yDistance, long time) {
-		if (time - previousTime >= reloadSpeed) {
+		if ( time - previousTime >= reloadSpeed ) {
 			previousTime = time;
 			Projectile p = new Projectile(this, getDirection(), getDamage(),
 					"fireball", xDistance, yDistance);
@@ -167,19 +196,15 @@ public abstract class Character extends Sprite {
 		}
 	}
 
-	protected void translate(int dx, int dy) {
-		if (dx == 0 || dy == 0) {
-			translateX((float) (moveSpeed * dx));
-			translateY((float) (moveSpeed * dy));
-		} else {
-			translateX((float) (moveSpeed * dx / Math.sqrt(2)));
-			translateY((float) (moveSpeed * dy / Math.sqrt(2)));
-		}
-	}
-
 	public void setSpeed(int speed) {
 		moveSpeed = speed;
 	}
+
+    public void setDirection(int dir) {
+        if (dir >= 0 && dir < NUMDIRECTIONS) {
+            direction = dir;
+        }
+    }
 
 	public void setReloadSpeed(int newReloadSpeed) {
 		reloadSpeed = newReloadSpeed;
