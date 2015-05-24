@@ -9,7 +9,7 @@ import com.mygdx.game.projectile.Projectile;
 public class Enemy extends Character {
 
 	private int travelTime;
-	private int aggroDistance = 200;
+	private int aggroDistance = 400;
 	private int travelTimeScalar = 100;
 	private int marginOfDelta = 30;
 	private int minTravelTime = 4;

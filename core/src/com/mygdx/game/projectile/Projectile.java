@@ -2,11 +2,13 @@ package com.mygdx.game.projectile;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.player.Character;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class Projectile extends Sprite
 {
@@ -20,13 +22,9 @@ public class Projectile extends Sprite
 	private String projectileType;
 	private Sound sound;
 
-	private static final int col = 4;
-	private static final int row = 1;
-
 	Animation animation;
-	Texture projectileTexture;
+	Array<AtlasRegion> projectileTexture;
 	TextureRegion currentFrame;
-	TextureRegion[] frames;
 	float stateTime;
 
 	public Projectile(Character c, int direction, int damage, String type, 
@@ -43,28 +41,28 @@ public class Projectile extends Sprite
 				+ projectileType + ".wav" ) );
 		sound.play();
 
-		projectileTexture = new Texture(
+		projectileTexture = new TextureAtlas(
 				Gdx.files.internal( "img/sprites/Projectiles/"
 						+ projectileType.charAt( 0 )
 						+ projectileType.substring( 1 ) + "/" + projectileType
-						+ ".png" ) );
-		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
-				projectileTexture.getWidth() / col,
-				projectileTexture.getHeight() / row );
-		frames = new TextureRegion[col * row];
+						+ ".atlas" ) ).getRegions();
+//		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
+//				projectileTexture.getWidth() / col,
+//				projectileTexture.getHeight() / row );
+//		frames = new TextureRegion[col * row];
+//
+//		int index = 0;
+//		for ( int i = 0; i < row; i++ )
+//		{
+//			for ( int j = 0; j < col; j++ )
+//			{
+//				frames[index++] = temp[i][j];
+//			}
+//		}
+		
+		this.set( new Sprite( projectileTexture.get(0) ) );
 
-		int index = 0;
-		for ( int i = 0; i < row; i++ )
-		{
-			for ( int j = 0; j < col; j++ )
-			{
-				frames[index++] = temp[i][j];
-			}
-		}
-
-		this.set( new Sprite( frames[0] ) );
-
-		animation = new Animation( .2f, frames );
+		animation = new Animation( .2f, projectileTexture );
 		stateTime = 0f;
 		currentFrame = animation.getKeyFrame( 0 );
 

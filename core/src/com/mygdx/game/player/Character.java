@@ -34,9 +34,6 @@ public abstract class Character extends Sprite {
 
 	private TextureAtlas textureAtlas;
 
-	protected int currentFrame;
-	protected int animationSpeed = 15;
-
 	float stateTime;
 	Animation upAnimation;
 	Animation rightAnimation;
@@ -202,7 +199,7 @@ public abstract class Character extends Sprite {
 		if ( time - previousTime >= reloadSpeed ) {
 			previousTime = time;
 			Projectile p = new Projectile(this, getDirection(), getDamage(),
-					"fireball", xDistance, yDistance);
+					"sword", xDistance, yDistance);
 			p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
 			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 
