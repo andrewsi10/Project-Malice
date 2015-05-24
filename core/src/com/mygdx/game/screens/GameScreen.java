@@ -94,9 +94,9 @@ public class GameScreen implements Screen {
         String spriteName = "RedMage";
         if (playerType.equals( "Mage of Justice" ))
         {
-        	spriteName = "WhiteMonk";
+        	spriteName = "WhiteMage";
         }
-        player = new Player("img/sprites/Players" + spriteName + "/" + spriteName + ".atlas", "fireball");
+        player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", "fireball");
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         
