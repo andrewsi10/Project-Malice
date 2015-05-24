@@ -30,6 +30,8 @@ public class GameScreen implements Screen {
 
 	private final Malice game;
 
+	
+	public final static int MAP_SIZE = 50;
 	private Map map;
 	private Texture pauseScreen;
 	private Sprite pauseSprite;
@@ -81,7 +83,7 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera();
         cam.setToOrtho(false, 960, 720);
         
-        map = new Map(50, 50);
+        map = new Map( MAP_SIZE, MAP_SIZE );
         map.generate(Map.DUNGEON);
         
         //initializes enemies and puts in a random amount of enemies
@@ -185,8 +187,19 @@ public class GameScreen implements Screen {
                 i--;
             }
         }
-        font.setColor( Color.BLACK );
-        font.draw( batch, "POINTS: " + playerPoints, cam.position.x - cam.viewportWidth / 2, cam.position.y + cam.viewportHeight / 2 );
+        float fontX = cam.position.x - cam.viewportWidth / 2;
+        float fontY = cam.position.y + cam.viewportHeight / 2;
+        if ( fontX < 0 || fontY < 0 
+                       || fontX > MAP_SIZE * Map.PIXELS_TO_METERS 
+                       || fontY > MAP_SIZE * Map.PIXELS_TO_METERS)
+        {
+            font.setColor( Color.WHITE );
+        }
+        else
+        {
+            font.setColor( Color.BLACK );
+        }
+        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
         batch.end();
         renderer.end();
         
