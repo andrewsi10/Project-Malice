@@ -41,6 +41,7 @@ public class GameScreen implements Screen {
     private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
 	private BitmapFont font;
+	private String playerType;
 	
 	public enum State
 	{
@@ -59,11 +60,12 @@ public class GameScreen implements Screen {
 
 	Music music;
 
-	public GameScreen(Malice g, Music m) {
+	public GameScreen(Malice g, Music m, String playerType) {
 		new Stage();
 		game = g;
 		music = m;
 		music.setVolume( 0.4f );
+		this.playerType = playerType;
 	}
 
 	@Override
@@ -89,7 +91,12 @@ public class GameScreen implements Screen {
         
         //initializes enemies and puts in a random amount of enemies
         sprites = new ArrayList<Character>();
-        player = new Player("img/sprites/Players/BlackMage/BlackMage.atlas", "fireball");
+        String spriteName = "RedMage";
+        if (playerType.equals( "Mage of Justice" ))
+        {
+        	spriteName = "WhiteMonk";
+        }
+        player = new Player("img/sprites/Players" + spriteName + "/" + spriteName + ".atlas", "fireball");
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         
@@ -239,7 +246,7 @@ public class GameScreen implements Screen {
                     	else if (sprite instanceof Player )
                     	{
                     		music.stop();
-                    		game.setScreen( new GameOver(game, music, playerPoints) );
+                    		game.setScreen( new GameOver(game, music, playerPoints, playerType) );
                     	}
                     }
                     break;

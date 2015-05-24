@@ -109,7 +109,7 @@ public class MainMenu implements Screen
 			{
 				playButton.remove();
 				exitButton.remove();
-				game.setScreen( new GameScreen( game, music ) );
+				game.setScreen( new CharacterSelect( game, music ) );
 			}
 		} );
 
