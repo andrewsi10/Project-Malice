@@ -42,6 +42,7 @@ public class GameScreen implements Screen {
 	private ArrayList<Projectile> projectiles;
 	private BitmapFont font;
 	private String playerType;
+	private String[] spriteNames = {"BlackMage", "Monk", "RedMage", "Thief", "Warrior", "WhiteMage"};
 	
 	public enum State
 	{
@@ -76,7 +77,8 @@ public class GameScreen implements Screen {
 		batchPause = new SpriteBatch();
 		pauseScreen = new Texture( "img/pausescreen.png" );
 		pauseSprite = new Sprite(pauseScreen);
-		state = State.RUN;
+		timeResumed = System.currentTimeMillis();
+		state = State.RESUME;
 		enemyMaxCount = -2;
 		enemyMinCount = 10;
 		numEnemies = 3;
@@ -91,10 +93,15 @@ public class GameScreen implements Screen {
         
         //initializes enemies and puts in a random amount of enemies
         sprites = new ArrayList<Character>();
-        String spriteName = "RedMage";
-        if (playerType.equals( "Mage of Justice" ))
+        CharacterSelect temp = new CharacterSelect(null, null);
+        String[] charNames = temp.getNames();
+        String spriteName = "BlackMage";
+        for (int i = 0; i < charNames.length; i++)
         {
-        	spriteName = "WhiteMage";
+        	if (charNames[i].equals( playerType ))
+        	{
+        		spriteName = spriteNames[i];
+        	}
         }
         player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", "fireball");
         player.setPosition(map.getSpawnX(), map.getSpawnY());

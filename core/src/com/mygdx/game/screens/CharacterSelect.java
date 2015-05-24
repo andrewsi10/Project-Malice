@@ -29,6 +29,11 @@ public class CharacterSelect implements Screen
 
 	private TextButton char1Button, char2Button, exitButton;
 
+	private TextButton[] characters;
+
+	private String[] characterNames = { "Dark Wizard", "Brawler",
+			"Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" };
+
 	private Skin skin;
 
 	Music music;
@@ -38,12 +43,19 @@ public class CharacterSelect implements Screen
 		game = g;
 		music = m;
 	}
+	
+	public String[] getNames()
+	{
+		return characterNames;
+	}
 
 	// copied from online
 	private void createSkin()
 	{
 		// Create a font
 		BitmapFont font = new BitmapFont();
+
+		characters = new TextButton[6];
 
 		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
 				new Texture( "img/titlescreen.png" ) ) ) );
@@ -92,50 +104,58 @@ public class CharacterSelect implements Screen
 		music.setVolume( 0.7f );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
-
 		createSkin();
-		char1Button = new TextButton( "Mage of Justice", skin ); // Use
-														// the
-														// initialized
-														// skin
-		char1Button.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() * 55 / 100 );
-		char1Button.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				char1Button.remove();
-				char2Button.remove();
-				exitButton.remove();
-				game.setScreen( new GameScreen( game, music, "Mage of Justice" ) );
-			}
-		} );
 
-		char2Button = new TextButton( "Crimson Wizard", skin ); // Use
-		// the
-		// initialized
-		// skin
-		char2Button.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() * 40 / 100 );
-		char2Button.addListener( new ClickListener()
+		for ( int i = 0; i < characters.length / 2; i++ )
 		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
+			final String charName = characterNames[i];
+			characters[i] = new TextButton(charName, skin);
+			characters[i].setPosition(
+					Gdx.graphics.getWidth() / 5,
+					Gdx.graphics.getHeight() * (60 - 20 * i) / 100 );
+			characters[i].addListener( new ClickListener()
 			{
-				char1Button.remove();
-				char2Button.remove();
-				exitButton.remove();
-				game.setScreen( new GameScreen( game, music, "Crimson Wizard" ) );
-			}
-		} );
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					for (TextButton button : characters)
+					{
+						button.remove();
+					}
+					exitButton.remove();
+					game.setScreen( new GameScreen( game, music,
+							charName ) );
+				}
+			} );
+		}
+		
+		for ( int i = characters.length / 2; i < characters.length; i++ )
+		{
+			final String charName = characterNames[i];
+			characters[i] = new TextButton(charName, skin);
+			characters[i].setPosition(
+					Gdx.graphics.getWidth() * 11 / 20,
+					Gdx.graphics.getHeight() * (60 - 20 * (i - characters.length / 2)) / 100 );
+			characters[i].addListener( new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					for (TextButton button : characters)
+					{
+						button.remove();
+					}
+					exitButton.remove();
+					game.setScreen( new GameScreen( game, music,
+							charName ) );
+				}
+			} );
+		}
 
 		exitButton = new TextButton( "Exit", skin );
 		exitButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 4 );
+				Gdx.graphics.getHeight() / 15 );
 		exitButton.addListener( new ClickListener()
 		{
 			@Override
@@ -146,8 +166,10 @@ public class CharacterSelect implements Screen
 		} );
 
 		stage.addActor( background );
-		stage.addActor( char1Button );
-		stage.addActor( char2Button );
+		for (TextButton button : characters)
+		{
+			stage.addActor( button );
+		}
 		stage.addActor( exitButton );
 	}
 
