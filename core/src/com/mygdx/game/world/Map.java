@@ -6,17 +6,19 @@ import java.util.LinkedList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Map
 {
     public static final int ARENA = 0;
     public static final int DUNGEON = 1;
-    public static final int PIXELS_TO_METERS = 49;
+    public static final int PIXELS_TO_METERS = 64;
+    public static final String PACKAGE = "map/";
     
     private boolean[][] areSpaces;
-    private Texture block[][];
-    private Texture space;
+    private Texture[] blocks;
+    private Texture[] spaces;
     private int spawnX;
     private int spawnY;
     
@@ -27,14 +29,18 @@ public class Map
      */
     public Map( int rows, int cols)
     {
-        space = new Texture( "map/GrassTile.png" );
+//        TextureRegion[][] trees = TextureRegion.split( new Texture( PACKAGE + "Trees.png" ), PIXELS_TO_METERS, PIXELS_TO_METERS );
+        spaces = new Texture[]{ new Texture( PACKAGE + "GrassTile.png" ) };
         areSpaces = new boolean[rows][cols];
-        block = new Texture[rows][cols];
-        for (int i = 0; i < rows; i++) {
-        	for (int j = 0; j < cols; j++) {
-        		block[i][j] = new Texture( "map/Trees/Tree" + (int)(Math.random()*10) + ".png");
-        	}
-        }
+        blocks = new Texture[10];
+        for ( int i = 0; i < blocks.length; i++ )
+            blocks[i] = new Texture( PACKAGE + "Trees/Tree" + i + ".png" );
+//        blocks = new Texture[trees.length * trees[0].length];
+//        for (int i = 0; i < trees.length; i++) {
+//        	for (int j = 0; j < trees[i].length; j++) {
+//        		blocks[i*trees.length + j] = trees[i][j].getTexture();
+//        	}
+//        }
     }
 
     /**
@@ -132,7 +138,7 @@ public class Map
     }
     
     // -----------------------Collision ------------------ //
-    
+
     /**
      * Returns true if Sprite is in a wall
      * @param s Sprite to check
@@ -140,7 +146,6 @@ public class Map
      */
     public boolean isCollidingWithWall( Sprite s )
     {
-        Rectangle sprite = new Rectangle( s.getX(), s.getY(), s.getWidth(), s.getHeight() );
         Rectangle check = new Rectangle();
         check.setSize( PIXELS_TO_METERS );
         int x = getTileX( s.getX() );
@@ -152,7 +157,8 @@ public class Map
                 if ( inTileBounds( i, j ) && !areSpaces[i][j] )
                 {
                     check.setPosition( getX( i ), getY( j ) );
-                    if ( sprite.overlaps( check )) return true;
+                    if ( s.getBoundingRectangle().overlaps( check )) 
+                        return true;
                 }
             }
         }
@@ -167,55 +173,17 @@ public class Map
      */
     public void draw( SpriteBatch batch )
     {
-    	initialDraw(batch);
-    	drawBlocks(batch);
-    	
-//        for ( int i = 0; i < areSpaces.length; i++ )
-//        {
-//            for ( int j = 0; j < areSpaces[i].length; j++ )
-//            {
-//                if (areSpaces[i][j])
-//                {
-//                	batch.draw(space, i*space.getWidth(), j*space.getHeight());
-//                }
-//                else {
-//                	batch.draw(block, i*block.getWidth(), j*space.getHeight());
-//                }
-//            }
-//        }
-    }
-    
-    /**
-     * covers the map in the texture used for spaces
-     * @param batch used to draw the map
-     */
-    void initialDraw(SpriteBatch batch)
-    {
-    	for (int i = 0; i < areSpaces.length; i++)
-    	{
-    		for (int j = 0; j < areSpaces[i].length; j++)
-    		{
-    			batch.draw(space, i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
-    		}
-    	}
-    }
-    
-    /**
-     * places blocks where necessary
-     * @param batch
-     */
-    void drawBlocks(SpriteBatch batch)
-    {
-    	for (int i = 0; i < areSpaces.length; i++)
-    	{
-    		for (int j = 0; j < areSpaces[i].length; j++)
-    		{
-    			if (!areSpaces[i][j])
-    			{
-    				batch.draw(block[i][j], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
-    			}
-    		}
-    	}
+        for ( int i = 0; i < areSpaces.length; i++ )
+        {
+            for ( int j = 0; j < areSpaces[i].length; j++ )
+            {
+                batch.draw(spaces[0], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+                if (!areSpaces[i][j])
+                {
+                    batch.draw(blocks[(i+j)%blocks.length], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+                }
+            }
+        }
     }
     
     /**
@@ -223,12 +191,10 @@ public class Map
      */
     public void dispose()
     {
-        for (int i = 0; i < block.length; i++) {
-        	for (int j = 0 ; j < block[i].length; j++) {
-        		block[i][j].dispose();
-        	}
-        }
-        this.space.dispose();
+        for ( Texture t : blocks )
+            t.dispose();
+        for ( Texture t : spaces )
+            t.dispose();
     }
     
     
