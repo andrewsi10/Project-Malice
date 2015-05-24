@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -22,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 
-public class GameOver implements Screen
+public class CharacterSelect implements Screen
 {
 	Image background;
 
@@ -30,26 +27,16 @@ public class GameOver implements Screen
 
 	private Stage stage;
 
-	private TextButton retryButton, exitButton;
+	private TextButton char1Button, char2Button, exitButton;
 
 	private Skin skin;
 
-	private int playerPoints;
-
-	private BitmapFont font;
-
-	private Batch batch;
-	
-	private String playerType;
-
 	Music music;
 
-	public GameOver(Malice g, Music m, int points, String playerType)
+	public CharacterSelect(Malice g, Music m)
 	{
 		game = g;
 		music = m;
-		playerPoints = points;
-		this.playerType = playerType;
 	}
 
 	// copied from online
@@ -57,8 +44,6 @@ public class GameOver implements Screen
 	{
 		// Create a font
 		BitmapFont font = new BitmapFont();
-
-		batch = new SpriteBatch();
 
 		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
 				new Texture( "img/titlescreen.png" ) ) ) );
@@ -106,27 +91,44 @@ public class GameOver implements Screen
 
 		music.setVolume( 0.7f );
 		stage = new Stage();
-		font = new BitmapFont();
-		font.setColor( Color.BLACK );
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
 		createSkin();
-		retryButton = new TextButton( "Try Again", skin ); // Use
-															// the
-															// initialized
-															// skin
-		retryButton.setPosition(
+		char1Button = new TextButton( "Mage of Justice", skin ); // Use
+														// the
+														// initialized
+														// skin
+		char1Button.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 2 );
-		retryButton.addListener( new ClickListener()
+				Gdx.graphics.getHeight() * 55 / 100 );
+		char1Button.addListener( new ClickListener()
 		{
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				retryButton.remove();
+				char1Button.remove();
+				char2Button.remove();
 				exitButton.remove();
-				music.play();
-				game.setScreen( new GameScreen( game, music, playerType ) );
+				game.setScreen( new GameScreen( game, music, "Mage of Justice" ) );
+			}
+		} );
+
+		char2Button = new TextButton( "Crimson Wizard", skin ); // Use
+		// the
+		// initialized
+		// skin
+		char2Button.setPosition(
+				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
+				Gdx.graphics.getHeight() * 40 / 100 );
+		char2Button.addListener( new ClickListener()
+		{
+			@Override
+			public void clicked(InputEvent event, float x, float y)
+			{
+				char1Button.remove();
+				char2Button.remove();
+				exitButton.remove();
+				game.setScreen( new GameScreen( game, music, "Crimson Wizard" ) );
 			}
 		} );
 
@@ -144,7 +146,8 @@ public class GameOver implements Screen
 		} );
 
 		stage.addActor( background );
-		stage.addActor( retryButton );
+		stage.addActor( char1Button );
+		stage.addActor( char2Button );
 		stage.addActor( exitButton );
 	}
 
@@ -155,12 +158,6 @@ public class GameOver implements Screen
 		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		stage.act();
 		stage.draw();
-		batch.begin();
-		font.draw( batch, "You earned " + playerPoints
-				+ " points. Better luck next time!",
-				Gdx.graphics.getWidth() / 2 - font.getRegion().getRegionWidth() / 2,
-				Gdx.graphics.getHeight() * 67 / 100 );
-		batch.end();
 	}
 
 	@Override
@@ -196,6 +193,5 @@ public class GameOver implements Screen
 	{
 		skin.dispose();
 		stage.dispose();
-		batch.dispose();
 	}
 }
