@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		projectiles = new ArrayList<Projectile>();
-		player = new Player("img/sprites/RedMage/RedMage.atlas", "6");
+		player = new Player("img/sprites/RedMage/RedMage.atlas");
 		batch = new SpriteBatch();
 		
 		//initializes enemies and puts in a random amount of enemies
@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
 			int index = 1 + (int) (Math.random() * numEnemies);
 			if (index == numEnemies + 1) index--;
 			enemies.add(new Enemy("img/sprites/Enemies/Enemy" + index
-					+ "/Enemy" + index + ".atlas", "0"));
+					+ "/Enemy" + index + ".atlas"));
 		}
 
 		cam = new OrthographicCamera();
@@ -91,11 +91,11 @@ public class GameScreen implements Screen {
         
         float x = player.getX();
         float y = player.getY();
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-            player.strafe();
-        } else {
+//        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+//            player.strafe();
+//        } else {
             player.move();
-        }
+//        }
         if (map.isCollidingWithWall(player))
             player.setPosition(x, y);
         player.draw(batch);

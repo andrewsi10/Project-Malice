@@ -3,13 +3,15 @@ package com.mygdx.game.player;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
-public abstract class Character extends Sprite
-{
+public abstract class Character extends Sprite {
 	public static final int NORTH = 0;
 	public static final int NORTHEAST = 1;
 	public static final int EAST = 2;
@@ -27,187 +29,207 @@ public abstract class Character extends Sprite
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
-    private float moveSpeed;
+	private float moveSpeed;
 
-    private TextureAtlas textureAtlas;
+	private TextureAtlas textureAtlas;
 
-    protected int currentFrame;
-    protected int animationSpeed = 15;
-    
+	protected int currentFrame;
+	protected int animationSpeed = 15;
+
+	float stateTime;
+	Animation upAnimation;
+	Animation rightAnimation;
+	Animation downAnimation;
+	Animation leftAnimation;
+	Array<AtlasRegion> upFrames;
+	Array<AtlasRegion> rightFrames;
+	Array<AtlasRegion> downFrames;
+	Array<AtlasRegion> leftFrames;
+
 	public Vector2 position = new Vector2();
-	
+
 	public Vector2 velocity;
 
-	public Character(String filePath, String frame)
-	{
+	// constructor for enemies
+	public Character(Array<AtlasRegion> frames) {
 		position = new Vector2();
-		textureAtlas = new TextureAtlas( Gdx.files.internal( filePath ) );
-		set( new Sprite( textureAtlas.findRegion( frame ) ) );
+
+		upFrames = frames;
+		rightFrames = frames;
+		downFrames = frames;
+		leftFrames = frames;
+		set(new Sprite(frames.get(0)));
+		initializeAnimations();
+	}
+
+	// constructor for player
+	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
+			Array<AtlasRegion> down, Array<AtlasRegion> left) {
+		position = new Vector2();
+
+		upFrames = up;
+		rightFrames = right;
+		downFrames = down;
+		leftFrames = left;
+		set(new Sprite(down.get(0)));
+		initializeAnimations();
+	}
+	
+	//initializes the animations
+	void initializeAnimations() {
+		upAnimation = new Animation(.2f, upFrames);
+		rightAnimation = new Animation(.2f, rightFrames);
+		downAnimation = new Animation(.2f, downFrames);
+		leftAnimation = new Animation(.2f, leftFrames);
+		stateTime = 0f;
 	}
 
 	abstract void move();
 
+	protected void move(int dir) {
 
-    protected void move( int dir )
-    {
-        setDirection(dir);
-        int dx = 0;
-        int dy = 0;
-        switch ( dir )
-        {
-            case NORTHWEST:
-                dx = -1;
-            case NORTH:
-                dy = 1;
-                break;
-            case NORTHEAST:
-                dy = 1;
-            case EAST:
-                dx = 1;
-                break;
-            case SOUTHEAST:
-                dx = 1;
-            case SOUTH:
-                dy = -1;
-                break;
-            case SOUTHWEST:
-                dy = -1;
-            case WEST:
-                dx = -1;
-                break;
-        }
-        translate( dx, dy );
-    }
-	abstract void strafe();
+		setDirection(dir);
+		Animation animation = downAnimation;
+		int dx = 0;
+		int dy = 0;
+		switch (dir) {
+		case NORTHWEST:
+			dx = -1;
+		case NORTH:
+			dy = 1;
+			animation = upAnimation;
+			break;
+		case NORTHEAST:
+			dy = 1;
+		case EAST:
+			dx = 1;
+			animation = rightAnimation;
+			break;
+		case SOUTHEAST:
+			dx = 1;
+		case SOUTH:
+			dy = -1;
+			animation = downAnimation;
+			break;
+		case SOUTHWEST:
+			dy = -1;
+		case WEST:
+			dx = -1;
+			animation = leftAnimation;
+			break;
+		}
 
-	public void increaseMaxHp(int i)
-	{
+		if (!animation.isAnimationFinished(stateTime)) {
+			stateTime += Gdx.graphics.getDeltaTime();
+		} else {
+			stateTime = 0;
+		}
+		this.setRegion(animation.getKeyFrame(stateTime));
+
+		translate(dx, dy);
+	}
+
+	public void increaseMaxHp(int i) {
 		maxHp += i;
 	}
 
-	public void increaseCurrentHp(int i)
-	{
-		if ( currentHp + i > maxHp )
-		{
+	public void increaseCurrentHp(int i) {
+		if (currentHp + i > maxHp) {
 			currentHp = maxHp;
-		} else
-		{
+		} else {
 			currentHp += i;
 		}
 	}
 
-    public boolean die()
-    {
-        return true;
-    }
+	public boolean die() {
+		return true;
+	}
 
-    public boolean takeDamage(int damage)
-    {
-        currentHp -= damage;
-        if ( currentHp <= 0 )
-        {
-            return die();
-        }
-        else return false;
-    }
+	public boolean takeDamage(int damage) {
+		currentHp -= damage;
+		if (currentHp <= 0) {
+			return die();
+		} else
+			return false;
+	}
 
-	public void increaseBdmg(int i)
-	{
+	public void increaseBdmg(int i) {
 		baseDmg += i;
 	}
 
-	public void setDirection(int dir)
-	{
-		if ( dir >= 0 && dir < NUMDIRECTIONS )
-		{
+	public void setDirection(int dir) {
+		if (dir >= 0 && dir < NUMDIRECTIONS) {
 			direction = dir;
 		}
 	}
 
-	public void update(float deltaTime)
-	{
+	public void update(float deltaTime) {
 		position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 	}
 
-    public void shoot( ArrayList<Projectile> projectiles, float xDistance, float yDistance, long time )
-    {
-        if ( time - previousTime >= reloadSpeed )
-        {
-            previousTime = time;
-            Projectile p = new Projectile( this, getDirection(), getDamage(), "fireball",
-                    xDistance, yDistance );
-            p.setPosition(getX() + getWidth() / 2, getY()
-                + getHeight() / 3);
-            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
+			float yDistance, long time) {
+		if (time - previousTime >= reloadSpeed) {
+			previousTime = time;
+			Projectile p = new Projectile(this, getDirection(), getDamage(),
+					"fireball", xDistance, yDistance);
+			p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
+			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 
-            projectiles.add( p );
-        }
-    }
-    
-    protected void translate( int dx, int dy )
-    {
-        if ( dx == 0 || dy == 0 )
-        {
-            translateX((float) (moveSpeed * dx));
-            translateY((float) (moveSpeed * dy));
-        }
-        else
-        {
-            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
-            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
-        }
-    }
-    
-    public void setSpeed( int speed )
-    {
-        moveSpeed = speed;
-    }
+			projectiles.add(p);
+		}
+	}
 
-    public void setReloadSpeed(int newReloadSpeed)
-    {
-        reloadSpeed = newReloadSpeed;
-    }
+	protected void translate(int dx, int dy) {
+		if (dx == 0 || dy == 0) {
+			translateX((float) (moveSpeed * dx));
+			translateY((float) (moveSpeed * dy));
+		} else {
+			translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+			translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+		}
+	}
 
-	public int getReloadSpeed()
-	{
+	public void setSpeed(int speed) {
+		moveSpeed = speed;
+	}
+
+	public void setReloadSpeed(int newReloadSpeed) {
+		reloadSpeed = newReloadSpeed;
+	}
+
+	public int getReloadSpeed() {
 		return reloadSpeed;
 	}
 
-	public TextureAtlas getAtlas()
-	{
+	public TextureAtlas getAtlas() {
 		return textureAtlas;
 	}
 
-	public int getMaxHp()
-	{
+	public int getMaxHp() {
 		return maxHp;
 	}
 
-	public int getCurrentHp()
-	{
+	public int getCurrentHp() {
 		return currentHp;
 	}
 
-	public int getDamage()
-	{
-		return baseDmg + (int) ( randMod * Math.random() );
+	public int getDamage() {
+		return baseDmg + (int) (randMod * Math.random());
 	}
 
-	public int getDirection()
-	{
+	public int getDirection() {
 		return direction;
 	}
-	
+
 	// --------------------For Testing --------------//
 	@Override
-	public String toString()
-	{
-	    String s = "HP: " + currentHp + "/" + maxHp + "; Base Damage: " 
-	              + baseDmg + ", RandomMod: " + randMod + ", " 
-	              + "Direction: " + direction + ", Reload; " + reloadSpeed
-	              + ", previousTime: " + previousTime 
-	              + ", moveSpeed: " + moveSpeed;
+	public String toString() {
+		String s = "HP: " + currentHp + "/" + maxHp + "; Base Damage: "
+				+ baseDmg + ", RandomMod: " + randMod + ", " + "Direction: "
+				+ direction + ", Reload; " + reloadSpeed + ", previousTime: "
+				+ previousTime + ", moveSpeed: " + moveSpeed;
 
-	    return s;
+		return s;
 	}
 }
