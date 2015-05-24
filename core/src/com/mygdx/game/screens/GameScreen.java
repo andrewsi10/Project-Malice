@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
         		spriteName = spriteNames[i];
         	}
         }
-        player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", "fireball");
+        player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", "holycross");
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         
