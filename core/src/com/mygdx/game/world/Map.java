@@ -15,7 +15,7 @@ public class Map
     public static final int PIXELS_TO_METERS = 49;
     
     private boolean[][] areSpaces;
-    private Texture block;
+    private Texture block[][];
     private Texture space;
     private int spawnX;
     private int spawnY;
@@ -27,9 +27,14 @@ public class Map
      */
     public Map( int rows, int cols)
     {
-        block = new Texture( "map/Trees/Tree1.png" );
         space = new Texture( "map/GrassTile.png" );
         areSpaces = new boolean[rows][cols];
+        block = new Texture[rows][cols];
+        for (int i = 0; i < rows; i++) {
+        	for (int j = 0; j < cols; j++) {
+        		block[i][j] = new Texture( "map/Trees/Tree" + (int)(Math.random()*10) + ".png");
+        	}
+        }
     }
 
     /**
@@ -207,7 +212,7 @@ public class Map
     		{
     			if (!areSpaces[i][j])
     			{
-    				batch.draw(block, i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+    				batch.draw(block[i][j], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
     			}
     		}
     	}
@@ -218,7 +223,11 @@ public class Map
      */
     public void dispose()
     {
-        this.block.dispose();
+        for (int i = 0; i < block.length; i++) {
+        	for (int j = 0 ; j < block[i].length; j++) {
+        		block[i][j].dispose();
+        	}
+        }
         this.space.dispose();
     }
     
