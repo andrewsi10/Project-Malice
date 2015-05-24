@@ -23,6 +23,7 @@ public class Enemy extends Character {
 		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
 		projectile = "sword";
+		setType("enemy");
 	}
 
 	@Override
@@ -86,4 +87,5 @@ public class Enemy extends Character {
 		int distance = (int)Math.sqrt( dx * dx + dy * dy );
 		return distance <= aggroDistance;
 	}
+
 }

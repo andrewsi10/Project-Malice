@@ -43,6 +43,7 @@ public abstract class Character extends Sprite {
 	Array<AtlasRegion> rightFrames;
 	Array<AtlasRegion> downFrames;
 	Array<AtlasRegion> leftFrames;
+	private String type;
 
 	// constructor for enemies
 	public Character(Array<AtlasRegion> frames) {
@@ -112,6 +113,16 @@ public abstract class Character extends Sprite {
 	public abstract void move( Character character, 
 	                           ArrayList<Projectile> projectiles, 
 	                           long time);
+	
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
 
 	protected void move(int dir) {
 
@@ -145,8 +156,13 @@ public abstract class Character extends Sprite {
 	}
 
     protected void translate(int dx, int dy) {
-        translateX((float) (moveSpeed * dx));
-        translateY((float) (moveSpeed * dy));
+        if (dx == 0 || dy == 0) {
+            translateX((float) (moveSpeed * dx));
+            translateY((float) (moveSpeed * dy));
+        } else {
+            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+        }
     }
     
     public void drawHp( ShapeRenderer renderer )
