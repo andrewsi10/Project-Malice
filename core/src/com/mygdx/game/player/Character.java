@@ -21,10 +21,10 @@ public abstract class Character extends Sprite {
 	public static final int NORTHWEST = 7;
 	public static final int NUMDIRECTIONS = 8;
 
-	private int maxHp; // max health
-	private int currentHp; // current health
-	private int baseDmg; // base damage
-	private int randMod; // random damage modifier
+	private int maxHp = 1; // max health
+	private int currentHp = maxHp; // current health
+	private int baseDmg = 1; // base damage
+	private int randMod = 0; // random damage modifier
 	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
@@ -167,16 +167,12 @@ public abstract class Character extends Sprite {
 		}
 	}
 
-	public boolean die() {
-		return true;
+	public boolean isDead() {
+		return currentHp <= 0;
 	}
 
-	public boolean takeDamage(int damage) {
+	public void takeDamage(int damage) {
 		currentHp -= damage;
-		if (currentHp <= 0) {
-			return die();
-		} else
-			return false;
 	}
 
 	public void increaseBdmg(int i) {

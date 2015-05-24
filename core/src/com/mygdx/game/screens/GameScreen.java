@@ -76,17 +76,7 @@ public class GameScreen implements Screen {
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         
-        int enemyCount = enemyMinCount + (int)(Math.random()*enemyMaxCount);
-        for (int i = 0; i < enemyCount; i++){
-            int index = 1 + (int) (Math.random() * numEnemies);
-            if (index == numEnemies + 1) index--;
-            Enemy e = new Enemy("img/sprites/Enemies/Enemy" + index
-                + "/Enemy" + index + ".atlas");
-            // set spawn for enemy
-            map.setSpawn();
-            e.setPosition(map.getSpawnX(), map.getSpawnY());
-            sprites.add(e);
-        }
+        spawnEnemies();
 	}
 
 	
@@ -137,6 +127,10 @@ public class GameScreen implements Screen {
         batch.begin();
         map.draw(batch);
         
+        if (sprites.size() < 3)
+        {
+        	spawnEnemies();
+        }
         
         for (Character sprite : sprites) {
             moveSprite(sprite);
@@ -151,6 +145,11 @@ public class GameScreen implements Screen {
                 if ( hasHit || projectile.hitCharacter( sprite ) )
                 {
                     hasHit = true;
+                    sprite.takeDamage( projectile.getDamage() );
+                    if (sprite.isDead())
+                    {
+                    	sprites.remove( sprite );
+                    }
                     break;
                 }
             }
@@ -166,6 +165,22 @@ public class GameScreen implements Screen {
         {
         	state = State.PAUSE;
         	// game.setScreen( new PauseMenu(game, music, this) );
+        }
+	}
+	
+	private void spawnEnemies()
+	{
+		int enemyCount = enemyMinCount + (int)(Math.random()*enemyMaxCount);
+        for (int i = 0; i < enemyCount; i++){
+            int index = 1 + (int) (Math.random() * numEnemies);
+            if (index == numEnemies + 1) index--;
+            Enemy e = new Enemy("img/sprites/Enemies/Enemy" + index
+                + "/Enemy" + index + ".atlas");
+            e.increaseBdmg( -1 );
+            // set spawn for enemy
+            map.setSpawn();
+            e.setPosition(map.getSpawnX(), map.getSpawnY());
+            sprites.add(e);
         }
 	}
     
