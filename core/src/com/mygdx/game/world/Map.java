@@ -3,6 +3,8 @@ package com.mygdx.game.world;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,11 +29,13 @@ public class Map
     public static final int SPAWN_DISTANCE = 5;
     
     private boolean[][] areSpaces;
-    private Texture[] blocks;
-    private Texture[] spaces;
+    private Pixmap[] blocks;
+    private Pixmap[] spaces;
     private int spawnX;
     private int spawnY;
     private int randomModifier;
+    
+    private TextureRegion map;
     
     /**
      * Constructs a map filled with walls
@@ -40,18 +44,26 @@ public class Map
      */
     public Map( int rows, int cols)
     {
-//        TextureRegion[][] trees = TextureRegion.split( new Texture( PACKAGE + "Trees.png" ), PIXELS_TO_METERS, PIXELS_TO_METERS );
-        spaces = new Texture[]{ new Texture( PACKAGE + "GrassTile.png" ) };
+        TextureRegion[][] trees = TextureRegion.split( new Texture( PACKAGE + "Trees.png" ), PIXELS_TO_METERS, PIXELS_TO_METERS );
+        spaces = new Pixmap[1];
+        Texture texture = new Texture( PACKAGE + "GrassTile.png" );
+        texture.getTextureData().prepare();
+        spaces[0] = texture.getTextureData().consumePixmap();
+        texture.dispose();
+//        spaces = new Texture[]{ new Texture( PACKAGE + "GrassTile.png" ) };
         areSpaces = new boolean[rows][cols];
-        blocks = new Texture[10];
-        for ( int i = 0; i < blocks.length; i++ )
-            blocks[i] = new Texture( PACKAGE + "Trees/Tree" + i + ".png" );
-//        blocks = new Texture[trees.length * trees[0].length];
-//        for (int i = 0; i < trees.length; i++) {
-//        	for (int j = 0; j < trees[i].length; j++) {
-//        		blocks[i*trees.length + j] = trees[i][j].getTexture();
-//        	}
-//        }
+//        blocks = new Texture[10];
+//        for ( int i = 0; i < blocks.length; i++ )
+//            blocks[i] = new Texture( PACKAGE + "Trees/Tree" + i + ".png" );
+        blocks = new Pixmap[trees.length * trees[0].length];
+        for (int i = 0; i < trees.length; i++) {
+        	for (int j = 0; j < trees[i].length; j++) {
+        	    Texture t = trees[i][j].getTexture();
+        	    t.getTextureData().prepare();
+        		blocks[i*trees.length + j] = t.getTextureData().consumePixmap();
+        		t.dispose();
+        	}
+        }
         
         randomModifier = randomNumber( PIXELS_TO_METERS );
     }
@@ -74,6 +86,7 @@ public class Map
      */
     public void generate( int type )
     {
+        Pixmap pixmap = new Pixmap( areSpaces.length * PIXELS_TO_METERS, areSpaces[0].length * PIXELS_TO_METERS, Format.RGB888 );
         switch ( type )
         {
             case ARENA:
@@ -84,6 +97,19 @@ public class Map
                 randomGeneration();
                 break;
         }
+        for ( int i = 0; i < areSpaces.length; i++ )
+        {
+            for ( int j = 0; j < areSpaces[i].length; j++ )
+            {
+                pixmap.drawPixmap(spaces[0], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+                if (!areSpaces[i][j])
+                {
+                    pixmap.drawPixmap(blocks[(i+j)*randomModifier%blocks.length], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
+                }
+            }
+        }
+        map = new TextureRegion( new Texture( pixmap ) );
+        map.flip( false, true );
     }
 
     /**
@@ -186,17 +212,7 @@ public class Map
      */
     public void draw( SpriteBatch batch )
     {
-        for ( int i = 0; i < areSpaces.length; i++ )
-        {
-            for ( int j = 0; j < areSpaces[i].length; j++ )
-            {
-                batch.draw(spaces[0], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
-                if (!areSpaces[i][j])
-                {
-                    batch.draw(blocks[(i+j)*randomModifier%blocks.length], i*PIXELS_TO_METERS, j*PIXELS_TO_METERS);
-                }
-            }
-        }
+        batch.draw( map, 0, 0 );
     }
     
     /**
@@ -204,10 +220,10 @@ public class Map
      */
     public void dispose()
     {
-        for ( Texture t : blocks )
-            t.dispose();
-        for ( Texture t : spaces )
-            t.dispose();
+        for ( Pixmap p : blocks )
+            p.dispose();
+        for ( Pixmap p : spaces )
+            p.dispose();
     }
     
     
