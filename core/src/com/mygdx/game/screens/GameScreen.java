@@ -180,21 +180,11 @@ public class GameScreen implements Screen {
             Projectile projectile = projectiles.get( i );
             projectile.draw(batch);
         }
-        float fontX = cam.position.x - cam.viewportWidth / 2;
-        float fontY = cam.position.y + cam.viewportHeight / 2;
-        if ( fontX < 0 || fontY < 0 
-                       || fontX > MAP_SIZE * Map.PIXELS_TO_METERS 
-                       || fontY > MAP_SIZE * Map.PIXELS_TO_METERS)
-        {
-            font.setColor( Color.WHITE );
-        }
-        else
-        {
-            font.setColor( Color.BLACK );
-        }
-        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
-        font.setColor( Color.BLACK );
-        font.draw( batch, "Game resumes in " + (2000 - System.currentTimeMillis() + timeResumed) + " milliseconds", cam.position.x - 100, cam.position.y + cam.viewportHeight / 3 );
+        float fontX = cam.position.x - 100;
+        float fontY = cam.position.y + cam.viewportHeight / 3;
+        drawPoints();
+        setFontColor( fontX, fontY );
+        font.draw( batch, "Game resumes in " + (2000 - System.currentTimeMillis() + timeResumed) + " milliseconds", fontX, fontY );
         batch.end();
         renderer.end();
         
@@ -267,17 +257,7 @@ public class GameScreen implements Screen {
                 i--;
             }
         }
-        float fontX = cam.position.x - cam.viewportWidth / 2;
-        float fontY = cam.position.y + cam.viewportHeight / 2;
-        if ( map.inPixelBounds( fontX, fontY ) )
-        {
-            font.setColor( Color.BLACK );
-        }
-        else
-        {
-            font.setColor( Color.WHITE );
-        }
-        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
+        drawPoints();
         batch.end();
         renderer.end();
         
@@ -312,6 +292,26 @@ public class GameScreen implements Screen {
             c.setPosition(x, y);
         }
         c.draw(batch);
+    }
+    
+    private void drawPoints()
+    {
+        float fontX = cam.position.x - cam.viewportWidth / 2;
+        float fontY = cam.position.y + cam.viewportHeight / 2;
+        setFontColor( fontX, fontY );
+        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
+    }
+    
+    private void setFontColor( float fontX, float fontY )
+    {
+        if ( map.inPixelBounds( fontX, fontY ) )
+        {
+            font.setColor( Color.BLACK );
+        }
+        else
+        {
+            font.setColor( Color.WHITE );
+        }
     }
 	
 	@Override
