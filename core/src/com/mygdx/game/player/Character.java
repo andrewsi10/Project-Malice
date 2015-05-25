@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -22,41 +24,43 @@ public abstract class Character extends Sprite {
 	public static final int WEST = 6;
 	public static final int NORTHWEST = 7;
 	public static final int NUMDIRECTIONS = 8;
+	
+	public static final int BARHEIGHT = 5;
 
+    float stateTime;
+    Animation upAnimation;
+    Animation rightAnimation;
+    Animation downAnimation;
+    Animation leftAnimation;
+    Array<AtlasRegion> upFrames;
+    Array<AtlasRegion> rightFrames;
+    Array<AtlasRegion> downFrames;
+    Array<AtlasRegion> leftFrames;
+    private BitmapFont font;
+
+    private int direction = -1;
 	private int maxHp = 50; // max health
 	private int currentHp = maxHp; // current health
+    private int experience = 0;
+    private int expToLevel = -1;
 	private int baseDmg = 10; // base damage
 	private int randMod = 4; // random damage modifier
-	private int direction = -1;
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
 	private float moveSpeed;
 
 	private TextureAtlas textureAtlas;
 
-	float stateTime;
-	Animation upAnimation;
-	Animation rightAnimation;
-	Animation downAnimation;
-	Animation leftAnimation;
-	Array<AtlasRegion> upFrames;
-	Array<AtlasRegion> rightFrames;
-	Array<AtlasRegion> downFrames;
-	Array<AtlasRegion> leftFrames;
 
 	// constructor for enemies
 	public Character(Array<AtlasRegion> frames) {
-		upFrames = frames;
-		rightFrames = frames;
-		downFrames = frames;
-		leftFrames = frames;
-		set(new Sprite(frames.get(0)));
-		initializeAnimations();
+	    this( frames, frames, frames, frames );
 	}
 
 	// constructor for player
 	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
 			Array<AtlasRegion> down, Array<AtlasRegion> left) {
+        font = new BitmapFont();
 		upFrames = up;
 		rightFrames = right;
 		downFrames = down;
@@ -65,7 +69,10 @@ public abstract class Character extends Sprite {
 		initializeAnimations();
 	}
 	
-	//initializes the animations
+	// ---------------------Animation and Art ----------------------//
+	/**
+	 * initializes the animations
+	 */
 	void initializeAnimations() {
 		upAnimation = new Animation(.2f, upFrames);
 		rightAnimation = new Animation(.2f, rightFrames);
@@ -108,7 +115,38 @@ public abstract class Character extends Sprite {
         }
         this.setRegion(animation.getKeyFrame(stateTime));
     }
-
+    
+    public void drawBars( Batch batch, ShapeRenderer renderer )
+    {
+        if ( !this.isDead() )
+        {
+            float hpW = getWidth();
+            float hpH = BARHEIGHT;
+            float hpX = getX();
+            float hpY = getY() - BARHEIGHT;
+            
+            // note: merge if statements in order to make them appear at same time
+            // suggestion: should we make exp a vertical bar or make hp above sprite?
+            if ( currentHp < maxHp ) { 
+                renderer.setColor( Color.GRAY );
+                renderer.rect( hpX, hpY, hpW, hpH );
+                renderer.setColor( Color.GREEN );
+                renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * currentHp / maxHp, hpH - 2 );
+                font.setColor( Color.MAROON );
+                font.draw( batch, currentHp + "/" + maxHp, hpX + hpW, hpY );
+            }
+            if ( experience < expToLevel && experience > 0 )
+            {
+                hpY -= BARHEIGHT - 1;
+                renderer.setColor( Color.GRAY );
+                renderer.rect( hpX, hpY, hpW, hpH );
+                renderer.setColor( Color.CYAN );
+                renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * experience / expToLevel, hpH - 2 );
+            }
+            
+        }
+    }
+    // ----------------- Environment Interaction ------------------------//
 	public abstract void move( Character character, 
 	                           ArrayList<Projectile> projectiles, 
 	                           long time);
@@ -153,18 +191,25 @@ public abstract class Character extends Sprite {
             translateY((float) (moveSpeed * dy / Math.sqrt(2)));
         }
     }
-    
-    public void drawHp( ShapeRenderer renderer )
-    {
-        if ( currentHp < maxHp && !this.isDead() ) {
-            float hpW = getWidth();
-            float hpH = 5;
-            float hpX = getX();
-            float hpY = getY() - hpH;
-            renderer.setColor( Color.GRAY );
-            renderer.rect( hpX, hpY, hpW, hpH );
-            renderer.setColor( Color.GREEN );
-            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * currentHp / maxHp, hpH - 2 );
+
+
+    public void shoot(ArrayList<Projectile> projectiles, float xDistance,
+            float yDistance, long time, String spriteType) {
+        if ( time - previousTime >= reloadSpeed ) {
+            previousTime = time;
+            Projectile p = new Projectile(this, getDirection(), getDamage(),
+                    spriteType, xDistance, yDistance);
+            p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
+            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+
+            projectiles.add(p);
+        }
+    }
+
+    // --------------------Setters and Incrementers --------------------//
+    public void setDirection(int dir) {
+        if (dir >= 0 && dir < NUMDIRECTIONS) {
+            direction = dir;
         }
     }
 
@@ -183,64 +228,72 @@ public abstract class Character extends Sprite {
 	public boolean isDead() {
 		return currentHp <= 0;
 	}
-
-	public void takeDamage(int damage) {
-		currentHp -= damage;
+	
+	public void setExp( int exp )
+	{
+	    this.experience = exp;
+	}
+	
+	public void setExpToLevel( int exp )
+	{
+	    this.expToLevel = exp;
 	}
 
-	public void increaseBdmg(int i) {
-		baseDmg += i;
-	}
-
-	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-			float yDistance, long time, String spriteType) {
-		if ( time - previousTime >= reloadSpeed ) {
-			previousTime = time;
-			Projectile p = new Projectile(this, getDirection(), getDamage(),
-					spriteType, xDistance, yDistance);
-			p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
-			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-
-			projectiles.add(p);
-		}
-	}
-
-	public void setSpeed(int speed) {
-		moveSpeed = speed;
-	}
-
-    public void setDirection(int dir) {
-        if (dir >= 0 && dir < NUMDIRECTIONS) {
-            direction = dir;
-        }
+    public void takeDamage(int damage) {
+        currentHp -= damage;
     }
 
-	public void setReloadSpeed(int newReloadSpeed) {
-		reloadSpeed = newReloadSpeed;
-	}
+    public void increaseBdmg(int i) {
+        baseDmg += i;
+    }
 
+    public void setSpeed(int speed) {
+        moveSpeed = speed;
+    }
+
+    public void setReloadSpeed(int newReloadSpeed) {
+        reloadSpeed = newReloadSpeed;
+    }
+	
+	// -----------------------Getters -----------------//
+
+    public BitmapFont getFont()
+    {
+        return font;
+    }
+
+    public TextureAtlas getAtlas() {
+        return textureAtlas;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public int getCurrentHp() {
+        return currentHp;
+    }
+    
+    public int getExp()
+    {
+        return experience;
+    }
+    
+    public int getExpToLevel()
+    {
+        return expToLevel;
+    }
+
+    public int getDamage() {
+        return baseDmg + (int) (randMod * Math.random());
+    }
+    
 	public int getReloadSpeed() {
 		return reloadSpeed;
-	}
-
-	public TextureAtlas getAtlas() {
-		return textureAtlas;
-	}
-
-	public int getMaxHp() {
-		return maxHp;
-	}
-
-	public int getCurrentHp() {
-		return currentHp;
-	}
-
-	public int getDamage() {
-		return baseDmg + (int) (randMod * Math.random());
-	}
-
-	public int getDirection() {
-		return direction;
 	}
 
 	// --------------------For Testing --------------//

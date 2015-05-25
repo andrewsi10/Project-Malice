@@ -174,10 +174,9 @@ public class GameScreen implements Screen {
         
         for (Character sprite : sprites) {
         	sprite.draw( batch );
-            sprite.drawHp( renderer );
+            sprite.drawBars( batch, renderer );
         }
-        for ( int i = 0; i < projectiles.size(); i++ ) {
-            Projectile projectile = projectiles.get( i );
+        for ( Projectile projectile : projectiles ) {
             projectile.draw(batch);
         }
         float fontX = cam.position.x - 100;
@@ -223,7 +222,7 @@ public class GameScreen implements Screen {
         
         for (Character sprite : sprites) {
             moveSprite(sprite);
-            sprite.drawHp( renderer );
+            sprite.drawBars( batch, renderer );
         }
         for ( int i = 0; i < projectiles.size(); i++ ) {
             Projectile projectile = projectiles.get( i );
@@ -242,10 +241,7 @@ public class GameScreen implements Screen {
                     	if (sprite instanceof Enemy)
                     	{
                     		playerPoints += 10;
-                    		if (playerPoints > player.getCurrentLevel() * 30)
-                    		{
-                    			player.increaseCurrentLevel();
-                    		}
+                    		player.increaseExp( sprite.getExp() );
                     		for (int j = 1; j < playerPoints; j *= 50)
                     		{
                     			int index = 1 + (int) (Math.random() * numEnemies);

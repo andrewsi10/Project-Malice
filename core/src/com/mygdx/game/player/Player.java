@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
@@ -15,6 +18,7 @@ public class Player extends Character {
 	private String projectile;
 	
 	private int playerLevel = 1;
+	
 	
 	public Player(String file, String proj) {
 		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
@@ -39,7 +43,16 @@ public class Player extends Character {
 								new TextureAtlas(Gdx.files.internal(file))
 										.findRegion("7") }));
 		setSpeed(5);
+		setExpToLevel( 100 );
 		projectile = proj;
+	}
+	
+	@Override
+	public void drawBars( Batch batch, ShapeRenderer renderer )
+	{
+	    super.drawBars( batch, renderer );
+	    getFont().setColor( Color.CYAN );
+	    getFont().draw( batch, "Level " + playerLevel, getX(), getY() + getHeight() );
 	}
 
     @Override
@@ -76,6 +89,16 @@ public class Player extends Character {
 		increaseBdmg( 2 );
 		increaseMaxHp( 10 );
 		increaseCurrentHp( (int) ( 10 * temp ) );
+    }
+    
+    public void increaseExp( int exp )
+    {
+        this.setExp( getExp() + exp );
+        if ( getExp() >= getExpToLevel() )
+        {
+            setExp( getExp() - getExpToLevel() );
+            increaseCurrentLevel();
+        }
     }
 
 	/**

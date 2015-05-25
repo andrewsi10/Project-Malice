@@ -20,8 +20,9 @@ public class Enemy extends Character {
 
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
-		setSpeed(3);
-		setReloadSpeed(getReloadSpeed() * 2);
+		setExp( 20 ); // set amount of exp Player will receive
+		setSpeed(3);  // set speed of Enemy
+		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 		projectile = "EnemyBullet";
 	}
 
