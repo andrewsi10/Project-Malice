@@ -242,6 +242,10 @@ public class GameScreen implements Screen {
                     	if (sprite instanceof Enemy)
                     	{
                     		playerPoints += 10;
+                    		if (playerPoints > player.getCurrentLevel() * 30)
+                    		{
+                    			player.increaseCurrentLevel();
+                    		}
                     		for (int j = 1; j < playerPoints; j *= 50)
                     		{
                     			int index = 1 + (int) (Math.random() * numEnemies);

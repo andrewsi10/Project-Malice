@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +13,8 @@ import com.mygdx.game.projectile.Projectile;
 public class Player extends Character {
 
 	private String projectile;
+	
+	private int playerLevel = 1;
 	
 	public Player(String file, String proj) {
 		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
@@ -56,6 +59,23 @@ public class Player extends Character {
                 Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
                 System.currentTimeMillis(), projectile );
         }
+    }
+    
+    public int getCurrentLevel()
+    {
+    	return playerLevel;
+    }
+    
+    public void increaseCurrentLevel()
+    {
+    	// might need balancing
+    	playerLevel++;
+    	Sound sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
+		sound.play();
+		double temp = getCurrentHp() / getMaxHp();
+		increaseBdmg( 2 );
+		increaseMaxHp( 10 );
+		increaseCurrentHp( (int) ( 10 * temp ) );
     }
 
 	/**
