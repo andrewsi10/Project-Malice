@@ -162,13 +162,9 @@ public class Map
      */
     public int sizeOfRoom( int x, int y )
     {
-        boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
-        for ( int i = 0; i < b.length; i++ )
-            for ( int j = 0; j < b[i].length; j++ )
-                b[i][j] = areSpaces[i][j];
-        return sizeOfRoom( x, y, b );
+        return sizeOfRoom( x, y, copyAreSpaces() );
         // did not work as above code
-//        return sizeOfRoom( x, y, areSpaces.clone() );
+        // return sizeOfRoom( x, y, areSpaces.clone() );
     }
 
     /**
@@ -202,13 +198,9 @@ public class Map
     
     public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
     {
-        boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
-        for ( int i = 0; i < b.length; i++ )
-            for ( int j = 0; j < b[i].length; j++ )
-                b[i][j] = areSpaces[i][j];
-        return hasPath( x1, y1, x2, y2, asSpace, b );
+        return hasPath( x1, y1, x2, y2, asSpace, copyAreSpaces() );
         // does not work as above code
-        //      return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
+        // return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
     }
 
     
@@ -299,6 +291,14 @@ public class Map
     
     // ----------------- Getters and Converters ---------------------//
     
+    private boolean[][] copyAreSpaces()
+    {
+        boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
+        for ( int i = 0; i < b.length; i++ )
+            for ( int j = 0; j < b[i].length; j++ )
+                b[i][j] = areSpaces[i][j];
+        return b;
+    }
     /**
      * Returns Width of Map in tiles
      * Private because Tile coordinates should only be managed in Map Class
