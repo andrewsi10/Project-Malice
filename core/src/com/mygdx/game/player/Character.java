@@ -43,7 +43,6 @@ public abstract class Character extends Sprite {
 	Array<AtlasRegion> rightFrames;
 	Array<AtlasRegion> downFrames;
 	Array<AtlasRegion> leftFrames;
-	private String type;
 
 	// constructor for enemies
 	public Character(Array<AtlasRegion> frames) {

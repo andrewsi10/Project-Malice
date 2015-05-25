@@ -10,7 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Malice;
 import com.mygdx.game.world.Map;
-public class JUnitTester
+public class JUnitMapTest
 {
     
     @Before
@@ -39,7 +39,7 @@ public class JUnitTester
     public static String filledMap;
     
     @Test
-    public void testMap() {
+    public void testMapGeneration() {
         Map map1 = new Map( MAP_SIZE, MAP_SIZE, true );
         Map map2 = new Map( MAP_SIZE, MAP_SIZE, true );
         map2.generate( Map.DUNGEON );
@@ -57,17 +57,24 @@ public class JUnitTester
                 if ( map2.getAreSpaces()[i][j] ) check = true;
             }
         }
-        assertTrue( "Generation must have at least one room", check );
+        assertTrue( "Generation must have at least one space", check );
+    }
+    
+    @Test
+    public void testMapCreateRoom()
+    {
+        Map map1 = new Map( MAP_SIZE, MAP_SIZE, true );
+        assertTrue( true );
     }
 
     public static junit.framework.Test suite()
     {
-        return new JUnit4TestAdapter( JUnitTester.class );
+        return new JUnit4TestAdapter( JUnitMapTest.class );
     }
     
     public static void main( String[] args )
     {
-        org.junit.runner.JUnitCore.main( "JUSafeTradeTest" );
+        org.junit.runner.JUnitCore.main( "JUnitMapTester" );
     }
 
 }
