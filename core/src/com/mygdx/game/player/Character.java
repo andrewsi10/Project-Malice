@@ -146,8 +146,13 @@ public abstract class Character extends Sprite {
 	}
 
     public void translate(int dx, int dy) {
-        translateX((float) (moveSpeed * dx));
-        translateY((float) (moveSpeed * dy));
+        if (dx == 0 || dy == 0) {
+            translateX((float) (moveSpeed * dx));
+            translateY((float) (moveSpeed * dy));
+        } else {
+            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+        }
     }
     
     public void drawHp( ShapeRenderer renderer )

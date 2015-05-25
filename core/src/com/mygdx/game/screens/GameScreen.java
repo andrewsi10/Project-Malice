@@ -242,6 +242,18 @@ public class GameScreen implements Screen {
                     	if (sprite instanceof Enemy)
                     	{
                     		playerPoints += 10;
+                    		for (int j = 1; j < playerPoints; j *= 50)
+                    		{
+                    			int index = 1 + (int) (Math.random() * numEnemies);
+                                if (index == numEnemies + 1) index--;
+                                Enemy e = new Enemy("img/sprites/Enemies/Enemy" + index
+                                    + "/Enemy" + index + ".atlas");
+                                e.increaseBdmg( -5 );
+                                // set spawn for enemy
+                                map.setSpawn(player.getX(), player.getY());
+                                e.setPosition(map.getSpawnX(), map.getSpawnY());
+                                sprites.add(e);
+                    		}
                     	}
                     	else if (sprite instanceof Player )
                     	{
