@@ -58,28 +58,30 @@ public class Player extends Character {
         }
     }
 
+	/**
+	 * Returns direction to go based on key input
+	 * @return direction or -1 if no direction
+	 */
 	private int getInputDirection() {
-		if (Gdx.input.isKeyPressed(Input.Keys.D)
-				&& Gdx.input.isKeyPressed(Input.Keys.W))
-			return NORTHEAST;
-		if (Gdx.input.isKeyPressed(Input.Keys.S)
-				&& Gdx.input.isKeyPressed(Input.Keys.D))
-			return SOUTHEAST;
-		if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.S))
-			return SOUTHWEST;
-		if (Gdx.input.isKeyPressed(Input.Keys.A)
-				&& Gdx.input.isKeyPressed(Input.Keys.W))
-			return NORTHWEST;
-		if (Gdx.input.isKeyPressed(Input.Keys.W))
-			return NORTH;
-		if (Gdx.input.isKeyPressed(Input.Keys.D))
-			return EAST;
-		if (Gdx.input.isKeyPressed(Input.Keys.S))
-			return SOUTH;
-		if (Gdx.input.isKeyPressed(Input.Keys.A))
-			return WEST;
-		return -1;
+        int dirY = -1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
+            dirY = NORTH;
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
+        
+	    int dirX = -1;
+	    if (Gdx.input.isKeyPressed(Input.Keys.D))
+	        dirX = EAST;
+	    if (Gdx.input.isKeyPressed(Input.Keys.A))
+	        dirX = ( dirX == EAST ) ? -1 : WEST;
+	    
+	    if ( dirY == -1 )
+	        return dirX;
+	    if ( dirX == -1 )
+	        return dirY;
+	    if ( dirY == NORTH && dirX == WEST )
+	        return NORTHWEST;
+		return ( dirY + dirX ) / 2;
 	}
 
 }
