@@ -45,12 +45,12 @@ public class Map
      */
     public Map( int rows, int cols)
     {
+        areSpaces = new boolean[rows][cols];
         spaces = new Pixmap[1];
         Texture texture = new Texture( PACKAGE + "GrassTile.png" );
         texture.getTextureData().prepare();
         spaces[0] = texture.getTextureData().consumePixmap();
         texture.dispose();
-        areSpaces = new boolean[rows][cols];
         TextureRegion[] trees = new TextureRegion[10];
         blocks = new Pixmap[trees.length];
         for ( int i = 0; i < blocks.length; i++ )
@@ -77,15 +77,14 @@ public class Map
     }
 
     /**
-     * Constructs a map and generates it according to type
+     * For Testing
      * @param rows number of rows in map
      * @param cols number of columns in map
-     * @param generation type of generation
+     * @param b to differentiate in testing
      */
-    public Map( int rows, int cols, int generation)
+    public Map( int rows, int cols, boolean b)
     {
-        this( rows, cols );
-        generate( generation );
+        areSpaces = new boolean[rows][cols];
     }
     
     /**
@@ -104,7 +103,6 @@ public class Map
                 randomGeneration();
                 break;
         }
-        createMap();
     }
     
     /**
@@ -519,5 +517,10 @@ public class Map
             s += "\n";
         }
         return s;
+    }
+    
+    public boolean[][] getAreSpaces()
+    {
+        return areSpaces;
     }
 }
