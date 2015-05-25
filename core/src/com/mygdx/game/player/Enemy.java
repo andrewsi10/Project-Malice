@@ -22,7 +22,7 @@ public class Enemy extends Character {
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
-		projectile = "enemybullet";
+		projectile = "EnemyBullet";
 		setType("enemy");
 	}
 

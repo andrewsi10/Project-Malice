@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
 	private BitmapFont font;
 	private String playerType;
 	private String[] spriteNames = {"BlackMage", "Monk", "RedMage", "Thief", "Warrior", "WhiteMage"};
+	private String[] projectileNames = {"DarkFire", "Boomerang", "Fireball", "PoisonShot", "Sword1", "HolyCross"};
 	
 	public enum State
 	{
@@ -96,14 +97,16 @@ public class GameScreen implements Screen {
         CharacterSelect temp = new CharacterSelect(null, null);
         String[] charNames = temp.getNames();
         String spriteName = "BlackMage";
+        String projectileName = "DarkFire";
         for (int i = 0; i < charNames.length; i++)
         {
         	if (charNames[i].equals( playerType ))
         	{
         		spriteName = spriteNames[i];
+        		projectileName = projectileNames[i];
         	}
         }
-        player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", "holycross");
+        player = new Player("img/sprites/Players/" + spriteName + "/" + spriteName + ".atlas", projectileName);
         player.setPosition(map.getSpawnX(), map.getSpawnY());
         sprites.add( player );
         

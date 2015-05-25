@@ -38,7 +38,7 @@ public class Projectile extends Sprite
 
 		projectileType = type;
 		sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/"
-				+ projectileType + ".wav" ) );
+				+ projectileType.toLowerCase() + ".wav" ) );
 		sound.play();
 
 		projectileTexture = new TextureAtlas(
