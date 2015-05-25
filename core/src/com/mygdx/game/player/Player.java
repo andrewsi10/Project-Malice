@@ -37,7 +37,6 @@ public class Player extends Character {
 										.findRegion("7") }));
 		setSpeed(5);
 		projectile = proj;
-		setType("player");
 	}
 
     @Override

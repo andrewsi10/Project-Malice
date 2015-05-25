@@ -34,7 +34,7 @@ public class Map
     private int spawnX;
     private int spawnY;
     
-    private TextureRegion map;
+    private Texture map;
     
     /**
      * Constructs a map filled with walls
@@ -54,7 +54,6 @@ public class Map
         for ( int i = 0; i < blocks.length; i++ )
         {
             trees[i] = new TextureRegion( new Texture( PACKAGE + "Trees/Tree" + i + ".png" ) );
-            trees[i].flip( false, true );
             Texture t = trees[i].getTexture();
             t.getTextureData().prepare();
             blocks[i] = t.getTextureData().consumePixmap();
@@ -63,6 +62,7 @@ public class Map
             
 // note: ideal method of loading in tree (doesn't work)
 //      TextureRegion[][] trees = TextureRegion.split( new Texture( PACKAGE + "Trees.png" ), PIXELS_TO_METERS, PIXELS_TO_METERS );
+//        texture = new Texture( PACKAGE + "Trees.png" );
 //        blocks = new Pixmap[trees.length * trees[0].length];
 //        for (int i = 0; i < trees.length; i++) {
 //        	for (int j = 0; j < trees[i].length; j++) {
@@ -92,7 +92,6 @@ public class Map
      */
     public void generate( int type )
     {
-        Pixmap pixmap = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
         switch ( type )
         {
             case ARENA:
@@ -103,23 +102,33 @@ public class Map
                 randomGeneration();
                 break;
         }
+        createMap();
+    }
+    
+    /**
+     * Creates the map image to be displayed
+     */
+    public void createMap()
+    {
+        Pixmap pixmap = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
         for ( int i = 0; i < getMapTileWidth(); i++ )
         {
             for ( int j = 0; j < getMapTileHeight(); j++ )
             {
                 int x = tileToPixel(i);
-                int y = tileToPixel(j+1);
-                pixmap.drawPixmap(spaces[0], x, this.getMapPixelHeight() - y);
+                int y = this.getMapPixelHeight() - tileToPixel(j+1);
+                pixmap.drawPixmap(spaces[0], x, y);
                 if (!areSpaces[i][j])
                 {
-                    pixmap.drawPixmap(blocks[randomNumber(blocks.length)], x, this.getMapPixelHeight() - y);
+                    pixmap.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
                 }
             }
         }
-        map = new TextureRegion( new Texture( pixmap ) );
+        map = new Texture( pixmap );
         pixmap.dispose();
     }
 
+    // --------------------------Recursive Methods ---------------------//
     /**
      * Recursively builds the room of the map where x and y are the top left 
      * corner of the room and w is the width and h is the height
@@ -185,12 +194,7 @@ public class Map
     }
     
     
-    /**
-     * convenience method
-     * @param p1
-     * @param p2
-     * @return
-     */
+    
     public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
     {
         boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
@@ -203,17 +207,28 @@ public class Map
     }
 
     
+    /**
+     * hasPath() helper method recursively finds if a point reaches another point
+     * @param x1 -coordinate of Point1
+     * @param y1 -coordinate of Point1
+     * @param x2 -coordinate of Point2
+     * @param y2 -coordinate of Point2
+     * @param asSpace 
+     * @param map
+     * @return
+     */
     private static boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
     {
         if ( map[x1][y1] != asSpace
                         || x1 < 1 || x1 >= map.length - 1
-                        || y1 < 1 || y1 >= map[0].length - 1 ) return false;
+                        || y1 < 1 || y1 >= map[0].length - 1 ) 
+            return false;
         if ( x1 == x2 && y1 == y2 ) return true;
         map[x1][y1] = !asSpace;
         return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
-                        || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
-                        || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
-                        || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
+            || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
+            || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
+            || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
     }
 
     // -----------------------Collision ------------------ //
@@ -252,6 +267,8 @@ public class Map
      */
     public void draw( SpriteBatch batch )
     {
+        if ( map == null )
+            createMap();
         batch.draw( map, 0, 0 );
     }
     
@@ -260,6 +277,7 @@ public class Map
      */
     public void dispose()
     {
+        map.dispose();
         for ( Pixmap p : blocks )
             p.dispose();
         for ( Pixmap p : spaces )
@@ -267,44 +285,73 @@ public class Map
     }
     
     
-    // ----------------- x,y -coordinate getters  ---------------------//
+    // ----------------- Getters and Converters ---------------------//
     
-    public int getMapTileWidth()
+    /**
+     * Returns Width of Map in tiles
+     * Private because Tile coordinates should only be managed in Map Class
+     * @return Width of Map in tiles
+     */
+    private int getMapTileWidth()
     {
         return areSpaces.length;
     }
-    
-    public int getMapTileHeight()
+
+    /**
+     * Returns Height of Map in tiles
+     * Private because Tile coordinates should only be managed in Map Class
+     * @return Height of Map in tiles
+     */
+    private int getMapTileHeight()
     {
         return areSpaces[0].length;
     }
     
+    /**
+     * Returns the map's width in pixels
+     * @return the map's width in pixels
+     */
     public int getMapPixelWidth()
     {
         return tileToPixel( getMapTileWidth() );
     }
-    
+
+    /**
+     * Returns the map's height in pixels
+     * @return the map's height in pixels
+     */
     public int getMapPixelHeight()
     {
         return tileToPixel( getMapTileHeight() );
     }
     
-    
+
     /**
-     * Get Real x value based on x Tile location
-     * @param x Tile Location
-     * @return Real x value
+     * Returns the pixel index of a coordinate
+     * @param tile coordinate
+     * @return pixel coordinate
      */
-    public static int tileToPixel( int x )
+    public static int tileToPixel( int tile )
     {
-        return x * PIXELS_TO_METERS;// + block.getWidth() / 2;
+        return tile * PIXELS_TO_METERS;// + block.getWidth() / 2;
     }
     
+    /**
+     * Returns the tile index of a coordinate
+     * @param pixel coordinate
+     * @return tile coordinate
+     */
     public static int pixelToTile( float pixel )
     {
         return (int)( pixel / PIXELS_TO_METERS );
     }
     
+    /**
+     * Returns whether given pixel is in the map
+     * @param x -coordinate of pixel
+     * @param y -coordinate of pixel
+     * @return true if pixel is in map
+     */
     public boolean inPixelBounds( float x, float y )
     {
         return x >= 0 
@@ -312,7 +359,13 @@ public class Map
             && ( x <= this.getMapPixelWidth() )
             && ( y <= this.getMapPixelHeight() );
     }
-    
+
+    /**
+     * Returns whether given tile is in the map
+     * @param x -coordinate of tile
+     * @param y -coordinate of tile
+     * @return true if tile is in map
+     */
     public boolean inTileBounds( int x, int y )
     {
         return ( x >= 0 && x < this.getMapTileWidth()
@@ -324,6 +377,7 @@ public class Map
     /**
      * Generates Random number from 0 inclusive to width in meters of map 
      * exclusive
+     * Private because Tile coordinates should only be managed in Map Class
      * @return random number
      */
     private int randomTileCoordinate()
@@ -408,6 +462,7 @@ public class Map
     
     /**
      * Sets the spawnX and spawnY, called with the generate(int) method
+     * Private because Tile coordinates should only be managed in Map Class
      * @param x int Tile location to avoid
      * @param y int Tile location to avoid
      */
@@ -444,24 +499,11 @@ public class Map
     public String toString()
     {
         String s = "";
-        char[][] map = this.showMap();
-        for ( char[] array : map ) {
-            for ( char c : array )
-                s += c + " ";
+        for ( int i = 0; i < areSpaces.length; i++ ) {
+            for ( int j = 0; j < areSpaces[0].length; j++ )
+                s += areSpaces[i][j] ? ' ' : 'X';
             s += "\n";
         }
         return s;
     }
-    
-    public char[][] showMap() // TODO remove getter method
-    {
-        char[][] map = new char[areSpaces.length][areSpaces[0].length];
-        for ( int i = 0; i < areSpaces.length; i++ )
-            for ( int j = 0; j < areSpaces[0].length; j++ )
-                map[i][j] = areSpaces[i][j] ? ' ' : 'X';
-        return map;
-    }
-    
-    // -----------------Deprecating methods ------------------//
-
 }

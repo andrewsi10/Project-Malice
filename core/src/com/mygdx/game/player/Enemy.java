@@ -23,7 +23,6 @@ public class Enemy extends Character {
 		setSpeed(3);
 		setReloadSpeed(getReloadSpeed() * 2);
 		projectile = "EnemyBullet";
-		setType("enemy");
 	}
 
 	@Override
