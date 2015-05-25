@@ -20,13 +20,14 @@ public class Map
     public static final int ARENA = 0;
     public static final int DUNGEON = 1;
     /**
-     * Conversion number from pixels to meters
+     * Conversion number from pixels to tiles
      */
-    public static final int PIXELS_TO_METERS = 64;
+    public static final int PIXELS_TO_TILES = 64;
     /**
-     * Spawn distance from player in meters
+     * Spawn distance from player in tiles
      */
     public static final int SPAWN_DISTANCE = 5;
+    public static final int OUTER_BORDER = 7;
     
     private boolean[][] areSpaces;
     private Pixmap[] blocks;
@@ -35,6 +36,7 @@ public class Map
     private int spawnY;
     
     private Texture map;
+    private Texture expanse;
     
     /**
      * Constructs a map filled with walls
@@ -110,22 +112,27 @@ public class Map
      */
     public void createMap()
     {
-        Pixmap pixmap = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
+        Pixmap pixmap1 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
+        Pixmap pixmap2 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
         for ( int i = 0; i < getMapTileWidth(); i++ )
         {
             for ( int j = 0; j < getMapTileHeight(); j++ )
             {
                 int x = tileToPixel(i);
                 int y = this.getMapPixelHeight() - tileToPixel(j+1);
-                pixmap.drawPixmap(spaces[0], x, y);
+                pixmap1.drawPixmap(spaces[0], x, y);
                 if (!areSpaces[i][j])
                 {
-                    pixmap.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
+                    pixmap1.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
                 }
+                pixmap2.drawPixmap(spaces[0], x, y);
+                pixmap2.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
             }
         }
-        map = new Texture( pixmap );
-        pixmap.dispose();
+        map = new Texture( pixmap1 );
+        expanse = new Texture( pixmap2 );
+        pixmap1.dispose();
+        pixmap2.dispose();
     }
 
     // --------------------------Recursive Methods ---------------------//
@@ -241,7 +248,7 @@ public class Map
     public boolean isCollidingWithWall( Sprite s )
     {
         Rectangle check = new Rectangle();
-        check.setSize( PIXELS_TO_METERS );
+        check.setSize( PIXELS_TO_TILES );
         int x = pixelToTile( s.getX() );
         int y = pixelToTile( s.getY() );
         for ( int i = x - 1; i <= x + 1; i++ )
@@ -269,6 +276,12 @@ public class Map
     {
         if ( map == null )
             createMap();
+        int x = tileToPixel( OUTER_BORDER );
+        int y = tileToPixel( OUTER_BORDER );
+        batch.draw( expanse, -x, -y );
+        batch.draw( expanse, x, -y );
+        batch.draw( expanse, -x, y );
+        batch.draw( expanse, x, y );
         batch.draw( map, 0, 0 );
     }
     
@@ -278,6 +291,7 @@ public class Map
     public void dispose()
     {
         map.dispose();
+        expanse.dispose();
         for ( Pixmap p : blocks )
             p.dispose();
         for ( Pixmap p : spaces )
@@ -333,7 +347,7 @@ public class Map
      */
     public static int tileToPixel( int tile )
     {
-        return tile * PIXELS_TO_METERS;// + block.getWidth() / 2;
+        return tile * PIXELS_TO_TILES;// + block.getWidth() / 2;
     }
     
     /**
@@ -343,7 +357,7 @@ public class Map
      */
     public static int pixelToTile( float pixel )
     {
-        return (int)( pixel / PIXELS_TO_METERS );
+        return (int)( pixel / PIXELS_TO_TILES );
     }
     
     /**
@@ -375,7 +389,7 @@ public class Map
     // --------------------Random Generators----------------//
     
     /**
-     * Generates Random number from 0 inclusive to width in meters of map 
+     * Generates Random number from 0 inclusive to width in tiles of map 
      * exclusive
      * Private because Tile coordinates should only be managed in Map Class
      * @return random number
