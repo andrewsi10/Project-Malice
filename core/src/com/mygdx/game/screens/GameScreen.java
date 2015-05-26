@@ -57,7 +57,6 @@ public class GameScreen implements Screen {
 	private int enemyMaxCount;
 	private int enemyMinCount;
 	private int numEnemies;
-	private int playerPoints;
 	private long timeResumed;
 
 	Music music;
@@ -83,7 +82,6 @@ public class GameScreen implements Screen {
 		enemyMaxCount = -2;
 		enemyMinCount = 10;
 		numEnemies = 3;
-		playerPoints = 0;
 		font = new BitmapFont();
 
         cam = new OrthographicCamera();
@@ -240,9 +238,9 @@ public class GameScreen implements Screen {
                     	sprites.remove( sprite );
                     	if (sprite instanceof Enemy)
                     	{
-                    		playerPoints += 10;
+                    		player.increasePoints();
                     		player.increaseExp( sprite.getExp() );
-                    		for (int j = 1; j < playerPoints; j *= 50)
+                    		for (int j = 1; j < player.getPoints(); j *= 60)
                     		{
                     			int index = 1 + (int) (Math.random() * numEnemies);
                                 if (index == numEnemies + 1) index--;
@@ -258,7 +256,7 @@ public class GameScreen implements Screen {
                     	else if (sprite instanceof Player )
                     	{
                     		music.stop();
-                    		game.setScreen( new GameOver(game, music, playerPoints, playerType) );
+                    		game.setScreen( new GameOver(game, music, player, playerType) );
                     	}
                     }
                     break;
@@ -311,7 +309,7 @@ public class GameScreen implements Screen {
         float fontX = cam.position.x - cam.viewportWidth / 2;
         float fontY = cam.position.y + cam.viewportHeight / 2;
         setFontColor( fontX, fontY );
-        font.draw( batch, "POINTS: " + playerPoints, fontX, fontY );
+        font.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
     }
     
     private void setFontColor( float fontX, float fontY )

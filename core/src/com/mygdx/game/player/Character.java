@@ -36,7 +36,7 @@ public abstract class Character extends Sprite {
     Array<AtlasRegion> rightFrames;
     Array<AtlasRegion> downFrames;
     Array<AtlasRegion> leftFrames;
-    private BitmapFont font;
+    protected BitmapFont font;
 
     private int direction = -1;
 	private int maxHp = 50; // max health
@@ -116,36 +116,8 @@ public abstract class Character extends Sprite {
         this.setRegion(animation.getKeyFrame(stateTime));
     }
     
-    public void drawBars( Batch batch, ShapeRenderer renderer )
-    {
-        if ( !this.isDead() )
-        {
-            float hpW = getWidth();
-            float hpH = BARHEIGHT;
-            float hpX = getX();
-            float hpY = getY() - BARHEIGHT;
-            
-            // note: merge if statements in order to make them appear at same time
-            // suggestion: should we make exp a vertical bar or make hp above sprite?
-            if ( currentHp < maxHp ) { 
-                renderer.setColor( Color.GRAY );
-                renderer.rect( hpX, hpY, hpW, hpH );
-                renderer.setColor( Color.GREEN );
-                renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * currentHp / maxHp, hpH - 2 );
-                font.setColor( Color.MAROON );
-                font.draw( batch, currentHp + "/" + maxHp, hpX + hpW, hpY );
-            }
-            if ( experience < expToLevel && experience > 0 )
-            {
-                hpY -= BARHEIGHT - 1;
-                renderer.setColor( Color.GRAY );
-                renderer.rect( hpX, hpY, hpW, hpH );
-                renderer.setColor( Color.CYAN );
-                renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * experience / expToLevel, hpH - 2 );
-            }
-            
-        }
-    }
+    public abstract void drawBars( Batch batch, ShapeRenderer renderer );
+    
     // ----------------- Environment Interaction ------------------------//
 	public abstract void move( Character character, 
 	                           ArrayList<Projectile> projectiles, 
@@ -231,7 +203,7 @@ public abstract class Character extends Sprite {
 	
 	public void setExp( int exp )
 	{
-	    this.experience = exp;
+	    this.setExperience( exp );
 	}
 	
 	public void setExpToLevel( int exp )
@@ -280,7 +252,7 @@ public abstract class Character extends Sprite {
     
     public int getExp()
     {
-        return experience;
+        return getExperience();
     }
     
     public int getExpToLevel()
@@ -305,5 +277,15 @@ public abstract class Character extends Sprite {
 				+ previousTime + ", moveSpeed: " + moveSpeed;
 
 		return s;
+	}
+
+	public int getExperience()
+	{
+		return experience;
+	}
+
+	public void setExperience(int experience)
+	{
+		this.experience = experience;
 	}
 }

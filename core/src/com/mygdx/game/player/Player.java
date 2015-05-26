@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,6 +19,10 @@ public class Player extends Character {
 	private String projectile;
 	
 	private int playerLevel = 1;
+	
+	private int playerPoints = 0;
+	
+	private GlyphLayout layout = new GlyphLayout();
 	
 	
 	public Player(String file, String proj) {
@@ -50,9 +55,32 @@ public class Player extends Character {
 	@Override
 	public void drawBars( Batch batch, ShapeRenderer renderer )
 	{
-	    super.drawBars( batch, renderer );
+		float hpW = getWidth();
+        float hpH = BARHEIGHT;
+        float hpX = getX();
+        float hpY = getY() - BARHEIGHT;
+        
+        // note: merge if statements in order to make them appear at same time
+        // suggestion: should we make exp a vertical bar or make hp above sprite?
+        if ( getCurrentHp() < getMaxHp() ) { 
+            renderer.setColor( Color.GRAY );
+            renderer.rect( hpX, hpY, hpW, hpH );
+            renderer.setColor( Color.GREEN );
+            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getCurrentHp() / getMaxHp(), hpH - 2 );
+            font.setColor( Color.MAROON );
+            font.draw( batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY );
+        }
+        if ( getExperience() < getExpToLevel() && getExperience() > 0 )
+        {
+            hpY -= BARHEIGHT - 1;
+            renderer.setColor( Color.GRAY );
+            renderer.rect( hpX, hpY, hpW, hpH );
+            renderer.setColor( Color.CYAN );
+            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getExperience() / getExpToLevel(), hpH - 2 );
+        }
 	    getFont().setColor( Color.CYAN );
-	    getFont().draw( batch, "Level " + playerLevel, getX(), getY() + getHeight() );
+	    layout.setText( getFont(), "Level " + playerLevel);
+	    getFont().draw( batch, "Level " + playerLevel, getX() - layout.width / 4, getY() + 1.8f * getHeight() );
 	}
 
     @Override
@@ -88,7 +116,17 @@ public class Player extends Character {
 		double temp = getCurrentHp() / getMaxHp();
 		increaseBdmg( 2 );
 		increaseMaxHp( 10 );
-		increaseCurrentHp( (int) ( 10 * temp ) );
+		increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
+    }
+    
+    public int getPoints()
+    {
+    	return playerPoints;
+    }
+    
+    public void increasePoints()
+    {
+    	playerPoints += 10;
     }
     
     public void increaseExp( int exp )
@@ -98,6 +136,7 @@ public class Player extends Character {
         {
             setExp( getExp() - getExpToLevel() );
             increaseCurrentLevel();
+            setExpToLevel(getExpToLevel() * getCurrentLevel() / 2);
         }
     }
 

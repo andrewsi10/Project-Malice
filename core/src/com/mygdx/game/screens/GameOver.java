@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
+import com.mygdx.game.player.Player;
 
 public class GameOver implements Screen
 {
@@ -34,7 +36,7 @@ public class GameOver implements Screen
 
 	private Skin skin;
 
-	private int playerPoints;
+	private Player player;
 
 	private BitmapFont font;
 
@@ -42,14 +44,17 @@ public class GameOver implements Screen
 	
 	private String playerType;
 
+	private GlyphLayout layout;
+	
 	Music music;
 
-	public GameOver(Malice g, Music m, int points, String playerType)
+	public GameOver(Malice g, Music m, Player player, String playerType)
 	{
 		game = g;
 		music = m;
-		playerPoints = points;
+		this.player = player;
 		this.playerType = playerType;
+		layout = new GlyphLayout();
 	}
 
 	// copied from online
@@ -156,9 +161,11 @@ public class GameOver implements Screen
 		stage.act();
 		stage.draw();
 		batch.begin();
-		font.draw( batch, "You earned " + playerPoints
-				+ " points. Better luck next time!",
-				Gdx.graphics.getWidth() / 2 - font.getRegion().getRegionWidth() / 2,
+		String str = "You earned " + player.getPoints()
+				+ " points and reached level " + player.getCurrentLevel() + ". Better luck next time!";
+		layout.setText( font, str );
+		font.draw( batch, str,
+				Gdx.graphics.getWidth() / 2 - layout.width / 2,
 				Gdx.graphics.getHeight() * 67 / 100 );
 		batch.end();
 	}
