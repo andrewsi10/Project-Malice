@@ -239,7 +239,7 @@ public class GameScreen implements Screen {
                     	if (sprite instanceof Enemy)
                     	{
                     		player.increasePoints();
-                    		player.increaseExp( sprite.getExp() );
+                    		player.increaseExp( sprite.getExperience() );
                     		for (int j = 1; j < player.getPoints(); j *= 60)
                     		{
                     			int index = 1 + (int) (Math.random() * numEnemies);

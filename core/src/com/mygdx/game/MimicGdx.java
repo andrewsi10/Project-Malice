@@ -2,8 +2,23 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+
 import static com.mygdx.game.player.Character.*;
 
+/**
+ *  The MimicGdx Class isolates nearly all input from the Gdx class
+ *  
+ *  This will allow 2 purposes:
+ *   - provides the functionality of an options screen when implemented
+ *   - Allows for better JUnit testing as many methods would be unable to be 
+ *     tested
+ *
+ *  @author  Nathan Lui
+ *  @version May 26, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: Project Malice
+ */
 public class MimicGdx
 {
     /**
@@ -111,12 +126,23 @@ public class MimicGdx
     }
     
     // -------------------------- Music and Audio --------------------- //
-    // note: Music and Audio may have to be separated somehow, this class may not be able to do that
+    public static Sound levelUp;
+
     
+    public static void initializeAudio()
+    {
+        levelUp = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
+    }
+    
+    public static void playAudio( Sound sound )
+    {
+        if ( sound != null )
+        {
+            sound.play();
+        }
+    }
     
     // -------------------------- File Input -------------------------- //
-    // note: File Input may have to be separated somehow, this class may not be able to do that
-    
-    
+    // note: File Input may have to be separated somehow through constructors, this class may not be able to do that
     
 }
