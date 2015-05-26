@@ -5,7 +5,7 @@ import com.mygdx.game.screens.Splash;
 
 public class Malice extends Game
 {
-	public static final String TITLE = "Project Malice", VERSION = "0.7.5.0";
+	public static final String TITLE = "Project Malice", VERSION = "1.0.0.0";
 
 	@Override
 	public void create()
