@@ -3,10 +3,12 @@ package com.mygdx.game.player;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -14,7 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
-public abstract class Character extends Sprite {
+public class Character extends Sprite {
 	public static final int NORTH = 0;
 	public static final int NORTHEAST = 1;
 	public static final int EAST = 2;
@@ -27,16 +29,20 @@ public abstract class Character extends Sprite {
 	
 	public static final int BARHEIGHT = 5;
 
-    float stateTime;
-    Animation upAnimation;
-    Animation rightAnimation;
-    Animation downAnimation;
-    Animation leftAnimation;
-    Array<AtlasRegion> upFrames;
-    Array<AtlasRegion> rightFrames;
-    Array<AtlasRegion> downFrames;
-    Array<AtlasRegion> leftFrames;
-    protected BitmapFont font;
+	private float stateTime;
+    private Animation upAnimation;
+    private Animation rightAnimation;
+    private Animation downAnimation;
+    private Animation leftAnimation;
+    private Array<AtlasRegion> upFrames;
+    private Array<AtlasRegion> rightFrames;
+    private Array<AtlasRegion> downFrames;
+    private Array<AtlasRegion> leftFrames;
+    private BitmapFont font;
+    
+    private int level = 0;
+    private GlyphLayout layout = new GlyphLayout();
+    private Color hpColor = Color.GREEN;
 
     private int direction = -1;
 	private int maxHp = 50; // max health
@@ -60,11 +66,11 @@ public abstract class Character extends Sprite {
 	// constructor for player
 	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
 			Array<AtlasRegion> down, Array<AtlasRegion> left) {
-        font = new BitmapFont();
 		upFrames = up;
 		rightFrames = right;
 		downFrames = down;
 		leftFrames = left;
+        font = new BitmapFont();
 		set(new Sprite(down.get(0)));
 		initializeAnimations();
 	}
@@ -73,7 +79,7 @@ public abstract class Character extends Sprite {
 	/**
 	 * initializes the animations
 	 */
-	void initializeAnimations() {
+	private void initializeAnimations() {
 		upAnimation = new Animation(.2f, upFrames);
 		rightAnimation = new Animation(.2f, rightFrames);
 		downAnimation = new Animation(.2f, downFrames);
@@ -116,19 +122,61 @@ public abstract class Character extends Sprite {
         this.setRegion(animation.getKeyFrame(stateTime));
     }
     
-    public abstract void drawBars( Batch batch, ShapeRenderer renderer );
+    public void drawBars( Batch batch, ShapeRenderer renderer )
+    {
+        float hpW = getWidth();
+        float hpH = BARHEIGHT;
+        float hpX = getX();
+        float hpY = getY() - BARHEIGHT;
+        
+        // note: merge if statements in order to make them appear at same time
+        // suggestion: should we make exp a vertical bar or make hp above sprite?
+        if ( getCurrentHp() < getMaxHp() ) { 
+            renderer.setColor( Color.GRAY );
+            renderer.rect( hpX, hpY, hpW, hpH );
+            renderer.setColor( hpColor );
+            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getCurrentHp() / getMaxHp(), hpH - 2 );
+            font.setColor( Color.MAROON );
+            font.draw( batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY );
+        }
+        if ( getExperience() < getExpToLevel() && getExperience() > 0 )
+        {
+            hpY -= BARHEIGHT - 2;
+            renderer.setColor( Color.GRAY );
+            renderer.rect( hpX, hpY, hpW, hpH );
+            renderer.setColor( Color.CYAN );
+            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getExperience() / getExpToLevel(), hpH - 2 );
+        }
+        if ( level > 0 )
+        {
+            getFont().setColor( Color.MAGENTA );
+            layout.setText( getFont(), "Level " + level);
+            getFont().draw( batch, "Level " + level, getX() - layout.width / 4, getY() + 1.8f * getHeight() );
+        }
+    }
     
     // ----------------- Environment Interaction ------------------------//
-	public abstract void move( Character character, 
-	                           ArrayList<Projectile> projectiles, 
-	                           long time);
+	/**
+	 * This method should be overridden for better functionality
+	 * moves sprite according to its current direction
+	 * @param character for sub classes to interact with environment
+	 * @param projectiles list of all projectiles, given to add this Character's projectiles to environment (for shooting functions)
+	 * @param time Time in game (used in order to determine delays in moving or shooting)
+	 */
+	public void move( Character character, ArrayList<Projectile> projectiles, 
+	                           long time)
+	{
+	    move();
+	}
 
-	protected void move(int dir) {
+	/**
+	 * Moves sprite according to its current direction
+	 */
+	private void move() {
 
-		setDirection(dir);
 		int dx = 0;
 		int dy = 0;
-		switch (dir) {
+		switch (direction) {
 		case NORTHWEST:
 			dx = -1;
 		case NORTH:
@@ -150,7 +198,7 @@ public abstract class Character extends Sprite {
 			dx = -1;
 			break;
 		}
-		setAnimations( dir );
+		setAnimations( direction );
 		translate(dx, dy);
 	}
 
@@ -179,6 +227,29 @@ public abstract class Character extends Sprite {
     }
 
     // --------------------Setters and Incrementers --------------------//
+    
+    public void setLevel( int newLevel)
+    {
+        level = newLevel;
+    }
+    
+    public void setHpColor( Color newColor )
+    {
+        hpColor = newColor;
+    }
+    
+    public void increaseCurrentLevel()
+    {
+        // might need balancing
+        level++;
+        Sound sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
+        sound.play();
+        double temp = getCurrentHp() / getMaxHp();
+        increaseBdmg( 2 );
+        increaseMaxHp( 10 );
+        increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
+    }
+    
     public void setDirection(int dir) {
         if (dir >= 0 && dir < NUMDIRECTIONS) {
             direction = dir;
@@ -200,11 +271,11 @@ public abstract class Character extends Sprite {
 	public boolean isDead() {
 		return currentHp <= 0;
 	}
-	
-	public void setExp( int exp )
-	{
-	    this.setExperience( exp );
-	}
+
+    public void setExperience(int experience)
+    {
+        this.experience = experience;
+    }
 	
 	public void setExpToLevel( int exp )
 	{
@@ -237,6 +308,11 @@ public abstract class Character extends Sprite {
     public TextureAtlas getAtlas() {
         return textureAtlas;
     }
+    
+    public int getCurrentLevel()
+    {
+        return level;
+    }
 
     public int getDirection() {
         return direction;
@@ -249,10 +325,10 @@ public abstract class Character extends Sprite {
     public int getCurrentHp() {
         return currentHp;
     }
-    
-    public int getExp()
+
+    public int getExperience()
     {
-        return getExperience();
+        return experience;
     }
     
     public int getExpToLevel()
@@ -277,15 +353,5 @@ public abstract class Character extends Sprite {
 				+ previousTime + ", moveSpeed: " + moveSpeed;
 
 		return s;
-	}
-
-	public int getExperience()
-	{
-		return experience;
-	}
-
-	public void setExperience(int experience)
-	{
-		this.experience = experience;
 	}
 }
