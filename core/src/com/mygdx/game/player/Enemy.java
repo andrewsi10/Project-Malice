@@ -99,8 +99,6 @@ public class Enemy extends Character {
         float hpX = getX();
         float hpY = getY() - BARHEIGHT;
         
-        // note: merge if statements in order to make them appear at same time
-        // suggestion: should we make exp a vertical bar or make hp above sprite?
         if ( getCurrentHp() < getMaxHp() ) { 
             renderer.setColor( Color.GRAY );
             renderer.rect( hpX, hpY, hpW, hpH );
@@ -108,14 +106,6 @@ public class Enemy extends Character {
             renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getCurrentHp() / getMaxHp(), hpH - 2 );
             font.setColor( Color.MAROON );
             font.draw( batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY );
-        }
-        if ( getExperience() < getExpToLevel() && getExperience() > 0 )
-        {
-            hpY -= BARHEIGHT - 1;
-            renderer.setColor( Color.GRAY );
-            renderer.rect( hpX, hpY, hpW, hpH );
-            renderer.setColor( Color.CYAN );
-            renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * getExperience() / getExpToLevel(), hpH - 2 );
         }
 	}
 

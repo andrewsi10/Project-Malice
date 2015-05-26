@@ -26,7 +26,7 @@ public class Map
     /**
      * Spawn distance from player in tiles
      */
-    public static final int SPAWN_DISTANCE = 5;
+    public static final int SPAWN_DISTANCE = 7;
     public static final int OUTER_BORDER = 7;
     
     private boolean[][] areSpaces;
@@ -451,12 +451,11 @@ public class Map
                 y = Math.min( point.y, p.y );
                 w = Math.abs( point.x - p.x );
                 h = Math.abs( point.y - p.y );
-                createRoom( x, y, w, 2 );
-                createRoom( x + w, y, 2, h );
+                createRoom( x, y + h, w, 2 );
+                createRoom( x, y, 2, h );
             }
         }
         this.setSpawn( -1, -1 );
-        // System.out.println( this ); // TODO remove
     }
 
     // -------------- Spawn methods -------------------- //
@@ -513,7 +512,7 @@ public class Map
         String s = "";
         for ( int i = 0; i < areSpaces.length; i++ ) {
             for ( int j = 0; j < areSpaces[0].length; j++ )
-                s += areSpaces[i][j] ? ' ' : 'X';
+                s += ( areSpaces[i][j] ? ' ' : 'X' ) + " ";
             s += "\n";
         }
         return s;
