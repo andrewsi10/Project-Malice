@@ -33,6 +33,7 @@ public class JUnitMapTest
     public static final int w1 = 5;
     public static final int h1 = 5;
     
+    // "\n" + s1 + "\n\n" + s2 + "\n\n" + s3 + "\n\n" + map1
     @Test
     public void testMapRecursion()
     {
@@ -40,7 +41,7 @@ public class JUnitMapTest
         assertEquals( "sizeOfRoom() should return zero at any point map when map is initialized", 
                                             map1.sizeOfRoom( 0, 0 ), 0 );
         map1.createRoom( x1, y1, w1, h1 );
-        String s1 = map1 + "";
+//        String s1 = map1 + "";
         assertTrue( "createRoom() Failed to create square", checkRoom( x1, y1, w1, h1, true, map1.getAreSpaces() ) );
         int size1 = map1.sizeOfRoom( x1, y1 );
         assertTrue( "sizeOfRoom() should not fill rooms", checkRoom( x1, y1, w1, h1, true, map1.getAreSpaces() ) );
@@ -51,7 +52,7 @@ public class JUnitMapTest
         int w2 = 7;
         int h2 = 5;
         map1.createRoom( x2, y2, w2, h2 );
-        String s2 = map1 + "";
+//        String s2 = map1 + "";
         assertTrue( "createRoom() Failed to create rectangle", checkRoom( x2, y2, w2, h2, true, map1.getAreSpaces() ) );
         assertTrue( "createRoom() removed previous room", checkRoom( x1, y1, w1, h1, true, map1.getAreSpaces() ) );
         assertFalse( "hasPath() connected 2 points, Should not be connected", map1.hasPath( x1, y1, x2, y2, true ) );
@@ -64,7 +65,7 @@ public class JUnitMapTest
         assertEquals( "sizeOfRoom() return incorrect value", size2, w2 * h2 );
         
         map1.createRoom( x1 + w1, y1 + h1, w2, h2 );
-        String s3 = map1 + "";
+//        String s3 = map1 + "";
         assertTrue( "createRoom() removed previous room", checkRoom( x1, y1, w1, h1, true, map1.getAreSpaces() ) );
         assertFalse( "hasPath() did not connected 2 points, should be connected", map1.hasPath( x1, y1, x2, y2, true ) );
 //        int size3 = map1.sizeOfRoom( x1, y1 );
@@ -72,7 +73,7 @@ public class JUnitMapTest
 //        assertEquals( "sizeOfRoom() returned " + size3 + ", should be \n" + s1 + "\n\n" + s2 + "\n\n" + s3, size3, 2 * size1 + size2 );
         
         map1.fillRoom( x1, y1 );
-        assertFalse( checkRoom( x1, y1, w1, h1, false, map1.getAreSpaces()));
+        assertTrue( "fillRoom() failed to fill entire room", checkRoom( x1, y1, w1, h1, false, map1.getAreSpaces()));
 //        map1.createRoom( x1, y1, w1, h1 );
 //        assertTrue( checkRoom( x1, y1, w1, h1, map1.getAreSpaces() ) );
 //        map1.createRoom( x1, y1, w1, h1 );

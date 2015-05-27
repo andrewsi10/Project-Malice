@@ -30,6 +30,7 @@ public class Map
     public static final int OUTER_BORDER = 7;
     
     private boolean[][] areSpaces;
+    
     private Pixmap[] blocks;
     private Pixmap[] spaces;
     private int spawnX;
@@ -106,7 +107,8 @@ public class Map
     }
     
     /**
-     * Creates the map image to be displayed
+     * Creates the map image to be displayed based on areSpaces and Pixmap 
+     * images created in the constructor
      */
     public void createMap()
     {
@@ -145,17 +147,23 @@ public class Map
      */
     public void createRoom( int x, int y, int w, int h )
     {
+        createRoom( x, y, w, h, new boolean[getMapTileWidth()][getMapTileHeight()] );
+    }
+    
+    private void createRoom( int x, int y, int w, int h, boolean[][] b )
+    {
         if ( w <= 0 || x >= getMapTileWidth() - 1
           || h <= 0 || y >= getMapTileHeight() - 1 ) return;
-        if ( x <= 0 ) { createRoom( 1, y, w + x - 1, h ); return; }
-        if ( y <= 0 ) { createRoom( x, 1, w, h + y - 1 ); return; }
-        if ( !this.areSpaces[x][y] ) createRoom( x + 1, y, w - 1, h );
+        if ( x <= 0 ) { createRoom( 1, y, w + x - 1, h, b ); return; }
+        if ( y <= 0 ) { createRoom( x, 1, w, h + y - 1, b ); return; }
+        if ( !b[x][y] ) createRoom( x + 1, y, w - 1, h, b );
         this.areSpaces[x][y] = true;
-        createRoom( x, y + 1, w, h - 1 );
+        b[x][y] = true;
+        createRoom( x, y + 1, w, h - 1, b );
     }
     
     /**
-     * Returns the size of a room
+     * Returns the size of a room recursively using a helper method
      * @param x starting x coordinate
      * @param y starting y coordinate
      * @return number of spaces in room
@@ -163,12 +171,10 @@ public class Map
     public int sizeOfRoom( int x, int y )
     {
         return sizeOfRoom( x, y, copyAreSpaces() );
-        // did not work as above code
-        // return sizeOfRoom( x, y, areSpaces.clone() );
     }
 
     /**
-     * Returns the size of a room recursively
+     * Returns the size of a room recursively (Helper Method)
      * @param x starting x coordinate
      * @param y starting y coordinate
      * @param map Map to flood fill
@@ -185,7 +191,7 @@ public class Map
     }
 
     /**
-     * Fills up all the spaces in a room (uses sizeOfRoom() method)
+     * Fills up all the spaces in a room (uses sizeOfRoom() helper method)
      * @param x starting x coordinate
      * @param y starting y coordinate
      */
@@ -194,13 +200,19 @@ public class Map
         sizeOfRoom( x, y, areSpaces );
     }
     
-    
-    
+    /**
+     * Returns whether point has a path to a second point
+     * Uses recursion with helper method
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param asSpace
+     * @return
+     */
     public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
     {
         return hasPath( x1, y1, x2, y2, asSpace, copyAreSpaces() );
-        // does not work as above code
-        // return hasPath( x1, y1, x2, y2, asSpace, areSpaces.clone() );
     }
 
     
@@ -294,8 +306,8 @@ public class Map
     private boolean[][] copyAreSpaces()
     {
         boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
-        for ( int i = 0; i < b.length; i++ )
-            for ( int j = 0; j < b[i].length; j++ )
+        for ( int i = 0; i < getMapTileWidth(); i++ )
+            for ( int j = 0; j < getMapTileHeight(); j++ )
                 b[i][j] = areSpaces[i][j];
         return b;
     }
@@ -415,26 +427,29 @@ public class Map
     {
         int x = randomTileCoordinate();
         int y = randomTileCoordinate();
-        int w = randomNumber( this.areSpaces.length / 3 ) + 3;
-        int h = randomNumber( this.areSpaces.length / 3 ) + 3;
+        int w = randomNumber( getMapTileWidth() / 3 ) + 3;
+        int h = randomNumber( getMapTileHeight() / 3 ) + 3;
         
         LinkedList<Point> list = new LinkedList<Point>();
-        int count = 0;
+        int size;
         do {
             createRoom( x, y, w, h );
             x = randomTileCoordinate();
             y = randomTileCoordinate();
-            w = randomNumber( this.areSpaces.length / 3 ) + 3;
-            h = randomNumber( this.areSpaces.length / 3 ) + 3;
+            w = randomNumber( getMapTileWidth() / 3 ) + 3;
+            h = randomNumber( getMapTileHeight() / 3 ) + 3;
             list.add( new Point( x, y ) );
-            count++;
-        } while ( x != this.areSpaces.length - 1
-               || count < this.areSpaces.length / 5 );
-        int largest = 0;
-        Point point = new Point();
+            size = sizeOfRoom( x, y );
+        } while (// x != this.areSpaces.length - 1
+                size < getMapTileWidth() * getMapTileHeight() / 2
+               );
+        
+        // Remove excess rooms
+        int largest = size;
+        Point point = list.removeLast();
         for ( Point p : list )
         {
-            int size = sizeOfRoom( p.x, p.y );
+            size = sizeOfRoom( p.x, p.y );
             if ( size > largest )
             {
                 largest = size;
@@ -452,7 +467,9 @@ public class Map
                 w = Math.abs( point.x - p.x );
                 h = Math.abs( point.y - p.y );
                 createRoom( x, y + h, w, 2 );
+                createRoom( x, y, w, 2 );
                 createRoom( x, y, 2, h );
+                createRoom( x + w, y, 2, h );
             }
         }
         this.setSpawn( -1, -1 );
@@ -512,7 +529,7 @@ public class Map
         String s = "";
         for ( int i = 0; i < areSpaces.length; i++ ) {
             for ( int j = 0; j < areSpaces[0].length; j++ )
-                s += ( areSpaces[i][j] ? ' ' : 'X' ) + " ";
+                s += ( areSpaces[getMapTileWidth() - 1 - i][j] ? ' ' : 'X' ) + " ";
             s += "\n";
         }
         return s;
