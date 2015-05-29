@@ -50,7 +50,7 @@ public class Splash implements Screen
 		batch.begin();
 		splashSprite.draw( batch );
 		batch.end();
-		if ( elapsed > 2 )
+		if ( elapsed > 5 )
 		{
 			game.setScreen( new MainMenu( game, mainTheme ) );
 		}
