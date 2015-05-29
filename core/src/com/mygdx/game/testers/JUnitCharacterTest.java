@@ -5,22 +5,13 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.mygdx.game.MimicGdx;
 import com.mygdx.game.player.Character;
-import com.mygdx.game.MimicGdx;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 
 public class JUnitCharacterTest {
 
-	private int moveSpeed = 10;
+	private float moveSpeed;
 	private int dy = 1;
 	private int dx = 1;
-	private Array<AtlasRegion> frames = new TextureAtlas(
-			Gdx.files.internal("img/sprites/Enemies/Enemy1/Enemy1.atlas"))
-			.getRegions();
 
 	/**
 	 * finds the distance between the coordinate (x, y) and (0, 0)
@@ -35,19 +26,20 @@ public class JUnitCharacterTest {
 		return Math.sqrt(x * x + y * y);
 	}
 
-	@Test
 	public void testMove() {
-
+		Character c = new Character();
+		c.setDirection(0);
 	}
-
+	
 	/**
 	 * initializes a character at the origin and translates it dx across the x
 	 * axis and dy across the y axis. Margin of error is set at .0001
 	 */
 	@Test
 	public void testTranslate() {
-		Character c = new Character(frames);
-		c.setPosition(0f, 0f);
+		//initializes new Character and moves it
+		Character c = new Character();
+		moveSpeed = c.getSpeed();
 		c.translate(dx, dy);
 		assertEquals("Character: translate(" + dy + ", " + dx
 				+ ") should result in the x-coordinate of the Character at "
@@ -58,4 +50,20 @@ public class JUnitCharacterTest {
 				+ (moveSpeed * dy / Math.sqrt(2)),
 				moveSpeed * dy / Math.sqrt(2), c.getY(), .0001);
 	}
+	
+	@Test
+	public void testIncreaseCurrentLevel() {
+		Character c = new Character();
+		c.takeDamage(25);
+		int level = c.getCurrentLevel() + 1;
+		int BDmg = c.getBDmg() + 2;
+		int maxHp = c.getMaxHp() + 10;
+		int increasedHp = (int)(10*(c.getCurrentHp()/c.getMaxHp() + 1));
+		c.increaseCurrentLevel();
+		assertEquals(c.getCurrentLevel(), level);
+		assertEquals(c.getBDmg(), BDmg);
+		assertEquals(c.getMaxHp(), maxHp);
+		assertEquals(c.getCurrentHp(), increasedHp);
+	}
+	
 }

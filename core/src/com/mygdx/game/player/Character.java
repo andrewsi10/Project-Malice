@@ -238,6 +238,9 @@ public class Character extends Sprite {
         hpColor = newColor;
     }
     
+    /**
+     * increases the level of the character, as well as increases maxHP and bullet damage
+     */
     public void increaseCurrentLevel()
     {
         // might need balancing
@@ -336,12 +339,20 @@ public class Character extends Sprite {
         return expToLevel;
     }
 
+    public int getBDmg() {
+    	return baseDmg;
+    }
+    
     public int getDamage() {
         return baseDmg + (int) (randMod * Math.random());
     }
     
 	public int getReloadSpeed() {
 		return reloadSpeed;
+	}
+	
+	public float getSpeed(){
+		return moveSpeed;
 	}
 
 	// --------------------For Testing --------------//
@@ -354,4 +365,13 @@ public class Character extends Sprite {
 
 		return s;
 	}
+	
+	/**
+	 * Constructor for testing. Initializes Character with position 0, 0 and moveSpeed 10
+	 */
+	public Character() {
+		setSpeed(10);
+		setLevel(1);
+	}
+	
 }
