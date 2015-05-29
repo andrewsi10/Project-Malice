@@ -112,7 +112,7 @@ public class GameOver implements Screen
 		music.setVolume( 0.7f );
 		stage = new Stage();
 		font = new BitmapFont();
-		font.setColor( Color.BLACK );
+		font.setColor( Color.WHITE );
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
 		createSkin();
