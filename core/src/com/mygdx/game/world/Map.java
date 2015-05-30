@@ -17,8 +17,11 @@ public class Map
      * Package for all images
      */
     public static final String PACKAGE = "map/";
-    public static final int ARENA = 0;
-    public static final int DUNGEON = 1;
+    // generation types
+    public static final int RANDOM = -1;
+    public static final int DUNGEON = 0;
+    public static final int ARENA = 1;
+    public static final int NUM_GENERATION_TYPES = 2;
     /**
      * Conversion number from pixels to tiles
      */
@@ -41,6 +44,7 @@ public class Map
     
     /**
      * Constructs a map filled with walls
+     * Prepares Pixmap arrays for use in createMap() from predetermined files
      * @param rows number of rows in map
      * @param cols number of columns in map
      */
@@ -54,7 +58,7 @@ public class Map
         texture.dispose();
         TextureRegion[] trees = new TextureRegion[10];
         blocks = new Pixmap[trees.length];
-        for ( int i = 0; i < blocks.length; i++ )
+        for ( int i = 0; i < blocks.length; i++ ) // stores textures in pixmaps
         {
             trees[i] = new TextureRegion( new Texture( PACKAGE + "Trees/Tree" + i + ".png" ) );
             Texture t = trees[i].getTexture();
@@ -78,10 +82,10 @@ public class Map
     }
 
     /**
-     * For Testing
+     * For JUnit Testing only (in order to avoid graphics: Textures and Pixmaps)
      * @param rows number of rows in map
      * @param cols number of columns in map
-     * @param b to differentiate in testing
+     * @param b to differentiate from other constructor for testing
      */
     public Map( int rows, int cols, boolean b)
     {
@@ -90,20 +94,25 @@ public class Map
     
     /**
      * Generates the map based on type of generation
+     * Type of generation current is not being used 
+     * (for expansion of game purposes)
      * @param type of generation
      */
     public void generate( int type )
     {
-        switch ( type )
-        {
-            case ARENA:
-                createRoom( 0, 0, getMapTileWidth(), getMapTileHeight() );
-                setSpawn( -1, -1 );
-                break;
-            case DUNGEON:
-                randomGeneration();
-                break;
-        }
+        if ( type == RANDOM )
+            type = randomNumber( NUM_GENERATION_TYPES );
+        randomGeneration( type );
+//        switch ( type )
+//        {
+//            case ARENA:
+//                createRoom( 0, 0, getMapTileWidth(), getMapTileHeight() );
+//                setSpawn( -1, -1 );
+//                break;
+//            case DUNGEON:
+//                randomGeneration();
+//                break;
+//        }
     }
     
     /**
@@ -112,8 +121,8 @@ public class Map
      */
     public void createMap()
     {
-        Pixmap pixmap1 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
-        Pixmap pixmap2 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGB888 );
+        Pixmap pixmap1 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGBA8888 );
+        Pixmap pixmap2 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGBA8888 );
         for ( int i = 0; i < getMapTileWidth(); i++ )
         {
             for ( int j = 0; j < getMapTileHeight(); j++ )
@@ -133,12 +142,14 @@ public class Map
         expanse = new Texture( pixmap2 );
         pixmap1.dispose();
         pixmap2.dispose();
+        System.out.println( this );
     }
 
     // --------------------------Recursive Methods ---------------------//
     /**
-     * Recursively builds the room of the map where x and y are the top left 
-     * corner of the room and w is the width and h is the height
+     * Recursively builds the room of the map where x and y are the starting 
+     * points and w is the width and h is the height, uses a helper method with 
+     * a new boolean[][] object
      * 
      * @param x -coordinate of top left of room
      * @param y -coordinate of top left of room
@@ -150,6 +161,32 @@ public class Map
         createRoom( x, y, w, h, new boolean[getMapTileWidth()][getMapTileHeight()] );
     }
     
+    /**
+     * Sets all tiles in areSpaces in the outline of a box starting at x and y
+     * and formed by w and h to true.
+     * @param x 
+     * @param y
+     * @param w
+     * @param h
+     */
+    public void createRectangle( int x, int y, int w, int h )
+    {
+        createRoom( x, y + h, w, 1 );
+        createRoom( x, y, w, 1 );
+        createRoom( x, y, 1, h );
+        createRoom( x + w, y, 1, h );
+    }
+    
+    /**
+     * Recursively builds the room of the map where x and y are the starting 
+     * points and w is the width and h is the height
+     *
+     * @param x -coordinate of top left of room
+     * @param y -coordinate of top left of room
+     * @param w width of room
+     * @param h height of room
+     * @param b 
+     */
     private void createRoom( int x, int y, int w, int h, boolean[][] b )
     {
         if ( w <= 0 || x >= getMapTileWidth() - 1
@@ -163,46 +200,47 @@ public class Map
     }
     
     /**
-     * Returns the size of a room recursively using a helper method
+     * Returns the size of a area recursively using a helper method and flood 
+     * fills a copy of areSpaces
      * @param x starting x coordinate
      * @param y starting y coordinate
      * @return number of spaces in room
      */
-    public int sizeOfRoom( int x, int y )
+    public int sizeOfArea( int x, int y )
     {
-        return sizeOfRoom( x, y, copyAreSpaces() );
+        return sizeOfArea( x, y, copyAreSpaces() );
     }
 
     /**
-     * Returns the size of a room recursively (Helper Method)
+     * Returns the size of a area recursively (Helper Method)
      * @param x starting x coordinate
      * @param y starting y coordinate
      * @param map Map to flood fill
      * @return number of spaces in room
      */
-    private static int sizeOfRoom( int x, int y, boolean[][] map )
+    private int sizeOfArea( int x, int y, boolean[][] map )
     {
-        if ( !map[x][y] ) return 0;
+        if ( !inTileBounds( x, y ) || !map[x][y] ) return 0;
         map[x][y] = false;
-        return sizeOfRoom( x - 1, y, map ) 
-             + sizeOfRoom( x + 1, y, map )
-             + sizeOfRoom( x, y - 1, map )
-             + sizeOfRoom( x, y + 1, map ) + 1;
+        return sizeOfArea( x - 1, y, map ) 
+             + sizeOfArea( x + 1, y, map )
+             + sizeOfArea( x, y - 1, map )
+             + sizeOfArea( x, y + 1, map ) + 1;
     }
 
     /**
-     * Fills up all the spaces in a room (uses sizeOfRoom() helper method)
+     * Fills up all the spaces in a area (uses sizeOfRoom() helper method)
      * @param x starting x coordinate
      * @param y starting y coordinate
      */
-    public void fillRoom( int x, int y )
+    public void fillArea( int x, int y )
     {
-        sizeOfRoom( x, y, areSpaces );
+        sizeOfArea( x, y, areSpaces );
     }
     
     /**
      * Returns whether point has a path to a second point
-     * Uses recursion with helper method
+     * Uses recursion with helper method to flood fill a copy of areSpaces
      * @param x1
      * @param y1
      * @param x2
@@ -224,14 +262,11 @@ public class Map
      * @param y2 -coordinate of Point2
      * @param asSpace 
      * @param map
-     * @return
+     * @return true if point1 has a path to point2 with asSpaces
      */
-    private static boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
+    private boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
     {
-        if ( map[x1][y1] != asSpace
-                        || x1 < 1 || x1 >= map.length - 1
-                        || y1 < 1 || y1 >= map[0].length - 1 ) 
-            return false;
+        if ( !inTileBounds( x1, y1 ) || map[x1][y1] != asSpace ) return false;
         if ( x1 == x2 && y1 == y2 ) return true;
         map[x1][y1] = !asSpace;
         return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
@@ -243,7 +278,8 @@ public class Map
     // -----------------------Collision ------------------ //
 
     /**
-     * Returns true if Sprite is in a wall
+     * Returns true if Sprite is in a wall, uses checks the sprite's bounding 
+     * rectangle with the walls near that sprite
      * @param s Sprite to check
      * @return true if Sprite is in a wall
      */
@@ -271,24 +307,28 @@ public class Map
 
     // ---------------------Libgdx management--------------------//
     /**
-     * Draws the map
+     * Draws the map, creates map if map Texture has not been created.
+     * Uses OUTER_BORDER and a texture of the outer border to create an expanse
+     * (expanse covers dark areas outside of map with walls
      * @param batch SpriteBatch used to draw the map
      */
     public void draw( SpriteBatch batch )
     {
+        // TODO
         if ( map == null )
             createMap();
-        int x = tileToPixel( OUTER_BORDER );
-        int y = tileToPixel( OUTER_BORDER );
-        batch.draw( expanse, -x, -y );
-        batch.draw( expanse, x, -y );
-        batch.draw( expanse, -x, y );
-        batch.draw( expanse, x, y );
+//        int x = tileToPixel( OUTER_BORDER );
+//        int y = tileToPixel( OUTER_BORDER );
+//        batch.draw( expanse, -x, -y );
+//        batch.draw( expanse, x, -y );
+//        batch.draw( expanse, -x, y );
+//        batch.draw( expanse, x, y );
         batch.draw( map, 0, 0 );
     }
     
     /**
      * Dispose of all Resources to prevent memory leaks
+     * resources include any Pixmap variables and the map textures
      */
     public void dispose()
     {
@@ -303,13 +343,17 @@ public class Map
     
     // ----------------- Getters and Converters ---------------------//
     
+    /**
+     * Returns a copy of the field areSpaces .
+     * @return copy of areSpaces
+     */
     private boolean[][] copyAreSpaces()
     {
         boolean[][] b = new boolean[getMapTileWidth()][getMapTileHeight()];
         for ( int i = 0; i < getMapTileWidth(); i++ )
             for ( int j = 0; j < getMapTileHeight(); j++ )
                 b[i][j] = areSpaces[i][j];
-        return b;
+        return b; // areSpaces[i][j].clone() does not work properly
     }
     /**
      * Returns Width of Map in tiles
@@ -422,8 +466,9 @@ public class Map
     /**
      * Randomly Generates "rooms" in map where all the edges of areSpaces[][] 
      * remain "false" or walls
+     * @param type of generation
      */
-    public void randomGeneration()
+    public void randomGeneration(int type )
     {
         int x = randomTileCoordinate();
         int y = randomTileCoordinate();
@@ -434,12 +479,12 @@ public class Map
         int size;
         do {
             createRoom( x, y, w, h );
+            list.add( new Point( x + 1, y + 1 ) );
             x = randomTileCoordinate();
             y = randomTileCoordinate();
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
-            list.add( new Point( x, y ) );
-            size = sizeOfRoom( x, y );
+            size = sizeOfArea( x, y );
         } while (// x != this.areSpaces.length - 1
                 size < getMapTileWidth() * getMapTileHeight() / 2
                );
@@ -449,27 +494,29 @@ public class Map
         Point point = list.removeLast();
         for ( Point p : list )
         {
-            size = sizeOfRoom( p.x, p.y );
-            if ( size > largest )
+            if ( type == ARENA )
             {
-                largest = size;
-                fillRoom( point.x, point.y );
-                point = p;
-                
+                size = sizeOfArea( p.x, p.y );
+                if ( size > largest )
+                {
+                    largest = size;
+                    fillArea( point.x, point.y );
+                    point = p;
+                    continue;
+
+                }
+                if ( size < largest ) {
+                    fillArea( p.x, p.y );
+                    continue;
+                }
             }
-            else if ( size < largest ) {
-                fillRoom( p.x, p.y );
-            }
-            else if ( !hasPath(point.x, point.y, p.x, p.y, true) )// && ( size == largest )
+            if ( !hasPath(point.x, point.y, p.x, p.y, true) )// && ( size == largest )
             {
                 x = Math.min( point.x, p.x );
                 y = Math.min( point.y, p.y );
                 w = Math.abs( point.x - p.x );
                 h = Math.abs( point.y - p.y );
-                createRoom( x, y + h, w, 2 );
-                createRoom( x, y, w, 2 );
-                createRoom( x, y, 2, h );
-                createRoom( x + w, y, 2, h );
+                createRectangle( x, y, w, h );
             }
         }
         this.setSpawn( -1, -1 );
@@ -523,6 +570,13 @@ public class Map
     }
     
     // --------------------For Testing ------------------ //
+    
+    /**
+     * Written mainly for testing
+     * Returns String representation of this map with X representing walls and 
+     * ' ' representing spaces.
+     * @return String representation of this map
+     */
     @Override
     public String toString()
     {
@@ -535,6 +589,10 @@ public class Map
         return s;
     }
     
+    /**
+     * Method for testing only
+     * @return the tile array of the map (areSpaces)
+     */
     public boolean[][] getAreSpaces()
     {
         return areSpaces;

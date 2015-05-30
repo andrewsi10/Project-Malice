@@ -88,7 +88,7 @@ public class GameScreen implements Screen {
         cam.setToOrtho(false, 960, 720);
         
         map = new Map( MAP_SIZE, MAP_SIZE );
-        map.generate(Map.DUNGEON);
+        map.generate(Map.RANDOM);
         
         //initializes enemies and puts in a random amount of enemies
         sprites = new ArrayList<Character>();
