@@ -189,8 +189,8 @@ public class Map
     {
         createRoom( x, y, w, 1 ); // bottom of rectangle
         createRoom( x, y, 1, h ); // left of rectangle
-        createRoom( x, y + h - 1, w, 1 ); // top of rectangle // did not work
-        createRoom( x + w - 1, y, 1, h ); // right of rectangle // did not work
+        createRoom( x, y + h - 1, w, 1 ); // top of rectangle
+        createRoom( x + w - 1, y, 1, h ); // right of rectangle
     }
     
     /**
@@ -462,7 +462,7 @@ public class Map
     // --------------------Random Generators----------------//
     
     /**
-     * Generates Random number from 0 inclusive to width in tiles of map 
+     * Generates Random number from 1 inclusive to width in tiles of map - 1
      * exclusive
      * Private because Tile coordinates should only be managed in Map Class
      * @return random number
@@ -489,23 +489,22 @@ public class Map
      */
     public void randomGeneration(int type )
     {
-        int x, y, w, h;
+        int x, y, w, h, size;
         
         LinkedList<Point> list = new LinkedList<Point>();
-        int size;
         do {
-            x = randomTileCoordinate();
-            y = randomTileCoordinate();
+            x = randomTileCoordinate() - 1;
+            y = randomTileCoordinate() - 1;
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
             createRoom( x, y, w, h );
-            list.add( new Point( x + 1, y + 1 ) );
+            list.add( new Point( x, y ) );
             size = sizeOfArea( x, y );
         } while (// x != this.areSpaces.length - 1
                 size < getMapTileWidth() * getMapTileHeight() / 2
                );
         
-        // Remove excess rooms
+        // Remove or connect excess rooms based on generation type
         int largest = size;
         Point point = list.removeLast();
         for ( Point p : list )
@@ -530,9 +529,10 @@ public class Map
             {
                 x = Math.min( point.x, p.x );
                 y = Math.min( point.y, p.y );
-                w = Math.abs( point.x - p.x );
-                h = Math.abs( point.y - p.y );
+                w = Math.abs( point.x - p.x ) + 1;
+                h = Math.abs( point.y - p.y ) + 1;
                 createRectangle( x, y, w, h );
+                largest = sizeOfArea( x, y );
             }
         }
         this.setSpawn( -1, -1 );
@@ -599,7 +599,7 @@ public class Map
         String s = "";
         for ( int i = 0; i < areSpaces.length; i++ ) {
             for ( int j = 0; j < areSpaces[0].length; j++ )
-                s += ( areSpaces[getMapTileWidth() - 1 - i][j] ? ' ' : 'X' ) + " ";
+                s += ( areSpaces[j][getMapTileWidth() - 1 - i] ? ' ' : 'X' ) + " ";
             s += "\n";
         }
         return s;
@@ -630,7 +630,7 @@ public class Map
             System.out.println( map );
             scanUser.nextLine();
         }
-        // testing recursive methods: buggy
+        // testing recursive methods:
 //      Map map1 = new Map( 25,25,true);
 //      while ( scanUser.hasNext() )
 //      {
@@ -655,29 +655,6 @@ public class Map
 //          {
 //              
 //          }
-//      Map map1 = new Map( 25,25, true );
-//      int x1 = 5;
-//      int y1 = 5;
-//      int w1 = 5;
-//      int h1 = 5;
-//      int x2 = 15;
-//      int y2 = 10;
-//      int w2 = 7;
-//      int h2 = 5;
-//      int x3 = 8;
-//      int y3 = 8;
-//      int w3 = 7;
-//      int h3 = 7;
-//      int rectX2 = 6;
-//      int rectY2 = 6;
-//      int rectW2 = 10;
-//      int rectH2 = 15;
-//      map1.createRoom( x1, y1, w1, h1 );
-//      map1.createRoom( x2, y2, w2, h2 );
-//      map1.createRoom( y2, x2, h2, w2 );
-//      map1.createRoom( x3, y3, w3, h3 );
-//      map1.createRectangle( 1, 1, 23, 23 );
-//      map1.createRectangle( rectX2, rectY2, rectW2, rectH2 );
-//      System.out.println( map1 );
+//      }
     }
 }
