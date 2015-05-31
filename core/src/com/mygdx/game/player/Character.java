@@ -224,8 +224,9 @@ public class Character extends Sprite {
             previousTime = time;
             Projectile p = new Projectile(this, getDirection(), getDamage(),
                     spriteType, xDistance, yDistance);
-            p.setPosition(getX() + getWidth() / 3, getY() + getHeight() / 3);
             p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+            p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, 
+                          getY() + getHeight() / 2 - p.getHeight() / 2);
 
             projectiles.add(p);
         }

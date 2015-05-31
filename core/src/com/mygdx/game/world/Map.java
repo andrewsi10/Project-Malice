@@ -47,7 +47,7 @@ public class Map
      * Spawn distance from player in tiles
      */
     public static final int SPAWN_DISTANCE = 7;
-    public static final int OUTER_BORDER = 7;
+    public static final int OUTER_BORDER = 8;
     
     private boolean[][] areSpaces;
     
