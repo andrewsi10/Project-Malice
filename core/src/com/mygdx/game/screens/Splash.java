@@ -10,6 +10,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Malice;
 import com.mygdx.game.MimicGdx;
 
+/**
+ * Splash Screen is a Screen that shows the developers of the project and gives
+ * credit for all artwork and audio. It also initializes and plays the music.
+ * After five seconds, the splash screen is replaced by the main menu.
+ *
+ * @author Andrew Si
+ * @version May 31, 2015
+ * @author Period: 4
+ * @author Assignment: my-gdx-game-core
+ *
+ * @author Sources: libgdx
+ */
 public class Splash implements Screen
 {
 
@@ -23,15 +35,28 @@ public class Splash implements Screen
 
 	Music mainTheme;
 
+	/**
+	 * Creates a Splash screen object and stores the Malice object that created
+	 * the screen.
+	 * 
+	 * @param g
+	 *            the Malice game that controls all the screens
+	 */
 	public Splash(Malice g)
 	{
 		game = g;
 	}
 
+	/**
+	 * Loads the image displaying the credits and decreases the volume of the
+	 * music.
+	 * 
+	 * @see com.badlogic.gdx.Screen#show()
+	 */
 	@Override
 	public void show()
 	{
-	    MimicGdx.initializeAudio();
+		MimicGdx.initializeAudio();
 		batch = new SpriteBatch();
 		Texture splashTexture = new Texture( "img/splashscreen.png" );
 		splashSprite = new Sprite( splashTexture );
@@ -40,9 +65,18 @@ public class Splash implements Screen
 		mainTheme = Gdx.audio.newMusic( Gdx.files
 				.internal( "audio/music/revivedpower.mp3" ) );
 		mainTheme.setLooping( true );
+		mainTheme.setVolume( 0.7f );
 		mainTheme.play();
 	}
 
+	/**
+	 * Refreshes the screen.
+	 * 
+	 * Clears the screen and redraws the same image. If five seconds have
+	 * passed, the Malice game switches the screen to a Main Menu screen.
+	 * 
+	 * @see com.badlogic.gdx.Screen#render(float)
+	 */
 	@Override
 	public void render(float delta)
 	{
@@ -58,6 +92,9 @@ public class Splash implements Screen
 		}
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resize(int, int)
+	 */
 	@Override
 	public void resize(int width, int height)
 	{
@@ -65,6 +102,9 @@ public class Splash implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#pause()
+	 */
 	@Override
 	public void pause()
 	{
@@ -72,6 +112,9 @@ public class Splash implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resume()
+	 */
 	@Override
 	public void resume()
 	{
@@ -79,6 +122,9 @@ public class Splash implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#hide()
+	 */
 	@Override
 	public void hide()
 	{
@@ -86,6 +132,13 @@ public class Splash implements Screen
 
 	}
 
+	/**
+	 * Gets rid of everything that can cause memory leakage.
+	 * 
+	 * Disposes the batch, texture from the splashSprite, and the music.
+	 * 
+	 * @see com.badlogic.gdx.Screen#dispose()
+	 */
 	@Override
 	public void dispose()
 	{

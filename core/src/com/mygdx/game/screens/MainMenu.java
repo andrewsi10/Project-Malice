@@ -19,6 +19,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 
+/**
+ * This screen is the main menu of Gauntlet. It has a background image and
+ * allows the user to play or exit the game.
+ *
+ * @author Andrew Si
+ * @version May 31, 2015
+ * @author Period: 4
+ * @author Assignment: my-gdx-game-core
+ *
+ * @author Sources: libgdx
+ */
 public class MainMenu implements Screen
 {
 
@@ -34,13 +45,28 @@ public class MainMenu implements Screen
 
 	Music music;
 
+	/**
+	 * Creates a MainMenu screen and stores the Malice object that created this
+	 * screen as well as the music object that is currently playing.
+	 * 
+	 * @param g
+	 *            the Malice object controlling the screens
+	 * @param m
+	 *            the music currently playing
+	 */
 	public MainMenu(Malice g, Music m)
 	{
 		game = g;
 		music = m;
 	}
 
-	// copied from online
+	/**
+	 * Creates a skin and the text button style that will be displayed in the
+	 * main menu.
+	 * 
+	 * The skin should be the default LibGDX skin and the text button style
+	 * should also be the default style.
+	 */
 	private void createSkin()
 	{
 		// Create a font
@@ -72,33 +98,25 @@ public class MainMenu implements Screen
 
 	}
 
+	/**
+	 * Shows the screen.
+	 * 
+	 * Decreases the volume of the music, calls createSkin(), then displays the
+	 * main menu background and two buttons, play and exit. Clicking play opens
+	 * up the character select menu and clicking exit closes the application.
+	 * 
+	 * @see com.badlogic.gdx.Screen#show()
+	 */
 	@Override
 	public void show()
 	{
-		// Stage stage = new Stage();
-		// // atlas = new TextureAtlas( "ui/button.pack" );
-		// skin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-		//
-		// table = new Table( skin );
-		// table.setBounds( 0,
-		// 0,
-		// Gdx.graphics.getWidth(),
-		// Gdx.graphics.getHeight() );
-		//
-		// white = new BitmapFont( Gdx.files.internal( "fonts/white.fnt" ),
-		// false );
-		// black = new BitmapFont( Gdx.files.internal( "fonts/black.fnt" ),
-		// false );
 
-		music.setVolume( 0.7f );
+		music.setVolume( 0.55f );
 		stage = new Stage();
-		Gdx.input.setInputProcessor( stage );// Make the stage consume events
+		Gdx.input.setInputProcessor( stage );
 
 		createSkin();
-		playButton = new TextButton( "Play", skin ); // Use
-														// the
-														// initialized
-														// skin
+		playButton = new TextButton( "Play", skin );
 		playButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
 				Gdx.graphics.getHeight() / 2 );
@@ -131,6 +149,11 @@ public class MainMenu implements Screen
 		stage.addActor( exitButton );
 	}
 
+	/**
+	 * Refreshes the screen and redraws the same stage.
+	 * 
+	 * @see com.badlogic.gdx.Screen#render(float)
+	 */
 	@Override
 	public void render(float delta)
 	{
@@ -140,6 +163,9 @@ public class MainMenu implements Screen
 		stage.draw();
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resize(int, int)
+	 */
 	@Override
 	public void resize(int width, int height)
 	{
@@ -147,6 +173,9 @@ public class MainMenu implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#pause()
+	 */
 	@Override
 	public void pause()
 	{
@@ -154,6 +183,9 @@ public class MainMenu implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resume()
+	 */
 	@Override
 	public void resume()
 	{
@@ -161,6 +193,9 @@ public class MainMenu implements Screen
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#hide()
+	 */
 	@Override
 	public void hide()
 	{
@@ -168,6 +203,13 @@ public class MainMenu implements Screen
 
 	}
 
+	/**
+	 * Removes everything that can create memory leakage.
+	 * 
+	 * Disposes of the skin and stage.
+	 * 
+	 * @see com.badlogic.gdx.Screen#dispose()
+	 */
 	@Override
 	public void dispose()
 	{
