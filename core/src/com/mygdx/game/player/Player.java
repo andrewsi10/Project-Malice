@@ -1,7 +1,6 @@
 package com.mygdx.game.player;
 
 import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,44 +12,56 @@ import com.mygdx.game.MimicGdx;
 public class Player extends Character {
 
 	private String projectile;
-	
+
 	private int playerPoints = 0;
-	
+
 	/**
-	 * constructor for Player
-	 * @param file reference for the player sprite atlas file
-	 * @param proj reference for the projectile atlas file
+	 * The constructor for player. The first parameter is used to reference the
+	 * file names of the images to create the Arrays for the super constructor.
+	 * The second parameter is used to reference the file name for the
+	 * projectile. Initialize variable speed to 5, expToLevel to 100, and level
+	 * to 1.
+	 * 
+	 * @param file
+	 *            reference for the player sprite atlas file
+	 * @param proj
+	 *            reference for the projectile atlas file
 	 */
 	public Player(String file, String proj) {
-		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
-				new TextureAtlas(Gdx.files.internal(file)).findRegion("0"),
-				new TextureAtlas(Gdx.files.internal(file)).findRegion("1") }),
-				new Array<AtlasRegion>( // right animation new Array
-						new AtlasRegion[] {
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("2"),
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("3") }),
-				new Array<AtlasRegion>( // down animation new Array
-						new AtlasRegion[] {
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("4"),
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("5") }),
-				new Array<AtlasRegion>( // left animation new Array
-						new AtlasRegion[] {
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("6"),
-								new TextureAtlas(Gdx.files.internal(file))
-										.findRegion("7") }));
+		super(new Array<AtlasRegion>(
+				new AtlasRegion[] { // up animation new Array
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("0"),
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("1") }), new Array<AtlasRegion>(
+				// right animation new Array
+				new AtlasRegion[] {
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("2"),
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("3") }), new Array<AtlasRegion>(
+				// down animation new Array
+				new AtlasRegion[] {
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("4"),
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("5") }), new Array<AtlasRegion>(
+				// left animation new Array
+				new AtlasRegion[] {
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("6"),
+						new TextureAtlas(Gdx.files.internal(file))
+								.findRegion("7") }));
 		setSpeed(5);
-		setExpToLevel( 100 );
-		setLevel( 1 );
+		setExpToLevel(100);
+		setLevel(1);
 		projectile = proj;
 	}
-	
+
 	/**
-	 * constructor for testing only
+	 * Constructor used for testing only. It does not use the super constructor
+	 * or initialize projectile. Initialize speed, expToLevel, and level as
+	 * accordingly with the regular constructor.
 	 */
 	public Player() {
 		setSpeed(5);
@@ -58,56 +69,55 @@ public class Player extends Character {
 		setLevel(1);
 	}
 
+	@Override
+	public void move(Character character, ArrayList<Projectile> projectiles,
+			long time) {
+		int dir = MimicGdx.getInputDirection();
+		if (dir != -1) {
+			setDirection(dir);
+			super.move(character, projectiles, time);
+		}
+
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
+					Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
+					System.currentTimeMillis(), projectile);
+		}
+	}
+
 	/**
-	 * 
+	 * increases displayed player points by a unit of 10
 	 */
-    @Override
-    public void move( Character character, 
-                      ArrayList<Projectile> projectiles, 
-                      long time )
-    {
-        int dir = MimicGdx.getInputDirection();
-        if (dir != -1) {
-            setDirection( dir );
-            super.move( character, projectiles, time );
-        }
-        
-        if (Gdx.input.isButtonPressed( Input.Buttons.LEFT ))
-        {
-            shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2, 
-                Gdx.graphics.getHeight() / 2 - Gdx.input.getY(), 
-                System.currentTimeMillis(), projectile );
-        }
-    }
-    
-    /**
-     * increases displayed player points
-     */
-    public void increasePoints()
-    {
-    	playerPoints += 10;
-    }
-    
-    /**
-     * increases exp of player based on return of getExperience()
-     * @param exp current exp
-     */
-    public void increaseExp( int exp )
-    {
-        this.setExperience( getExperience() + exp );
-        if ( getExperience() >= getExpToLevel() )
-        {
-            setExperience( getExperience() - getExpToLevel() );
-            increaseCurrentLevel();
-            setExpToLevel(getExpToLevel() * getCurrentLevel() / 2);
-        }
-    }
-	
+	public void increasePoints() {
+		playerPoints += 10;
+	}
+
+	/**
+	 * Increases the experience of Player (variable inherited by Character). If
+	 * experience exceeds expToLevel, increment level by one and set experience
+	 * to the remaining experience after reaching expToLevel.
+	 * 
+	 * @param exp
+	 *            current value of experience
+	 */
+	public void increaseExp(int exp) {
+		this.setExperience(getExperience() + exp);
+		if (getExperience() >= getExpToLevel()) {
+			setExperience(getExperience() - getExpToLevel());
+			increaseCurrentLevel();
+			setExpToLevel(getExpToLevel() * getCurrentLevel() / 2);
+		}
+	}
+
 	// --------------------Getters & Setters------------------ //
-    
-    public int getPoints()
-    {
-    	return playerPoints;
-    }
+
+	/**
+	 * returns the amount of points earned by the Player
+	 * 
+	 * @return points earned by the player
+	 */
+	public int getPoints() {
+		return playerPoints;
+	}
 
 }
