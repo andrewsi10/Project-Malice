@@ -35,9 +35,21 @@ public class Map
     public static final String PACKAGE = "map/";
     // generation types
     // public static final int STORY = -2;
+    /**
+     * Sets generation to Randomly pick between the generation types
+     */
     public static final int RANDOM = -1;
+    /**
+     * Generation type Dungeon
+     */
     public static final int DUNGEON = 0;
+    /**
+     * Generation type Arena
+     */
     public static final int ARENA = 1;
+    /**
+     * Number of Generation types
+     */
     public static final int NUM_GENERATION_TYPES = 2;
     /**
      * Conversion number from pixels to tiles
@@ -47,6 +59,9 @@ public class Map
      * Spawn distance from player in tiles
      */
     public static final int SPAWN_DISTANCE = 7;
+    /**
+     * Determines how far the outer border is drawn (meant to cover black space)
+     */
     public static final int OUTER_BORDER = 8;
     
     private boolean[][] areSpaces;
