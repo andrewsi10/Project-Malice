@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 import static com.mygdx.game.player.Character.*;
@@ -49,7 +50,7 @@ public class MimicGdx
         int dirX = -1;
         if ( isKeyPressed( CONTROLS[1] ) )
             dirX = EAST;
-        if ( isKeyPressed( CONTROLS[2] ) )
+        if ( isKeyPressed( CONTROLS[3] ) )
             dirX = ( dirX == EAST ) ? -1 : WEST;
         
         if ( dirY == -1 )
@@ -126,17 +127,20 @@ public class MimicGdx
     }
     
     // -------------------------- Music and Audio --------------------- //
+    public static boolean MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
+    
     public static Sound levelUp;
-
+//    public static Music mainTheme;
     
     public static void initializeAudio()
     {
         levelUp = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
+//        mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
     }
     
     public static void playAudio( Sound sound )
     {
-        if ( sound != null )
+        if ( !MUTED && sound != null )
         {
             sound.play();
         }

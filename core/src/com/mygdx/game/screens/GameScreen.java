@@ -83,8 +83,8 @@ public class GameScreen implements Screen {
 		enemyMinCount = 10;
 		font = new BitmapFont();
 
-        cam = new OrthographicCamera();
-        cam.setToOrtho(false, 960, 720);
+        cam = new OrthographicCamera( 1280, 720 );
+//        cam.setToOrtho(false, 1280, 720);
         
         map = new Map( MAP_SIZE, MAP_SIZE );
         map.generate(Map.RANDOM);
@@ -299,6 +299,16 @@ public class GameScreen implements Screen {
         c.move(player, projectiles, System.currentTimeMillis());
         if (map.isCollidingWithWall(c)) {
             c.setPosition(x, y);
+            c.setDirection( c.getDirection() - 1 );
+            c.move();
+            if ( map.isCollidingWithWall( c ) )
+            {
+                c.setPosition( x, y );
+                c.setDirection( c.getDirection() + 2 );
+                c.move();
+                if ( map.isCollidingWithWall( c ) )
+                    c.setPosition( x, y );
+            }
         }
         c.draw(batch);
     }

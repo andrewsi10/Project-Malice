@@ -96,10 +96,10 @@ public class Character extends Sprite {
      * Sets animation based on direction
      * @param dir
      */
-    private void setAnimations( int dir )
+    private void setAnimations()
     {
         Animation animation = downAnimation;
-        switch ( dir )
+        switch ( direction )
         {
             case NORTH:
                 animation = upAnimation;
@@ -172,12 +172,13 @@ public class Character extends Sprite {
 	                           long time)
 	{
 	    move();
+        setAnimations();
 	}
 
 	/**
 	 * Moves sprite according to its current direction
 	 */
-	private void move() {
+	public void move() {
 
 		int dx = 0;
 		int dy = 0;
@@ -203,7 +204,6 @@ public class Character extends Sprite {
 			dx = -1;
 			break;
 		}
-		setAnimations( direction );
 		translate(dx, dy);
 	}
 
@@ -224,7 +224,7 @@ public class Character extends Sprite {
             previousTime = time;
             Projectile p = new Projectile(this, getDirection(), getDamage(),
                     spriteType, xDistance, yDistance);
-            p.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 3);
+            p.setPosition(getX() + getWidth() / 3, getY() + getHeight() / 3);
             p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 
             projectiles.add(p);
@@ -251,9 +251,7 @@ public class Character extends Sprite {
     }
     
     public void setDirection(int dir) {
-        if (dir >= 0 && dir < NUMDIRECTIONS) {
-            direction = dir;
-        }
+        direction = dir % NUMDIRECTIONS;
     }
 
 	public void increaseMaxHp(int i) {
