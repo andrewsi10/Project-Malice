@@ -16,52 +16,80 @@ public class Enemy extends Character {
 	private int minTravelTime = 4;
 	private String projectile;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            reference to the atlas file used to get the images for Enemy
+	 */
 	public Enemy(String file) {
 		super(new TextureAtlas(Gdx.files.internal(file)).getRegions());
 
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
-		setExperience( 20 ); // set amount of exp Player will receive
-		setHpColor( Color.RED );
-		setSpeed(3);  // set speed of Enemy
+		setExperience(20); // set amount of exp Player will receive
+		setSpeed(3); // set speed of Enemy
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 		projectile = "EnemyBullet";
 	}
 
+	/**
+	 * Constructor used for testing
+	 */
+	public Enemy() {
+		setDirection((int) (Math.random() * 8));
+		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
+		setExperience(20); // set amount of exp Player will receive
+		setSpeed(3); // set speed of Enemy
+		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
+	}
+
+	/**
+	 * moves Enemy towards the player if within aggroDistance otherwise moves
+	 * randomly
+	 */
 	@Override
-	public void move( Character character, 
-	                  ArrayList<Projectile> projectiles, 
-	                  long time) 
-	{
+	public void move(Character character, ArrayList<Projectile> projectiles,
+			long time) {
 		if (!inRange(character)) {
-            setRandomDirection();
-	        super.move( character, projectiles, time ); // note % NUMDIRECTION if errors
+			setRandomDirection();
+			super.move(character, projectiles, time); // note % NUMDIRECTION if
+														// errors
 		}
 		// moves towards the player
 		else {
-		    setRandomDirection();
+			setRandomDirection();
 
 			float deltaX = character.getX() - getX();
 			float deltaY = character.getY() - getY();
 			int newDir = this.getDirection(-deltaX, -deltaY);
 			if (newDir != -1) {
-			    setDirection( newDir );
+				setDirection(newDir);
 				shoot(projectiles, deltaX, deltaY, time, projectile);
 			}
-            super.move( character, projectiles, time );
+			super.move(character, projectiles, time);
 		}
 	}
-	
-	private void setRandomDirection()
-	{
-        if (travelTime < 1) {
-            setDirection((int) (Math.random() * 8));
-            travelTime = (int) (minTravelTime + Math.random()
-                    * travelTimeScalar);
-        }
-        travelTime--;
+
+	/**
+	 * if travelTime is less than one, sets a new, random direction for the
+	 * enemy
+	 */
+	public void setRandomDirection() {
+		if (travelTime < 1) {
+			setDirection((int) (Math.random() * 8));
+			travelTime = (int) (minTravelTime + Math.random()
+					* travelTimeScalar);
+		}
+		travelTime--;
 	}
 
+	/**
+	 * 
+	 * @param deltaX
+	 * @param deltaY
+	 * @return
+	 */
 	private int getDirection(float deltaX, float deltaY) {
 		if (deltaX < -marginOfDelta && deltaY < -marginOfDelta)
 			return NORTHEAST;
@@ -82,11 +110,45 @@ public class Enemy extends Character {
 		return -1;
 	}
 
+	/**
+	 * determines whether the enemy is in shooting range of the character,
+	 * determined by the variable aggroDistance. This method uses the Distance
+	 * Formula.
+	 * 
+	 * @param character
+	 *            Character enemy will be compared to
+	 * @return whether enemy is within aggroDistance
+	 */
 	public boolean inRange(Character character) {
-	    float dx = character.getX() - this.getX();
-	    float dy = character.getY() - this.getY();
-		int distance = (int)Math.sqrt( dx * dx + dy * dy );
+		float dx = character.getX() - this.getX();
+		float dy = character.getY() - this.getY();
+		int distance = (int) Math.sqrt(dx * dx + dy * dy);
 		return distance <= aggroDistance;
+	}
+
+	// ------------- Getters and Setters ----------------- //
+	public int getTravelTimeScalar() {
+		return travelTimeScalar;
+	}
+
+	public int getMinTravelTime() {
+		return minTravelTime;
+	}
+
+	public int getTravelTime() {
+		return travelTime;
+	}
+
+	public void setTravelTime(int time) {
+		travelTime = time;
+	}
+
+	public int getMarginOfDelta() {
+		return marginOfDelta;
+	}
+
+	public int getAggroDistance() {
+		return aggroDistance;
 	}
 
 }

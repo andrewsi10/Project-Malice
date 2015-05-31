@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.MimicGdx;
 
 public class Character extends Sprite {
 	public static final int NORTH = 0;
@@ -227,6 +228,23 @@ public class Character extends Sprite {
     }
 
     // --------------------Setters and Incrementers --------------------//
+   
+    /**
+     * increases the level of the character, as well as increases maxHP and bullet damage
+     */
+    public void increaseCurrentLevel()
+    {
+        // might need balancing
+        level++;
+        if (!MimicGdx.isTesting) {
+        	MimicGdx.initializeAudio();
+        }
+        MimicGdx.playAudio(MimicGdx.levelUp);
+        double temp = getCurrentHp() / getMaxHp();
+        increaseBdmg( 2 );
+        increaseMaxHp( 10 );
+        increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
+    }
     
     public void setLevel( int newLevel)
     {
@@ -236,21 +254,6 @@ public class Character extends Sprite {
     public void setHpColor( Color newColor )
     {
         hpColor = newColor;
-    }
-    
-    /**
-     * increases the level of the character, as well as increases maxHP and bullet damage
-     */
-    public void increaseCurrentLevel()
-    {
-        // might need balancing
-        level++;
-        Sound sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
-        sound.play();
-        double temp = getCurrentHp() / getMaxHp();
-        increaseBdmg( 2 );
-        increaseMaxHp( 10 );
-        increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
     }
     
     public void setDirection(int dir) {

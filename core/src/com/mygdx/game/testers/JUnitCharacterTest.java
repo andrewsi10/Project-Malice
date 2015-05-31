@@ -2,10 +2,9 @@ package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
 import junit.framework.JUnit4TestAdapter;
-
 import org.junit.Test;
-
 import com.mygdx.game.player.Character;
+import com.mygdx.game.MimicGdx;
 
 public class JUnitCharacterTest {
 
@@ -26,6 +25,7 @@ public class JUnitCharacterTest {
 		return Math.sqrt(x * x + y * y);
 	}
 
+	@Test
 	public void testMove() {
 		Character c = new Character();
 		c.setDirection(0);
@@ -53,17 +53,19 @@ public class JUnitCharacterTest {
 	
 	@Test
 	public void testIncreaseCurrentLevel() {
+		MimicGdx.isTesting = true;
 		Character c = new Character();
 		c.takeDamage(25);
 		int level = c.getCurrentLevel() + 1;
 		int BDmg = c.getBDmg() + 2;
+		int increasedHp = c.getCurrentHp() + (int)(10*(c.getCurrentHp()/c.getMaxHp() + 1));
 		int maxHp = c.getMaxHp() + 10;
-		int increasedHp = (int)(10*(c.getCurrentHp()/c.getMaxHp() + 1));
 		c.increaseCurrentLevel();
 		assertEquals(c.getCurrentLevel(), level);
 		assertEquals(c.getBDmg(), BDmg);
 		assertEquals(c.getMaxHp(), maxHp);
 		assertEquals(c.getCurrentHp(), increasedHp);
+		MimicGdx.isTesting = false;
 	}
 	
 }

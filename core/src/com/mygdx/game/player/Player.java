@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.MimicGdx;
 
 public class Player extends Character {
 
@@ -48,7 +49,7 @@ public class Player extends Character {
                       ArrayList<Projectile> projectiles, 
                       long time )
     {
-        int dir = getInputDirection();
+        int dir = MimicGdx.getInputDirection();
         if (dir != -1) {
             setDirection( dir );
             super.move( character, projectiles, time );
@@ -83,30 +84,30 @@ public class Player extends Character {
         }
     }
 
-	/**
-	 * Returns direction to go based on key input
-	 * @return direction or -1 if no direction
-	 */
-	private int getInputDirection() {
-        int dirY = -1;
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
-            dirY = NORTH;
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
-            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
-        
-	    int dirX = -1;
-	    if (Gdx.input.isKeyPressed(Input.Keys.D))
-	        dirX = EAST;
-	    if (Gdx.input.isKeyPressed(Input.Keys.A))
-	        dirX = ( dirX == EAST ) ? -1 : WEST;
-	    
-	    if ( dirY == -1 )
-	        return dirX;
-	    if ( dirX == -1 )
-	        return dirY;
-	    if ( dirY == NORTH && dirX == WEST )
-	        return NORTHWEST;
-		return ( dirY + dirX ) / 2;
-	}
+//	/**
+//	 * Returns direction to go based on key input
+//	 * @return direction or -1 if no direction
+//	 */
+//	private int getInputDirection() {
+//        int dirY = -1;
+//        if (Gdx.input.isKeyPressed(Input.Keys.W))
+//            dirY = NORTH;
+//        if (Gdx.input.isKeyPressed(Input.Keys.S))
+//            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
+//        
+//	    int dirX = -1;
+//	    if (Gdx.input.isKeyPressed(Input.Keys.D))
+//	        dirX = EAST;
+//	    if (Gdx.input.isKeyPressed(Input.Keys.A))
+//	        dirX = ( dirX == EAST ) ? -1 : WEST;
+//	    
+//	    if ( dirY == -1 )
+//	        return dirX;
+//	    if ( dirX == -1 )
+//	        return dirY;
+//	    if ( dirY == NORTH && dirX == WEST )
+//	        return NORTHWEST;
+//		return ( dirY + dirX ) / 2;
+//	}
 
 }
