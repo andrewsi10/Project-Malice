@@ -16,6 +16,11 @@ public class Player extends Character {
 	
 	private int playerPoints = 0;
 	
+	/**
+	 * constructor for Player
+	 * @param file reference for the player sprite atlas file
+	 * @param proj reference for the projectile atlas file
+	 */
 	public Player(String file, String proj) {
 		super(new Array<AtlasRegion>(new AtlasRegion[] { // up animation new Array
 				new TextureAtlas(Gdx.files.internal(file)).findRegion("0"),
@@ -43,13 +48,25 @@ public class Player extends Character {
 		setLevel( 1 );
 		projectile = proj;
 	}
+	
+	/**
+	 * constructor for testing only
+	 */
+	public Player() {
+		setSpeed(5);
+		setExpToLevel(100);
+		setLevel(1);
+	}
 
+	/**
+	 * 
+	 */
     @Override
     public void move( Character character, 
                       ArrayList<Projectile> projectiles, 
                       long time )
     {
-        int dir = MimicGdx.getInputDirection();
+        int dir = getInputDirection();
         if (dir != -1) {
             setDirection( dir );
             super.move( character, projectiles, time );
@@ -63,16 +80,18 @@ public class Player extends Character {
         }
     }
     
-    public int getPoints()
-    {
-    	return playerPoints;
-    }
-    
+    /**
+     * increases displayed player points
+     */
     public void increasePoints()
     {
     	playerPoints += 10;
     }
     
+    /**
+     * increases exp of player based on return of getExperience()
+     * @param exp current exp
+     */
     public void increaseExp( int exp )
     {
         this.setExperience( getExperience() + exp );
@@ -84,30 +103,37 @@ public class Player extends Character {
         }
     }
 
-//	/**
-//	 * Returns direction to go based on key input
-//	 * @return direction or -1 if no direction
-//	 */
-//	private int getInputDirection() {
-//        int dirY = -1;
-//        if (Gdx.input.isKeyPressed(Input.Keys.W))
-//            dirY = NORTH;
-//        if (Gdx.input.isKeyPressed(Input.Keys.S))
-//            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
-//        
-//	    int dirX = -1;
-//	    if (Gdx.input.isKeyPressed(Input.Keys.D))
-//	        dirX = EAST;
-//	    if (Gdx.input.isKeyPressed(Input.Keys.A))
-//	        dirX = ( dirX == EAST ) ? -1 : WEST;
-//	    
-//	    if ( dirY == -1 )
-//	        return dirX;
-//	    if ( dirX == -1 )
-//	        return dirY;
-//	    if ( dirY == NORTH && dirX == WEST )
-//	        return NORTHWEST;
-//		return ( dirY + dirX ) / 2;
-//	}
+	/**
+	 * Returns direction to go based on key input
+	 * @return direction or -1 if no direction
+	 */
+	private int getInputDirection() {
+        int dirY = -1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
+            dirY = NORTH;
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
+        
+	    int dirX = -1;
+	    if (Gdx.input.isKeyPressed(Input.Keys.D))
+	        dirX = EAST;
+	    if (Gdx.input.isKeyPressed(Input.Keys.A))
+	        dirX = ( dirX == EAST ) ? -1 : WEST;
+	    
+	    if ( dirY == -1 )
+	        return dirX;
+	    if ( dirX == -1 )
+	        return dirY;
+	    if ( dirY == NORTH && dirX == WEST )
+	        return NORTHWEST;
+		return ( dirY + dirX ) / 2;
+	}
+	
+	// --------------------Getters & Setters------------------ //
+    
+    public int getPoints()
+    {
+    	return playerPoints;
+    }
 
 }

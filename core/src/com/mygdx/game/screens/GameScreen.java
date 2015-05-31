@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 	private State state;
 	private int enemyMaxCount;
 	private int enemyMinCount;
-	private int numEnemies;
+	private int numEnemies = 7;
 	private long timeResumed;
 
 	Music music;
@@ -81,7 +81,6 @@ public class GameScreen implements Screen {
 		state = State.RESUME;
 		enemyMaxCount = -2;
 		enemyMinCount = 10;
-		numEnemies = 3;
 		font = new BitmapFont();
 
         cam = new OrthographicCamera();

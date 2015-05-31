@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -18,6 +17,9 @@ import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.MimicGdx;
 
 public class Character extends Sprite {
+	/**
+	 * constant variables which represent 8 various directions
+	 */
 	public static final int NORTH = 0;
 	public static final int NORTHEAST = 1;
 	public static final int EAST = 2;
@@ -30,6 +32,9 @@ public class Character extends Sprite {
 	
 	public static final int BARHEIGHT = 5;
 
+	/**
+	 * variables used to hold animation frames and initialize animations
+	 */
 	private float stateTime;
     private Animation upAnimation;
     private Animation rightAnimation;
@@ -39,6 +44,7 @@ public class Character extends Sprite {
     private Array<AtlasRegion> rightFrames;
     private Array<AtlasRegion> downFrames;
     private Array<AtlasRegion> leftFrames;
+    
     private BitmapFont font;
     
     private int level = 0;
@@ -55,8 +61,6 @@ public class Character extends Sprite {
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
 	private float moveSpeed;
-
-	private TextureAtlas textureAtlas;
 
 
 	// constructor for enemies
@@ -246,16 +250,6 @@ public class Character extends Sprite {
         increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
     }
     
-    public void setLevel( int newLevel)
-    {
-        level = newLevel;
-    }
-    
-    public void setHpColor( Color newColor )
-    {
-        hpColor = newColor;
-    }
-    
     public void setDirection(int dir) {
         if (dir >= 0 && dir < NUMDIRECTIONS) {
             direction = dir;
@@ -310,9 +304,15 @@ public class Character extends Sprite {
     {
         return font;
     }
-
-    public TextureAtlas getAtlas() {
-        return textureAtlas;
+    
+    public void setLevel( int newLevel)
+    {
+        level = newLevel;
+    }
+    
+    public void setHpColor( Color newColor )
+    {
+        hpColor = newColor;
     }
     
     public int getCurrentLevel()
