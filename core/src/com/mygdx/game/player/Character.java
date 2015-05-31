@@ -241,9 +241,6 @@ public class Character extends Sprite {
     {
         // might need balancing
         level++;
-        if (!MimicGdx.isTesting) {
-        	MimicGdx.initializeAudio();
-        }
         MimicGdx.playAudio(MimicGdx.levelUp);
         double temp = getCurrentHp() / getMaxHp();
         increaseBdmg( 2 );
