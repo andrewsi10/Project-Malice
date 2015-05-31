@@ -2,6 +2,7 @@ package com.mygdx.game.world;
 
 import java.awt.Point;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -11,6 +12,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ *  Map class displays a map using tiles in a 2D array. Does not use a separate 
+ *  class for tiles, instead it uses a 2D array of boolean to tell between a 
+ *  space and a wall/block
+ *  
+ *  note: all coordinates are based on a bottom left origin
+ *        Pixmap uses top-left-origin coordinates so adjustments are made
+ *
+ *  @author  Nathan Lui
+ *  @version May 30, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: libgdx
+ */
 public class Map
 {
     /**
@@ -18,6 +34,7 @@ public class Map
      */
     public static final String PACKAGE = "map/";
     // generation types
+    // public static final int STORY = -2;
     public static final int RANDOM = -1;
     public static final int DUNGEON = 0;
     public static final int ARENA = 1;
@@ -94,30 +111,30 @@ public class Map
     
     /**
      * Generates the map based on type of generation
-     * Type of generation current is not being used 
-     * (for expansion of game purposes)
+     * 
+     * This method should be used instead of randomGeneration() as it will take 
+     * in consideration all types of generations
+     * 
+     * (this method is mainly for expansion of game generation)
      * @param type of generation
      */
     public void generate( int type )
     {
         if ( type == RANDOM )
             type = randomNumber( NUM_GENERATION_TYPES );
+        // if ( type >= 0 )
         randomGeneration( type );
-//        switch ( type )
-//        {
-//            case ARENA:
-//                createRoom( 0, 0, getMapTileWidth(), getMapTileHeight() );
-//                setSpawn( -1, -1 );
-//                break;
-//            case DUNGEON:
-//                randomGeneration();
-//                break;
-//        }
+        // else if ( type == STORY )
+        // createStoryMap();
     }
     
     /**
      * Creates the map image to be displayed based on areSpaces and Pixmap 
      * images created in the constructor
+     * 
+     * Takes in consideration that Pixmap is based on a top left origin 
+     * coordinate system and that rest of map is based on a bottom left origin 
+     * coordinate system.
      */
     public void createMap()
     {
@@ -142,7 +159,6 @@ public class Map
         expanse = new Texture( pixmap2 );
         pixmap1.dispose();
         pixmap2.dispose();
-        System.out.println( this );
     }
 
     // --------------------------Recursive Methods ---------------------//
@@ -171,10 +187,10 @@ public class Map
      */
     public void createRectangle( int x, int y, int w, int h )
     {
-        createRoom( x, y + h, w, 1 );
-        createRoom( x, y, w, 1 );
-        createRoom( x, y, 1, h );
-        createRoom( x + w, y, 1, h );
+        createRoom( x, y, w, 1 ); // bottom of rectangle
+        createRoom( x, y, 1, h ); // left of rectangle
+        createRoom( x, y + h - 1, w, 1 ); // top of rectangle // did not work
+        createRoom( x + w - 1, y, 1, h ); // right of rectangle // did not work
     }
     
     /**
@@ -229,24 +245,26 @@ public class Map
     }
 
     /**
-     * Fills up all the spaces in a area (uses sizeOfRoom() helper method)
+     * Fills up all the spaces in a area (uses helper method to flood fill)
      * @param x starting x coordinate
      * @param y starting y coordinate
      */
     public void fillArea( int x, int y )
     {
-        sizeOfArea( x, y, areSpaces );
+        sizeOfArea( x, y, areSpaces ); // reuse sizeOfArea() helper method
     }
     
     /**
      * Returns whether point has a path to a second point
      * Uses recursion with helper method to flood fill a copy of areSpaces
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @param asSpace
-     * @return
+     * @param x1 x-coordinate of point 1
+     * @param y1 y-coordinate of point 1
+     * @param x2 x-coordinate of point 2
+     * @param y2 y-coordinate of point 2
+     * @param asSpace whether path should be a space or not
+     *          - this parameter is only used as true currently, it is for 
+     *            expansion of generation capability purposes
+     * @return if there is a path from point 1 to point 2
      */
     public boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace )
     {
@@ -261,7 +279,7 @@ public class Map
      * @param x2 -coordinate of Point2
      * @param y2 -coordinate of Point2
      * @param asSpace 
-     * @param map
+     * @param map that is flood filled
      * @return true if point1 has a path to point2 with asSpaces
      */
     private boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
@@ -278,8 +296,10 @@ public class Map
     // -----------------------Collision ------------------ //
 
     /**
-     * Returns true if Sprite is in a wall, uses checks the sprite's bounding 
-     * rectangle with the walls near that sprite
+     * Returns true if Sprite is in a wall, checks the sprite's bounding 
+     * Rectangle with a created Rectangle to represent the walls near that 
+     * sprite
+     * 
      * @param s Sprite to check
      * @return true if Sprite is in a wall
      */
@@ -314,15 +334,14 @@ public class Map
      */
     public void draw( SpriteBatch batch )
     {
-        // TODO
         if ( map == null )
             createMap();
-//        int x = tileToPixel( OUTER_BORDER );
-//        int y = tileToPixel( OUTER_BORDER );
-//        batch.draw( expanse, -x, -y );
-//        batch.draw( expanse, x, -y );
-//        batch.draw( expanse, -x, y );
-//        batch.draw( expanse, x, y );
+        int x = tileToPixel( OUTER_BORDER );
+        int y = tileToPixel( OUTER_BORDER );
+        batch.draw( expanse, -x, -y );
+        batch.draw( expanse, x, -y );
+        batch.draw( expanse, -x, y );
+        batch.draw( expanse, x, y );
         batch.draw( map, 0, 0 );
     }
     
@@ -470,20 +489,17 @@ public class Map
      */
     public void randomGeneration(int type )
     {
-        int x = randomTileCoordinate();
-        int y = randomTileCoordinate();
-        int w = randomNumber( getMapTileWidth() / 3 ) + 3;
-        int h = randomNumber( getMapTileHeight() / 3 ) + 3;
+        int x, y, w, h;
         
         LinkedList<Point> list = new LinkedList<Point>();
         int size;
         do {
-            createRoom( x, y, w, h );
-            list.add( new Point( x + 1, y + 1 ) );
             x = randomTileCoordinate();
             y = randomTileCoordinate();
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
+            createRoom( x, y, w, h );
+            list.add( new Point( x + 1, y + 1 ) );
             size = sizeOfArea( x, y );
         } while (// x != this.areSpaces.length - 1
                 size < getMapTileWidth() * getMapTileHeight() / 2
@@ -570,7 +586,7 @@ public class Map
     }
     
     // --------------------For Testing ------------------ //
-    
+
     /**
      * Written mainly for testing
      * Returns String representation of this map with X representing walls and 
@@ -596,5 +612,72 @@ public class Map
     public boolean[][] getAreSpaces()
     {
         return areSpaces;
+    }
+    
+    
+    /**
+     * Runs short testing program for visually checking the map on command line
+     * @param arg command line arguments -- not used
+     */
+    public static void main( String[] args )
+    {
+        @SuppressWarnings("resource")
+        Scanner scanUser = new Scanner( System.in );
+        Map map;
+        while ( true ) {
+            map = new Map( 25, 25, true );
+            map.generate( Map.RANDOM );
+            System.out.println( map );
+            scanUser.nextLine();
+        }
+        // testing recursive methods: buggy
+//      Map map1 = new Map( 25,25,true);
+//      while ( scanUser.hasNext() )
+//      {
+//            System.out.println( map1 );
+//          s= scanUser.next();
+//          try {
+//              switch( s.charAt( 0 ) ) {
+//                  case 'c':
+//                      map1.createRoom( scanUser.nextInt(), scanUser.nextInt(), scanUser.nextInt(), scanUser.nextInt() );
+//                      break;
+//                  case 'p':
+//                      map1.hasPath( scanUser.nextInt(), scanUser.nextInt(), scanUser.nextInt(), scanUser.nextInt(), true );
+//                      break;
+//                  case 's':
+//                      System.out.println( map1.sizeOfRoom( scanUser.nextInt(), scanUser.nextInt() ) );
+//                      break;
+//                  case 'g':
+//                      map1.generate( scanUser.nextInt() );
+//                      break;
+//              }
+//          } catch( Exception e )
+//          {
+//              
+//          }
+//      Map map1 = new Map( 25,25, true );
+//      int x1 = 5;
+//      int y1 = 5;
+//      int w1 = 5;
+//      int h1 = 5;
+//      int x2 = 15;
+//      int y2 = 10;
+//      int w2 = 7;
+//      int h2 = 5;
+//      int x3 = 8;
+//      int y3 = 8;
+//      int w3 = 7;
+//      int h3 = 7;
+//      int rectX2 = 6;
+//      int rectY2 = 6;
+//      int rectW2 = 10;
+//      int rectH2 = 15;
+//      map1.createRoom( x1, y1, w1, h1 );
+//      map1.createRoom( x2, y2, w2, h2 );
+//      map1.createRoom( y2, x2, h2, w2 );
+//      map1.createRoom( x3, y3, w3, h3 );
+//      map1.createRectangle( 1, 1, 23, 23 );
+//      map1.createRectangle( rectX2, rectY2, rectW2, rectH2 );
+//      System.out.println( map1 );
     }
 }
