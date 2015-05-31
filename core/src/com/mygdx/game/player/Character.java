@@ -233,63 +233,52 @@ public class Character extends Sprite {
 		translate(dx, dy);
 	}
 
-	/**
-	 * @param dx
-	 * @param dy
-	 */
-	public void translate(int dx, int dy) {
-		if (dx == 0 || dy == 0) {
-			translateX((float) (moveSpeed * dx));
-			translateY((float) (moveSpeed * dy));
-		} else {
-			translateX((float) (moveSpeed * dx / Math.sqrt(2)));
-			translateY((float) (moveSpeed * dy / Math.sqrt(2)));
-		}
-	}
 
-	/**
-	 * @param projectiles
-	 * @param xDistance
-	 * @param yDistance
-	 * @param time
-	 * @param spriteType
-	 */
-	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-			float yDistance, long time, String spriteType) {
-		if (time - previousTime >= reloadSpeed) {
-			previousTime = time;
-			Projectile p = new Projectile(this, getDirection(), getDamage(),
-					spriteType, xDistance, yDistance);
-			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-			p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, getY()
-					+ getHeight() / 2 - p.getHeight() / 2);
+    public void translate(int dx, int dy) {
+        if (dx == 0 || dy == 0) {
+            translateX((float) (moveSpeed * dx));
+            translateY((float) (moveSpeed * dy));
+        } else {
+            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+        }
+    }
 
-			projectiles.add(p);
-		}
-	}
 
-	// --------------------Setters and Incrementers --------------------//
+    public void shoot(ArrayList<Projectile> projectiles, float xDistance,
+            float yDistance, long time, String spriteType) {
+        if ( time - previousTime >= reloadSpeed ) {
+            previousTime = time;
+            Projectile p = new Projectile(this, getDirection(), getDamage(),
+                    spriteType, xDistance, yDistance);
+            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+            p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, 
+                          getY() + getHeight() / 2 - p.getHeight() / 2);
 
-	/**
-	 * increases the level of the character, as well as increases maxHP and
-	 * bullet damage
-	 */
-	public void increaseCurrentLevel() {
-		// might need balancing
-		level++;
-		if (!MimicGdx.isTesting) {
-			MimicGdx.initializeAudio();
-		}
-		MimicGdx.playAudio(MimicGdx.levelUp);
-		double temp = getCurrentHp() / getMaxHp();
-		increaseBdmg(2);
-		increaseMaxHp(10);
-		increaseCurrentHp((int) (10 * (temp + 1)));
-	}
+            projectiles.add(p);
+        }
+    }
 
-	public void setDirection(int dir) {
-		direction = dir % NUMDIRECTIONS;
-	}
+    // --------------------Setters and Incrementers --------------------//
+   
+    /**
+     * increases the level of the character, as well as increases maxHP and bullet damage
+     */
+    public void increaseCurrentLevel()
+    {
+        // might need balancing
+        level++;
+        MimicGdx.playAudio(MimicGdx.levelUp);
+        double temp = getCurrentHp() / getMaxHp();
+        increaseBdmg( 2 );
+        increaseMaxHp( 10 );
+        increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
+    }
+    
+    public void setDirection(int dir) {
+        direction = dir % NUMDIRECTIONS;
+    }
+
 
 	public void increaseMaxHp(int i) {
 		maxHp += i;

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Malice;
+import com.mygdx.game.MimicGdx;
 
 public class Splash implements Screen
 {
@@ -30,6 +31,7 @@ public class Splash implements Screen
 	@Override
 	public void show()
 	{
+	    MimicGdx.initializeAudio();
 		batch = new SpriteBatch();
 		Texture splashTexture = new Texture( "img/splashscreen.png" );
 		splashSprite = new Sprite( splashTexture );
