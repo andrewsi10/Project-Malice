@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.projectile.Projectile;
 
+/**
+ * @author Christopher
+ *
+ */
 public class Enemy extends Character {
 
 	private int travelTime;
@@ -17,7 +21,13 @@ public class Enemy extends Character {
 	private String projectile;
 
 	/**
-	 * Constructor
+	 * Enemy constructor. Parameter used to reference the images used for
+	 * animation frames. Create an Array<AtlasRegion> and input it in the super
+	 * constructor. Initialize experience to 20, speed to 3, reloadSpeed to
+	 * getReloadSpeed() * 2, and projectile to the file name of the atlas file
+	 * for the enemy projectiles. Initialize direction to a random integer in
+	 * the interval [0, 8) and travelTime to a random integer in the interval
+	 * [minTravelTime, minTravelTime + travelTimeScalar).
 	 * 
 	 * @param file
 	 *            reference to the atlas file used to get the images for Enemy
@@ -34,7 +44,10 @@ public class Enemy extends Character {
 	}
 
 	/**
-	 * Constructor used for testing
+	 * Constructor used for testing. Initialize experience to 20, speed to 3,
+	 * and reloadSpeed to getReloadSpeed() * 2. Initialize direction to a random
+	 * integer in the interval [0, 8) and travelTime to a random integer in the
+	 * interval [minTravelTime, minTravelTime + travelTimeScalar).
 	 */
 	public Enemy() {
 		setDirection((int) (Math.random() * 8));
@@ -44,10 +57,6 @@ public class Enemy extends Character {
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 	}
 
-	/**
-	 * moves Enemy towards the player if within aggroDistance otherwise moves
-	 * randomly
-	 */
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
@@ -72,8 +81,9 @@ public class Enemy extends Character {
 	}
 
 	/**
-	 * if travelTime is less than one, sets a new, random direction for the
-	 * enemy
+	 * If travelTime < 1, reassign direction to a random number in the interval
+	 * [0, 8) and travelTime to a random number in the interval [minTravelTime,
+	 * minTravelTime + travelTimeScalar). Otherwise decrement travelTime by one.
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
@@ -111,9 +121,9 @@ public class Enemy extends Character {
 	}
 
 	/**
-	 * determines whether the enemy is in shooting range of the character,
-	 * determined by the variable aggroDistance. This method uses the Distance
-	 * Formula.
+	 * Determines whether the enemy is in shooting range of the character. Enemy
+	 * is in shooting range when character is inside aggroDistance. Use the
+	 * distance formula in relation to Enemy.
 	 * 
 	 * @param character
 	 *            Character enemy will be compared to
@@ -127,26 +137,57 @@ public class Enemy extends Character {
 	}
 
 	// ------------- Getters and Setters ----------------- //
+	/**
+	 * getter method for travelTimeScalar
+	 * 
+	 * @return travelTimeScalar
+	 */
 	public int getTravelTimeScalar() {
 		return travelTimeScalar;
 	}
 
+	/**
+	 * getter method for minTravelTime
+	 * 
+	 * @return minTravelTime
+	 */
 	public int getMinTravelTime() {
 		return minTravelTime;
 	}
 
+	/**
+	 * getter method for travelTime
+	 * 
+	 * @return travelTime
+	 */
 	public int getTravelTime() {
 		return travelTime;
 	}
 
+	/**
+	 * setter method for travelTime
+	 * 
+	 * @param time
+	 *            new value for travelTime
+	 */
 	public void setTravelTime(int time) {
 		travelTime = time;
 	}
 
+	/**
+	 * getter method for marginOfDelta
+	 * 
+	 * @return marginOfDelta
+	 */
 	public int getMarginOfDelta() {
 		return marginOfDelta;
 	}
 
+	/**
+	 * getter method for aggroDistance
+	 * 
+	 * @return aggroDistance
+	 */
 	public int getAggroDistance() {
 		return aggroDistance;
 	}
