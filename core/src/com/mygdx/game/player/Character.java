@@ -15,6 +15,10 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.MimicGdx;
 
+/**
+ * @author Christopher
+ *
+ */
 public class Character extends Sprite {
 	/**
 	 * constant variables which represent 8 various directions
@@ -100,7 +104,10 @@ public class Character extends Sprite {
 
 	// ---------------------Animation and Art ----------------------//
 	/**
-	 * initializes the animations
+	 * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
+	 * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
+	 * animation should have a frame duration of .2 seconds. Initialize
+	 * stateTime to 0f.
 	 */
 	private void initializeAnimations() {
 		upAnimation = new Animation(.2f, upFrames);
@@ -110,9 +117,13 @@ public class Character extends Sprite {
 		stateTime = 0f;
 	}
 
-
 	/**
-	 * uses direction to 
+	 * Uses the value of direction to initialize a new animation to either
+	 * upAnimation, rightAnimation, downAnimation, or leftAnimaion, respective
+	 * to the values of the constant variables provided two represent the 8
+	 * different directions. Use stateTime to display the correct keyFrame and
+	 * update stateTime while the animation is not finished. Once the animation
+	 * is finished, set stateTime to 0.
 	 */
 	private void setAnimations() {
 		Animation animation = downAnimation;
@@ -202,7 +213,9 @@ public class Character extends Sprite {
 	}
 
 	/**
-	 * Moves sprite according to its current direction
+	 * Moves sprite according to its current direction. Then translates
+	 * Character in the appropriate direction by one unit using the
+	 * translate(int, int) method.
 	 */
 	public void move() {
 
@@ -233,57 +246,93 @@ public class Character extends Sprite {
 		translate(dx, dy);
 	}
 
+	/**
+	 * uses translateX and translateY to move Character by dx and dy multiplied
+	 * by moveSpeed units respectively. If Character moves along a diagonal
+	 * (neither dx nor dy are equal to 0), divide the value inside both
+	 * translateX and translateY by Math.sqrt(2).
+	 * 
+	 * @param dx
+	 *            change in x-coordinate
+	 * @param dy
+	 *            change in y-coordinate
+	 */
+	public void translate(int dx, int dy) {
+		if (dx == 0 || dy == 0) {
+			translateX((float) (moveSpeed * dx));
+			translateY((float) (moveSpeed * dy));
+		} else {
+			translateX((float) (moveSpeed * dx / Math.sqrt(2)));
+			translateY((float) (moveSpeed * dy / Math.sqrt(2)));
+		}
+	}
 
-    public void translate(int dx, int dy) {
-        if (dx == 0 || dy == 0) {
-            translateX((float) (moveSpeed * dx));
-            translateY((float) (moveSpeed * dy));
-        } else {
-            translateX((float) (moveSpeed * dx / Math.sqrt(2)));
-            translateY((float) (moveSpeed * dy / Math.sqrt(2)));
-        }
-    }
+	/**
+	 * @param projectiles
+	 * @param xDistance
+	 * @param yDistance
+	 * @param time
+	 * @param spriteType
+	 */
+	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
+			float yDistance, long time, String spriteType) {
+		if (time - previousTime >= reloadSpeed) {
+			previousTime = time;
+			Projectile p = new Projectile(this, getDirection(), getDamage(),
+					spriteType, xDistance, yDistance);
+			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
+			p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, getY()
+					+ getHeight() / 2 - p.getHeight() / 2);
 
+			projectiles.add(p);
+		}
+	}
 
-    public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-            float yDistance, long time, String spriteType) {
-        if ( time - previousTime >= reloadSpeed ) {
-            previousTime = time;
-            Projectile p = new Projectile(this, getDirection(), getDamage(),
-                    spriteType, xDistance, yDistance);
-            p.setSize(p.getWidth() / 3, p.getHeight() / 3);
-            p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, 
-                          getY() + getHeight() / 2 - p.getHeight() / 2);
+	// --------------------Setters and Incrementers --------------------//
 
-            projectiles.add(p);
-        }
-    }
+	/**
+	 * Increases the level of the character and uses MimicGdx to play the sound
+	 * file for leveling up. Increase baseDmg by 2 and maxHp by 10. Increase the
+	 * currentHp to maintain the same ratio of currentHp to maxHp prior to
+	 * increasing maxHp.
+	 */
+	public void increaseCurrentLevel() {
+		// might need balancing
+		level++;
+		MimicGdx.playAudio(MimicGdx.levelUp);
+		double temp = getCurrentHp() / getMaxHp();
+		increaseBdmg(2);
+		increaseMaxHp(10);
+		increaseCurrentHp((int) (10 * (temp + 1)));
+	}
 
-    // --------------------Setters and Incrementers --------------------//
-   
-    /**
-     * increases the level of the character, as well as increases maxHP and bullet damage
-     */
-    public void increaseCurrentLevel()
-    {
-        // might need balancing
-        level++;
-        MimicGdx.playAudio(MimicGdx.levelUp);
-        double temp = getCurrentHp() / getMaxHp();
-        increaseBdmg( 2 );
-        increaseMaxHp( 10 );
-        increaseCurrentHp( (int) ( 10 * (temp + 1) ) );
-    }
-    
-    public void setDirection(int dir) {
-        direction = dir % NUMDIRECTIONS;
-    }
+	/**
+	 * Setter method for setDirection. Input will be modded by 8 so that
+	 * direction will be a valid integer in the range [0, 8)
+	 * 
+	 * @param dir
+	 */
+	public void setDirection(int dir) {
+		direction = dir % NUMDIRECTIONS;
+	}
 
-
+	/**
+	 * increases maxHp by the input value
+	 * 
+	 * @param i
+	 *            integer to increase maxHp by
+	 */
 	public void increaseMaxHp(int i) {
 		maxHp += i;
 	}
 
+	/**
+	 * increases currentHp by the input value. If currentHp exceeds maxHp,
+	 * currentHp is reduced to equal maxHp.
+	 * 
+	 * @param i
+	 *            integer to increase currentHp by
+	 */
 	public void increaseCurrentHp(int i) {
 		if (currentHp + i > maxHp) {
 			currentHp = maxHp;
@@ -292,84 +341,192 @@ public class Character extends Sprite {
 		}
 	}
 
+	/**
+	 * returns whether character is dead
+	 * 
+	 * @return true if currentHp <= 0. False otherwise.
+	 */
 	public boolean isDead() {
 		return currentHp <= 0;
 	}
 
+	/**
+	 * setter for experience
+	 * 
+	 * @param experience
+	 *            new value for experience
+	 */
 	public void setExperience(int experience) {
 		this.experience = experience;
 	}
 
+	/**
+	 * setter for expToLevel
+	 * 
+	 * @param exp
+	 *            new value for expToLevel
+	 */
 	public void setExpToLevel(int exp) {
 		this.expToLevel = exp;
 	}
 
+	/**
+	 * decrements currentHp by damage taken
+	 * 
+	 * @param damage
+	 *            value of damage taken
+	 */
 	public void takeDamage(int damage) {
 		currentHp -= damage;
 	}
 
+	/**
+	 * increments baseDmg by input value
+	 * 
+	 * @param i
+	 *            value to increase baseDmg by
+	 */
 	public void increaseBdmg(int i) {
 		baseDmg += i;
 	}
 
+	/**
+	 * setter method for moveSpeed
+	 * 
+	 * @param speed
+	 *            new value for moveSpeed
+	 */
 	public void setSpeed(int speed) {
 		moveSpeed = speed;
 	}
 
+	/**
+	 * setter method for reloadSpeed
+	 * 
+	 * @param newReloadSpeed
+	 *            new value of reloadSpeed
+	 */
 	public void setReloadSpeed(int newReloadSpeed) {
 		reloadSpeed = newReloadSpeed;
 	}
 
-	// -----------------------Getters -----------------//
-
-	public BitmapFont getFont() {
-		return font;
-	}
-
+	/**
+	 * setter method for level
+	 * 
+	 * @param newLevel
+	 *            new value of level
+	 */
 	public void setLevel(int newLevel) {
 		level = newLevel;
 	}
 
+	/**
+	 * setter method for hpColor
+	 * 
+	 * @param newColor
+	 *            new color of hpColor
+	 */
 	public void setHpColor(Color newColor) {
 		hpColor = newColor;
 	}
 
+	// -----------------------Getters -----------------//
+
+	/**
+	 * getter method for font
+	 * 
+	 * @return font
+	 */
+	public BitmapFont getFont() {
+		return font;
+	}
+
+	/**
+	 * getter method for level
+	 * 
+	 * @return level
+	 */
 	public int getCurrentLevel() {
 		return level;
 	}
 
+	/**
+	 * getter method for direction
+	 * 
+	 * @return direction
+	 */
 	public int getDirection() {
 		return direction;
 	}
 
+	/**
+	 * getter method for maxHp
+	 * 
+	 * @return maxHp
+	 */
 	public int getMaxHp() {
 		return maxHp;
 	}
 
+	/**
+	 * getter method for currentHp
+	 * 
+	 * @return currentHp
+	 */
 	public int getCurrentHp() {
 		return currentHp;
 	}
 
+	/**
+	 * getter method for experience
+	 * 
+	 * @return experience
+	 */
 	public int getExperience() {
 		return experience;
 	}
 
+	/**
+	 * getter method for expToLevel
+	 * 
+	 * @return expToLevel
+	 */
 	public int getExpToLevel() {
 		return expToLevel;
 	}
 
+	/**
+	 * getter method for baseDmg
+	 * 
+	 * @return baseDmg
+	 */
 	public int getBDmg() {
 		return baseDmg;
 	}
 
+	/**
+	 * damage dealt by Character
+	 * 
+	 * @return baseDmg with an added random value scaled by randMod
+	 */
 	public int getDamage() {
 		return baseDmg + (int) (randMod * Math.random());
 	}
 
+	/**
+	 * getter method for reloadSpeed
+	 * 
+	 * @return reloadSpeed
+	 */
 	public int getReloadSpeed() {
 		return reloadSpeed;
 	}
 
+	/**
+	 * getter method for moveSpeed
+	 * 
+	 * @return moveSpeed;
+	 */
 	public float getSpeed() {
 		return moveSpeed;
 	}
@@ -386,8 +543,8 @@ public class Character extends Sprite {
 	}
 
 	/**
-	 * Constructor for testing. Initializes Character with position 0, 0 and
-	 * moveSpeed 10
+	 * Constructor for testing. Initializes Character with position (0, 0),
+	 * moveSpeed 10, and level 1.
 	 */
 	public Character() {
 		setSpeed(10);
