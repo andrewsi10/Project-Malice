@@ -164,10 +164,10 @@ public class Map
                 pixmap1.drawPixmap(spaces[0], x, y);
                 if (!areSpaces[i][j])
                 {
-                    pixmap1.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
+                    pixmap1.drawPixmap( blocks[randomNumber(blocks.length)], x, y );
                 }
-                pixmap2.drawPixmap(spaces[0], x, y);
-                pixmap2.drawPixmap(blocks[randomNumber(blocks.length)], x, y);
+                pixmap2.drawPixmap( spaces[0], x, y );
+                pixmap2.drawPixmap( blocks[randomNumber(blocks.length)], x, y );
             }
         }
         map = new Texture( pixmap1 );
@@ -233,9 +233,14 @@ public class Map
     /**
      * Returns the size of a area recursively using a helper method and flood 
      * fills a copy of areSpaces
+     * 
+     * Creates a copy of the 2D array of booleans to flood fill. 
+     * Parameters x and y indicate any coordinate in the room.
+     * If starting coordinate is not a space, this method returns 0.
+     * 
      * @param x starting x coordinate
      * @param y starting y coordinate
-     * @return number of spaces in room
+     * @return number of spaces in area
      */
     public int sizeOfArea( int x, int y )
     {
@@ -261,6 +266,9 @@ public class Map
 
     /**
      * Fills up all the spaces in a area (uses helper method to flood fill)
+     * 
+     * Parameters x and y are the starting coordinate of the area to flood fill
+     * 
      * @param x starting x coordinate
      * @param y starting y coordinate
      */
@@ -271,7 +279,11 @@ public class Map
     
     /**
      * Returns whether point has a path to a second point
-     * Uses recursion with helper method to flood fill a copy of areSpaces
+     * 
+     * Uses recursion with helper method to flood fill
+     * Creates a copy of the 2D boolean array in order to allow flood fill
+     * without modifying the main array.
+     * 
      * @param x1 x-coordinate of point 1
      * @param y1 y-coordinate of point 1
      * @param x2 x-coordinate of point 2
@@ -302,10 +314,10 @@ public class Map
         if ( !inTileBounds( x1, y1 ) || map[x1][y1] != asSpace ) return false;
         if ( x1 == x2 && y1 == y2 ) return true;
         map[x1][y1] = !asSpace;
-        return hasPath( x1 - 1, y1, x2, y2, asSpace, map)
-            || hasPath( x1 + 1, y1, x2, y2, asSpace, map)
-            || hasPath( x1, y1 - 1, x2, y2, asSpace, map)
-            || hasPath( x1, y1 + 1, x2, y2, asSpace, map);
+        return hasPath( x1 - 1, y1, x2, y2, asSpace, map )
+            || hasPath( x1 + 1, y1, x2, y2, asSpace, map )
+            || hasPath( x1, y1 - 1, x2, y2, asSpace, map )
+            || hasPath( x1, y1 + 1, x2, y2, asSpace, map );
     }
 
     // -----------------------Collision ------------------ //
@@ -331,7 +343,7 @@ public class Map
                 if ( inTileBounds( i, j ) && !areSpaces[i][j] )
                 {
                     check.setPosition( tileToPixel( i ), tileToPixel( j ) );
-                    if ( s.getBoundingRectangle().overlaps( check )) 
+                    if ( s.getBoundingRectangle().overlaps( check ) ) 
                         return true;
                 }
             }
@@ -429,7 +441,7 @@ public class Map
     
 
     /**
-     * Returns the pixel index of a coordinate
+     * Returns the pixel index of a coordinate given the tile coordinate
      * @param tile coordinate
      * @return pixel coordinate
      */
@@ -439,7 +451,7 @@ public class Map
     }
     
     /**
-     * Returns the tile index of a coordinate
+     * Returns the tile index of a coordinate given the pixel coordinate
      * @param pixel coordinate
      * @return tile coordinate
      */
@@ -540,7 +552,7 @@ public class Map
                     continue;
                 }
             }
-            if ( !hasPath(point.x, point.y, p.x, p.y, true) )// && ( size == largest )
+            if ( !hasPath( point.x, point.y, p.x, p.y, true ) )// && ( size == largest )
             {
                 x = Math.min( point.x, p.x );
                 y = Math.min( point.y, p.y );
@@ -630,21 +642,21 @@ public class Map
     }
     
     
-    /**
-     * Runs short testing program for visually checking the map on command line
-     * @param arg command line arguments -- not used
-     */
-    public static void main( String[] args )
-    {
-        @SuppressWarnings("resource")
-        Scanner scanUser = new Scanner( System.in );
-        Map map;
-        while ( true ) {
-            map = new Map( 25, 25, true );
-            map.generate( Map.RANDOM );
-            System.out.println( map );
-            scanUser.nextLine();
-        }
+//    /**
+//     * Runs short testing program for visually checking the map on command line
+//     * @param arg command line arguments -- not used
+//     */
+//    public static void main( String[] args )
+//    {
+//        @SuppressWarnings("resource")
+//        Scanner scanUser = new Scanner( System.in );
+//        Map map;
+//        while ( true ) {
+//            map = new Map( 25, 25, true );
+//            map.generate( Map.RANDOM );
+//            System.out.println( map );
+//            scanUser.nextLine();
+//        }
         // testing recursive methods:
 //      Map map1 = new Map( 25,25,true);
 //      while ( scanUser.hasNext() )
@@ -671,5 +683,5 @@ public class Map
 //              
 //          }
 //      }
-    }
+//    }
 }

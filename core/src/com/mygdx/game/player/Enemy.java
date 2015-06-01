@@ -40,6 +40,7 @@ public class Enemy extends Character {
 		setExperience(20); // set amount of exp Player will receive
 		setSpeed(3); // set speed of Enemy
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
+		setHpColor( Color.RED );
 		projectile = "EnemyBullet";
 	}
 
@@ -62,8 +63,7 @@ public class Enemy extends Character {
 			long time) {
 		if (!inRange(character)) {
 			setRandomDirection();
-			super.move(character, projectiles, time); // note % NUMDIRECTION if
-														// errors
+			super.move(character, projectiles, time);
 		}
 		// moves towards the player
 		else {

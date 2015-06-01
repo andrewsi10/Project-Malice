@@ -16,8 +16,14 @@ import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.MimicGdx;
 
 /**
- * @author Christopher
+ *  This class represents a sprite in the game with animations and movement
  *
+ *  @author  Christopher Cheung
+ *  @version May 31, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: libgdx
  */
 public class Character extends Sprite {
 	/**
@@ -33,6 +39,9 @@ public class Character extends Sprite {
 	public static final int NORTHWEST = 7;
 	public static final int NUMDIRECTIONS = 8;
 
+	/**
+	 * Variable used to determine the height in pixels of the status bars
+	 */
 	public static final int BARHEIGHT = 5;
 
 	/**
@@ -146,17 +155,28 @@ public class Character extends Sprite {
 			break;
 		}
 
-		if (!animation.isAnimationFinished(stateTime)) {
+		if ( !animation.isAnimationFinished( stateTime ) ) {
 			stateTime += Gdx.graphics.getDeltaTime();
 		} else {
 			stateTime = 0;
 		}
-		this.setRegion(animation.getKeyFrame(stateTime));
+		this.setRegion( animation.getKeyFrame( stateTime ) );
 	}
 
 	/**
-	 * @param batch
-	 * @param renderer
+	 * Draws the stats of the Character around the sprite.
+	 * 
+	 * Each bar must have a height of BARHEIGHT and appear below the Character
+	 * with hp bar ontop of the exp bar
+	 * hp bar and exp bar must only be drawn when hp and exp is less than their 
+	 * maximum (maxHp and expToLevel respectively)
+	 * 
+	 * Uses the BitmapFont to write the level of the Character above the sprite
+	 * and to write the hp values next to the hp bar
+	 * 
+	 * @param batch Batch to draw the words with
+	 * @param renderer the ShapeRenderer used to draw rectangles representing 
+	 *                 the bars
 	 */
 	public void drawBars(Batch batch, ShapeRenderer renderer) {
 		float hpW = getWidth();
@@ -185,9 +205,9 @@ public class Character extends Sprite {
 					/ getExpToLevel(), hpH - 2);
 		}
 		if (level > 0) {
-			getFont().setColor(Color.MAGENTA);
-			layout.setText(getFont(), "Level " + level);
-			getFont().draw(batch, "Level " + level, getX() - layout.width / 4,
+			font.setColor(Color.MAGENTA);
+			layout.setText(font, "Level " + level);
+			font.draw(batch, "Level " + level, getX() - layout.width / 4,
 					getY() + 1.8f * getHeight());
 		}
 	}
@@ -196,6 +216,8 @@ public class Character extends Sprite {
 	/**
 	 * This method should be overridden for better functionality moves sprite
 	 * according to its current direction
+	 * 
+	 * This method should also be called by overridden method to update animations
 	 * 
 	 * @param character
 	 *            for sub classes to interact with environment
@@ -268,17 +290,27 @@ public class Character extends Sprite {
 	}
 
 	/**
-	 * @param projectiles
-	 * @param xDistance
-	 * @param yDistance
-	 * @param time
-	 * @param spriteType
+	 * Puts a projectile that this Character shoots into the given Projectile 
+	 * array
+	 * 
+	 * 
+	 * 
+	 * @param projectiles ArrayList of Projectiles to add this Character's 
+	 *                     projectile to
+	 * @param xDistance the x distance for the slope that the projectile should 
+	 *                     take
+	 * @param yDistance the y distance for the slope that the projectile should 
+     *                     take
+	 * @param time         Current time in milliseconds to determine if this 
+	 *                         Character can shoot
+	 * @param spriteType   String representing this what type of sprite this 
+	 *                             Character is
 	 */
 	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
 			float yDistance, long time, String spriteType) {
 		if (time - previousTime >= reloadSpeed) {
 			previousTime = time;
-			Projectile p = new Projectile(this, getDirection(), getDamage(),
+			Projectile p = new Projectile(this, getDamage(),
 					spriteType, xDistance, yDistance);
 			p.setSize(p.getWidth() / 3, p.getHeight() / 3);
 			p.setPosition(getX() + getWidth() / 2 - p.getWidth() / 2, getY()
@@ -433,15 +465,6 @@ public class Character extends Sprite {
 	// -----------------------Getters -----------------//
 
 	/**
-	 * getter method for font
-	 * 
-	 * @return font
-	 */
-	public BitmapFont getFont() {
-		return font;
-	}
-
-	/**
 	 * getter method for level
 	 * 
 	 * @return level
@@ -532,6 +555,15 @@ public class Character extends Sprite {
 	}
 
 	// --------------------For Testing --------------//
+	/**
+	 * @see java.lang.Object#toString()
+	 * 
+	 * Returns a String that represents this Character:
+	 * HP: currentHp / maxHp; Base Damage, RandomMod, Direction, reloadSpeed, 
+	 * previousTime, moveSpeed
+	 * 
+	 * @return a String that represents this Character
+	 */
 	@Override
 	public String toString() {
 		String s = "HP: " + currentHp + "/" + maxHp + "; Base Damage: "
