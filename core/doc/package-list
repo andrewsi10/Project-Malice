@@ -1,4 +1,6 @@
 com.mygdx.game
+com.mygdx.game.client
+com.mygdx.game.desktop
 com.mygdx.game.player
 com.mygdx.game.projectile
 com.mygdx.game.screens
