@@ -533,14 +533,4 @@ public class GameScreen implements Screen
 		font.dispose();
 	}
 
-	/**
-	 * Getter method for the current state of the game
-	 * 
-	 * @return state, the State Enum storing the state of the game
-	 */
-	public State getState()
-	{
-		return state;
-	}
-
 }

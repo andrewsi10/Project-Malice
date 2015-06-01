@@ -13,7 +13,9 @@ import com.badlogic.gdx.utils.Array;
  *  Represents a Projectile in the game. Always moves in a straight line based
  *  on a given slope.
  *
- *  @author  
+ *  @author  Andrew Si wrote the move() method
+ *  @author  Christopher Cheung wrote the constructor
+ *  @author  Nathan Lui wrote the hitCharacter() method
  *  @version May 31, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core
@@ -24,8 +26,8 @@ public class Projectile extends Sprite
 {
     private Character myCharacter;
 
-	final private float xDistance;
-	final private float yDistance;
+//	final private float xDistance;
+//	final private float yDistance;
 	final private double angle;
 	final private int speed = 8;
 	final private int damage;
@@ -36,6 +38,7 @@ public class Projectile extends Sprite
 	private float stateTime;
 
 	/**
+	 * @author Christopher Cheung
 	 * Constructs a Projectile class
 	 * 
 	 * DistanceX and distanceY determines the slope of the line that this 
@@ -53,11 +56,7 @@ public class Projectile extends Sprite
 	    float distanceX, float distanceY)
 	{
         this.myCharacter = c;
-
-		xDistance = distanceX;
-		yDistance = distanceY;
-		angle = Math.atan2( yDistance, xDistance );
-
+		angle = Math.atan2( distanceY, distanceX );
 		sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/"
 				+ type.toLowerCase() + ".wav" ) );
 		sound.play();
@@ -87,9 +86,31 @@ public class Projectile extends Sprite
 		stateTime = 0f;
 
 		this.damage = damage;
+        setSize(getWidth() / 3, getHeight() / 3);
+        setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 
+                    c.getY() + c.getHeight() / 2 - getHeight() / 2);
+	}
+	
+	/**
+	 * Constructs this Projectile without animations, For testing only
+	 * 
+	 * Projectile will be unable to move.
+	 * 
+	 * @param x -coordinate as starting point
+	 * @param y -coordinate as starting point
+	 * @param w width of the projectile
+	 * @param h height of the projectile
+	 * @param d damage that this projectile deals
+	 */
+	public Projectile( float x, float y, float w, float h, int d )
+	{
+	    setBounds( x, y, w, h );
+	    damage = d;
+	    angle = 0;
 	}
 
 	/**
+     * @author Andrew Si
 	 * Moves this projectile on the line with slope based on the given 
 	 * xDistance and yDistance from constructor
 	 * Updates animation based on time
@@ -114,6 +135,7 @@ public class Projectile extends Sprite
 	}
     
     /**
+     * @author Nathan Lui
      * Returns whether this projectile hits a given character based on bounding rectangles
      * if Character is the same as the one that spawned this projectile,
      * this method should return false
