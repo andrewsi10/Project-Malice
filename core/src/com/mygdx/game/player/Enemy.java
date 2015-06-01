@@ -8,8 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.projectile.Projectile;
 
 /**
- * @author Christopher
+ *  This class represents an Enemy in the game that will attack the Player when
+ *  conditions are met. Uses basic AI programming
  *
+ *  @author  Christopher Cheung
+ *  @version May 31, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: libgdx
  */
 public class Enemy extends Character {
 
@@ -58,6 +65,20 @@ public class Enemy extends Character {
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 	}
 
+    /**
+     * @see com.mygdx.game.player.Character#move(com.mygdx.game.player.Character, java.util.ArrayList, long)
+     * 
+     * moves this Character according to a basic AI algorithm
+     * 
+     * if the Character is within range, move toward that Character and shoot 
+     * at it, else get a random direction to move in
+     * 
+     * @param character main Character to interact with, the Character to attack
+     * @param projectiles ArrayList of Projectiles to add this Player's 
+     *                     projectile into the environment when shooting
+     * @param time Time in game (used in order to determine delays in moving or
+     *            shooting)
+     */
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
@@ -71,7 +92,7 @@ public class Enemy extends Character {
 
 			float deltaX = character.getX() - getX();
 			float deltaY = character.getY() - getY();
-			int newDir = this.getDirection(-deltaX, -deltaY);
+			int newDir = this.getDirection(deltaX, deltaY);
 			if (newDir != -1) {
 				setDirection(newDir);
 				shoot(projectiles, deltaX, deltaY, time, projectile);
@@ -95,28 +116,40 @@ public class Enemy extends Character {
 	}
 
 	/**
+	 * Returns the Direction that the given parameters indicate
 	 * 
-	 * @param deltaX
-	 * @param deltaY
-	 * @return
+	 * If both deltaX and deltaY are greater than the marginOfDelta,
+	 * move diagonal
+	 * else if one of them is greater than the marginOfDelta,
+	 *   move straight in that direction
+	 * else return -1
+	 * 
+	 * after above conditions are met,
+	 * EAST when deltaX is positive and WEST when negative
+	 * NORTH when deltaY is positive and SOUTH when negative
+	 * 
+	 * @param deltaX change in x
+	 * @param deltaY change in y
+	 * @return the Direction that the given parameters indicate
+	 *         -1 if no direction is indicated
 	 */
-	private int getDirection(float deltaX, float deltaY) {
-		if (deltaX < -marginOfDelta && deltaY < -marginOfDelta)
-			return NORTHEAST;
-		if (deltaX < -marginOfDelta && deltaY > marginOfDelta)
-			return SOUTHEAST;
-		if (deltaX > marginOfDelta && deltaY > marginOfDelta)
-			return SOUTHWEST;
-		if (deltaX > marginOfDelta && deltaY < -marginOfDelta)
-			return NORTHWEST;
-		if (Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta)
-			return NORTH;
-		if (deltaX < -marginOfDelta && Math.abs(deltaX) < marginOfDelta)
-			return EAST;
-		if (Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta)
-			return SOUTH;
-		if (deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta)
-			return WEST;
+	private int getDirection( float deltaX, float deltaY ) {
+        if ( deltaX > marginOfDelta && deltaY > marginOfDelta )
+            return NORTHEAST;
+        if ( deltaX > marginOfDelta && deltaY < -marginOfDelta )
+            return SOUTHEAST;
+		if ( deltaX < -marginOfDelta && deltaY < -marginOfDelta )
+            return SOUTHWEST;
+		if ( deltaX < -marginOfDelta && deltaY > marginOfDelta )
+            return NORTHWEST;
+        if ( Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta )
+            return NORTH;
+        if ( deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta )
+            return EAST;
+		if ( Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta )
+            return SOUTH;
+		if ( deltaX < -marginOfDelta && Math.abs(deltaX) < marginOfDelta )
+            return WEST;
 		return -1;
 	}
 

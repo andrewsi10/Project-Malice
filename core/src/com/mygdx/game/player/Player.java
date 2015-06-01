@@ -9,6 +9,17 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.MimicGdx;
 
+/**
+ *  This class represents a Player in the game. Takes in Input from the keyboard
+ *  in order to move around and shoot.
+ *
+ *  @author  Christopher Cheung
+ *  @version May 31, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: libgdx
+ */
 public class Player extends Character {
 
 	private String projectile;
@@ -69,6 +80,18 @@ public class Player extends Character {
 		setLevel(1);
 	}
 
+	/**
+	 * @see com.mygdx.game.player.Character#move(com.mygdx.game.player.Character, java.util.ArrayList, long)
+	 * 
+	 * moves the Character according to the input of keyboard gotten from 
+	 * MimicGdx class
+	 * 
+	 * @param character main Character to interact with -- not used in Player
+	 * @param projectiles ArrayList of Projectiles to add this Player's 
+	 *                     projectile into the environment when shooting
+	 * @param time Time in game (used in order to determine delays in moving or
+     *            shooting)
+	 */
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
