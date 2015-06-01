@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -41,7 +41,7 @@ import com.mygdx.game.world.Map;
  *
  * @author Sources: libgdx
  */
-public class GameScreen extends ScreenAdapter
+public class GameScreen implements Screen
 {
 
 	private SpriteBatch batch;
@@ -495,7 +495,31 @@ public class GameScreen extends ScreenAdapter
 			font.setColor( Color.WHITE );
 		}
 	}
-	
+
+	/**
+	 * @see com.badlogic.gdx.Screen#resize(int, int)
+	 */
+	@Override
+	public void resize(int width, int height) {}
+
+	/**
+	 * @see com.badlogic.gdx.Screen#pause()
+	 */
+	@Override
+	public void pause() {}
+
+	/**
+	 * @see com.badlogic.gdx.Screen#resume()
+	 */
+	@Override
+	public void resume() {}
+
+	/**
+	 * @see com.badlogic.gdx.Screen#hide()
+	 */
+	@Override
+	public void hide() {}
+
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.
 	 * 
