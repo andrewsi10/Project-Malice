@@ -20,10 +20,14 @@ import com.mygdx.game.projectile.Projectile;
  */
 public class Enemy extends Character {
 
+    /**
+     * The margin of change for the Enemy to choose directions
+     */
+    public static final int marginOfDelta = 30;
+    
 	private int travelTime;
 	private int aggroDistance = 400;
 	private int travelTimeScalar = 100;
-	private int marginOfDelta = 30;
 	private int minTravelTime = 4;
 	private String projectile;
 
@@ -133,7 +137,7 @@ public class Enemy extends Character {
 	 * @return the Direction that the given parameters indicate
 	 *         -1 if no direction is indicated
 	 */
-	private int getDirection( float deltaX, float deltaY ) {
+	public int getDirection( float deltaX, float deltaY ) {
         if ( deltaX > marginOfDelta && deltaY > marginOfDelta )
             return NORTHEAST;
         if ( deltaX > marginOfDelta && deltaY < -marginOfDelta )
@@ -148,7 +152,7 @@ public class Enemy extends Character {
             return EAST;
 		if ( Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta )
             return SOUTH;
-		if ( deltaX < -marginOfDelta && Math.abs(deltaX) < marginOfDelta )
+		if ( deltaX < -marginOfDelta && Math.abs(deltaY) < marginOfDelta )
             return WEST;
 		return -1;
 	}
@@ -205,15 +209,6 @@ public class Enemy extends Character {
 	 */
 	public void setTravelTime(int time) {
 		travelTime = time;
-	}
-
-	/**
-	 * getter method for marginOfDelta
-	 * 
-	 * @return marginOfDelta
-	 */
-	public int getMarginOfDelta() {
-		return marginOfDelta;
 	}
 
 	/**

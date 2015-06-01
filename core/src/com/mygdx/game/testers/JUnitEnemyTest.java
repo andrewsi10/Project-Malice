@@ -1,11 +1,20 @@
 package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
-import junit.framework.JUnit4TestAdapter;
 import org.junit.Test;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Character;
 
+/**
+ *  JUnit tester for the Enemy class
+ *
+ *  @author  Christopher Cheung
+ *  @version Jun 1, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: Libgdx, JUnit4
+ */
 public class JUnitEnemyTest {
 
 	/**
@@ -49,7 +58,27 @@ public class JUnitEnemyTest {
 	 */
 	@Test
 	public void testGetDirection() {
-
+	    int d = Enemy.marginOfDelta;
+	    Enemy e = new Enemy();
+        float dx = 0;
+        float dy = 0;
+        assertEquals(-1, e.getDirection(dx,dy), .0001); // check for not moving
+        dy = d + 1;
+        assertEquals(Character.NORTH, e.getDirection(dx,dy), .0001);
+        dx = d + 1;
+        assertEquals(Character.NORTHEAST, e.getDirection(dx,dy), .0001);
+        dy = 0;
+        assertEquals(Character.EAST, e.getDirection(dx,dy), .0001);
+        dy = -d - 1;
+        assertEquals(Character.SOUTHEAST, e.getDirection(dx,dy), .0001);
+        dx = 0;
+        assertEquals(Character.SOUTH, e.getDirection(dx,dy), .0001);
+        dx = -d - 1;
+        assertEquals(Character.SOUTHWEST, e.getDirection(dx,dy), .0001);
+        dy = 0;
+        assertEquals(Character.WEST, e.getDirection(dx,dy), .0001);
+        dy = d + 1;
+        assertEquals(Character.NORTHWEST, e.getDirection(dx,dy), .0001);
 	}
 
 	/**

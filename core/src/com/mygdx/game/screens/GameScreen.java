@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -41,7 +41,7 @@ import com.mygdx.game.world.Map;
  *
  * @author Sources: libgdx
  */
-public class GameScreen implements Screen
+public class GameScreen extends ScreenAdapter
 {
 
 	private SpriteBatch batch;
@@ -93,7 +93,7 @@ public class GameScreen implements Screen
 	private int numEnemies = 7;
 	private long timeResumed;
 
-	Music music;
+	private Music music;
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
@@ -194,8 +194,6 @@ public class GameScreen implements Screen
 			break;
 		case RESUME :
 			renderResume( delta );
-			break;
-		default :
 			break;
 		}
 	}
@@ -497,47 +495,7 @@ public class GameScreen implements Screen
 			font.setColor( Color.WHITE );
 		}
 	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resize(int, int)
-	 */
-	@Override
-	public void resize(int width, int height)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#pause()
-	 */
-	@Override
-	public void pause()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resume()
-	 */
-	@Override
-	public void resume()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#hide()
-	 */
-	@Override
-	public void hide()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.
 	 * 

@@ -16,7 +16,7 @@ import com.mygdx.game.world.Map;
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core
  *
- *  @author  Sources:
+ *  @author  Sources: libgdx, junit4
  */
 public class JUnitMapTest
 {
