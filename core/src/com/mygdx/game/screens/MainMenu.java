@@ -21,7 +21,8 @@ import com.mygdx.game.Malice;
 
 /**
  * This screen is the main menu of Gauntlet. It has a background image and
- * allows the user to play or exit the game.
+ * allows the user to play or exit the game. The screen also utilizes a ton of
+ * LibGDX libraries, including Stage, Skin, and TextButton.
  *
  * @author Andrew Si
  * @version May 31, 2015

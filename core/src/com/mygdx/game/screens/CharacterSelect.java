@@ -23,7 +23,8 @@ import com.mygdx.game.Malice;
  * This screen displays six different classes for the player to choose from and
  * an exit button. Selecting one of the classes begins gameplay and selecting
  * the exit button closes the game. The screen uses the same background image as
- * the main menu screen.
+ * the main menu screen. The screen utilizes a ton of LibGDX libraries, including
+ * Stage, Skin, and TextButton.
  *
  * @author Andrew Si
  * @version May 31, 2015
@@ -259,7 +260,7 @@ public class CharacterSelect implements Screen
 	}
 
 	/**
-	 * Disposes the skin and stage to prevent memory leakage.
+	 * Disposes the Skin and Stage to prevent memory leakage.
 	 * 
 	 * @see com.badlogic.gdx.Screen#dispose()
 	 */

@@ -24,7 +24,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 import com.mygdx.game.player.Player;
 
-public class GameOver implements Screen {
+/**
+ * The Game Over screen displays the same background image as the Main Menu and
+ * allows the user to try again with the same class, choose a different class,
+ * or exit the game. The screen also shows users which level they reached and
+ * how many points they received. The screen utilizes a ton of LibGDX libraries,
+ * including Stage, Skin, and BitmapFont.
+ *
+ * @author Andrew Si
+ * @version May 31, 2015
+ * @author Period: 4
+ * @author Assignment: my-gdx-game-core
+ *
+ * @author Sources: libgdx
+ */
+public class GameOver implements Screen
+{
 	Image background;
 
 	private final Malice game;
@@ -47,7 +62,22 @@ public class GameOver implements Screen {
 
 	Music music;
 
-	public GameOver(Malice g, Music m, Player player, String playerType) {
+	/**
+	 * Creates a GameOver screen and stores the Malice object that created this
+	 * screen, the music currently playing, the player object from Game Screen,
+	 * and the class that the player chose.
+	 * 
+	 * @param g
+	 *            the Malice object controlling the screens
+	 * @param m
+	 *            the music currently playing
+	 * @param player
+	 *            the player that the user was controlling in the Game Screen
+	 * @param playerType
+	 *            the class that the player chose in the CharacterSelect screen
+	 */
+	public GameOver(Malice g, Music m, Player player, String playerType)
+	{
 		game = g;
 		music = m;
 		this.player = player;
@@ -55,154 +85,189 @@ public class GameOver implements Screen {
 		layout = new GlyphLayout();
 	}
 
-	// copied from online
-	private void createSkin() {
+	/**
+	 * Creates a skin and the text button style that will be displayed in the
+	 * main menu.
+	 * 
+	 * The skin should be the default LibGDX skin and the text button style
+	 * should also be the default style.
+	 */
+	private void createSkin()
+	{
 		// Create a font
 		BitmapFont font = new BitmapFont();
 
 		batch = new SpriteBatch();
 
-		background = new Image((Drawable) new SpriteDrawable(new Sprite(
-				new Texture("img/titlescreen.png"))));
+		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
+				new Texture( "img/titlescreen.png" ) ) ) );
 
-		skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-		skin.add("default", font);
+		skin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
+		skin.add( "default", font );
 
 		// Create a texture
-		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4,
-				(int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
-		pixmap.setColor(Color.WHITE);
+		Pixmap pixmap = new Pixmap( (int) Gdx.graphics.getWidth() / 4,
+				(int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888 );
+		pixmap.setColor( Color.WHITE );
 		pixmap.fill();
-		skin.add("background", new Texture(pixmap));
+		skin.add( "background", new Texture( pixmap ) );
 
 		// Create a button style
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
-		textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textButtonStyle.checked = skin.newDrawable("background",
-				Color.DARK_GRAY);
-		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
-		textButtonStyle.font = skin.getFont("default");
-		skin.add("default", textButtonStyle);
+		textButtonStyle.up = skin.newDrawable( "background", Color.GRAY );
+		textButtonStyle.down = skin.newDrawable( "background", Color.DARK_GRAY );
+		textButtonStyle.checked = skin.newDrawable( "background",
+				Color.DARK_GRAY );
+		textButtonStyle.over = skin
+				.newDrawable( "background", Color.LIGHT_GRAY );
+		textButtonStyle.font = skin.getFont( "default" );
+		skin.add( "default", textButtonStyle );
 
 	}
 
+	/**
+	 * Shows the Game Over screen by displaying the background image and the
+	 * three buttons the user can select.
+	 * 
+	 * Changes the music volume and sets up the Stage and background image and
+	 * buttons.
+	 * 
+	 * @see com.badlogic.gdx.Screen#show()
+	 */
 	@Override
-	public void show() {
-		// Stage stage = new Stage();
-		// // atlas = new TextureAtlas( "ui/button.pack" );
-		// skin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-		//
-		// table = new Table( skin );
-		// table.setBounds( 0,
-		// 0,
-		// Gdx.graphics.getWidth(),
-		// Gdx.graphics.getHeight() );
-		//
-		// white = new BitmapFont( Gdx.files.internal( "fonts/white.fnt" ),
-		// false );
-		// black = new BitmapFont( Gdx.files.internal( "fonts/black.fnt" ),
-		// false );
-
-		music.setVolume(0.7f);
+	public void show()
+	{
+		music.setVolume( 0.7f );
 		stage = new Stage();
 		font = new BitmapFont();
-		font.setColor(Color.WHITE);
-		Gdx.input.setInputProcessor(stage);// Make the stage consume events
+		font.setColor( Color.WHITE );
+		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
 		createSkin();
-		retryButton = new TextButton("Try Again", skin); // Use
-															// the
-															// initialized
-															// skin
+		retryButton = new TextButton( "Try Again", skin );
 		retryButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 2);
-		retryButton.addListener(new ClickListener() {
+				Gdx.graphics.getHeight() / 2 );
+		retryButton.addListener( new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				retryButton.remove();
 				switchButton.remove();
 				exitButton.remove();
 				music.play();
-				game.setScreen(new GameScreen(game, music, playerType));
+				game.setScreen( new GameScreen( game, music, playerType ) );
 			}
-		});
+		} );
 
-		switchButton = new TextButton("Switch Characters", skin);
+		switchButton = new TextButton( "Switch Characters", skin );
 		switchButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 3);
-		switchButton.addListener(new ClickListener() {
+				Gdx.graphics.getHeight() / 3 );
+		switchButton.addListener( new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				retryButton.remove();
 				switchButton.remove();
 				exitButton.remove();
 				music.play();
-				game.setScreen(new CharacterSelect(game, music));
+				game.setScreen( new CharacterSelect( game, music ) );
 			}
-		});
-		
-		exitButton = new TextButton("Exit", skin);
+		} );
+
+		exitButton = new TextButton( "Exit", skin );
 		exitButton.setPosition(
 				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 6);
-		exitButton.addListener(new ClickListener() {
+				Gdx.graphics.getHeight() / 6 );
+		exitButton.addListener( new ClickListener()
+		{
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void clicked(InputEvent event, float x, float y)
+			{
 				Gdx.app.exit();
 			}
-		});
+		} );
 
-		stage.addActor(background);
-		stage.addActor(retryButton);
-		stage.addActor(switchButton);
-		stage.addActor(exitButton);
+		stage.addActor( background );
+		stage.addActor( retryButton );
+		stage.addActor( switchButton );
+		stage.addActor( exitButton );
 	}
 
+	/**
+	 * Displays the amount of points the player received and the level that the
+	 * player reached.
+	 * 
+	 * @see com.badlogic.gdx.Screen#render(float)
+	 */
 	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+	public void render(float delta)
+	{
+		Gdx.gl.glClearColor( 0, 0, 0, 1 );
+		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		stage.act();
 		stage.draw();
 		batch.begin();
 		String str = "You earned " + player.getPoints()
 				+ " points and reached level " + player.getCurrentLevel()
 				+ ". Better luck next time!";
-		layout.setText(font, str);
-		font.draw(batch, str, Gdx.graphics.getWidth() / 2 - layout.width / 2,
-				Gdx.graphics.getHeight() * 67 / 100);
+		layout.setText( font, str );
+		font.draw( batch, str, Gdx.graphics.getWidth() / 2 - layout.width / 2,
+				Gdx.graphics.getHeight() * 67 / 100 );
 		batch.end();
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resize(int, int)
+	 */
 	@Override
-	public void resize(int width, int height) {
+	public void resize(int width, int height)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#pause()
+	 */
 	@Override
-	public void pause() {
+	public void pause()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#resume()
+	 */
 	@Override
-	public void resume() {
+	public void resume()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @see com.badlogic.gdx.Screen#hide()
+	 */
 	@Override
-	public void hide() {
+	public void hide()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Removes the Skin, Stage, and Batch to prevent memory leakage.
+	 * 
+	 * @see com.badlogic.gdx.Screen#dispose()
+	 */
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		skin.dispose();
 		stage.dispose();
 		batch.dispose();

@@ -135,7 +135,7 @@ public class Splash implements Screen
 	/**
 	 * Gets rid of everything that can cause memory leakage.
 	 * 
-	 * Disposes the batch, texture from the splashSprite, and the music.
+	 * Disposes the Batch, texture from the Sprite, and the Music.
 	 * 
 	 * @see com.badlogic.gdx.Screen#dispose()
 	 */
