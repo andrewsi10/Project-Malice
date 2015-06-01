@@ -38,7 +38,6 @@ public class Projectile extends Sprite
 	private float stateTime;
 
 	/**
-	 * @author Christopher Cheung
 	 * Constructs a Projectile class
 	 * 
 	 * DistanceX and distanceY determines the slope of the line that this 
@@ -110,7 +109,6 @@ public class Projectile extends Sprite
 	}
 
 	/**
-     * @author Andrew Si
 	 * Moves this projectile on the line with slope based on the given 
 	 * xDistance and yDistance from constructor
 	 * Updates animation based on time
@@ -135,7 +133,6 @@ public class Projectile extends Sprite
 	}
     
     /**
-     * @author Nathan Lui
      * Returns whether this projectile hits a given character based on bounding rectangles
      * if Character is the same as the one that spawned this projectile,
      * this method should return false
