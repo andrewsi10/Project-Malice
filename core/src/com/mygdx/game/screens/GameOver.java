@@ -40,7 +40,7 @@ import com.mygdx.game.player.Player;
  */
 public class GameOver implements Screen
 {
-	Image background;
+	private Image background;
 
 	private final Malice game;
 
@@ -60,7 +60,7 @@ public class GameOver implements Screen
 
 	private GlyphLayout layout;
 
-	Music music;
+	private Music music;
 
 	/**
 	 * Creates a GameOver screen and stores the Malice object that created this

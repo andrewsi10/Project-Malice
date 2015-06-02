@@ -21,6 +21,9 @@ import com.mygdx.game.world.Map;
 public class JUnitMapTest
 {
     // ----------------------------Test Map ----------------------//
+    /**
+     * Size of map for testing
+     */
     public static final int MAP_SIZE = 25;
     
     /**

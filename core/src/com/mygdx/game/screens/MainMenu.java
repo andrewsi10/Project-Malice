@@ -35,7 +35,7 @@ import com.mygdx.game.Malice;
 public class MainMenu implements Screen
 {
 
-	Image background;
+	private Image background;
 
 	private final Malice game;
 
@@ -45,7 +45,7 @@ public class MainMenu implements Screen
 
 	private Skin skin;
 
-	Music music;
+	private Music music;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this

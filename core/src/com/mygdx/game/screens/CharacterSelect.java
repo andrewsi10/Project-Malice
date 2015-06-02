@@ -35,13 +35,13 @@ import com.mygdx.game.Malice;
  */
 public class CharacterSelect implements Screen
 {
-	Image background;
+	private Image background;
 
 	private final Malice game;
 
 	private Stage stage;
 
-	private TextButton char1Button, char2Button, exitButton;
+	private TextButton /*char1Button, char2Button,*/ exitButton;
 
 	private TextButton[] characters;
 
@@ -50,7 +50,7 @@ public class CharacterSelect implements Screen
 
 	private Skin skin;
 
-	Music music;
+	private Music music;
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
@@ -225,7 +225,6 @@ public class CharacterSelect implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -235,7 +234,6 @@ public class CharacterSelect implements Screen
 	@Override
 	public void pause()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -245,7 +243,6 @@ public class CharacterSelect implements Screen
 	@Override
 	public void resume()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -255,7 +252,6 @@ public class CharacterSelect implements Screen
 	@Override
 	public void hide()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
