@@ -61,8 +61,7 @@ public class Projectile extends Sprite
 
 		projectileTexture = new TextureAtlas(
 				Gdx.files.internal( "img/sprites/Projectiles/"
-						+ type.charAt( 0 )
-						+ type.substring( 1 ) + "/" + type
+						+ type + "/" + type
 						+ ".atlas" ) ).getRegions();
 //		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
 //				projectileTexture.getWidth() / col,
