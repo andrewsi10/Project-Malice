@@ -2,7 +2,6 @@ package com.mygdx.game.world;
 
 import java.awt.Point;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -25,7 +24,7 @@ import com.badlogic.gdx.math.Rectangle;
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core
  *
- *  @author  Sources: libgdx
+ *  @author  Sources: Libgdx
  */
 public class Map
 {

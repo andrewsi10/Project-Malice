@@ -14,6 +14,7 @@ import com.mygdx.game.MimicGdx;
  *  in order to move around and shoot.
  *
  *  @author  Christopher Cheung
+ *  @author  Other contributors: Andrew Si, Nathan Lui
  *  @version May 31, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core

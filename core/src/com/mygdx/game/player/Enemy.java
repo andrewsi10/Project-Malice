@@ -12,6 +12,7 @@ import com.mygdx.game.projectile.Projectile;
  *  conditions are met. Uses basic AI programming
  *
  *  @author  Christopher Cheung
+ *  @author  Other contributors: Andrew Si, Nathan Lui
  *  @version May 31, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core

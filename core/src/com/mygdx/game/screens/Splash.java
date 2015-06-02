@@ -15,7 +15,7 @@ import com.mygdx.game.MimicGdx;
  * credit for all artwork and audio. It also initializes and plays the music.
  * After five seconds, the splash screen is replaced by the main menu.
  *
- * @author Andrew Si
+ * @author  Som Pathak
  * @version May 31, 2015
  * @author Period: 4
  * @author Assignment: my-gdx-game-core
@@ -98,7 +98,6 @@ public class Splash implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -108,7 +107,6 @@ public class Splash implements Screen
 	@Override
 	public void pause()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -118,7 +116,6 @@ public class Splash implements Screen
 	@Override
 	public void resume()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -128,7 +125,6 @@ public class Splash implements Screen
 	@Override
 	public void hide()
 	{
-		// TODO Auto-generated method stub
 
 	}
 

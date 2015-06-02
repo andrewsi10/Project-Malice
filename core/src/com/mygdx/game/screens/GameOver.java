@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -31,7 +30,8 @@ import com.mygdx.game.player.Player;
  * how many points they received. The screen utilizes a ton of LibGDX libraries,
  * including Stage, Skin, and BitmapFont.
  *
- * @author Andrew Si
+ * @author  Som Pathak
+ * @author  Other contributors: Andrew Si
  * @version May 31, 2015
  * @author Period: 4
  * @author Assignment: my-gdx-game-core
@@ -224,41 +224,25 @@ public class GameOver implements Screen
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
-	public void resize(int width, int height)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public void resize(int width, int height) {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
-	public void pause()
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
-	public void resume()
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide()
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public void hide() {}
 
 	/**
 	 * Removes the Skin, Stage, and Batch to prevent memory leakage.

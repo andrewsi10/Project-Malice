@@ -16,18 +16,6 @@ import com.mygdx.game.MimicGdx;
  *  @author  Sources: libgdx, junit4
  */
 public class JUnitCharacterTest {
-//	/**
-//	 * finds the distance between the coordinate (x, y) and (0, 0)
-//	 * 
-//	 * @param x
-//	 *            x coordinate
-//	 * @param y
-//	 *            y coordinate
-//	 * @return the distance from the origin to (x, y)
-//	 */
-//	private double distanceFormula(double x, double y) {
-//		return Math.sqrt(x * x + y * y);
-//	}
 
 	/**
 	 * Tests the Character's move() method for all 8 directions

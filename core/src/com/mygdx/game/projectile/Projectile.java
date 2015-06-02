@@ -13,9 +13,8 @@ import com.badlogic.gdx.utils.Array;
  *  Represents a Projectile in the game. Always moves in a straight line based
  *  on a given slope.
  *
- *  @author  Andrew Si wrote the move() method
- *  @author  Christopher Cheung wrote the constructor
- *  @author  Nathan Lui wrote the hitCharacter() method
+ *  @author  Andrew Si 
+ *  @author  Other contributors: Christopher Cheung, Nathan Lui
  *  @version May 31, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core

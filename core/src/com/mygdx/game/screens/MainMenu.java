@@ -24,7 +24,8 @@ import com.mygdx.game.Malice;
  * allows the user to play or exit the game. The screen also utilizes a ton of
  * LibGDX libraries, including Stage, Skin, and TextButton.
  *
- * @author Andrew Si
+ * @author  Som Pathak
+ * @author  Other contributors: Andrew Si
  * @version May 31, 2015
  * @author Period: 4
  * @author Assignment: my-gdx-game-core
@@ -170,7 +171,6 @@ public class MainMenu implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -180,7 +180,6 @@ public class MainMenu implements Screen
 	@Override
 	public void pause()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -190,7 +189,6 @@ public class MainMenu implements Screen
 	@Override
 	public void resume()
 	{
-		// TODO Auto-generated method stub
 
 	}
 
@@ -200,7 +198,6 @@ public class MainMenu implements Screen
 	@Override
 	public void hide()
 	{
-		// TODO Auto-generated method stub
 
 	}
 

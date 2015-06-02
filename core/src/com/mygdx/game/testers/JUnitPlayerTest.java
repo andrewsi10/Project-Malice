@@ -5,6 +5,17 @@ import org.junit.Test;
 import com.mygdx.game.player.Player;
 import com.mygdx.game.MimicGdx;
 
+/**
+ *  JUnit tester for Player
+ *
+ *  @author  Som Pathak
+ *  @author  Other contributors: Christopher Cheung
+ *  @version Jun 1, 2015
+ *  @author  Period: 4
+ *  @author  Assignment: my-gdx-game-core
+ *
+ *  @author  Sources: Libgdx, JUnit4
+ */
 public class JUnitPlayerTest {
 
 	/**

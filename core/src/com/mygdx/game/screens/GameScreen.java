@@ -35,6 +35,7 @@ import com.mygdx.game.world.Map;
  * allow for pausing and resuming the game.
  *
  * @author Andrew Si
+ * @author Other contributors: Christopher Cheung, Nathan Lui
  * @version May 31, 2015
  * @author Period: 4
  * @author Assignment: my-gdx-game-core

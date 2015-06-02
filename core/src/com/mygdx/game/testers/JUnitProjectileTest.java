@@ -11,7 +11,7 @@ import com.mygdx.game.projectile.Projectile;
  *  Constructor and move() method in Projectile cannot be tested with JUnits 
  *  due to the animations in them
  *
- *  @author  Nathan Lui
+ *  @author  Som Pathak
  *  @version Jun 1, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core

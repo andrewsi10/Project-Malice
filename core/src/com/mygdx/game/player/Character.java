@@ -19,6 +19,7 @@ import com.mygdx.game.MimicGdx;
  *  This class represents a sprite in the game with animations and movement
  *
  *  @author  Christopher Cheung
+ *  @author  Other contributors: Andrew Si, Nathan Lui
  *  @version May 31, 2015
  *  @author  Period: 4
  *  @author  Assignment: my-gdx-game-core
@@ -37,6 +38,9 @@ public class Character extends Sprite {
 	public static final int SOUTHWEST = 5;
 	public static final int WEST = 6;
 	public static final int NORTHWEST = 7;
+	/**
+	 * The Number of Directions
+	 */
 	public static final int NUMDIRECTIONS = 8;
 
 	/**
