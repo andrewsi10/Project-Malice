@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
@@ -94,8 +94,6 @@ public class GameScreen implements Screen
 	private int numEnemies = 7;
 	private long timeResumed;
 
-	private Music music;
-
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
 	 * created this screen, the music currently playing, and the class that the
@@ -108,12 +106,11 @@ public class GameScreen implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameScreen(Malice g, Music m, String playerType)
+	public GameScreen(Malice g, String playerType)
 	{
 		new Stage();
 		game = g;
-		music = m;
-		music.setVolume( 0.4f );
+		Options.Audio.mainTheme.setVolume( 0.4f );
 		this.playerType = playerType;
 	}
 
@@ -150,8 +147,7 @@ public class GameScreen implements Screen
 
 		// initializes enemies and puts in a random amount of enemies
 		sprites = new ArrayList<Character>();
-		CharacterSelect temp = new CharacterSelect( null, null );
-		String[] charNames = temp.getNames();
+		String[] charNames = CharacterSelect.characterNames;
 		String spriteName = "BlackMage";
 		String projectileName = "DarkFire";
 		for ( int i = 0; i < charNames.length; i++ )
@@ -212,7 +208,7 @@ public class GameScreen implements Screen
 	 */
 	public void renderPaused(float delta)
 	{
-		music.pause();
+	    Options.Audio.mainTheme.pause();
 		Gdx.gl.glClearColor( 0, 0, 0, 1 );
 		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		batchPause.begin();
@@ -320,9 +316,9 @@ public class GameScreen implements Screen
 		cam.position.y = player.getY();
 		cam.update();
 
-		if ( !music.isPlaying() )
+		if ( !Options.Audio.mainTheme.isPlaying() )
 		{
-			music.play();
+		    Options.Audio.mainTheme.play();
 		}
 
 		// tell the SpriteBatch to render in the
@@ -380,8 +376,8 @@ public class GameScreen implements Screen
 							}
 						} else if ( sprite instanceof Player )
 						{
-							music.stop();
-							game.setScreen( new GameOver( game, music, player,
+						    Options.Audio.mainTheme.stop();
+							game.setScreen( new GameOver( game, player,
 									playerType ) );
 						}
 					}

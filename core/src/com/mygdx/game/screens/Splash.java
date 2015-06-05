@@ -2,12 +2,12 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 import com.mygdx.game.MimicGdx;
 
 /**
@@ -33,8 +33,6 @@ public class Splash implements Screen
 
 	private final Malice game;
 
-	Music mainTheme;
-
 	/**
 	 * Creates a Splash screen object and stores the Malice object that created
 	 * the screen.
@@ -57,16 +55,15 @@ public class Splash implements Screen
 	public void show()
 	{
 		MimicGdx.initializeAudio();
+	    Options.initialize();
 		batch = new SpriteBatch();
 		Texture splashTexture = new Texture( "img/splashscreen.png" );
 		splashSprite = new Sprite( splashTexture );
 		splashSprite
 				.setSize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
-		mainTheme = Gdx.audio.newMusic( Gdx.files
-				.internal( "audio/music/revivedpower.mp3" ) );
-		mainTheme.setLooping( true );
-		mainTheme.setVolume( 0.7f );
-		mainTheme.play();
+		Options.Audio.mainTheme.setLooping( true );
+		Options.Audio.mainTheme.setVolume( 0.7f );
+		Options.Audio.mainTheme.play();
 	}
 
 	/**
@@ -88,7 +85,7 @@ public class Splash implements Screen
 		batch.end();
 		if ( elapsed > 5 )
 		{
-			game.setScreen( new MainMenu( game, mainTheme ) );
+			game.setScreen( new MainMenu( game ) );
 		}
 	}
 
@@ -140,7 +137,7 @@ public class Splash implements Screen
 	{
 		batch.dispose();
 		splashSprite.getTexture().dispose();
-		mainTheme.dispose();
+		Options.Audio.mainTheme.dispose();
 	}
 
 }

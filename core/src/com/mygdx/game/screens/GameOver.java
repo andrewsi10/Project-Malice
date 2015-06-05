@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 import com.mygdx.game.player.Player;
 
 /**
@@ -60,8 +60,6 @@ public class GameOver implements Screen
 
 	private GlyphLayout layout;
 
-	private Music music;
-
 	/**
 	 * Creates a GameOver screen and stores the Malice object that created this
 	 * screen, the music currently playing, the player object from Game Screen,
@@ -76,10 +74,9 @@ public class GameOver implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameOver(Malice g, Music m, Player player, String playerType)
+	public GameOver(Malice g, Player player, String playerType)
 	{
 		game = g;
-		music = m;
 		this.player = player;
 		this.playerType = playerType;
 		layout = new GlyphLayout();
@@ -137,7 +134,7 @@ public class GameOver implements Screen
 	@Override
 	public void show()
 	{
-		music.setVolume( 0.7f );
+	    Options.Audio.mainTheme.setVolume( 0.7f );
 		stage = new Stage();
 		font = new BitmapFont();
 		font.setColor( Color.WHITE );
@@ -153,11 +150,8 @@ public class GameOver implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				retryButton.remove();
-				switchButton.remove();
-				exitButton.remove();
-				music.play();
-				game.setScreen( new GameScreen( game, music, playerType ) );
+                clearScreen();
+				game.setScreen( new GameScreen( game, playerType ) );
 			}
 		} );
 
@@ -170,11 +164,8 @@ public class GameOver implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				retryButton.remove();
-				switchButton.remove();
-				exitButton.remove();
-				music.play();
-				game.setScreen( new CharacterSelect( game, music ) );
+				clearScreen();
+				game.setScreen( new CharacterSelect( game ) );
 			}
 		} );
 
@@ -195,6 +186,14 @@ public class GameOver implements Screen
 		stage.addActor( retryButton );
 		stage.addActor( switchButton );
 		stage.addActor( exitButton );
+	}
+	
+	public void clearScreen()
+	{
+        retryButton.remove();
+        switchButton.remove();
+        exitButton.remove();
+        Options.Audio.mainTheme.play();
 	}
 
 	/**

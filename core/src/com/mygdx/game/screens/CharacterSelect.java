@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 
 /**
  * This screen displays six different classes for the player to choose from and
@@ -35,22 +35,30 @@ import com.mygdx.game.Malice;
  */
 public class CharacterSelect implements Screen
 {
+
+    /**
+     * Gets the array storing the names of the characters that will be used for
+     * the buttons.
+     * 
+     * @return characterNames, the array containing the names of the characters
+     *         that will be used for the buttons
+     */
+    public static String[] characterNames = { "Dark Wizard", "Brawler",
+            "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" };
+    
+    private static final int NUMBUTTONS = 6;
+    
 	private Image background;
 
 	private final Malice game;
 
 	private Stage stage;
 
-	private TextButton /*char1Button, char2Button,*/ exitButton;
+	private TextButton exitButton;
 
 	private TextButton[] characters;
 
-	private String[] characterNames = { "Dark Wizard", "Brawler",
-			"Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" };
-
 	private Skin skin;
-
-	private Music music;
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
@@ -61,10 +69,9 @@ public class CharacterSelect implements Screen
 	 * @param m
 	 *            the music currently playing
 	 */
-	public CharacterSelect(Malice g, Music m)
+	public CharacterSelect(Malice g)
 	{
 		game = g;
-		music = m;
 	}
 
 	/**
@@ -91,7 +98,7 @@ public class CharacterSelect implements Screen
 		// Create a font
 		BitmapFont font = new BitmapFont();
 
-		characters = new TextButton[6];
+		characters = new TextButton[NUMBUTTONS];
 
 		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
 				new Texture( "img/titlescreen.png" ) ) ) );
@@ -129,13 +136,12 @@ public class CharacterSelect implements Screen
 	@Override
 	public void show()
 	{
-
-		music.setVolume( 0.7f );
+	    Options.Audio.mainTheme.setVolume( 0.7f );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 		createSkin();
 
-		for ( int i = 0; i < characters.length / 2; i++ )
+		for ( int i = 0; i < NUMBUTTONS / 2; i++ )
 		{
 			final String charName = characterNames[i];
 			characters[i] = new TextButton( charName, skin );
@@ -151,12 +157,12 @@ public class CharacterSelect implements Screen
 						button.remove();
 					}
 					exitButton.remove();
-					game.setScreen( new GameScreen( game, music, charName ) );
+					game.setScreen( new GameScreen( game, charName ) );
 				}
 			} );
 		}
 
-		for ( int i = characters.length / 2; i < characters.length; i++ )
+		for ( int i = NUMBUTTONS / 2; i < NUMBUTTONS; i++ )
 		{
 			final String charName = characterNames[i];
 			characters[i] = new TextButton( charName, skin );
@@ -164,7 +170,7 @@ public class CharacterSelect implements Screen
 					.setPosition(
 							Gdx.graphics.getWidth() * 11 / 20,
 							Gdx.graphics.getHeight()
-									* ( 60 - 20 * ( i - characters.length / 2 ) )
+									* ( 60 - 20 * ( i - NUMBUTTONS / 2 ) )
 									/ 100 );
 			characters[i].addListener( new ClickListener()
 			{
@@ -176,7 +182,7 @@ public class CharacterSelect implements Screen
 						button.remove();
 					}
 					exitButton.remove();
-					game.setScreen( new GameScreen( game, music, charName ) );
+					game.setScreen( new GameScreen( game, charName ) );
 				}
 			} );
 		}

@@ -78,15 +78,15 @@ public class MimicGdx
      * Array full of test keys to simulate input -- currently not used
      */
     public static int[] testKeys;
-//    public static int[] testBtns;
-//    public static int mouseX;
-//    public static int mouseY;
-//    
-//    public static boolean isKeyJustPressed( int key )
-//    {
-//        return isTesting ? isKeyPressed( key ) : Gdx.input.isKeyJustPressed( key );
-//    }
-//    
+    public static int[] testBtns;
+    public static int mouseX;
+    public static int mouseY;
+    
+    public static boolean isKeyJustPressed( int key )
+    {
+        return isTesting ? isKeyPressed( key ) : Gdx.input.isKeyJustPressed( key );
+    }
+    
     /**
      * Returns whether the given key is pressed
      * @param key key to check for
@@ -96,12 +96,12 @@ public class MimicGdx
     {
         return isTesting ? inArray(key,testKeys) : Gdx.input.isKeyPressed(key);
     }
-//    
-//    public static boolean isButtonPressed( int button )
-//    {
-//        return isTesting ? inArray(button,testBtns) : Gdx.input.isButtonPressed( button );
-//    }
-//    
+    
+    public static boolean isButtonPressed( int button )
+    {
+        return isTesting ? inArray(button,testBtns) : Gdx.input.isButtonPressed( button );
+    }
+    
     /**
      * Returns whether an int is in the int array
      * @param i int to check for
@@ -115,34 +115,34 @@ public class MimicGdx
                 if ( j == i ) return true;
         return false;
     }
-//    
-//    public static int getX()
-//    {
-//        return isTesting ? mouseX : Gdx.input.getX();
-//    }
-//    
-//    public static int getY()
-//    {
-//        return isTesting ? mouseY : Gdx.input.getY();
-//    }
-//    
-//    public static void setMousePosition( int x, int y )
-//    {
-//        mouseX = x;
-//        mouseY = y;
-//    }
+    
+    public static int getX()
+    {
+        return isTesting ? mouseX : Gdx.input.getX();
+    }
+    
+    public static int getY()
+    {
+        return isTesting ? mouseY : Gdx.input.getY();
+    }
+    
+    public static void setMousePosition( int x, int y )
+    {
+        mouseX = x;
+        mouseY = y;
+    }
     
     // -------------------------- Graphics ---------------------------- //
-//    
-//    public static int getWidth()
-//    {
-//        return isTesting ? 1280 : Gdx.graphics.getWidth();
-//    }
-//    
-//    public static int getHeight()
-//    {
-//        return isTesting ? 720 : Gdx.graphics.getHeight();
-//    }
+    
+    public static int getWidth()
+    {
+        return isTesting ? 1280 : Gdx.graphics.getWidth();
+    }
+    
+    public static int getHeight()
+    {
+        return isTesting ? 720 : Gdx.graphics.getHeight();
+    }
     
     // -------------------------- Music and Audio --------------------- //
     public static boolean MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated

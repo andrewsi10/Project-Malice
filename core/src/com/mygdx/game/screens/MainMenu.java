@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 
 /**
  * This screen is the main menu of Gauntlet. It has a background image and
@@ -45,8 +45,6 @@ public class MainMenu implements Screen
 
 	private Skin skin;
 
-	private Music music;
-
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
 	 * screen as well as the music object that is currently playing.
@@ -56,10 +54,9 @@ public class MainMenu implements Screen
 	 * @param m
 	 *            the music currently playing
 	 */
-	public MainMenu(Malice g, Music m)
+	public MainMenu(Malice g)
 	{
 		game = g;
-		music = m;
 	}
 
 	/**
@@ -112,8 +109,7 @@ public class MainMenu implements Screen
 	@Override
 	public void show()
 	{
-
-		music.setVolume( 0.55f );
+	    Options.Audio.mainTheme.setVolume( 0.55f );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );
 
@@ -129,7 +125,7 @@ public class MainMenu implements Screen
 			{
 				playButton.remove();
 				exitButton.remove();
-				game.setScreen( new CharacterSelect( game, music ) );
+				game.setScreen( new CharacterSelect( game ) );
 			}
 		} );
 
