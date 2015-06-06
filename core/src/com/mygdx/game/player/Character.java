@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
-import com.mygdx.game.MimicGdx;
+import com.mygdx.game.Options;
 
 /**
  *  This class represents a sprite in the game with animations and movement
@@ -332,7 +332,7 @@ public class Character extends Sprite {
 	public void increaseCurrentLevel() {
 		// might need balancing
 		level++;
-		MimicGdx.playAudio(MimicGdx.levelUp);
+		Options.Audio.playAudio("levelup");
 		double temp = getCurrentHp() / getMaxHp();
 		increaseBdmg(2);
 		increaseMaxHp(10);

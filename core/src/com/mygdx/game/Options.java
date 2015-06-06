@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
@@ -27,10 +29,15 @@ public class Options
                                   Input.Keys.A,
                 Input.Buttons.LEFT
              };
+
+    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
+        "Warrior", "WhiteMage" };
+    public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
+        "PoisonShot", "Sword1", "HolyCross" };
     
     public static void initialize()
     {
-        Options.Audio.initializeAudio();
+        Audio.initializeAudio();
     }
     
     // -------------------------- Player Controls --------------------- //
@@ -71,20 +78,26 @@ public class Options
     public static class Audio {
         public static boolean MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
 
-        public static Sound levelUp;
         public static Music mainTheme;
+        public static HashMap<String,Sound> SOUNDS;
 
         private static void initializeAudio()
         {
-            levelUp = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) );
             mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
+            SOUNDS = new HashMap<String, Sound>();
+            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
+            for ( String s : projectileNames )
+                SOUNDS.put( s, Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + s.toLowerCase() + ".wav" ) ) );
+//            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
+//            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
+//            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
         }
 
-        public static void playAudio( Sound sound )
+        public static void playAudio( String s )
         {
-            if ( !MUTED && sound != null )
+            if ( !MUTED && SOUNDS.get( s ) != null )
             {
-                sound.play();
+                SOUNDS.get( s ).play();
             }
         }
     }

@@ -66,7 +66,7 @@ public class GameScreen implements Screen
 	private String playerType;
 	private String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
 			"Warrior", "WhiteMage" };
-	private String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
+	public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
 			"PoisonShot", "Sword1", "HolyCross" };
 
 	/**
@@ -96,13 +96,11 @@ public class GameScreen implements Screen
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
-	 * created this screen, the music currently playing, and the class that the
+	 * created this screen, and the class that the
 	 * player chose.
 	 * 
 	 * @param g
 	 *            the Malice object controlling the screens
-	 * @param m
-	 *            the music currently playing
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
@@ -270,8 +268,8 @@ public class GameScreen implements Screen
 		setFontColor( fontX, fontY );
 		font.draw( batch,
 				"Game resumes in "
-						+ ( 2000 - System.currentTimeMillis() + timeResumed )
-						+ " milliseconds", fontX, fontY );
+						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
+						+ " seconds", fontX, fontY );
 		batch.end();
 		renderer.end();
 

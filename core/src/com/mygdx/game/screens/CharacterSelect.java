@@ -43,18 +43,16 @@ public class CharacterSelect implements Screen
      * @return characterNames, the array containing the names of the characters
      *         that will be used for the buttons
      */
-    public static String[] characterNames = { "Dark Wizard", "Brawler",
+    public static final String[] characterNames = { "Dark Wizard", "Brawler",
             "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" };
     
-    private static final int NUMBUTTONS = 6;
+    private static final int NUMBUTTONS = characterNames.length;
     
 	private Image background;
 
 	private final Malice game;
 
 	private Stage stage;
-
-	private TextButton exitButton;
 
 	private TextButton[] characters;
 
@@ -72,18 +70,6 @@ public class CharacterSelect implements Screen
 	public CharacterSelect(Malice g)
 	{
 		game = g;
-	}
-
-	/**
-	 * Gets the array storing the names of the characters that will be used for
-	 * the buttons.
-	 * 
-	 * @return characterNames, the array containing the names of the characters
-	 *         that will be used for the buttons
-	 */
-	public String[] getNames()
-	{
-		return characterNames;
 	}
 
 	/**
@@ -140,72 +126,66 @@ public class CharacterSelect implements Screen
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 		createSkin();
+		
+		final TextButton randomButton, exitButton;
+		final String name = characterNames[(int)(Math.random() * NUMBUTTONS)];
 
-		for ( int i = 0; i < NUMBUTTONS / 2; i++ )
+        stage.addActor( background );
+
+        exitButton = new TextButton( "Exit", skin );
+        exitButton.setPosition(
+                Gdx.graphics.getWidth() * 7 / 10 - exitButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 15 );
+        exitButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Gdx.app.exit();
+            }
+        } );
+
+        randomButton = new TextButton( "Random", skin );
+        randomButton.setPosition(
+                Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 15 );
+        randomButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                for ( TextButton button : characters )
+                {
+                    button.remove();
+                }
+                randomButton.remove();
+                exitButton.remove();
+                game.setScreen( new GameScreen( game, name ) );
+            }
+        } );
+        
+		for ( int i = 0; i < NUMBUTTONS; i++ )
 		{
 			final String charName = characterNames[i];
 			characters[i] = new TextButton( charName, skin );
-			characters[i].setPosition( Gdx.graphics.getWidth() / 5,
-					Gdx.graphics.getHeight() * ( 60 - 20 * i ) / 100 );
-			characters[i].addListener( new ClickListener()
-			{
+			characters[i].setPosition( 
+			    Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - characters[i].getWidth() / 2,
+				Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
+			characters[i].addListener( new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y)
 				{
 					for ( TextButton button : characters )
 					{
+		                randomButton.remove();
 						button.remove();
 					}
 					exitButton.remove();
 					game.setScreen( new GameScreen( game, charName ) );
 				}
 			} );
+            stage.addActor( characters[i] );
 		}
-
-		for ( int i = NUMBUTTONS / 2; i < NUMBUTTONS; i++ )
-		{
-			final String charName = characterNames[i];
-			characters[i] = new TextButton( charName, skin );
-			characters[i]
-					.setPosition(
-							Gdx.graphics.getWidth() * 11 / 20,
-							Gdx.graphics.getHeight()
-									* ( 60 - 20 * ( i - NUMBUTTONS / 2 ) )
-									/ 100 );
-			characters[i].addListener( new ClickListener()
-			{
-				@Override
-				public void clicked(InputEvent event, float x, float y)
-				{
-					for ( TextButton button : characters )
-					{
-						button.remove();
-					}
-					exitButton.remove();
-					game.setScreen( new GameScreen( game, charName ) );
-				}
-			} );
-		}
-
-		exitButton = new TextButton( "Exit", skin );
-		exitButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 15 );
-		exitButton.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				Gdx.app.exit();
-			}
-		} );
-
-		stage.addActor( background );
-		for ( TextButton button : characters )
-		{
-			stage.addActor( button );
-		}
-		stage.addActor( exitButton );
+        stage.addActor( exitButton );
+        stage.addActor( randomButton );
 	}
 
 	/**
@@ -229,37 +209,25 @@ public class CharacterSelect implements Screen
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
-	public void resize(int width, int height)
-	{
-
-	}
+	public void resize(int width, int height) {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
-	public void pause()
-	{
-
-	}
+	public void pause() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
-	public void resume()
-	{
-
-	}
+	public void resume() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide()
-	{
-
-	}
+	public void hide() {}
 
 	/**
 	 * Disposes the Skin and Stage to prevent memory leakage.

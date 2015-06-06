@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
-import com.mygdx.game.MimicGdx;
+import com.mygdx.game.Options;
 
 /**
  *  This class represents a Player in the game. Takes in Input from the keyboard
@@ -96,7 +96,7 @@ public class Player extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
-		int dir = MimicGdx.getInputDirection();
+		int dir = Options.getInputDirection();
 		if (dir != -1) {
 			setDirection(dir);
 			super.move(character, projectiles, time);
