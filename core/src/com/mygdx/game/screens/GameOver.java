@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 import com.mygdx.game.player.Player;
 
 /**
@@ -126,15 +125,13 @@ public class GameOver implements Screen
 	 * Shows the Game Over screen by displaying the background image and the
 	 * three buttons the user can select.
 	 * 
-	 * Changes the music volume and sets up the Stage and background image and
-	 * buttons.
+	 * Sets up the Stage and background image and buttons.
 	 * 
 	 * @see com.badlogic.gdx.Screen#show()
 	 */
 	@Override
 	public void show()
 	{
-	    Options.Audio.mainTheme.setVolume( 0.7f );
 		stage = new Stage();
 		font = new BitmapFont();
 		font.setColor( Color.WHITE );
@@ -150,8 +147,7 @@ public class GameOver implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-                clearScreen();
-				game.setScreen( new GameScreen( game, playerType ) );
+                clearScreen( new GameScreen( game, playerType ) );
 			}
 		} );
 
@@ -164,8 +160,7 @@ public class GameOver implements Screen
 			@Override
 			public void clicked(InputEvent event, float x, float y)
 			{
-				clearScreen();
-				game.setScreen( new CharacterSelect( game ) );
+				clearScreen( new CharacterSelect( game ) );
 			}
 		} );
 
@@ -188,12 +183,12 @@ public class GameOver implements Screen
 		stage.addActor( exitButton );
 	}
 	
-	public void clearScreen()
+	public void clearScreen( Screen newScreen )
 	{
         retryButton.remove();
         switchButton.remove();
         exitButton.remove();
-        Options.Audio.mainTheme.play();
+        game.setScreen( newScreen );
 	}
 
 	/**

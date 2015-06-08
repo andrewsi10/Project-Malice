@@ -35,6 +35,10 @@ import com.mygdx.game.Options;
  */
 public class CharacterSelect implements Screen
 {
+    /**
+     * Volume of this screen
+     */
+    private static final float VOLUME = 0.7f;
 
     /**
      * Gets the array storing the names of the characters that will be used for
@@ -122,7 +126,7 @@ public class CharacterSelect implements Screen
 	@Override
 	public void show()
 	{
-	    Options.Audio.mainTheme.setVolume( 0.7f );
+	    Options.Audio.playTheme( VOLUME );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );// Make the stage consume events
 		createSkin();
@@ -175,9 +179,9 @@ public class CharacterSelect implements Screen
 				{
 					for ( TextButton button : characters )
 					{
-		                randomButton.remove();
 						button.remove();
 					}
+                    randomButton.remove();
 					exitButton.remove();
 					game.setScreen( new GameScreen( game, charName ) );
 				}

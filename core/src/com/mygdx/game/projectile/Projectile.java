@@ -1,10 +1,10 @@
 package com.mygdx.game.projectile;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
@@ -25,12 +25,9 @@ public class Projectile extends Sprite
 {
     private Character myCharacter;
 
-//	final private float xDistance;
-//	final private float yDistance;
 	final private double angle;
 	final private int speed = 8;
 	final private int damage;
-	private Sound sound;
 
 	private Animation animation;
 	private Array<AtlasRegion> projectileTexture;
@@ -55,9 +52,7 @@ public class Projectile extends Sprite
 	{
         this.myCharacter = c;
 		angle = Math.atan2( distanceY, distanceX );
-		sound = Gdx.audio.newSound( Gdx.files.internal( "audio/sound/"
-				+ type.toLowerCase() + ".wav" ) );
-		sound.play();
+		Options.Audio.playAudio( type );
 
 		projectileTexture = new TextureAtlas(
 				Gdx.files.internal( "img/sprites/Projectiles/"
@@ -148,7 +143,7 @@ public class Projectile extends Sprite
         return overlaps;
     }
     
-    // for expansion: returns whether two sprites are of the same Team
+    // for expansion: returns whether two sprites are of the same Team, should use strings if more than two teams
 //    private boolean sameTeam( Character c1, Character c2 )
 //    {
 //        return ( c1 instanceof Enemy && c2 instanceof Enemy )

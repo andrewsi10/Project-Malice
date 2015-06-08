@@ -49,6 +49,11 @@ public class GameScreen implements Screen
 	private SpriteBatch batchPause;
 
 	private final Malice game;
+	
+    /**
+     * Volume of this screen
+     */
+    private static final float VOLUME = 0.4f;
 
 	/**
 	 * Size of the map
@@ -108,7 +113,7 @@ public class GameScreen implements Screen
 	{
 		new Stage();
 		game = g;
-		Options.Audio.mainTheme.setVolume( 0.4f );
+		Options.Audio.playTheme( VOLUME );
 		this.playerType = playerType;
 	}
 
@@ -206,7 +211,7 @@ public class GameScreen implements Screen
 	 */
 	public void renderPaused(float delta)
 	{
-	    Options.Audio.mainTheme.pause();
+	    Options.Audio.stopTheme( 0 ); // pause the theme music
 		Gdx.gl.glClearColor( 0, 0, 0, 1 );
 		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		batchPause.begin();
@@ -314,10 +319,7 @@ public class GameScreen implements Screen
 		cam.position.y = player.getY();
 		cam.update();
 
-		if ( !Options.Audio.mainTheme.isPlaying() )
-		{
-		    Options.Audio.mainTheme.play();
-		}
+		Options.Audio.playTheme( VOLUME ); // note: removed check, may cause lag without check for isPlaying()
 
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
@@ -374,7 +376,7 @@ public class GameScreen implements Screen
 							}
 						} else if ( sprite instanceof Player )
 						{
-						    Options.Audio.mainTheme.stop();
+						    Options.Audio.stopTheme( 1 ); // stops the theme music
 							game.setScreen( new GameOver( game, player,
 									playerType ) );
 						}

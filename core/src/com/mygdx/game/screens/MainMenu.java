@@ -34,6 +34,10 @@ import com.mygdx.game.Options;
  */
 public class MainMenu implements Screen
 {
+    /**
+     * Volume of this screen
+     */
+    private static final float VOLUME = 0.55f;
 
 	private Image background;
 
@@ -109,7 +113,7 @@ public class MainMenu implements Screen
 	@Override
 	public void show()
 	{
-	    Options.Audio.mainTheme.setVolume( 0.55f );
+	    Options.Audio.playTheme( VOLUME );
 		stage = new Stage();
 		Gdx.input.setInputProcessor( stage );
 

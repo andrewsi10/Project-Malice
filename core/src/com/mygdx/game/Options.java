@@ -81,6 +81,9 @@ public class Options
         public static Music mainTheme;
         public static HashMap<String,Sound> SOUNDS;
 
+        /**
+         * Initializes all the audio
+         */
         private static void initializeAudio()
         {
             mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
@@ -92,13 +95,49 @@ public class Options
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
         }
+        
+        /**
+         * Stops the theme music from playing
+         * @param type method of stopping:
+         *          0 - pauses playing
+         *          1 - stops playing (returns theme to the beginning)
+         */
+        public static void stopTheme( int type )
+        {
+            if ( mainTheme.isPlaying() )
+                switch ( type )
+                {
+                    case 0:
+                        mainTheme.pause();
+                        break;
+                    case 1:
+                        mainTheme.stop();
+                        break;
+                }
+        }
+        
+        /**
+         * Plays the theme music
+         * @param volume volume to set the theme music to
+         */
+        public static void playTheme( float volume )
+        {
+            if ( mainTheme == null )
+                initializeAudio();
+            mainTheme.setLooping( true );
+            mainTheme.setVolume( volume );
+            if ( !MUTED )
+                mainTheme.play();
+        }
 
+        /**
+         * Plays a sound based on a given string (relates to the file name)
+         * @param s string related to the file name of the sound to play
+         */
         public static void playAudio( String s )
         {
             if ( !MUTED && SOUNDS.get( s ) != null )
-            {
                 SOUNDS.get( s ).play();
-            }
         }
     }
     

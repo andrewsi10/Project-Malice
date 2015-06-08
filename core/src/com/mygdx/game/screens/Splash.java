@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
-import com.mygdx.game.MimicGdx;
 
 /**
  * Splash Screen is a Screen that shows the developers of the project and gives
@@ -24,6 +23,10 @@ import com.mygdx.game.MimicGdx;
  */
 public class Splash implements Screen
 {
+    /**
+     * Volume of this screen
+     */
+    private static final float VOLUME = 0.7f;
 
 	private SpriteBatch batch;
 
@@ -54,16 +57,13 @@ public class Splash implements Screen
 	@Override
 	public void show()
 	{
-		MimicGdx.initializeAudio();
 	    Options.initialize();
 		batch = new SpriteBatch();
 		Texture splashTexture = new Texture( "img/splashscreen.png" );
 		splashSprite = new Sprite( splashTexture );
 		splashSprite
 				.setSize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
-		Options.Audio.mainTheme.setLooping( true );
-		Options.Audio.mainTheme.setVolume( 0.7f );
-		Options.Audio.mainTheme.play();
+		Options.Audio.playTheme( VOLUME );
 	}
 
 	/**
