@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -61,8 +60,6 @@ public class Character extends Sprite {
 	private Array<AtlasRegion> downFrames;
 	private Array<AtlasRegion> leftFrames;
 
-	private BitmapFont font;
-
 	private int level = 0;
 	private GlyphLayout layout = new GlyphLayout();
 	private Color hpColor = Color.GREEN;
@@ -110,7 +107,6 @@ public class Character extends Sprite {
 		rightFrames = right;
 		downFrames = down;
 		leftFrames = left;
-		font = new BitmapFont();
 		set(new Sprite(down.get(0)));
 		initializeAnimations();
 	}
@@ -197,8 +193,8 @@ public class Character extends Sprite {
 			renderer.setColor(hpColor);
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getCurrentHp()
 					/ getMaxHp(), hpH - 2);
-			font.setColor(Color.MAROON);
-			font.draw(batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY);
+			Options.FONT.setColor(Color.MAROON);
+			Options.FONT.draw(batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY);
 		}
 		if (getExperience() < getExpToLevel() && getExperience() > 0) {
 			hpY -= BARHEIGHT - 2;
@@ -209,9 +205,9 @@ public class Character extends Sprite {
 					/ getExpToLevel(), hpH - 2);
 		}
 		if (level > 0) {
-			font.setColor(Color.MAGENTA);
-			layout.setText(font, "Level " + level);
-			font.draw(batch, "Level " + level, getX() - layout.width / 4,
+		    Options.FONT.setColor(Color.MAGENTA);
+			layout.setText(Options.FONT, "Level " + level);
+			Options.FONT.draw(batch, "Level " + level, getX() - layout.width / 4,
 					getY() + 1.8f * getHeight());
 		}
 	}

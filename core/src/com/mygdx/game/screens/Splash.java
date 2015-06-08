@@ -90,37 +90,25 @@ public class Splash implements Screen
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
-	public void resize(int width, int height)
-	{
-
-	}
+	public void resize(int width, int height) {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()
 	 */
 	@Override
-	public void pause()
-	{
-
-	}
+	public void pause() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#resume()
 	 */
 	@Override
-	public void resume()
-	{
-
-	}
+	public void resume() {}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide()
-	{
-
-	}
+	public void hide() {}
 
 	/**
 	 * Gets rid of everything that can cause memory leakage.

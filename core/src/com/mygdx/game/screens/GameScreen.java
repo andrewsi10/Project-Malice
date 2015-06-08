@@ -8,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -65,7 +64,6 @@ public class GameScreen implements Screen
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
-	private BitmapFont font;
 	private String playerType;
 	private String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
 			"Warrior", "WhiteMage" };
@@ -137,7 +135,6 @@ public class GameScreen implements Screen
 		state = State.RESUME;
 		enemyMaxCount = -2;
 		enemyMinCount = 10;
-		font = new BitmapFont();
 
 		cam = new OrthographicCamera( 1280, 720 );
 		// cam.setToOrtho(false, 1280, 720);
@@ -263,7 +260,7 @@ public class GameScreen implements Screen
 		float fontY = cam.position.y + cam.viewportHeight / 3;
 		drawPoints();
 		setFontColor( fontX, fontY );
-		font.draw( batch,
+		Options.FONT.draw( batch,
 				"Game resumes in "
 						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
 						+ " seconds", fontX, fontY );
@@ -456,7 +453,7 @@ public class GameScreen implements Screen
 		float fontX = cam.position.x - cam.viewportWidth / 2;
 		float fontY = cam.position.y + cam.viewportHeight / 2;
 		setFontColor( fontX, fontY );
-		font.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
+		Options.FONT.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
 	}
 
 	/**
@@ -473,7 +470,7 @@ public class GameScreen implements Screen
 	 */
 	private void setFontColor(float fontX, float fontY)
 	{
-        font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
+	    Options.FONT.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
 
 	/**
@@ -512,7 +509,6 @@ public class GameScreen implements Screen
 		batch.dispose();
 		renderer.dispose();
 		batchPause.dispose();
-		font.dispose();
 		pauseSprite.getTexture().dispose();
         player.getTexture().dispose();
         for ( Projectile p : projectiles )

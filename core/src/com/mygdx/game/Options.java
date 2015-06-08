@@ -6,6 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import static com.mygdx.game.player.Character.*;
 
@@ -34,10 +40,33 @@ public class Options
         "Warrior", "WhiteMage" };
     public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
         "PoisonShot", "Sword1", "HolyCross" };
+    public static Skin buttonSkin;
+    public static final BitmapFont FONT = new BitmapFont();
     
     public static void initialize()
     {
         Audio.initializeAudio();
+        buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
+        buttonSkin.add( "default", FONT );
+
+        // Create a texture
+        Pixmap pixmap = new Pixmap( (int) Gdx.graphics.getWidth() / 4,
+                (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888 );
+        pixmap.setColor( Color.WHITE );
+        pixmap.fill();
+        buttonSkin.add( "background", new Texture( pixmap ) );
+        pixmap.dispose();
+
+        // Create a button style
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = buttonSkin.newDrawable( "background", Color.GRAY );
+        textButtonStyle.down = buttonSkin.newDrawable( "background", Color.DARK_GRAY );
+        textButtonStyle.checked = buttonSkin.newDrawable( "background",
+                Color.DARK_GRAY );
+        textButtonStyle.over = buttonSkin
+                .newDrawable( "background", Color.LIGHT_GRAY );
+        textButtonStyle.font = buttonSkin.getFont( "default" );
+        buttonSkin.add( "default", textButtonStyle );
     }
     
     // -------------------------- Player Controls --------------------- //
