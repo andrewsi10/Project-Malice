@@ -3,7 +3,6 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -90,9 +89,6 @@ public class GameOver implements Screen
 	 */
 	private void createSkin()
 	{
-		// Create a font
-		BitmapFont font = new BitmapFont();
-
 		batch = new SpriteBatch();
 
 		background = new Image( (Drawable) new SpriteDrawable( new Sprite(
@@ -200,8 +196,6 @@ public class GameOver implements Screen
 	@Override
 	public void render(float delta)
 	{
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		stage.act();
 		stage.draw();
 		batch.begin();
@@ -249,5 +243,6 @@ public class GameOver implements Screen
 		skin.dispose();
 		stage.dispose();
 		batch.dispose();
+		font.dispose();
 	}
 }

@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -78,8 +77,6 @@ public class Splash implements Screen
 	public void render(float delta)
 	{
 		elapsed += delta;
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		batch.begin();
 		splashSprite.draw( batch );
 		batch.end();
@@ -137,7 +134,6 @@ public class Splash implements Screen
 	{
 		batch.dispose();
 		splashSprite.getTexture().dispose();
-		Options.Audio.mainTheme.dispose();
 	}
 
 }

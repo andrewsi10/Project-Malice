@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -60,7 +59,6 @@ public class GameScreen implements Screen
 	 */
 	public final static int MAP_SIZE = 50;
 	private Map map;
-	private Texture pauseScreen;
 	private Sprite pauseSprite;
 	private OrthographicCamera cam;
 	private ShapeRenderer renderer;
@@ -134,8 +132,7 @@ public class GameScreen implements Screen
 		renderer = new ShapeRenderer();
 		batch = new SpriteBatch();
 		batchPause = new SpriteBatch();
-		pauseScreen = new Texture( "img/pausescreen.png" );
-		pauseSprite = new Sprite( pauseScreen );
+		pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 		enemyMaxCount = -2;
@@ -212,8 +209,6 @@ public class GameScreen implements Screen
 	public void renderPaused(float delta)
 	{
 	    Options.Audio.stopTheme( 0 ); // pause the theme music
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
 		batchPause.begin();
 		pauseSprite.draw( batchPause );
 		batchPause.end();
@@ -237,9 +232,6 @@ public class GameScreen implements Screen
 	 */
 	public void renderResume(float delta)
 	{
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
-
 		cam.position.x = player.getX();
 		cam.position.y = player.getY();
 		cam.update();
@@ -312,9 +304,6 @@ public class GameScreen implements Screen
 	 */
 	public void renderRun(float delta)
 	{
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
-
 		cam.position.x = player.getX();
 		cam.position.y = player.getY();
 		cam.update();
@@ -484,13 +473,7 @@ public class GameScreen implements Screen
 	 */
 	private void setFontColor(float fontX, float fontY)
 	{
-		if ( map.inPixelBounds( fontX, fontY ) )
-		{
-			font.setColor( Color.BLACK );
-		} else
-		{
-			font.setColor( Color.WHITE );
-		}
+        font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
 
 	/**
@@ -527,7 +510,15 @@ public class GameScreen implements Screen
 	{
 		map.dispose();
 		batch.dispose();
+		renderer.dispose();
+		batchPause.dispose();
 		font.dispose();
+		pauseSprite.getTexture().dispose();
+        player.getTexture().dispose();
+        for ( Projectile p : projectiles )
+            p.getTexture().dispose();
+        for ( Character e : sprites )
+            e.getTexture().dispose();
 	}
 
 }

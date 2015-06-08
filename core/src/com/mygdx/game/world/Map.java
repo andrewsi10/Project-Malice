@@ -61,7 +61,7 @@ public class Map
     /**
      * Determines how far the outer border is drawn (meant to cover black space)
      */
-    public static final int OUTER_BORDER = 8;
+    public static final int OUTER_BORDER = 9;
     
     private boolean[][] areSpaces;
     
