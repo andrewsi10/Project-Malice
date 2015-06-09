@@ -82,7 +82,7 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new GameScreen( game ).setPlayerType( playerType ) );
+                game.setScreen( game.gameScreen.setPlayerType( playerType ) );
             }
         } );
 

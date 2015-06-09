@@ -83,7 +83,7 @@ public class CharacterSelect implements Screen
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    game.setScreen( new GameScreen( game ).setPlayerType( charName ) );
+                    game.setScreen( game.gameScreen.setPlayerType( charName ) );
                 }
             } );
         }
@@ -94,7 +94,7 @@ public class CharacterSelect implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new GameScreen( game ).setPlayerType( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
+                game.setScreen( game.gameScreen.setPlayerType( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
             }
         } );
 

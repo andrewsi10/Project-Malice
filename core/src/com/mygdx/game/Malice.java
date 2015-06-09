@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.Splash;
 
 /**
@@ -20,6 +21,9 @@ public class Malice extends Game
 	 * Name of the application window is TITLE followed by VERSION
 	 */
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.0.0";
+	
+	public GameScreen gameScreen;
+	
 	/**
 	 * Sets the screen to a new Splash Screen.
 	 * 
@@ -29,6 +33,7 @@ public class Malice extends Game
 	public void create()
 	{
 	    Options.initialize();
+	    gameScreen = new GameScreen( this );
 		setScreen( new Splash( this ) );
 	}
 

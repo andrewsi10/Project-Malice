@@ -115,6 +115,9 @@ public class GameScreen implements Screen
         batchPause = new SpriteBatch();
         pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
 
+        enemyMaxCount = -2;
+        enemyMinCount = 10;
+        
         map = new Map( MAP_SIZE, MAP_SIZE );
         cam = new OrthographicCamera( 1280, 720 );
         // cam.setToOrtho(false, 1280, 720);
@@ -136,8 +139,6 @@ public class GameScreen implements Screen
         Options.Audio.playTheme( VOLUME );
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
-		enemyMaxCount = -2;
-		enemyMinCount = 10;
 
 		map.generate( Map.RANDOM );
 
