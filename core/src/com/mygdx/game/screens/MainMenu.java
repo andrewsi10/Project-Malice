@@ -54,6 +54,31 @@ public class MainMenu implements Screen
 	public MainMenu(Malice g)
 	{
 		game = g;
+        stage = new Stage();
+
+        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
+                new Texture( "img/titlescreen.png" ) ) ) );
+        playButton = Options.getButton( "Play", 
+                                Gdx.graphics.getWidth() / 2, 
+                                Gdx.graphics.getHeight() / 2, 
+                                new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( game.characterSelect );
+            }
+        } );
+
+        exitButton = Options.getButton( "Exit", 
+                                Gdx.graphics.getWidth() / 2, 
+                                Gdx.graphics.getHeight() / 4, 
+                                new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Gdx.app.exit();
+            }
+        } );
 	}
 	
 	/**
@@ -68,38 +93,8 @@ public class MainMenu implements Screen
 	@Override
 	public void show()
 	{
-	    Options.Audio.playTheme( VOLUME );
-		stage = new Stage();
-		Gdx.input.setInputProcessor( stage );
-
-        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
-                new Texture( "img/titlescreen.png" ) ) ) );
-		playButton = new TextButton( "Play", Options.buttonSkin );
-		playButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 2 );
-		playButton.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				playButton.remove();
-				exitButton.remove();
-				game.setScreen( new CharacterSelect( game ) );
-			}
-		} );
-
-		exitButton = new TextButton( "Exit", Options.buttonSkin );
-		exitButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 4 );
-		exitButton.addListener( new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				Gdx.app.exit();
-			}
-		} );
+        Options.Audio.playTheme( VOLUME );
+        Gdx.input.setInputProcessor( stage );
 		stage.addActor( background );
 		stage.addActor( playButton );
 		stage.addActor( exitButton );
@@ -139,7 +134,10 @@ public class MainMenu implements Screen
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide() {}
+	public void hide() {
+        playButton.remove();
+        exitButton.remove();
+	}
 
 	/**
 	 * Removes everything that can create memory leakage.

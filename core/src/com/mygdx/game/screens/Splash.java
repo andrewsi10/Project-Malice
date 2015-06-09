@@ -45,6 +45,11 @@ public class Splash implements Screen
 	public Splash(Malice g)
 	{
 		game = g;
+        batch = new SpriteBatch();
+        Texture splashTexture = new Texture( "img/splashscreen.png" );
+        splashSprite = new Sprite( splashTexture );
+        splashSprite
+                .setSize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
 	}
 
 	/**
@@ -56,13 +61,7 @@ public class Splash implements Screen
 	@Override
 	public void show()
 	{
-	    Options.initialize();
-		batch = new SpriteBatch();
-		Texture splashTexture = new Texture( "img/splashscreen.png" );
-		splashSprite = new Sprite( splashTexture );
-		splashSprite
-				.setSize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
-		Options.Audio.playTheme( VOLUME );
+        Options.Audio.playTheme( VOLUME );
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class Splash implements Screen
 		batch.end();
 		if ( elapsed > 5 )
 		{
-			game.setScreen( new MainMenu( game ) );
+			game.setScreen( game.mainMenu );
 		}
 	}
 

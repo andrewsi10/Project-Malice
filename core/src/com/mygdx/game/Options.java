@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import static com.mygdx.game.player.Character.*;
 
@@ -40,13 +41,24 @@ public class Options
         "Warrior", "WhiteMage" };
     public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
         "PoisonShot", "Sword1", "HolyCross" };
-    public static Skin buttonSkin;
+    public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
     
     public static void initialize()
     {
         Audio.initializeAudio();
-        buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
+        createSkin();
+    }
+
+    /**
+     * Creates a skin and the text button style that will be displayed in the
+     * main menu.
+     * 
+     * The skin should be the default LibGDX skin and the text button style
+     * should also be the default style.
+     */
+    private static void createSkin()
+    {
         buttonSkin.add( "default", FONT );
 
         // Create a texture
@@ -67,6 +79,14 @@ public class Options
                 .newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = buttonSkin.getFont( "default" );
         buttonSkin.add( "default", textButtonStyle );
+    }
+    
+    public static TextButton getButton( String text, float x, float y, ClickListener c )
+    {
+        TextButton b = new TextButton( text, buttonSkin );
+        b.setPosition( x - b.getWidth() / 2, y );
+        b.addListener( c );
+        return b;
     }
     
     // -------------------------- Player Controls --------------------- //
@@ -105,7 +125,8 @@ public class Options
 
     // -------------------------- Music and Audio --------------------- //
     public static class Audio {
-        public static boolean MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
+        public static boolean SOUND_MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
+        public static boolean MUSIC_MUTED = false;
 
         public static Music mainTheme;
         public static HashMap<String,Sound> SOUNDS;
@@ -155,7 +176,7 @@ public class Options
                 initializeAudio();
             mainTheme.setLooping( true );
             mainTheme.setVolume( volume );
-            if ( !MUTED )
+            if ( !MUSIC_MUTED )
                 mainTheme.play();
         }
 
@@ -165,7 +186,7 @@ public class Options
          */
         public static void playAudio( String s )
         {
-            if ( !MUTED && SOUNDS.get( s ) != null )
+            if ( !SOUND_MUTED && SOUNDS.get( s ) != null )
                 SOUNDS.get( s ).play();
         }
     }

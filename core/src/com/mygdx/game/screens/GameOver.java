@@ -48,8 +48,6 @@ public class GameOver implements Screen
 
 	private Batch batch;
 
-	private String playerType;
-
 	private GlyphLayout layout;
 
 	/**
@@ -66,12 +64,49 @@ public class GameOver implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameOver(Malice g, Player player, String playerType)
+	public GameOver(Malice g, Player player, final String playerType)
 	{
 		game = g;
 		this.player = player;
-		this.playerType = playerType;
 		layout = new GlyphLayout();
+        stage = new Stage();
+
+        batch = new SpriteBatch();
+        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
+                new Texture( "img/titlescreen.png" ) ) ) );
+        
+        retryButton = Options.getButton( "Try Again", 
+                           Gdx.graphics.getWidth() / 2, 
+                           Gdx.graphics.getHeight() / 2, 
+                           new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( new GameScreen( game, playerType ) );
+            }
+        } );
+
+        switchButton = Options.getButton( "Switch Characters", 
+                           Gdx.graphics.getWidth() / 2, 
+                           Gdx.graphics.getHeight() / 3, 
+                           new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( game.characterSelect );
+            }
+        } );
+        
+        exitButton = Options.getButton( "Exit", 
+                            Gdx.graphics.getWidth() / 2, 
+                            Gdx.graphics.getHeight() / 6, 
+                            new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Gdx.app.exit();
+            }
+        } );
 	}
 	
 	/**
@@ -85,65 +120,13 @@ public class GameOver implements Screen
 	@Override
 	public void show()
 	{
-		stage = new Stage();
-		Options.FONT.setColor( Color.WHITE );
-		Gdx.input.setInputProcessor( stage );// Make the stage consume events
-
-        batch = new SpriteBatch();
-
-        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
-                new Texture( "img/titlescreen.png" ) ) ) );
-		retryButton = new TextButton( "Try Again", Options.buttonSkin );
-		retryButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 2 );
-		retryButton.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-                clearScreen( new GameScreen( game, playerType ) );
-			}
-		} );
-
-		switchButton = new TextButton( "Switch Characters", Options.buttonSkin );
-		switchButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 3 );
-		switchButton.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				clearScreen( new CharacterSelect( game ) );
-			}
-		} );
-
-		exitButton = new TextButton( "Exit", Options.buttonSkin );
-		exitButton.setPosition(
-				Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-				Gdx.graphics.getHeight() / 6 );
-		exitButton.addListener( new ClickListener()
-		{
-			@Override
-			public void clicked(InputEvent event, float x, float y)
-			{
-				Gdx.app.exit();
-			}
-		} );
+        Options.FONT.setColor( Color.WHITE );
+        Gdx.input.setInputProcessor( stage );// Make the stage consume events
 
 		stage.addActor( background );
 		stage.addActor( retryButton );
 		stage.addActor( switchButton );
 		stage.addActor( exitButton );
-	}
-	
-	public void clearScreen( Screen newScreen )
-	{
-        retryButton.remove();
-        switchButton.remove();
-        exitButton.remove();
-        game.setScreen( newScreen );
 	}
 
 	/**
@@ -189,7 +172,11 @@ public class GameOver implements Screen
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide() {}
+	public void hide() {
+        retryButton.remove();
+        switchButton.remove();
+        exitButton.remove();
+	}
 
 	/**
 	 * Removes the Skin, Stage, and Batch to prevent memory leakage.
