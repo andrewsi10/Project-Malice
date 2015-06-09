@@ -82,7 +82,7 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new GameScreen( game, playerType ) );
+                game.setScreen( new GameScreen( game ).setPlayerType( playerType ) );
             }
         } );
 
@@ -93,20 +93,25 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.characterSelect );
+                game.setScreen( new CharacterSelect( game ) );
             }
         } );
         
-        exitButton = Options.getButton( "Exit", 
+        exitButton = Options.getButton( "Back To Main Menu", 
                             Gdx.graphics.getWidth() / 2, 
                             Gdx.graphics.getHeight() / 6, 
                             new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Gdx.app.exit();
+                game.setScreen( new MainMenu( game ) );
             }
         } );
+
+        stage.addActor( background );
+        stage.addActor( retryButton );
+        stage.addActor( switchButton );
+        stage.addActor( exitButton );
 	}
 	
 	/**
@@ -122,11 +127,6 @@ public class GameOver implements Screen
 	{
         Options.FONT.setColor( Color.WHITE );
         Gdx.input.setInputProcessor( stage );// Make the stage consume events
-
-		stage.addActor( background );
-		stage.addActor( retryButton );
-		stage.addActor( switchButton );
-		stage.addActor( exitButton );
 	}
 
 	/**
@@ -172,11 +172,7 @@ public class GameOver implements Screen
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide() {
-        retryButton.remove();
-        switchButton.remove();
-        exitButton.remove();
-	}
+	public void hide() {}
 
 	/**
 	 * Removes the Skin, Stage, and Batch to prevent memory leakage.

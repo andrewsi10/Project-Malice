@@ -105,12 +105,19 @@ public class GameScreen implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameScreen(Malice g, String playerType)
+	public GameScreen(Malice g)
 	{
 		new Stage();
 		game = g;
-		Options.Audio.playTheme( VOLUME );
-		this.playerType = playerType;
+        projectiles = new ArrayList<Projectile>();
+        renderer = new ShapeRenderer();
+        batch = new SpriteBatch();
+        batchPause = new SpriteBatch();
+        pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
+
+        map = new Map( MAP_SIZE, MAP_SIZE );
+        cam = new OrthographicCamera( 1280, 720 );
+        // cam.setToOrtho(false, 1280, 720);
 	}
 
 	/**
@@ -126,41 +133,18 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
-		projectiles = new ArrayList<Projectile>();
-		renderer = new ShapeRenderer();
-		batch = new SpriteBatch();
-		batchPause = new SpriteBatch();
-		pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
+        Options.Audio.playTheme( VOLUME );
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 		enemyMaxCount = -2;
 		enemyMinCount = 10;
 
-		cam = new OrthographicCamera( 1280, 720 );
-		// cam.setToOrtho(false, 1280, 720);
-
-		map = new Map( MAP_SIZE, MAP_SIZE );
 		map.generate( Map.RANDOM );
 
-		// initializes enemies and puts in a random amount of enemies
-		sprites = new ArrayList<Character>();
-		String[] charNames = CharacterSelect.characterNames;
-		String spriteName = "BlackMage";
-		String projectileName = "DarkFire";
-		for ( int i = 0; i < charNames.length; i++ )
-		{
-			if ( charNames[i].equals( playerType ) )
-			{
-				spriteName = spriteNames[i];
-				projectileName = projectileNames[i];
-			}
-		}
-		player = new Player( "img/sprites/Players/" + spriteName + "/"
-				+ spriteName + ".atlas", projectileName );
-		player.setPosition( map.getSpawnX(), map.getSpawnY() );
-		sprites.add( player );
+        player.setPosition( map.getSpawnX(), map.getSpawnY() );
+        sprites.add( player );
 
-		spawnEnemies();
+        spawnEnemies();
 	}
 
 	/**
@@ -496,6 +480,27 @@ public class GameScreen implements Screen
 	 */
 	@Override
 	public void hide() {}
+	
+	public Screen setPlayerType( String type )
+	{
+	    playerType = type;
+        // initializes enemies and puts in a random amount of enemies
+        sprites = new ArrayList<Character>();
+        String[] charNames = CharacterSelect.characterNames;
+        String spriteName = "BlackMage";
+        String projectileName = "DarkFire";
+        for ( int i = 0; i < charNames.length; i++ )
+        {
+            if ( charNames[i].equals( playerType ) )
+            {
+                spriteName = spriteNames[i];
+                projectileName = projectileNames[i];
+            }
+        }
+        player = new Player( "img/sprites/Players/" + spriteName + "/"
+                        + spriteName + ".atlas", projectileName );
+        return this;
+	}
 
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.

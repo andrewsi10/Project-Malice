@@ -72,17 +72,6 @@ public class CharacterSelect implements Screen
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
         stage = new Stage();
-
-        exitButton = Options.getButton( "Exit", 
-                            Gdx.graphics.getWidth() * 7 / 10, 
-                            Gdx.graphics.getHeight() / 15, 
-                            new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                Gdx.app.exit();
-            }
-        } );
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
@@ -94,7 +83,7 @@ public class CharacterSelect implements Screen
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    game.setScreen( new GameScreen( game, charName ) );
+                    game.setScreen( new GameScreen( game ).setPlayerType( charName ) );
                 }
             } );
         }
@@ -105,9 +94,26 @@ public class CharacterSelect implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new GameScreen( game, characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
+                game.setScreen( new GameScreen( game ).setPlayerType( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
             }
         } );
+
+        exitButton = Options.getButton( "Back to Main Menu", 
+                            Gdx.graphics.getWidth() * 7 / 10, 
+                            Gdx.graphics.getHeight() / 15,
+                            new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( new MainMenu( game ) );
+            }
+        } );
+        
+        stage.addActor( background );
+        for ( TextButton b : characters )
+            stage.addActor( b );
+        stage.addActor( exitButton );
+        stage.addActor( randomButton );
 	}
 
 	/**
@@ -122,12 +128,6 @@ public class CharacterSelect implements Screen
 	{
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );// Make the stage consume events
-        
-        stage.addActor( background );
-		for ( TextButton b : characters )
-		    stage.addActor( b );
-        stage.addActor( exitButton );
-        stage.addActor( randomButton );
 	}
 
 	/**
@@ -167,12 +167,7 @@ public class CharacterSelect implements Screen
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide() {
-        for ( TextButton button : characters )
-            button.remove();
-        randomButton.remove();
-        exitButton.remove();
-    }
+	public void hide() {}
 
 	/**
 	 * Disposes the Skin and Stage to prevent memory leakage.

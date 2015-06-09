@@ -81,7 +81,7 @@ public class Splash implements Screen
 		batch.end();
 		if ( elapsed > 5 )
 		{
-			game.setScreen( game.mainMenu );
+			game.setScreen( new MainMenu( game ) );
 		}
 	}
 

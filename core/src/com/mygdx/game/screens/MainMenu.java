@@ -65,7 +65,7 @@ public class MainMenu implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.characterSelect );
+                game.setScreen( new CharacterSelect( game ) );
             }
         } );
 
@@ -79,6 +79,9 @@ public class MainMenu implements Screen
                 Gdx.app.exit();
             }
         } );
+        stage.addActor( background );
+        stage.addActor( playButton );
+        stage.addActor( exitButton );
 	}
 	
 	/**
@@ -95,9 +98,6 @@ public class MainMenu implements Screen
 	{
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );
-		stage.addActor( background );
-		stage.addActor( playButton );
-		stage.addActor( exitButton );
 	}
 
 	/**
@@ -134,10 +134,7 @@ public class MainMenu implements Screen
 	 * @see com.badlogic.gdx.Screen#hide()
 	 */
 	@Override
-	public void hide() {
-        playButton.remove();
-        exitButton.remove();
-	}
+	public void hide() {}
 
 	/**
 	 * Removes everything that can create memory leakage.

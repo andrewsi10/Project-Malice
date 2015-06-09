@@ -134,6 +134,8 @@ public class Map
      */
     public void generate( int type )
     {
+        areSpaces = new boolean[getMapTileWidth()][getMapTileHeight()];
+        map = null;
         if ( type == RANDOM )
             type = randomNumber( NUM_GENERATION_TYPES );
         // if ( type >= 0 )
