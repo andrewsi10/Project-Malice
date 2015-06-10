@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -41,6 +42,7 @@ public class MainMenu implements Screen
 	private Stage stage;
 
 	private TextButton playButton, optionsButton, exitButton;
+	private Button music;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -70,17 +72,28 @@ public class MainMenu implements Screen
             }
         } );
 
-        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
-        optionsButton.setPosition( 
-                Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2, 
-                Gdx.graphics.getHeight() / 3 );
-        optionsButton.addListener( new ClickListener() {
+//        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
+//        optionsButton.setPosition( 
+//                Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2, 
+//                Gdx.graphics.getHeight() / 3 );
+//        optionsButton.addListener( new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y)
+//            {
+//                game.setScreen( new OptionsScreen( game ) );
+//            }
+//        } );
+        music = new TextButton( "Music", Options.buttonSkin );
+        music.setSize( 64, 64 );
+        music.setPosition( Gdx.graphics.getWidth() - music.getWidth(), 0 );
+        music.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new OptionsScreen( game ) );
+                Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
+                Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
             }
-        } );
+        });
 
         exitButton = new TextButton( "Exit", Options.buttonSkin ); 
         exitButton.setPosition(
@@ -95,7 +108,8 @@ public class MainMenu implements Screen
         } );
         stage.addActor( background );
         stage.addActor( playButton );
-        stage.addActor( optionsButton );
+        stage.addActor( music );
+//        stage.addActor( optionsButton );
         stage.addActor( exitButton );
 	}
 	
