@@ -40,7 +40,7 @@ public class MainMenu implements Screen
 
 	private Stage stage;
 
-	private TextButton playButton, exitButton;
+	private TextButton playButton, optionsButton, exitButton;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -69,9 +69,20 @@ public class MainMenu implements Screen
             }
         } );
 
+        optionsButton = Options.getButton( "Settings", 
+                           Gdx.graphics.getWidth() / 2, 
+                           Gdx.graphics.getHeight() / 3, 
+                           new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( new OptionsScreen( game ) );
+            }
+        } );
+
         exitButton = Options.getButton( "Exit", 
                                 Gdx.graphics.getWidth() / 2, 
-                                Gdx.graphics.getHeight() / 4, 
+                                Gdx.graphics.getHeight() / 5, 
                                 new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -81,6 +92,7 @@ public class MainMenu implements Screen
         } );
         stage.addActor( background );
         stage.addActor( playButton );
+        stage.addActor( optionsButton );
         stage.addActor( exitButton );
 	}
 	

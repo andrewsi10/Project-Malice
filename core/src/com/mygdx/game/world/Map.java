@@ -526,7 +526,7 @@ public class Map
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
             createRoom( x, y, w, h );
-            list.add( new Point( x, y ) );
+            list.add( new Point( x + 1, y + 1 ) );
             size = sizeOfArea( x, y );
         } while (// x != this.areSpaces.length - 1
                 size < getMapTileWidth() * getMapTileHeight() / 2
@@ -557,8 +557,8 @@ public class Map
             {
                 x = Math.min( point.x, p.x );
                 y = Math.min( point.y, p.y );
-                w = Math.abs( point.x - p.x ) + 1;
-                h = Math.abs( point.y - p.y ) + 1;
+                w = Math.abs( point.x - p.x );
+                h = Math.abs( point.y - p.y );
                 createRectangle( x, y, w, h );
                 largest = sizeOfArea( x, y );
             }

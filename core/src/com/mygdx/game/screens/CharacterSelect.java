@@ -54,7 +54,7 @@ public class CharacterSelect implements Screen
 	private Stage stage;
 
 	private TextButton[] characters;
-	private TextButton exitButton, randomButton;
+	private TextButton backButton, randomButton;
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
@@ -98,7 +98,7 @@ public class CharacterSelect implements Screen
             }
         } );
 
-        exitButton = Options.getButton( "Back to Main Menu", 
+        backButton = Options.getButton( "Back to Main Menu", 
                             Gdx.graphics.getWidth() * 7 / 10, 
                             Gdx.graphics.getHeight() / 15,
                             new ClickListener() {
@@ -112,7 +112,7 @@ public class CharacterSelect implements Screen
         stage.addActor( background );
         for ( TextButton b : characters )
             stage.addActor( b );
-        stage.addActor( exitButton );
+        stage.addActor( backButton );
         stage.addActor( randomButton );
 	}
 

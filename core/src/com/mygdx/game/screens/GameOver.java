@@ -42,7 +42,7 @@ public class GameOver implements Screen
 
 	private Stage stage;
 
-	private TextButton retryButton, exitButton, switchButton;
+	private TextButton retryButton, switchButton, backButton;
 	
 	private Player player;
 
@@ -97,7 +97,7 @@ public class GameOver implements Screen
             }
         } );
         
-        exitButton = Options.getButton( "Back To Main Menu", 
+        backButton = Options.getButton( "Back To Main Menu", 
                             Gdx.graphics.getWidth() / 2, 
                             Gdx.graphics.getHeight() / 6, 
                             new ClickListener() {
@@ -111,7 +111,7 @@ public class GameOver implements Screen
         stage.addActor( background );
         stage.addActor( retryButton );
         stage.addActor( switchButton );
-        stage.addActor( exitButton );
+        stage.addActor( backButton );
 	}
 	
 	/**

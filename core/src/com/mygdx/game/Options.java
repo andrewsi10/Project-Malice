@@ -154,7 +154,7 @@ public class Options
          */
         public static void stopTheme( int type )
         {
-            if ( mainTheme.isPlaying() )
+            if ( mainTheme.isPlaying() ) // may be able to remove
                 switch ( type )
                 {
                     case 0:
@@ -178,6 +178,8 @@ public class Options
             mainTheme.setVolume( volume );
             if ( !MUSIC_MUTED )
                 mainTheme.play();
+            else
+                stopTheme( 1 );
         }
 
         /**
@@ -186,7 +188,7 @@ public class Options
          */
         public static void playAudio( String s )
         {
-            if ( !SOUND_MUTED && SOUNDS.get( s ) != null )
+            if ( !SOUND_MUTED && SOUNDS.containsKey( s ) )
                 SOUNDS.get( s ).play();
         }
     }
