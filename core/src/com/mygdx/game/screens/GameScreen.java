@@ -137,6 +137,7 @@ public class GameScreen implements Screen
 	public void show()
 	{
         Options.Audio.playTheme( VOLUME );
+        Gdx.input.setInputProcessor( null );
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 

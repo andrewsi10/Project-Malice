@@ -32,20 +32,21 @@ public class OptionsScreen implements Screen
         game = g;
         stage = new Stage();
         
-        musicButton = Options.getButton( "Music", 
-                           Gdx.graphics.getWidth() / 2, 
-                           Gdx.graphics.getHeight() / 2, 
-                           new ClickListener() );
+        musicButton = new TextButton( "Music", Options.buttonSkin ); 
+        musicButton.setPosition( 
+                    Gdx.graphics.getWidth() / 2 - musicButton.getWidth() / 2, 
+                    Gdx.graphics.getHeight() / 2 );
 
-        soundButton = Options.getButton( "Sound", 
-                           Gdx.graphics.getWidth() / 2, 
-                           Gdx.graphics.getHeight() / 3, 
-                           new ClickListener() );
-
-        backButton = Options.getButton( "Back to Main Menu", 
-                            Gdx.graphics.getWidth() / 2, 
-                            Gdx.graphics.getHeight() / 15,
-                            new ClickListener() {
+        soundButton = new TextButton( "Sound", Options.buttonSkin ); 
+        soundButton.setPosition( 
+                    Gdx.graphics.getWidth() / 2 - soundButton.getWidth() / 2, 
+                    Gdx.graphics.getHeight() / 3 );
+        
+        backButton = new TextButton( "Back To Main Menu", Options.buttonSkin ); 
+        backButton.setPosition(
+                Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 6 );
+        backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {

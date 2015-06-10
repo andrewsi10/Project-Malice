@@ -75,10 +75,11 @@ public class GameOver implements Screen
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
         
-        retryButton = Options.getButton( "Try Again", 
-                           Gdx.graphics.getWidth() / 2, 
-                           Gdx.graphics.getHeight() / 2, 
-                           new ClickListener() {
+        retryButton = new TextButton( "Try Again", Options.buttonSkin );
+        retryButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - retryButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 );
+        retryButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
@@ -86,10 +87,11 @@ public class GameOver implements Screen
             }
         } );
 
-        switchButton = Options.getButton( "Switch Characters", 
-                           Gdx.graphics.getWidth() / 2, 
-                           Gdx.graphics.getHeight() / 3, 
-                           new ClickListener() {
+        switchButton = new TextButton( "Switch Characters", Options.buttonSkin ); 
+        switchButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - switchButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 3 );
+        switchButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
@@ -97,10 +99,11 @@ public class GameOver implements Screen
             }
         } );
         
-        backButton = Options.getButton( "Back To Main Menu", 
-                            Gdx.graphics.getWidth() / 2, 
-                            Gdx.graphics.getHeight() / 6, 
-                            new ClickListener() {
+        backButton = new TextButton( "Back To Main Menu", Options.buttonSkin ); 
+        backButton.setPosition(
+                Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 6 );
+        backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {

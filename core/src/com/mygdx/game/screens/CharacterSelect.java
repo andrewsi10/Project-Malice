@@ -76,10 +76,11 @@ public class CharacterSelect implements Screen
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
             final String charName = characterNames[i];
-            characters[i] = Options.getButton( charName, 
-                Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10, 
-                Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100, // 5/8 - i*7/40
-                new ClickListener() {
+            characters[i] = new TextButton( charName, Options.buttonSkin );
+            characters[i].setPosition( 
+                Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - characters[i].getWidth() / 2,
+                Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
+            characters[i].addListener( new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
@@ -87,10 +88,11 @@ public class CharacterSelect implements Screen
                 }
             } );
         }
-        randomButton = Options.getButton( "Random Character", 
-                                    Gdx.graphics.getWidth() * 3 / 10, 
-                                    Gdx.graphics.getHeight() / 15, 
-                                    new ClickListener() {
+        randomButton = new TextButton( "Random Character", Options.buttonSkin );
+        randomButton.setPosition(
+                Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 15 );
+        randomButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
@@ -98,10 +100,11 @@ public class CharacterSelect implements Screen
             }
         } );
 
-        backButton = Options.getButton( "Back to Main Menu", 
-                            Gdx.graphics.getWidth() * 7 / 10, 
-                            Gdx.graphics.getHeight() / 15,
-                            new ClickListener() {
+        backButton = new TextButton( "Back to Main Menu", Options.buttonSkin ); 
+        backButton.setPosition(
+                Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 15 );
+        backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {

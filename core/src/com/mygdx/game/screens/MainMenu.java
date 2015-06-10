@@ -58,10 +58,11 @@ public class MainMenu implements Screen
 
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
-        playButton = Options.getButton( "Play", 
-                                Gdx.graphics.getWidth() / 2, 
-                                Gdx.graphics.getHeight() / 2, 
-                                new ClickListener() {
+        playButton = new TextButton( "Play", Options.buttonSkin );
+        playButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 );
+        playButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
@@ -69,10 +70,11 @@ public class MainMenu implements Screen
             }
         } );
 
-        optionsButton = Options.getButton( "Settings", 
-                           Gdx.graphics.getWidth() / 2, 
-                           Gdx.graphics.getHeight() / 3, 
-                           new ClickListener() {
+        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
+        optionsButton.setPosition( 
+                Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2, 
+                Gdx.graphics.getHeight() / 3 );
+        optionsButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
@@ -80,10 +82,11 @@ public class MainMenu implements Screen
             }
         } );
 
-        exitButton = Options.getButton( "Exit", 
-                                Gdx.graphics.getWidth() / 2, 
-                                Gdx.graphics.getHeight() / 5, 
-                                new ClickListener() {
+        exitButton = new TextButton( "Exit", Options.buttonSkin ); 
+        exitButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
+            Gdx.graphics.getHeight() / 4 );
+        exitButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {

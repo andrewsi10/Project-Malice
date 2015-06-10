@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import static com.mygdx.game.player.Character.*;
 
@@ -79,14 +78,6 @@ public class Options
                 .newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = buttonSkin.getFont( "default" );
         buttonSkin.add( "default", textButtonStyle );
-    }
-    
-    public static TextButton getButton( String text, float x, float y, ClickListener c )
-    {
-        TextButton b = new TextButton( text, buttonSkin );
-        b.setPosition( x - b.getWidth() / 2, y );
-        b.addListener( c );
-        return b;
     }
     
     // -------------------------- Player Controls --------------------- //
