@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -42,7 +41,7 @@ public class MainMenu implements Screen
 	private Stage stage;
 
 	private TextButton playButton, optionsButton, exitButton;
-	private Button music;
+	private final TextButton music;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -83,8 +82,8 @@ public class MainMenu implements Screen
 //                game.setScreen( new OptionsScreen( game ) );
 //            }
 //        } );
-        music = new TextButton( "Music", Options.buttonSkin );
-        music.setSize( 64, 64 );
+        music = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
+        music.setSize( 64, 100 );
         music.setPosition( Gdx.graphics.getWidth() - music.getWidth(), 0 );
         music.addListener( new ClickListener() {
             @Override
@@ -92,6 +91,8 @@ public class MainMenu implements Screen
             {
                 Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
                 Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
+                music.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
+                music.toggle();
             }
         });
 
