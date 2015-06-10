@@ -114,6 +114,7 @@ public class GameScreen implements Screen
         batch = new SpriteBatch();
         batchPause = new SpriteBatch();
         pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
+        sprites = new ArrayList<Character>();
 
         enemyMaxCount = -2;
         enemyMinCount = 10;
@@ -122,6 +123,27 @@ public class GameScreen implements Screen
         cam = new OrthographicCamera( 1280, 720 );
         // cam.setToOrtho(false, 1280, 720);
 	}
+    
+    public Screen update( String type )
+    {
+        playerType = type;
+        // initializes enemies and puts in a random amount of enemies
+        String[] charNames = CharacterSelect.characterNames;
+        String spriteName = "BlackMage";
+        String projectileName = "DarkFire";
+        for ( int i = 0; i < charNames.length; i++ )
+        {
+            if ( charNames[i].equals( playerType ) )
+            {
+                spriteName = spriteNames[i];
+                projectileName = projectileNames[i];
+                break;
+            }
+        }
+        player = new Player( "img/sprites/Players/" + spriteName + "/"
+                        + spriteName + ".atlas", projectileName );
+        return this;
+    }
 
 	/**
 	 * Shows gameplay with the player in the center of the screen inside a
@@ -141,8 +163,8 @@ public class GameScreen implements Screen
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 
+        sprites.clear();
 		map.generate( Map.RANDOM );
-
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         sprites.add( player );
 
@@ -349,8 +371,7 @@ public class GameScreen implements Screen
 						} else if ( sprite instanceof Player )
 						{
 						    Options.Audio.stopTheme( 1 ); // stops the theme music
-							game.setScreen( new GameOver( game, player,
-									playerType ) );
+							game.setScreen( game.gameOver.update( player, playerType ) );
 						}
 					}
 					break;
@@ -482,27 +503,6 @@ public class GameScreen implements Screen
 	 */
 	@Override
 	public void hide() {}
-	
-	public Screen setPlayerType( String type )
-	{
-	    playerType = type;
-        // initializes enemies and puts in a random amount of enemies
-        sprites = new ArrayList<Character>();
-        String[] charNames = CharacterSelect.characterNames;
-        String spriteName = "BlackMage";
-        String projectileName = "DarkFire";
-        for ( int i = 0; i < charNames.length; i++ )
-        {
-            if ( charNames[i].equals( playerType ) )
-            {
-                spriteName = spriteNames[i];
-                projectileName = projectileNames[i];
-            }
-        }
-        player = new Player( "img/sprites/Players/" + spriteName + "/"
-                        + spriteName + ".atlas", projectileName );
-        return this;
-	}
 
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.

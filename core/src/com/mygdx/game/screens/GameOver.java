@@ -44,11 +44,11 @@ public class GameOver implements Screen
 
 	private TextButton retryButton, switchButton, backButton;
 	
-	private Player player;
-
 	private Batch batch;
 
 	private GlyphLayout layout;
+	
+	private String message;
 
 	/**
 	 * Creates a GameOver screen and stores the Malice object that created this
@@ -64,28 +64,15 @@ public class GameOver implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameOver(Malice g, Player player, final String playerType)
+	public GameOver(Malice g)
 	{
 		game = g;
-		this.player = player;
 		layout = new GlyphLayout();
         stage = new Stage();
 
         batch = new SpriteBatch();
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
-        
-        retryButton = new TextButton( "Try Again", Options.buttonSkin );
-        retryButton.setPosition(
-            Gdx.graphics.getWidth() / 2 - retryButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 );
-        retryButton.addListener( new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                game.setScreen( game.gameScreen.setPlayerType( playerType ) );
-            }
-        } );
 
         switchButton = new TextButton( "Switch Characters", Options.buttonSkin ); 
         switchButton.setPosition(
@@ -95,7 +82,8 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new CharacterSelect( game ) );
+                game.setScreen( game.characterSelect );
+                switchButton.toggle();
             }
         } );
         
@@ -107,14 +95,36 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new MainMenu( game ) );
+                game.setScreen( game.mainMenu );
+                backButton.toggle();
             }
         } );
 
         stage.addActor( background );
-        stage.addActor( retryButton );
         stage.addActor( switchButton );
         stage.addActor( backButton );
+	}
+	
+	public GameOver update( Player player, final String playerType )
+	{
+	    message = "You earned " + player.getPoints()
+	            + " points and reached level " + player.getCurrentLevel()
+	            + ". Better luck next time!";
+	    if ( retryButton != null ) retryButton.remove();
+        retryButton = new TextButton( "Try Again", Options.buttonSkin );
+        retryButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - retryButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 );
+        retryButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( game.gameScreen.update( playerType ) );
+                retryButton.toggle();
+            }
+        } );
+        stage.addActor( retryButton );
+	    return this;
 	}
 	
 	/**
@@ -144,11 +154,8 @@ public class GameOver implements Screen
 		stage.act();
 		stage.draw();
 		batch.begin();
-		String str = "You earned " + player.getPoints()
-				+ " points and reached level " + player.getCurrentLevel()
-				+ ". Better luck next time!";
-		layout.setText( Options.FONT, str );
-		Options.FONT.draw( batch, str, Gdx.graphics.getWidth() / 2 - layout.width / 2,
+		layout.setText( Options.FONT, message );
+		Options.FONT.draw( batch, message, Gdx.graphics.getWidth() / 2 - layout.width / 2,
 				Gdx.graphics.getHeight() * 67 / 100 );
 		batch.end();
 	}

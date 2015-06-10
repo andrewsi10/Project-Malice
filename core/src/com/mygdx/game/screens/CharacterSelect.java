@@ -53,7 +53,6 @@ public class CharacterSelect implements Screen
 
 	private Stage stage;
 
-	private TextButton[] characters;
 	private TextButton backButton, randomButton;
 
 	/**
@@ -68,53 +67,54 @@ public class CharacterSelect implements Screen
 	public CharacterSelect(Malice g)
 	{
 		game = g;
-        characters = new TextButton[NUMBUTTONS];
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
         stage = new Stage();
+        stage.addActor( background );
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
             final String charName = characterNames[i];
-            characters[i] = new TextButton( charName, Options.buttonSkin );
-            characters[i].setPosition( 
-                Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - characters[i].getWidth() / 2,
+            final TextButton b = new TextButton( charName, Options.buttonSkin );
+            b.setPosition( 
+                Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
                 Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
-            characters[i].addListener( new ClickListener() {
+            b.addListener( new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    game.setScreen( game.gameScreen.setPlayerType( charName ) );
+                    game.setScreen( game.gameScreen.update( charName ) );
+                    b.toggle();
                 }
             } );
+            stage.addActor( b );
         }
         randomButton = new TextButton( "Random Character", Options.buttonSkin );
         randomButton.setPosition(
                 Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 15 );
+                Gdx.graphics.getHeight() / 12 );
         randomButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.gameScreen.setPlayerType( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
+                game.setScreen( game.gameScreen.update( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
+                randomButton.toggle();
             }
         } );
 
         backButton = new TextButton( "Back to Main Menu", Options.buttonSkin ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 15 );
+                Gdx.graphics.getHeight() / 12 );
         backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new MainMenu( game ) );
+                game.setScreen( game.mainMenu );
+                backButton.toggle();
             }
         } );
         
-        stage.addActor( background );
-        for ( TextButton b : characters )
-            stage.addActor( b );
         stage.addActor( backButton );
         stage.addActor( randomButton );
 	}

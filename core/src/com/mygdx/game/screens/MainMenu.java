@@ -40,8 +40,10 @@ public class MainMenu implements Screen
 
 	private Stage stage;
 
-	private TextButton playButton, optionsButton, exitButton;
-	private final TextButton music;
+	private TextButton playButton, 
+//	                optionsButton, 
+	                exitButton;
+	private final TextButton muteButton;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -67,7 +69,8 @@ public class MainMenu implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( new CharacterSelect( game ) );
+                game.setScreen( game.characterSelect );
+                playButton.toggle();
             }
         } );
 
@@ -82,17 +85,18 @@ public class MainMenu implements Screen
 //                game.setScreen( new OptionsScreen( game ) );
 //            }
 //        } );
-        music = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
-        music.setSize( 64, 100 );
-        music.setPosition( Gdx.graphics.getWidth() - music.getWidth(), 0 );
-        music.addListener( new ClickListener() {
+        muteButton = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
+        muteButton.setSize( 100, 64 );
+        muteButton.setPosition( Gdx.graphics.getWidth() - muteButton.getWidth(), 0 );
+        muteButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
                 Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
+                Options.Audio.SOUND_MUTED = !Options.Audio.SOUND_MUTED;
                 Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
-                music.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
-                music.toggle();
+                muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
+                muteButton.toggle();
             }
         });
 
@@ -109,7 +113,7 @@ public class MainMenu implements Screen
         } );
         stage.addActor( background );
         stage.addActor( playButton );
-        stage.addActor( music );
+        stage.addActor( muteButton );
 //        stage.addActor( optionsButton );
         stage.addActor( exitButton );
 	}
