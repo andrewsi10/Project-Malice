@@ -33,23 +33,9 @@ public class Map
      */
     public static final String PACKAGE = "map/";
     // generation types
-    // public static final int STORY = -2;
-    /**
-     * Sets generation to Randomly pick between the generation types
-     */
-    public static final int RANDOM = -1;
-    /**
-     * Generation type Dungeon
-     */
-    public static final int DUNGEON = 0;
-    /**
-     * Generation type Arena
-     */
-    public static final int ARENA = 1;
-    /**
-     * Number of Generation types
-     */
-    public static final int NUM_GENERATION_TYPES = 2;
+    public enum Generation {
+        STORY, RANDOM, DUNGEON, ARENA
+    }
     /**
      * Conversion number from pixels to tiles
      */
@@ -132,14 +118,25 @@ public class Map
      * (this method is mainly for expansion of game generation)
      * @param type of generation
      */
-    public void generate( int type )
+    public void generate( Generation type )
     {
         areSpaces = new boolean[getMapTileWidth()][getMapTileHeight()];
         map = null;
-        if ( type == RANDOM )
-            type = randomNumber( NUM_GENERATION_TYPES );
+        switch ( type )
+        {
+            case STORY:
+                break;
+            case RANDOM:
+                type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
+            default:
+                System.out.println( type );
+                randomGeneration( type );
+                break;
+        }
+//        if ( type == RANDOM )
+//            type = randomNumber( NUM_GENERATION_TYPES );
         // if ( type >= 0 )
-        randomGeneration( type );
+//        randomGeneration( type );
         // else if ( type == STORY )
         // createStoryMap();
     }
@@ -488,17 +485,6 @@ public class Map
     }
 
     // --------------------Random Generators----------------//
-    
-    /**
-     * Generates Random number from 1 inclusive to width in tiles of map - 1
-     * exclusive
-     * Private because Tile coordinates should only be managed in Map Class
-     * @return random number
-     */
-    private int randomTileCoordinate()
-    {
-        return randomNumber( this.areSpaces.length - 1 ) + 1;
-    }
 
     /**
      * Generates Random number from 0 inclusive to given limit exclusive
@@ -515,14 +501,14 @@ public class Map
      * remain "false" or walls
      * @param type of generation
      */
-    public void randomGeneration(int type )
+    public void randomGeneration(Generation type )
     {
         int x, y, w, h, size;
         
         LinkedList<Point> list = new LinkedList<Point>();
         do {
-            x = randomTileCoordinate() - 1;
-            y = randomTileCoordinate() - 1;
+            x = randomNumber( getMapTileWidth() - 3 );
+            y = randomNumber( getMapTileHeight() - 3 );
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
             createRoom( x, y, w, h );
@@ -537,7 +523,7 @@ public class Map
         Point point = list.removeLast();
         for ( Point p : list )
         {
-            if ( type == ARENA )
+            if ( type == Generation.ARENA )
             {
                 size = sizeOfArea( p.x, p.y );
                 if ( size > largest )
@@ -588,8 +574,8 @@ public class Map
     private void setSpawn( int x, int y )
     {
         do {
-            spawnX = this.randomTileCoordinate();
-            spawnY = this.randomTileCoordinate();
+            spawnX = randomNumber( getMapTileWidth() - 1 ) + 1;
+            spawnY = randomNumber( getMapTileHeight() - 1 ) + 1;
         } while ( !areSpaces[spawnX][spawnY] 
                || ( Math.abs( spawnX - x ) < SPAWN_DISTANCE 
                  && Math.abs( spawnY - y ) < SPAWN_DISTANCE ) );
@@ -654,7 +640,7 @@ public class Map
 //        Map map;
 //        while ( true ) {
 //            map = new Map( 25, 25, true );
-//            map.generate( Map.RANDOM );
+//            map.generate( Map.Generation.RANDOM );
 //            System.out.println( map );
 //            scanUser.nextLine();
 //        }

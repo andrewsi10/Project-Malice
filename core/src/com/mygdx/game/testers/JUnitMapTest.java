@@ -35,7 +35,7 @@ public class JUnitMapTest
     public void testMapGeneration() {
         Map map1 = new Map( MAP_SIZE, MAP_SIZE, true );
         Map map2 = new Map( MAP_SIZE, MAP_SIZE, true );
-        map2.generate( Map.DUNGEON );
+        map2.generate( Map.Generation.DUNGEON );
         assertNotNull( "Map testing constructor does no initialize array", map1.getAreSpaces() );
         assertTrue( "Map should start out filled with walls", checkRoom( 0, 0, MAP_SIZE, MAP_SIZE, false, map1.getAreSpaces()) );
         boolean check = false;

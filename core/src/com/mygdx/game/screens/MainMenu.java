@@ -132,6 +132,7 @@ public class MainMenu implements Screen
 	{
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );
+        muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
 	}
 
 	/**

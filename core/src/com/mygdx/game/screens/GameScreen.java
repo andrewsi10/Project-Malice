@@ -164,7 +164,7 @@ public class GameScreen implements Screen
 		state = State.RESUME;
 
         sprites.clear();
-		map.generate( Map.RANDOM );
+		map.generate( Map.Generation.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         sprites.add( player );
 
