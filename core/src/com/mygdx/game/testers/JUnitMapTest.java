@@ -33,8 +33,8 @@ public class JUnitMapTest
      */
     @Test
     public void testMapGeneration() {
-        Map map1 = new Map( MAP_SIZE, MAP_SIZE, true );
-        Map map2 = new Map( MAP_SIZE, MAP_SIZE, true );
+        Map map1 = new Map( MAP_SIZE, MAP_SIZE );
+        Map map2 = new Map( MAP_SIZE, MAP_SIZE );
         map2.generate( Map.Generation.DUNGEON );
         assertNotNull( "Map testing constructor does no initialize array", map1.getAreSpaces() );
         assertTrue( "Map should start out filled with walls", checkRoom( 0, 0, MAP_SIZE, MAP_SIZE, false, map1.getAreSpaces()) );
@@ -79,7 +79,7 @@ public class JUnitMapTest
         int rectW = MAP_SIZE - 2;
         int rectH = rectW;
         int rectSize = 2 * rectW + 2 * rectH - 4;
-        Map map1 = new Map( MAP_SIZE, MAP_SIZE, true );
+        Map map1 = new Map( MAP_SIZE, MAP_SIZE );
         assertEquals( "sizeOfRoom() should return zero at any point map when map is initialized", 
                                             map1.sizeOfArea( 0, 0 ), 0 );
         // ------------------------- createRooms():
@@ -318,7 +318,7 @@ public class JUnitMapTest
         int y1 = 5;
         int w1 = 5;
         int h1 = 5;
-        Map map = new Map( MAP_SIZE, MAP_SIZE, true );
+        Map map = new Map( MAP_SIZE, MAP_SIZE );
         map.createRoom( x1, y1, w1, h1 );
         
         int avoid = Map.tileToPixel( MAP_SIZE / 2 ); // pixel coordinate to avoid
@@ -353,7 +353,7 @@ public class JUnitMapTest
     {
         int x = 5, y = 5, w = 5, h = 5;
         int d = 64; // any dimensions other than 0
-        Map map = new Map( MAP_SIZE, MAP_SIZE, true );
+        Map map = new Map( MAP_SIZE, MAP_SIZE );
         map.createRoom( x, y, w, h );
         
         Sprite sprite = new Sprite();

@@ -1,6 +1,7 @@
 package com.mygdx.game.world;
 
 import java.awt.Point;
+import java.util.EnumMap;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Pixmap;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -28,74 +28,68 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Map
 {
-    /**
-     * Package for all images
-     */
+    
+    // ----------------------- Enums and static finals --------------- //
+    /** Package for all images */
     public static final String PACKAGE = "map/";
     // generation types
     public enum Generation {
         STORY, RANDOM, DUNGEON, ARENA
     }
-    /**
-     * Conversion number from pixels to tiles
-     */
+    // Biome types
+    public enum Biome {
+        FOREST
+    }
+    // Tile types
+    private enum Tile {
+        BLOCK, SPACE
+    }
+
+    private static final EnumMap<Tile, Integer> tileIndex = new EnumMap<Tile, Integer>(Tile.class);
+    private static final EnumMap<Biome, Pixmap> biomes = new EnumMap<Biome, Pixmap>(Biome.class);
+    
+    static { // initialize EnumMaps
+        Tile[] tiles = Tile.values();
+        for ( int i = 0; i < tiles.length; i++ )
+            tileIndex.put( tiles[i], i );
+        Texture texture;
+        for ( Biome b : Biome.values() ) {
+            String s = b.toString();
+            texture = new Texture( PACKAGE + s.charAt( 0 ) + s.substring( 1 ).toLowerCase() + ".png" );
+            texture.getTextureData().prepare();
+            biomes.put( b, texture.getTextureData().consumePixmap() );
+            texture.dispose();
+        }
+    }
+    
+    
+    /** Conversion number from pixels to tiles */
     public static final int PIXELS_TO_TILES = 64;
-    /**
-     * Spawn distance from player in tiles
-     */
+    /** Spawn distance from player in tiles */
     public static final int SPAWN_DISTANCE = 7;
-    /**
-     * Determines how far the outer border is drawn (meant to cover black space)
-     */
+    /** Determines how far the outer border is drawn (meant to cover black space) */
     public static final int OUTER_BORDER = 9;
     
+    // --------------- private variables --------------- //
     private boolean[][] areSpaces;
-    
-    private Pixmap[] blocks;
-    private Pixmap[] spaces;
+    private Pixmap biome;
     private int spawnX;
     private int spawnY;
     
     private Texture map;
     private Texture expanse;
-    
+
+    // -------------------- Constructors ------------------- //
     /**
      * Constructs a map filled with walls
      * Prepares Pixmap arrays for use in createMap() from predetermined files
      * @param rows number of rows in map
      * @param cols number of columns in map
      */
-    public Map( int rows, int cols)
+    public Map( Biome b, int rows, int cols )
     {
         areSpaces = new boolean[rows][cols];
-        spaces = new Pixmap[1];
-        Texture texture = new Texture( PACKAGE + "GrassTile.png" );
-        texture.getTextureData().prepare();
-        spaces[0] = texture.getTextureData().consumePixmap();
-        texture.dispose();
-        TextureRegion[] trees = new TextureRegion[10];
-        blocks = new Pixmap[trees.length];
-        for ( int i = 0; i < blocks.length; i++ ) // stores textures in pixmaps
-        {
-            trees[i] = new TextureRegion( new Texture( PACKAGE + "Trees/Tree" + i + ".png" ) );
-            Texture t = trees[i].getTexture();
-            t.getTextureData().prepare();
-            blocks[i] = t.getTextureData().consumePixmap();
-            t.dispose();
-        }
-            
-// note: ideal method of loading in tree (doesn't work)
-//      TextureRegion[][] trees = TextureRegion.split( new Texture( PACKAGE + "Trees.png" ), PIXELS_TO_METERS, PIXELS_TO_METERS );
-//        texture = new Texture( PACKAGE + "Trees.png" );
-//        blocks = new Pixmap[trees.length * trees[0].length];
-//        for (int i = 0; i < trees.length; i++) {
-//        	for (int j = 0; j < trees[i].length; j++) {
-//        	    Texture t = trees[i][j].getTexture();
-//        	    t.getTextureData().prepare();
-//        		blocks[i*trees.length + j] = t.getTextureData().consumePixmap();
-//        		t.dispose();
-//        	}
-//        }
+        biome = biomes.get( b );
     }
 
     /**
@@ -104,11 +98,12 @@ public class Map
      * @param cols number of columns in map
      * @param b to differentiate from other constructor for testing
      */
-    public Map( int rows, int cols, boolean b)
+    public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
     }
     
+    // --------------------- Generating ----------------- //
     /**
      * Generates the map based on type of generation
      * 
@@ -129,7 +124,6 @@ public class Map
             case RANDOM:
                 type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
             default:
-                System.out.println( type );
                 randomGeneration( type );
                 break;
         }
@@ -159,13 +153,25 @@ public class Map
             {
                 int x = tileToPixel(i);
                 int y = this.getMapPixelHeight() - tileToPixel(j+1);
-                pixmap1.drawPixmap(spaces[0], x, y);
-                if (!areSpaces[i][j])
+                pixmap1.drawPixmap( biome, x, y, 
+                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                    tileToPixel(tileIndex.get( Tile.SPACE ) ), 
+                    PIXELS_TO_TILES, PIXELS_TO_TILES );
+                if ( !areSpaces[i][j] )
                 {
-                    pixmap1.drawPixmap( blocks[randomNumber(blocks.length)], x, y );
+                    pixmap1.drawPixmap( biome, x, y, 
+                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                        tileToPixel(tileIndex.get( Tile.BLOCK )), 
+                        PIXELS_TO_TILES, PIXELS_TO_TILES );
                 }
-                pixmap2.drawPixmap( spaces[0], x, y );
-                pixmap2.drawPixmap( blocks[randomNumber(blocks.length)], x, y );
+                pixmap2.drawPixmap( biome, x, y, 
+                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                    tileToPixel(tileIndex.get( Tile.SPACE )), 
+                    PIXELS_TO_TILES, PIXELS_TO_TILES );
+                pixmap2.drawPixmap( biome, x, y, 
+                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                    tileToPixel(tileIndex.get( Tile.BLOCK )), 
+                    PIXELS_TO_TILES, PIXELS_TO_TILES );
             }
         }
         map = new Texture( pixmap1 );
@@ -378,10 +384,7 @@ public class Map
     {
         map.dispose();
         expanse.dispose();
-        for ( Pixmap p : blocks )
-            p.dispose();
-        for ( Pixmap p : spaces )
-            p.dispose();
+        biome.dispose();
     }
     
     
