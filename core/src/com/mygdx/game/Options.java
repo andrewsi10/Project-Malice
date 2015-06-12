@@ -36,8 +36,8 @@ public class Options
                 Input.Buttons.LEFT
              };
 
-    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
-        "Warrior", "WhiteMage" };
+//    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
+//        "Warrior", "WhiteMage" };
     public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
         "PoisonShot", "Sword1", "HolyCross" };
     public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );

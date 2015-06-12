@@ -8,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -44,7 +43,8 @@ public class GameScreen implements Screen
 {
 
 	private SpriteBatch batch;
-	private SpriteBatch batchPause;
+    private OrthographicCamera cam;
+    private ShapeRenderer renderer;
 
 	private final Malice game;
 	
@@ -58,14 +58,12 @@ public class GameScreen implements Screen
 	 */
 	public final static int MAP_SIZE = 50;
 	private Map map;
-	private Sprite pauseSprite;
-	private OrthographicCamera cam;
-	private ShapeRenderer renderer;
+    private Texture pauseTexture;
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
 	private String playerType;
-	private String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
+	private static String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
 			"Warrior", "WhiteMage" };
 	public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
 			"PoisonShot", "Sword1", "HolyCross" };
@@ -112,8 +110,7 @@ public class GameScreen implements Screen
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        batchPause = new SpriteBatch();
-        pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
+        pauseTexture = new Texture( "img/pausescreen.png" );
         sprites = new ArrayList<Character>();
 
         enemyMaxCount = -2;
@@ -214,9 +211,13 @@ public class GameScreen implements Screen
 	public void renderPaused(float delta)
 	{
 	    Options.Audio.stopTheme( 0 ); // pause the theme music
-		batchPause.begin();
-		pauseSprite.draw( batchPause );
-		batchPause.end();
+//	    pauseSprite.setPosition( cam.position.x, cam.position.y );
+		batch.begin();
+//		pauseSprite.draw( batch );
+		batch.draw( pauseTexture, 
+		    cam.position.x - pauseTexture.getWidth() / 2, 
+		    cam.position.y - pauseTexture.getHeight() / 2 );
+		batch.end();
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
 		{
 			state = State.RESUME;
@@ -237,14 +238,7 @@ public class GameScreen implements Screen
 	 */
 	public void renderResume(float delta)
 	{
-		cam.position.x = player.getX();
-		cam.position.y = player.getY();
-		cam.update();
-
-		// tell the SpriteBatch to render in the
-		// coordinate system specified by the camera.
-		batch.setProjectionMatrix( cam.combined );
-		renderer.setProjectionMatrix( cam.combined );
+        setMatrixAndCam();
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
@@ -309,16 +303,9 @@ public class GameScreen implements Screen
 	 */
 	public void renderRun(float delta)
 	{
-		cam.position.x = player.getX();
-		cam.position.y = player.getY();
-		cam.update();
+	    setMatrixAndCam();
 
 		Options.Audio.playTheme( VOLUME ); // note: removed check, may cause lag without check for isPlaying()
-
-		// tell the SpriteBatch to render in the
-		// coordinate system specified by the camera.
-		batch.setProjectionMatrix( cam.combined );
-		renderer.setProjectionMatrix( cam.combined );
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
@@ -391,6 +378,18 @@ public class GameScreen implements Screen
 		{
 			state = State.PAUSE;
 		}
+	}
+	
+	private void setMatrixAndCam()
+	{
+        cam.position.x = player.getX();
+        cam.position.y = player.getY();
+        cam.update();
+
+        // tell the SpriteBatch to render in the
+        // coordinate system specified by the camera.
+        batch.setProjectionMatrix( cam.combined );
+        renderer.setProjectionMatrix( cam.combined );
 	}
 
 	/**
@@ -515,8 +514,7 @@ public class GameScreen implements Screen
 		map.dispose();
 		batch.dispose();
 		renderer.dispose();
-		batchPause.dispose();
-		pauseSprite.getTexture().dispose();
+		pauseTexture.dispose();
         player.getTexture().dispose();
         for ( Projectile p : projectiles )
             p.getTexture().dispose();
