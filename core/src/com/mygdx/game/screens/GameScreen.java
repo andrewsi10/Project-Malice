@@ -62,7 +62,6 @@ public class GameScreen implements Screen
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
-	private Options.Names playerType;
 
 	/**
 	 * Enum for handling the various states of the game screen.
@@ -118,8 +117,10 @@ public class GameScreen implements Screen
     
     public Screen update( Options.Names type )
     {
-        playerType = type;
-        player = new Player( type ); // TODO
+        if ( player == null )
+            player = new Player( type ); // TODO
+        else
+            player.change( type );
         return this;
     }
 
@@ -144,6 +145,7 @@ public class GameScreen implements Screen
         sprites.clear();
 		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
+        player.reload();
         sprites.add( player );
 
         spawnEnemies();
@@ -324,7 +326,9 @@ public class GameScreen implements Screen
 						} else if ( sprite instanceof Player )
 						{
 						    Options.Audio.stopTheme( 1 ); // stops the theme music
-							game.setScreen( game.gameOver.update( player, playerType ) );
+							game.setScreen( game.gameOver.update( 
+							                       player.getPoints(), 
+							                       player.getCurrentLevel() ) );
 						}
 					}
 					break;
@@ -376,7 +380,7 @@ public class GameScreen implements Screen
 		for ( int i = 0; i < limit; i++ )
 		{
 			int index = 1 + (int) ( Math.random() * Options.NUMENEMIES );
-			Enemy e = new Enemy( "Enemy" + index );
+			Enemy e = new Enemy( Options.atlas.get( "Enemy" + index ) );
 			e.increaseBdmg( -5 );
 			// set spawn for enemy
 			map.setSpawn( player.getX(), player.getY() );

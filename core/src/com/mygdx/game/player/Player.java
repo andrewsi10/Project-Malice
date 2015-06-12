@@ -52,10 +52,15 @@ public class Player extends Character {
 		setLevel(1);
 	}
 	
-	public Player reload( Options.Names n ) // loads with default settings
+	public void reload() // reloads with default settings
 	{
-	    this.load( 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
-	    return this;
+	    this.load( 50, 0, 1, 5, 500 );
+	}
+	
+	public void change( Options.Names n )
+	{
+	    this.setProjectile( n.getProjectileName() );
+	    this.initializeAnimations( Options.playerAtlas.get( n ) );
 	}
 
 	/**

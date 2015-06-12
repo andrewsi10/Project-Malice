@@ -3,7 +3,7 @@ package com.mygdx.game.player;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.Options;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.game.projectile.Projectile;
 
 /**
@@ -42,8 +42,8 @@ public class Enemy extends Character {
 	 * @param file
 	 *            reference to the atlas file used to get the images for Enemy
 	 */
-	public Enemy(String file) {
-		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", Options.atlas.get( file ) );
+	public Enemy( Animation a ) {
+		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", a );
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 	}

@@ -3,7 +3,6 @@ package com.mygdx.game.projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
 
 /**
@@ -43,12 +42,11 @@ public class Projectile extends Sprite
 	 * @param distanceX the x distance used to determine slope
 	 * @param distanceY the y distance used to determine slope
 	 */
-	public Projectile(Character c, int damage, String type, 
-	    float distanceX, float distanceY)
+	public Projectile(Character c, int damage, 
+	                        float distanceX, float distanceY, Animation a)
 	{
         this.myCharacter = c;
 		angle = Math.atan2( distanceY, distanceX );
-		Options.Audio.playAudio( type );
 
 //		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
 //				projectileTexture.getWidth() / col,
@@ -63,7 +61,7 @@ public class Projectile extends Sprite
 //				frames[index++] = temp[i][j];
 //			}
 //		}
-        animation = Options.atlas.get( type );
+        animation = a;
         stateTime = 0f;
 		
 		this.set( new Sprite( animation.getKeyFrame( stateTime ) ) );

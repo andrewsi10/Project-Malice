@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
-import com.mygdx.game.player.Player;
 
 /**
  * The Game Over screen displays the same background image as the Main Menu and
@@ -105,11 +104,10 @@ public class GameOver implements Screen
         stage.addActor( backButton );
 	}
 	
-	public GameOver update( Player player, final Options.Names playerType )
+	public GameOver update( int points, int level )
 	{
-	    message = "You earned " + player.getPoints()
-	            + " points and reached level " + player.getCurrentLevel()
-	            + ". Better luck next time!";
+	    message = "You earned " + points + " points and reached level " + level
+	                    + ". Better luck next time!";
 	    if ( retryButton != null ) retryButton.remove();
         retryButton = new TextButton( "Try Again", Options.buttonSkin );
         retryButton.setPosition(
@@ -119,7 +117,7 @@ public class GameOver implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.gameScreen.update( playerType ) );
+                game.setScreen( game.gameScreen );
                 retryButton.toggle();
             }
         } );

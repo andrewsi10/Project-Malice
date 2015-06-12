@@ -54,6 +54,7 @@ public class Character extends Sprite {
 	private GlyphLayout layout = new GlyphLayout();
 	private Color hpColor = Color.GREEN;
 
+	private int prevDirection = -1;
 	private int direction = -1;
 	private int maxHp; // max health
 	private int currentHp; // current health
@@ -97,16 +98,26 @@ public class Character extends Sprite {
 	                  String projectile, Animation... a ) {
 	    this.hpColor = hpColor;
         this.animations = new Animation[4];
-        this.load( maxHp, experience, level, speed, reloadSpeed, projectile, a );
+        this.load( maxHp, experience, level, speed, reloadSpeed );
+        this.projectile = projectile;
+        this.initializeAnimations( a );
 	}
 
+    /**
+     * loads this Character based on parameters
+     * @param maxHp
+     * @param experience
+     * @param level
+     * @param speed
+     * @param reloadSpeed
+     * @param projectile
+     * @param a
+     */
     public void load( int maxHp, 
                       int experience, 
                       int level, 
                       int speed, 
-                      int reloadSpeed, 
-                      String projectile, 
-                      Animation... a )
+                      int reloadSpeed )
     {
         this.maxHp = maxHp;
         this.currentHp = maxHp;
@@ -114,8 +125,6 @@ public class Character extends Sprite {
         this.level = level;
         this.moveSpeed = speed;
         this.reloadSpeed = reloadSpeed;
-        this.projectile = projectile;
-        initializeAnimations( a );
     }
 
 	// ---------------------Animation and Art ----------------------//
@@ -125,7 +134,7 @@ public class Character extends Sprite {
     * animation should have a frame duration of .2 seconds. Initialize
     * stateTime to 0f.
     */
-    public void initializeAnimations( Animation[] a )
+    public void initializeAnimations( Animation... a )
     {
         for ( int i = 0; i < animations.length; i++ )
             animations[i] = a[i%a.length];
@@ -144,24 +153,27 @@ public class Character extends Sprite {
 	 * is finished, set stateTime to 0.
 	 */
 	private void setAnimations() {
-		switch (direction) {
-	    case NORTHWEST:
-		case NORTH:
-        case NORTHEAST:
-			animation = animations[0];
-			break;
-		case EAST:
-			animation = animations[1];
-			break;
-        case SOUTHEAST:
-		case SOUTH:
-        case SOUTHWEST:
-			animation = animations[2];
-			break;
-		case WEST:
-			animation = animations[3];
-			break;
-		}
+	    if ( Math.abs( direction - prevDirection ) > 1 ) {
+	        switch (direction) {
+	            case NORTHWEST:
+	            case NORTH:
+	            case NORTHEAST:
+	                prevDirection = NORTH;
+	                break;
+	            case EAST:
+                    prevDirection = EAST;
+	                break;
+	            case SOUTHEAST:
+	            case SOUTH:
+	            case SOUTHWEST:
+                    prevDirection = SOUTH;
+	                break;
+	            case WEST:
+                    prevDirection = WEST;
+	                break;
+	        }
+	        animation = animations[prevDirection / 2];
+	    }
 
 		if ( !animation.isAnimationFinished( stateTime ) ) {
 			stateTime += Gdx.graphics.getDeltaTime();
@@ -318,10 +330,10 @@ public class Character extends Sprite {
 			float yDistance, long time) {
 		if (time - previousTime >= reloadSpeed) {
 			previousTime = time;
-			Projectile p = new Projectile(this, getDamage(),
-					projectile, xDistance, yDistance);
-
-			projectiles.add(p);
+			Projectile p = new Projectile( this, getDamage(), xDistance, yDistance,
+			    Options.atlas.get( projectile ) );
+	        Options.Audio.playAudio( projectile );
+			projectiles.add( p );
 		}
 	}
 
