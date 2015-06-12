@@ -42,10 +42,10 @@ public class CharacterSelect implements Screen
      * @return characterNames, the array containing the names of the characters
      *         that will be used for the buttons
      */
-    public static final String[] characterNames = { "Dark Wizard", "Brawler",
-            "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" };
+//    public static final String[] characterNames = { "Dark Wizard", "Brawler",
+//            "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" }; // TODO
     
-    private static final int NUMBUTTONS = characterNames.length;
+    private static final int NUMBUTTONS = Options.NAMES.length;
     
 	private Image background;
 
@@ -74,8 +74,8 @@ public class CharacterSelect implements Screen
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
-            final String charName = characterNames[i];
-            final TextButton b = new TextButton( charName, Options.buttonSkin );
+            final Options.Names charName = Options.NAMES[i];
+            final TextButton b = new TextButton( charName.getButtonName(), Options.buttonSkin );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
                 Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
@@ -97,7 +97,7 @@ public class CharacterSelect implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.gameScreen.update( characterNames[(int)(Math.random() * NUMBUTTONS)] ) );
+                game.setScreen( game.gameScreen.update( Options.NAMES[(int)(Math.random() * NUMBUTTONS)] ) );
                 randomButton.toggle();
             }
         } );

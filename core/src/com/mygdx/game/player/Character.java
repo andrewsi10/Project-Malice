@@ -55,10 +55,6 @@ public class Character extends Sprite {
 	private Animation rightAnimation;
 	private Animation downAnimation;
 	private Animation leftAnimation;
-	private Array<AtlasRegion> upFrames;
-	private Array<AtlasRegion> rightFrames;
-	private Array<AtlasRegion> downFrames;
-	private Array<AtlasRegion> leftFrames;
 
 	private int level = 0;
 	private GlyphLayout layout = new GlyphLayout();
@@ -74,6 +70,7 @@ public class Character extends Sprite {
 	private int reloadSpeed = 500;
 	private double previousTime = 0;
 	private float moveSpeed;
+	private String projectile;
 
 	/**
 	 * The Character constructor for Enemy, which uses the same
@@ -86,6 +83,12 @@ public class Character extends Sprite {
 		this(frames, frames, frames, frames);
 	}
 
+    /**
+     * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
+     * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
+     * animation should have a frame duration of .2 seconds. Initialize
+     * stateTime to 0f.
+     */
 	/**
 	 * The Character constructor for Player, which takes four Array<AtlasRegion>
 	 * and uses them to initialize the animations for each direction. Also
@@ -103,28 +106,15 @@ public class Character extends Sprite {
 	 */
 	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
 			Array<AtlasRegion> down, Array<AtlasRegion> left) {
-		upFrames = up;
-		rightFrames = right;
-		downFrames = down;
-		leftFrames = left;
+        upAnimation = new Animation(.2f, up);
+        rightAnimation = new Animation(.2f, right);
+        downAnimation = new Animation(.2f, down);
+        leftAnimation = new Animation(.2f, left);
+        stateTime = 0f;
 		set(new Sprite(down.get(0)));
-		initializeAnimations();
 	}
 
 	// ---------------------Animation and Art ----------------------//
-	/**
-	 * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
-	 * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
-	 * animation should have a frame duration of .2 seconds. Initialize
-	 * stateTime to 0f.
-	 */
-	private void initializeAnimations() {
-		upAnimation = new Animation(.2f, upFrames);
-		rightAnimation = new Animation(.2f, rightFrames);
-		downAnimation = new Animation(.2f, downFrames);
-		leftAnimation = new Animation(.2f, leftFrames);
-		stateTime = 0f;
-	}
 
 	/**
 	 * Uses the value of direction to initialize a new animation to either
@@ -137,19 +127,19 @@ public class Character extends Sprite {
 	private void setAnimations() {
 		Animation animation = downAnimation;
 		switch (direction) {
+	    case NORTHWEST:
 		case NORTH:
+        case NORTHEAST:
 			animation = upAnimation;
 			break;
-		case NORTHEAST:
-		case SOUTHEAST:
 		case EAST:
 			animation = rightAnimation;
 			break;
+        case SOUTHEAST:
 		case SOUTH:
+        case SOUTHWEST:
 			animation = downAnimation;
 			break;
-		case NORTHWEST:
-		case SOUTHWEST:
 		case WEST:
 			animation = leftAnimation;
 			break;
@@ -307,11 +297,11 @@ public class Character extends Sprite {
 	 *                             Character is
 	 */
 	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-			float yDistance, long time, String spriteType) {
+			float yDistance, long time) {
 		if (time - previousTime >= reloadSpeed) {
 			previousTime = time;
 			Projectile p = new Projectile(this, getDamage(),
-					spriteType, xDistance, yDistance);
+					projectile, xDistance, yDistance);
 
 			projectiles.add(p);
 		}
@@ -457,6 +447,11 @@ public class Character extends Sprite {
 	 */
 	public void setHpColor(Color newColor) {
 		hpColor = newColor;
+	}
+	
+	public void setProjectile( String s )
+	{
+	    projectile = s;
 	}
 
 	// -----------------------Getters -----------------//

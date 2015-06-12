@@ -3,7 +3,6 @@ package com.mygdx.game.projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -30,7 +29,6 @@ public class Projectile extends Sprite
 	final private int damage;
 
 	private Animation animation;
-	private Array<AtlasRegion> projectileTexture;
 	private float stateTime;
 
 	/**
@@ -54,10 +52,7 @@ public class Projectile extends Sprite
 		angle = Math.atan2( distanceY, distanceX );
 		Options.Audio.playAudio( type );
 
-		projectileTexture = new TextureAtlas(
-				Gdx.files.internal( "img/sprites/Projectiles/"
-						+ type + "/" + type
-						+ ".atlas" ) ).getRegions();
+		Array<AtlasRegion> projectileTexture = Options.atlas.get( type ).getRegions();
 //		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
 //				projectileTexture.getWidth() / col,
 //				projectileTexture.getHeight() / row );

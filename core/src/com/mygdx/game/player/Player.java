@@ -3,7 +3,6 @@ package com.mygdx.game.player;
 import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
@@ -23,8 +22,6 @@ import com.mygdx.game.Options;
  */
 public class Player extends Character {
 
-	private String projectile;
-
 	private int playerPoints = 0;
 
 	/**
@@ -39,35 +36,30 @@ public class Player extends Character {
 	 * @param proj
 	 *            reference for the projectile atlas file
 	 */
-	public Player(String file, String proj) {
-		super(new Array<AtlasRegion>(
-				new AtlasRegion[] { // up animation new Array
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("0"),
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("1") }), new Array<AtlasRegion>(
+	public Player(Options.Names n) {
+		super(new Array<AtlasRegion>(// up animation new Array
+				new AtlasRegion[] { 
+				    Options.playerAtlas.get( n ).findRegion( "0" ),
+				    Options.playerAtlas.get( n ).findRegion( "1" )}), 
+			new Array<AtlasRegion>(
 				// right animation new Array
 				new AtlasRegion[] {
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("2"),
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("3") }), new Array<AtlasRegion>(
+				    Options.playerAtlas.get( n ).findRegion( "2" ),
+				    Options.playerAtlas.get( n ).findRegion( "3" ) }), 
+			new Array<AtlasRegion>(
 				// down animation new Array
 				new AtlasRegion[] {
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("4"),
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("5") }), new Array<AtlasRegion>(
+				    Options.playerAtlas.get( n ).findRegion( "4" ),
+				    Options.playerAtlas.get( n ).findRegion( "5" ) }), 
+			new Array<AtlasRegion>(
 				// left animation new Array
 				new AtlasRegion[] {
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("6"),
-						new TextureAtlas(Gdx.files.internal(file))
-								.findRegion("7") }));
+				    Options.playerAtlas.get( n ).findRegion( "6" ),
+				    Options.playerAtlas.get( n ).findRegion( "7" ) }));
 		setSpeed(5);
 		setExpToLevel(100);
 		setLevel(1);
-		projectile = proj;
+		setProjectile( n.getProjectileName() );
 	}
 
 	/**
@@ -105,7 +97,7 @@ public class Player extends Character {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
-					System.currentTimeMillis(), projectile);
+					System.currentTimeMillis() );
 		}
 	}
 

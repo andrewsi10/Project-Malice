@@ -2,9 +2,8 @@ package com.mygdx.game.player;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygdx.game.Options;
 import com.mygdx.game.projectile.Projectile;
 
 /**
@@ -30,7 +29,6 @@ public class Enemy extends Character {
 	private int aggroDistance = 400;
 	private int travelTimeScalar = 100;
 	private int minTravelTime = 4;
-	private String projectile;
 
 	/**
 	 * Enemy constructor. Parameter used to reference the images used for
@@ -45,7 +43,7 @@ public class Enemy extends Character {
 	 *            reference to the atlas file used to get the images for Enemy
 	 */
 	public Enemy(String file) {
-		super(new TextureAtlas(Gdx.files.internal(file)).getRegions());
+		super(Options.atlas.get( file ).getRegions());
 
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
@@ -53,7 +51,7 @@ public class Enemy extends Character {
 		setSpeed(3); // set speed of Enemy
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 		setHpColor( Color.RED );
-		projectile = "EnemyBullet";
+		setProjectile( "EnemyBullet" );
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class Enemy extends Character {
 			int newDir = this.getDirection(deltaX, deltaY);
 			if (newDir != -1) {
 				setDirection(newDir);
-				shoot(projectiles, deltaX, deltaY, time, projectile);
+				shoot(projectiles, deltaX, deltaY, time);
 			}
 			super.move(character, projectiles, time);
 		}

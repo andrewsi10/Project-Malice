@@ -62,11 +62,7 @@ public class GameScreen implements Screen
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
-	private String playerType;
-	private static String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
-			"Warrior", "WhiteMage" };
-	public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
-			"PoisonShot", "Sword1", "HolyCross" };
+	private Options.Names playerType;
 
 	/**
 	 * Enum for handling the various states of the game screen.
@@ -90,7 +86,6 @@ public class GameScreen implements Screen
 	private State state;
 	private int enemyMaxCount;
 	private int enemyMinCount;
-	private int numEnemies = 7;
 	private long timeResumed;
 
 	/**
@@ -121,24 +116,10 @@ public class GameScreen implements Screen
         // cam.setToOrtho(false, 1280, 720);
 	}
     
-    public Screen update( String type )
+    public Screen update( Options.Names type )
     {
         playerType = type;
-        // initializes enemies and puts in a random amount of enemies
-        String[] charNames = CharacterSelect.characterNames;
-        String spriteName = "BlackMage";
-        String projectileName = "DarkFire";
-        for ( int i = 0; i < charNames.length; i++ )
-        {
-            if ( charNames[i].equals( playerType ) )
-            {
-                spriteName = spriteNames[i];
-                projectileName = projectileNames[i];
-                break;
-            }
-        }
-        player = new Player( "img/sprites/Players/" + spriteName + "/"
-                        + spriteName + ".atlas", projectileName );
+        player = new Player( type ); // TODO
         return this;
     }
 
@@ -211,9 +192,7 @@ public class GameScreen implements Screen
 	public void renderPaused(float delta)
 	{
 	    Options.Audio.stopTheme( 0 ); // pause the theme music
-//	    pauseSprite.setPosition( cam.position.x, cam.position.y );
 		batch.begin();
-//		pauseSprite.draw( batch );
 		batch.draw( pauseTexture, 
 		    cam.position.x - pauseTexture.getWidth() / 2, 
 		    cam.position.y - pauseTexture.getHeight() / 2 );
@@ -341,20 +320,7 @@ public class GameScreen implements Screen
 						{
 							player.increasePoints();
 							player.increaseExp( sprite.getExperience() );
-							for ( int j = 1; j < player.getPoints(); j *= 60 )
-							{
-								int index = 1 + (int) ( Math.random() * numEnemies );
-								if ( index == numEnemies + 1 )
-									index--;
-								Enemy e = new Enemy(
-										"img/sprites/Enemies/Enemy" + index
-												+ "/Enemy" + index + ".atlas" );
-								e.increaseBdmg( -5 );
-								// set spawn for enemy
-								map.setSpawn( player.getX(), player.getY() );
-								e.setPosition( map.getSpawnX(), map.getSpawnY() );
-								sprites.add( e );
-							}
+							spawnEnemies( player.getPoints() / 60 );
 						} else if ( sprite instanceof Player )
 						{
 						    Options.Audio.stopTheme( 1 ); // stops the theme music
@@ -391,6 +357,11 @@ public class GameScreen implements Screen
         batch.setProjectionMatrix( cam.combined );
         renderer.setProjectionMatrix( cam.combined );
 	}
+	
+	private void spawnEnemies()
+	{
+	    spawnEnemies( enemyMinCount + (int) ( Math.random() * enemyMaxCount ) );
+	}
 
 	/**
 	 * Helper method that spawns enemies in random locations, where the number
@@ -400,16 +371,12 @@ public class GameScreen implements Screen
 	 * characters remain.
 	 * 
 	 */
-	private void spawnEnemies()
+	private void spawnEnemies( int limit )
 	{
-		int enemyCount = enemyMinCount + (int) ( Math.random() * enemyMaxCount );
-		for ( int i = 0; i < enemyCount; i++ )
+		for ( int i = 0; i < limit; i++ )
 		{
-			int index = 1 + (int) ( Math.random() * numEnemies );
-			if ( index == numEnemies + 1 )
-				index--;
-			Enemy e = new Enemy( "img/sprites/Enemies/Enemy" + index + "/Enemy"
-					+ index + ".atlas" );
+			int index = 1 + (int) ( Math.random() * Options.NUMENEMIES );
+			Enemy e = new Enemy( "Enemy" + index );
 			e.increaseBdmg( -5 );
 			// set spawn for enemy
 			map.setSpawn( player.getX(), player.getY() );

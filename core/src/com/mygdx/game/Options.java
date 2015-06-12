@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -10,8 +11,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
 
 import static com.mygdx.game.player.Character.*;
 
@@ -38,15 +42,65 @@ public class Options
 
 //    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
 //        "Warrior", "WhiteMage" };
-    public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
-        "PoisonShot", "Sword1", "HolyCross" };
+    public enum Names {
+        BlackMage( "Dark Wizard", "DarkFire" ), 
+        Monk( "Brawler", "Boomerang" ), 
+        RedMage( "Crimson Wizard", "Fireball" ), 
+        Thief( "Bandit", "PoisonShot" ), 
+        Warrior( "Warrior", "Sword1" ), 
+        WhiteMage( "Mage of Justice", "HolyCross" );
+        
+        private String button, projectile;
+        
+        Names( String button, String projectile ) {
+            this.button = button;
+            this.projectile = projectile;
+        }
+        
+        public String getButtonName()
+        {
+            return button;
+        }
+        
+        public String getProjectileName()
+        {
+            return projectile;
+        }
+    }
+    
+//    public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
+//        "PoisonShot", "Sword1", "HolyCross" };
     public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
+    public static final Names[] NAMES = Names.values();
+    public static final EnumMap<Names, TextureAtlas> playerAtlas = new EnumMap<Names, TextureAtlas>(Names.class);
+    public static final HashMap<String, TextureAtlas> atlas = new HashMap<String, TextureAtlas>();
+    public static final int NUMENEMIES = 7;
     
     public static void initialize()
     {
         Audio.initializeAudio();
+        loadAtlas();
         createSkin();
+    }
+    
+    private static void loadAtlas()
+    {
+        String s;
+        for ( Names n : NAMES )
+        {
+            playerAtlas.put( n, new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ) );
+            s = n.getProjectileName();
+            atlas.put( s, new TextureAtlas( "img/sprites/Projectiles/" + s 
+                + "/" + s + ".atlas" ) );
+        }
+        for ( int i = 1; i <= NUMENEMIES; i++ )
+        {
+            s = "Enemy" + i;
+            atlas.put( s, new TextureAtlas( "img/sprites/Enemies/" + s + "/" 
+                                + s + ".atlas" ) );
+        }
+        atlas.put( "EnemyBullet", new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ) );
     }
 
     /**
@@ -72,10 +126,8 @@ public class Options
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = buttonSkin.newDrawable( "background", Color.GRAY );
         textButtonStyle.down = buttonSkin.newDrawable( "background", Color.DARK_GRAY );
-        textButtonStyle.checked = buttonSkin.newDrawable( "background",
-                Color.DARK_GRAY );
-        textButtonStyle.over = buttonSkin
-                .newDrawable( "background", Color.LIGHT_GRAY );
+        textButtonStyle.checked = buttonSkin.newDrawable( "background", Color.DARK_GRAY );
+        textButtonStyle.over = buttonSkin.newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = buttonSkin.getFont( "default" );
         buttonSkin.add( "default", textButtonStyle );
     }
@@ -130,8 +182,8 @@ public class Options
             mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
             SOUNDS = new HashMap<String, Sound>();
             SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
-            for ( String s : projectileNames )
-                SOUNDS.put( s, Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + s.toLowerCase() + ".wav" ) ) );
+            for ( Names n : NAMES )
+                SOUNDS.put( n.getProjectileName(), Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + n.getProjectileName().toLowerCase() + ".wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );

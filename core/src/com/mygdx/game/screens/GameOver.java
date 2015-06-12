@@ -105,7 +105,7 @@ public class GameOver implements Screen
         stage.addActor( backButton );
 	}
 	
-	public GameOver update( Player player, final String playerType )
+	public GameOver update( Player player, final Options.Names playerType )
 	{
 	    message = "You earned " + player.getPoints()
 	            + " points and reached level " + player.getCurrentLevel()
