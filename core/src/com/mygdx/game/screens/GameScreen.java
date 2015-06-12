@@ -119,7 +119,7 @@ public class GameScreen implements Screen
         enemyMaxCount = -2;
         enemyMinCount = 10;
         
-        map = new Map( Map.Biome.FOREST, MAP_SIZE, MAP_SIZE );
+        map = new Map( MAP_SIZE, MAP_SIZE );
         cam = new OrthographicCamera( 1280, 720 );
         // cam.setToOrtho(false, 1280, 720);
 	}
@@ -164,7 +164,7 @@ public class GameScreen implements Screen
 		state = State.RESUME;
 
         sprites.clear();
-		map.generate( Map.Generation.RANDOM );
+		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         sprites.add( player );
 

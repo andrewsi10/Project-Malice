@@ -38,10 +38,10 @@ public class Map
     }
     // Biome types
     public enum Biome {
-        FOREST
+        RANDOM, FOREST, SNOW
     }
     // Tile types
-    private enum Tile {
+    private enum Tile { // 1st row is blocks, 2nd row is spaces (expansion: 3rd row is decoration)
         BLOCK, SPACE
     }
 
@@ -54,6 +54,7 @@ public class Map
             tileIndex.put( tiles[i], i );
         Texture texture;
         for ( Biome b : Biome.values() ) {
+            if ( b == Biome.RANDOM ) continue;
             String s = b.toString();
             texture = new Texture( PACKAGE + s.charAt( 0 ) + s.substring( 1 ).toLowerCase() + ".png" );
             texture.getTextureData().prepare();
@@ -80,24 +81,23 @@ public class Map
     private Texture expanse;
 
     // -------------------- Constructors ------------------- //
-    /**
-     * Constructs a map filled with walls
-     * Prepares Pixmap arrays for use in createMap() from predetermined files
-     * @param rows number of rows in map
-     * @param cols number of columns in map
-     */
-    public Map( Biome b, int rows, int cols )
-    {
-        areSpaces = new boolean[rows][cols];
-        biome = biomes.get( b );
-    }
+//    /**
+//     * Constructs a map filled with walls
+//     * Prepares Pixmap arrays for use in createMap() from predetermined files
+//     * @param rows number of rows in map
+//     * @param cols number of columns in map
+//     */
+//    public Map( Biome b, int rows, int cols )
+//    {
+//        areSpaces = new boolean[rows][cols];
+//    }
 
-    /**
-     * For JUnit Testing only (in order to avoid graphics: Textures and Pixmaps)
-     * @param rows number of rows in map
-     * @param cols number of columns in map
-     * @param b to differentiate from other constructor for testing
-     */
+//    /**
+//     * For JUnit Testing only (in order to avoid graphics: Textures and Pixmaps)
+//     * @param rows number of rows in map
+//     * @param cols number of columns in map
+//     * @param b to differentiate from other constructor for testing
+//     */
     public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
@@ -113,10 +113,13 @@ public class Map
      * (this method is mainly for expansion of game generation)
      * @param type of generation
      */
-    public void generate( Generation type )
+    public void generate( Generation type, Biome b )
     {
         areSpaces = new boolean[getMapTileWidth()][getMapTileHeight()];
         map = null;
+        if ( b == Biome.RANDOM )
+            b = Biome.values()[randomNumber(Biome.values().length - 1) + 1];
+        biome = biomes.get( b );
         switch ( type )
         {
             case STORY:
