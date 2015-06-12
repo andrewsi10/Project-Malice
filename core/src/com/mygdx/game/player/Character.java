@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Options;
 
@@ -46,28 +44,25 @@ public class Character extends Sprite {
 	 * Variable used to determine the height in pixels of the status bars
 	 */
 	public static final int BARHEIGHT = 5;
-
 	/**
 	 * variables used to hold animation frames and initialize animations
 	 */
 	private float stateTime;
-	private Animation upAnimation;
-	private Animation rightAnimation;
-	private Animation downAnimation;
-	private Animation leftAnimation;
+	private Animation[] animations;
+	private Animation animation;
 
-	private int level = 0;
 	private GlyphLayout layout = new GlyphLayout();
 	private Color hpColor = Color.GREEN;
 
 	private int direction = -1;
-	private int maxHp = 50; // max health
-	private int currentHp = maxHp; // current health
-	private int experience = 0;
+	private int maxHp; // max health
+	private int currentHp; // current health
+	private int experience;
+    private int level;
 	private int expToLevel = -1;
 	private int baseDmg = 10; // base damage
 	private int randMod = 4; // random damage modifier
-	private int reloadSpeed = 500;
+	private int reloadSpeed;
 	private double previousTime = 0;
 	private float moveSpeed;
 	private String projectile;
@@ -78,44 +73,68 @@ public class Character extends Sprite {
 	 * 
 	 * @param frames
 	 *            the animation frame used for every direction
-	 */
-	public Character(Array<AtlasRegion> frames) {
-		this(frames, frames, frames, frames);
+	 *
+     * The Character constructor for Player, which takes four Array<AtlasRegion>
+     * and uses them to initialize the animations for each direction. Also
+     * initializes font to display information about the Character on-screen.
+     * Initial frame to be drawn for Character is set.
+     * 
+     * @param up
+     *            north-ward animation frames
+     * @param right
+     *            east-ward animation frames
+     * @param down
+     *            south-ward animation frames
+     * @param left
+     *            west-ward animation frames
+     */
+	public Character( Color hpColor, 
+	                  int maxHp, 
+	                  int experience, 
+	                  int level,
+	                  int speed, 
+	                  int reloadSpeed, 
+	                  String projectile, Animation... a ) {
+	    this.hpColor = hpColor;
+        this.animations = new Animation[4];
+        this.load( maxHp, experience, level, speed, reloadSpeed, projectile, a );
 	}
 
-    /**
-     * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
-     * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
-     * animation should have a frame duration of .2 seconds. Initialize
-     * stateTime to 0f.
-     */
-	/**
-	 * The Character constructor for Player, which takes four Array<AtlasRegion>
-	 * and uses them to initialize the animations for each direction. Also
-	 * initializes font to display information about the Character on-screen.
-	 * Initial frame to be drawn for Character is set.
-	 * 
-	 * @param up
-	 *            north-ward animation frames
-	 * @param right
-	 *            east-ward animation frames
-	 * @param down
-	 *            south-ward animation frames
-	 * @param left
-	 *            west-ward animation frames
-	 */
-	public Character(Array<AtlasRegion> up, Array<AtlasRegion> right,
-			Array<AtlasRegion> down, Array<AtlasRegion> left) {
-        upAnimation = new Animation(.2f, up);
-        rightAnimation = new Animation(.2f, right);
-        downAnimation = new Animation(.2f, down);
-        leftAnimation = new Animation(.2f, left);
-        stateTime = 0f;
-		set(new Sprite(down.get(0)));
-	}
+    public void load( int maxHp, 
+                      int experience, 
+                      int level, 
+                      int speed, 
+                      int reloadSpeed, 
+                      String projectile, 
+                      Animation... a )
+    {
+        this.maxHp = maxHp;
+        this.currentHp = maxHp;
+        this.experience = experience;
+        this.level = level;
+        this.moveSpeed = speed;
+        this.reloadSpeed = reloadSpeed;
+        this.projectile = projectile;
+        initializeAnimations( a );
+    }
 
 	// ---------------------Animation and Art ----------------------//
-
+   /**
+    * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
+    * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
+    * animation should have a frame duration of .2 seconds. Initialize
+    * stateTime to 0f.
+    */
+    public void initializeAnimations( Animation[] a )
+    {
+        for ( int i = 0; i < animations.length; i++ )
+            animations[i] = a[i%a.length];
+        stateTime = 0f;
+        animation = a[2%a.length];
+//        this.setRegion( a[2%a.length].getKeyFrame( stateTime ) );
+        set( new Sprite(a[2%a.length].getKeyFrame( stateTime ) ) );
+    }
+	
 	/**
 	 * Uses the value of direction to initialize a new animation to either
 	 * upAnimation, rightAnimation, downAnimation, or leftAnimaion, respective
@@ -125,23 +144,22 @@ public class Character extends Sprite {
 	 * is finished, set stateTime to 0.
 	 */
 	private void setAnimations() {
-		Animation animation = downAnimation;
 		switch (direction) {
 	    case NORTHWEST:
 		case NORTH:
         case NORTHEAST:
-			animation = upAnimation;
+			animation = animations[0];
 			break;
 		case EAST:
-			animation = rightAnimation;
+			animation = animations[1];
 			break;
         case SOUTHEAST:
 		case SOUTH:
         case SOUTHWEST:
-			animation = downAnimation;
+			animation = animations[2];
 			break;
 		case WEST:
-			animation = leftAnimation;
+			animation = animations[3];
 			break;
 		}
 

@@ -43,15 +43,9 @@ public class Enemy extends Character {
 	 *            reference to the atlas file used to get the images for Enemy
 	 */
 	public Enemy(String file) {
-		super(Options.atlas.get( file ).getRegions());
-
+		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", Options.atlas.get( file ) );
 		setDirection((int) (Math.random() * 8));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
-		setExperience(20); // set amount of exp Player will receive
-		setSpeed(3); // set speed of Enemy
-		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
-		setHpColor( Color.RED );
-		setProjectile( "EnemyBullet" );
 	}
 
 	/**
@@ -61,7 +55,7 @@ public class Enemy extends Character {
 	 * interval [minTravelTime, minTravelTime + travelTimeScalar).
 	 */
 	public Enemy() {
-		setDirection((int) (Math.random() * 8));
+		setDirection((int) (Math.random() * NUMDIRECTIONS));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setExperience(20); // set amount of exp Player will receive
 		setSpeed(3); // set speed of Enemy
@@ -111,7 +105,7 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-			setDirection((int) (Math.random() * 8));
+			setDirection((int) (Math.random() * NUMDIRECTIONS));
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);
 		}

@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.utils.Array;
 
 /**
  *  Represents a Projectile in the game. Always moves in a straight line based
@@ -52,7 +50,6 @@ public class Projectile extends Sprite
 		angle = Math.atan2( distanceY, distanceX );
 		Options.Audio.playAudio( type );
 
-		Array<AtlasRegion> projectileTexture = Options.atlas.get( type ).getRegions();
 //		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
 //				projectileTexture.getWidth() / col,
 //				projectileTexture.getHeight() / row );
@@ -66,12 +63,10 @@ public class Projectile extends Sprite
 //				frames[index++] = temp[i][j];
 //			}
 //		}
+        animation = Options.atlas.get( type );
+        stateTime = 0f;
 		
-		this.set( new Sprite( projectileTexture.get(0) ) );
-
-		animation = new Animation( .2f, projectileTexture );
-		stateTime = 0f;
-
+		this.set( new Sprite( animation.getKeyFrame( stateTime ) ) );
 		this.damage = damage;
         setSize(getWidth() / 3, getHeight() / 3);
         setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 

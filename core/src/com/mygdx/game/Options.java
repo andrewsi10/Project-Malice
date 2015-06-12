@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -73,9 +74,10 @@ public class Options
     public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
     public static final Names[] NAMES = Names.values();
-    public static final EnumMap<Names, TextureAtlas> playerAtlas = new EnumMap<Names, TextureAtlas>(Names.class);
-    public static final HashMap<String, TextureAtlas> atlas = new HashMap<String, TextureAtlas>();
+    public static final EnumMap<Names, Animation[]> playerAtlas = new EnumMap<Names, Animation[]>(Names.class);
+    public static final HashMap<String, Animation> atlas = new HashMap<String, Animation>();
     public static final int NUMENEMIES = 7;
+    public static final float FRAME_DURATION = 0.2f;
     
     public static void initialize()
     {
@@ -87,20 +89,28 @@ public class Options
     private static void loadAtlas()
     {
         String s;
+        Array<AtlasRegion> a;
         for ( Names n : NAMES )
         {
-            playerAtlas.put( n, new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ) );
+            a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
+            playerAtlas.put( n, new Animation[]{
+                new Animation( FRAME_DURATION, a.get( 0 ), a.get( 1 ) ),
+                new Animation( FRAME_DURATION, a.get( 2 ), a.get( 3 ) ),
+                new Animation( FRAME_DURATION, a.get( 4 ), a.get( 5 ) ),
+                new Animation( FRAME_DURATION, a.get( 6 ), a.get( 7 ) ) } );
+            
             s = n.getProjectileName();
-            atlas.put( s, new TextureAtlas( "img/sprites/Projectiles/" + s 
-                + "/" + s + ".atlas" ) );
+            a = new TextureAtlas( "img/sprites/Projectiles/" + s + "/" + s + ".atlas" ).getRegions();
+            atlas.put( s, new Animation( FRAME_DURATION, a ) );
         }
         for ( int i = 1; i <= NUMENEMIES; i++ )
         {
             s = "Enemy" + i;
-            atlas.put( s, new TextureAtlas( "img/sprites/Enemies/" + s + "/" 
-                                + s + ".atlas" ) );
+            a = new TextureAtlas( "img/sprites/Enemies/" + s + "/" + s + ".atlas" ).getRegions();
+            atlas.put( s, new Animation( FRAME_DURATION, a ) );
         }
-        atlas.put( "EnemyBullet", new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ) );
+        a = new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ).getRegions();
+        atlas.put( "EnemyBullet", new Animation( FRAME_DURATION, a ) );
     }
 
     /**

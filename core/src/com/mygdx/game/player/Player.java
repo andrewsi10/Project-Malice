@@ -1,10 +1,10 @@
 package com.mygdx.game.player;
 
 import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Options;
 
@@ -36,30 +36,9 @@ public class Player extends Character {
 	 * @param proj
 	 *            reference for the projectile atlas file
 	 */
-	public Player(Options.Names n) {
-		super(new Array<AtlasRegion>(// up animation new Array
-				new AtlasRegion[] { 
-				    Options.playerAtlas.get( n ).findRegion( "0" ),
-				    Options.playerAtlas.get( n ).findRegion( "1" )}), 
-			new Array<AtlasRegion>(
-				// right animation new Array
-				new AtlasRegion[] {
-				    Options.playerAtlas.get( n ).findRegion( "2" ),
-				    Options.playerAtlas.get( n ).findRegion( "3" ) }), 
-			new Array<AtlasRegion>(
-				// down animation new Array
-				new AtlasRegion[] {
-				    Options.playerAtlas.get( n ).findRegion( "4" ),
-				    Options.playerAtlas.get( n ).findRegion( "5" ) }), 
-			new Array<AtlasRegion>(
-				// left animation new Array
-				new AtlasRegion[] {
-				    Options.playerAtlas.get( n ).findRegion( "6" ),
-				    Options.playerAtlas.get( n ).findRegion( "7" ) }));
-		setSpeed(5);
+	public Player(Options.Names n) { // loads with default settings
+		super(Color.GREEN, 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
 		setExpToLevel(100);
-		setLevel(1);
-		setProjectile( n.getProjectileName() );
 	}
 
 	/**
@@ -71,6 +50,12 @@ public class Player extends Character {
 		setSpeed(5);
 		setExpToLevel(100);
 		setLevel(1);
+	}
+	
+	public Player reload( Options.Names n ) // loads with default settings
+	{
+	    this.load( 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
+	    return this;
 	}
 
 	/**
