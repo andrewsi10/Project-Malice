@@ -1,7 +1,8 @@
 package com.mygdx.game.world;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -33,7 +34,7 @@ public class Map
     public static final String PACKAGE = "map/";
     // generation types
     public enum Generation {
-        STORY, RANDOM, DUNGEON, ARENA
+        STORY, DUNGEON, ARENA, RANDOM
     }
     // Biome types
     public enum Biome {
@@ -102,6 +103,11 @@ public class Map
         areSpaces = new boolean[rows][cols];
     }
     
+    public Map( int size )
+    {
+        areSpaces = new boolean[size][size];
+    }
+    
     // --------------------- Generating ----------------- //
     /**
      * Generates the map based on type of generation
@@ -126,18 +132,12 @@ public class Map
             case ARENA:
                 generateArena();
                 break;
-            case RANDOM:
-                type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
+//            case RANDOM:
+//                type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
             default:
                 randomGeneration();
                 break;
         }
-//        if ( type == RANDOM )
-//            type = randomNumber( NUM_GENERATION_TYPES );
-        // if ( type >= 0 )
-//        randomGeneration( type );
-        // else if ( type == STORY )
-        // createStoryMap();
         this.setSpawn( -1, -1 );
     }
     
@@ -281,12 +281,35 @@ public class Map
      */
     private int sizeOfArea( int x, int y, boolean[][] map )
     {
-        if ( !inTileBounds( x, y ) || !map[x][y] ) return 0;
-        map[x][y] = false;
-        return sizeOfArea( x - 1, y, map ) 
-             + sizeOfArea( x + 1, y, map )
-             + sizeOfArea( x, y - 1, map )
-             + sizeOfArea( x, y + 1, map ) + 1;
+        // recursive method
+//        if ( !inTileBounds( x, y ) || !map[x][y] ) return 0;
+//        map[x][y] = false;
+//        return sizeOfArea( x - 1, y, map ) 
+//             + sizeOfArea( x + 1, y, map )
+//             + sizeOfArea( x, y - 1, map )
+//             + sizeOfArea( x, y + 1, map ) + 1;
+        // iterative method
+        Queue<Integer> queueX = new LinkedList<Integer>();
+        Queue<Integer> queueY = new LinkedList<Integer>();
+        queueX.add( x );
+        queueY.add( y );
+
+        int count = 0;
+        while (!queueX.isEmpty()) {
+            x = queueX.remove();
+            y = queueY.remove();
+
+            if ( map[x][y] ) {
+                queueX.add( x + 1 ); queueY.add( y );
+                queueX.add( x - 1 ); queueY.add( y );
+                queueX.add( x );     queueY.add( y + 1 );
+                queueX.add( x );     queueY.add( y - 1 );
+                
+                map[x][y] = false;
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -336,13 +359,37 @@ public class Map
      */
     private boolean hasPath( int x1, int y1, int x2, int y2, boolean asSpace, boolean[][] map )
     {
-        if ( !inTileBounds( x1, y1 ) || map[x1][y1] != asSpace ) return false;
-        if ( x1 == x2 && y1 == y2 ) return true;
-        map[x1][y1] = !asSpace;
-        return hasPath( x1 - 1, y1, x2, y2, asSpace, map )
-            || hasPath( x1 + 1, y1, x2, y2, asSpace, map )
-            || hasPath( x1, y1 - 1, x2, y2, asSpace, map )
-            || hasPath( x1, y1 + 1, x2, y2, asSpace, map );
+        // recursive method
+//        if ( !inTileBounds( x1, y1 ) || map[x1][y1] != asSpace ) return false;
+//        if ( x1 == x2 && y1 == y2 ) return true;
+//        map[x1][y1] = !asSpace;
+//        return hasPath( x1 - 1, y1, x2, y2, asSpace, map )
+//            || hasPath( x1 + 1, y1, x2, y2, asSpace, map )
+//            || hasPath( x1, y1 - 1, x2, y2, asSpace, map )
+//            || hasPath( x1, y1 + 1, x2, y2, asSpace, map );
+        // iterative method
+        Queue<Integer> queueX = new LinkedList<Integer>();
+        Queue<Integer> queueY = new LinkedList<Integer>();
+        queueX.add( x1 );
+        queueY.add( y1 );
+
+        int x, y;
+        while (!queueX.isEmpty()) {
+            x = queueX.remove();
+            y = queueY.remove();
+
+            if ( inTileBounds( x, y ) && map[x][y] == asSpace ) {
+                if ( x == x2 && y == y2 ) return true;
+                
+                queueX.add( x + 1 ); queueY.add( y );
+                queueX.add( x - 1 ); queueY.add( y );
+                queueX.add( x );     queueY.add( y + 1 );
+                queueX.add( x );     queueY.add( y - 1 );
+                
+                map[x][y] = false;
+            }
+        }
+        return false;
     }
 
     // -----------------------Collision ------------------ //
@@ -530,8 +577,8 @@ public class Map
         boolean method = randomNumber( 2 ) == 0;
         int x, y, w, h, size;
         
-        ArrayList<Integer> listX = new ArrayList<Integer>();
-        ArrayList<Integer> listY = new ArrayList<Integer>();
+        LinkedList<Integer> listX = new LinkedList<Integer>();
+        LinkedList<Integer> listY = new LinkedList<Integer>();
         do {
             x = randomNumber( getMapTileWidth() - 3 );
             y = randomNumber( getMapTileHeight() - 3 );
@@ -547,33 +594,36 @@ public class Map
         
         // Remove or connect excess rooms based on generation type
         int largest = size;
-        int pX = listX.remove( listX.size() - 1 );
-        int pY = listY.remove( listY.size() - 1 );
-        for ( int i = 0; i < listX.size(); i++ )
+        int pX = listX.removeLast();
+        int pY = listY.removeLast();
+        int x1, y1;
+        while ( !listX.isEmpty() )
         {
+            x1 = listX.remove();
+            y1 = listY.remove();
             if ( method )
             {
-                size = sizeOfArea( listX.get( i ), listY.get( i ) );
+                size = sizeOfArea( x1, y1 );
                 if ( size > largest )
                 {
                     largest = size;
                     fillArea( pX, pY );
-                    pX = listX.get( i );
-                    pY = listY.get( i );
+                    pX = x1;
+                    pY = y1;
                     continue;
 
                 }
                 if ( size < largest ) {
-                    fillArea( listX.get( i ), listY.get( i ) );
+                    fillArea( x1, y1 );
                     continue;
                 }
             }
-            if ( !hasPath( pX, pY, listX.get( i ), listY.get( i ), true ) )// && ( size == largest )
+            if ( !hasPath( pX, pY, x1, y1, true ) )// && ( size == largest )
             {
-                x = Math.min( pX, listX.get( i ) );
-                y = Math.min( pY, listY.get( i ) );
-                w = Math.abs( pX - listX.get( i ) );
-                h = Math.abs( pY - listY.get( i ) );
+                x = Math.min( pX, x1 );
+                y = Math.min( pY, y1 );
+                w = Math.abs( pX - x1 );
+                h = Math.abs( pY - y1 );
                 createRectangle( x, y, w, h );
                 largest = sizeOfArea( x, y );
             }
