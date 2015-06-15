@@ -1,8 +1,7 @@
 package com.mygdx.game.world;
 
-import java.awt.Point;
+import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -510,15 +509,17 @@ public class Map
     public void randomGeneration(Generation type )
     {
         int x, y, w, h, size;
-        
-        LinkedList<Point> list = new LinkedList<Point>();
+
+        ArrayList<Integer> listX = new ArrayList<Integer>();
+        ArrayList<Integer> listY = new ArrayList<Integer>();
         do {
             x = randomNumber( getMapTileWidth() - 3 );
             y = randomNumber( getMapTileHeight() - 3 );
             w = randomNumber( getMapTileWidth() / 3 ) + 3;
             h = randomNumber( getMapTileHeight() / 3 ) + 3;
             createRoom( x, y, w, h );
-            list.add( new Point( x + 1, y + 1 ) );
+            listX.add( x + 1 );
+            listY.add( y + 1 );
             size = sizeOfArea( x, y );
         } while (// x != this.areSpaces.length - 1
                 size < getMapTileWidth() * getMapTileHeight() / 2
@@ -526,31 +527,33 @@ public class Map
         
         // Remove or connect excess rooms based on generation type
         int largest = size;
-        Point point = list.removeLast();
-        for ( Point p : list )
+        int pX = listX.remove( listX.size() - 1 );
+        int pY = listY.remove( listY.size() - 1 );
+        for ( int i = 0; i < listX.size(); i++ )
         {
             if ( type == Generation.ARENA )
             {
-                size = sizeOfArea( p.x, p.y );
+                size = sizeOfArea( listX.get( i ), listY.get( i ) );
                 if ( size > largest )
                 {
                     largest = size;
-                    fillArea( point.x, point.y );
-                    point = p;
+                    fillArea( pX, pY );
+                    pX = listX.get( i );
+                    pY = listY.get( i );
                     continue;
 
                 }
                 if ( size < largest ) {
-                    fillArea( p.x, p.y );
+                    fillArea( listX.get( i ), listY.get( i ) );
                     continue;
                 }
             }
-            if ( !hasPath( point.x, point.y, p.x, p.y, true ) )// && ( size == largest )
+            if ( !hasPath( pX, pY, listX.get( i ), listY.get( i ), true ) )// && ( size == largest )
             {
-                x = Math.min( point.x, p.x );
-                y = Math.min( point.y, p.y );
-                w = Math.abs( point.x - p.x );
-                h = Math.abs( point.y - p.y );
+                x = Math.min( pX, listX.get( i ) );
+                y = Math.min( pY, listY.get( i ) );
+                w = Math.abs( pX - listX.get( i ) );
+                h = Math.abs( pY - listY.get( i ) );
                 createRectangle( x, y, w, h );
                 largest = sizeOfArea( x, y );
             }
