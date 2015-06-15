@@ -143,7 +143,7 @@ public class GameScreen implements Screen
 		state = State.RESUME;
 
         sprites.clear();
-		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
+		map.generate( Map.Generation.ARENA, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         player.reload();
         sprites.add( player );

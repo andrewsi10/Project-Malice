@@ -123,10 +123,13 @@ public class Map
         {
             case STORY:
                 break;
+            case ARENA:
+                generateArena();
+                break;
             case RANDOM:
                 type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
             default:
-                randomGeneration( type );
+                randomGeneration();
                 break;
         }
 //        if ( type == RANDOM )
@@ -135,6 +138,7 @@ public class Map
 //        randomGeneration( type );
         // else if ( type == STORY )
         // createStoryMap();
+        this.setSpawn( -1, -1 );
     }
     
     /**
@@ -180,6 +184,21 @@ public class Map
         expanse = new Texture( pixmap2 );
         pixmap1.dispose();
         pixmap2.dispose();
+    }
+    
+    public void generateArena()
+    {
+        for ( int i = 0; i < areSpaces.length; i++ )
+        {
+            for ( int j = 0; j < areSpaces.length; j++ )
+            {
+                if ( i == 0 || i == areSpaces.length - 1 
+                  || j == 0 || j == areSpaces[0].length - 1 
+                  || i % 5 == 0 && j % 5 == 0 )
+                    continue;
+                areSpaces[i][j] = true;
+            }
+        }
     }
 
     // --------------------------Recursive Methods ---------------------//
@@ -506,10 +525,11 @@ public class Map
      * remain "false" or walls
      * @param type of generation
      */
-    public void randomGeneration(Generation type )
+    public void randomGeneration()
     {
+        boolean method = randomNumber( 2 ) == 0;
         int x, y, w, h, size;
-
+        
         ArrayList<Integer> listX = new ArrayList<Integer>();
         ArrayList<Integer> listY = new ArrayList<Integer>();
         do {
@@ -531,7 +551,7 @@ public class Map
         int pY = listY.remove( listY.size() - 1 );
         for ( int i = 0; i < listX.size(); i++ )
         {
-            if ( type == Generation.ARENA )
+            if ( method )
             {
                 size = sizeOfArea( listX.get( i ), listY.get( i ) );
                 if ( size > largest )
@@ -558,7 +578,6 @@ public class Map
                 largest = sizeOfArea( x, y );
             }
         }
-        this.setSpawn( -1, -1 );
     }
 
     // -------------- Spawn methods -------------------- //
