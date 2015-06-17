@@ -94,7 +94,7 @@ public class GameScreen implements Screen
 	 * 
 	 * @param g
 	 *            the Malice object controlling the screens
-	 * @param playerType
+	 *  playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
 	public GameScreen(Malice g)
@@ -143,7 +143,7 @@ public class GameScreen implements Screen
 		state = State.RESUME;
 
         sprites.clear();
-		map.generate( Map.Generation.ARENA, Map.Biome.RANDOM );
+		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         player.reload();
         sprites.add( player );
