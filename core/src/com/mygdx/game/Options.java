@@ -4,7 +4,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -18,8 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 
-import static com.mygdx.game.player.Character.*;
-
 /**
  *
  *  @author  Nathan Lui
@@ -29,17 +26,6 @@ import static com.mygdx.game.player.Character.*;
  */
 public class Options
 {
-    /**
-     * This array stores Key input values
-     * 0    , 1   , 2    , 3   , 4
-     * NORTH, EAST, SOUTH, WEST, Attack
-     */
-    public static int[] CONTROLS = new int[]{ Input.Keys.W,
-                                                             Input.Keys.D,
-                                               Input.Keys.S,
-                                  Input.Keys.A,
-                Input.Buttons.LEFT
-             };
 
 //    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
 //        "Warrior", "WhiteMage" };
@@ -140,36 +126,6 @@ public class Options
         textButtonStyle.over = buttonSkin.newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = buttonSkin.getFont( "default" );
         buttonSkin.add( "default", textButtonStyle );
-    }
-    
-    // -------------------------- Player Controls --------------------- //
-    
-    /**
-     * Returns direction to go based on key input and an array that stores
-     * input values
-     * (Used by Player class)
-     * @return direction or -1 if no direction
-     */
-    public static int getInputDirection() {
-        int dirY = -1;
-        if ( Gdx.input.isKeyPressed( CONTROLS[0] ) )
-            dirY = NORTH;
-        if ( Gdx.input.isKeyPressed( CONTROLS[2] ) )
-            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
-        
-        int dirX = -1;
-        if ( Gdx.input.isKeyPressed( CONTROLS[1] ) )
-            dirX = EAST;
-        if ( Gdx.input.isKeyPressed( CONTROLS[3] ) )
-            dirX = ( dirX == EAST ) ? -1 : WEST;
-        
-        if ( dirY == -1 )
-            return dirX;
-        if ( dirX == -1 )
-            return dirY;
-        if ( dirY == NORTH && dirX == WEST )
-            return NORTHWEST;
-        return ( dirY + dirX ) / 2;
     }
     
     /*** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

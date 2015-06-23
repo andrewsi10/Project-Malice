@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.Controller;
 import com.mygdx.game.Options;
 
 /**
@@ -78,7 +79,7 @@ public class Player extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
-		int dir = Options.getInputDirection();
+		int dir = Controller.getInputDirection();
 		if (dir != -1) {
 			setDirection(dir);
 			super.move(character, projectiles, time);
