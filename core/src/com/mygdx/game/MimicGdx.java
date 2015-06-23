@@ -1,10 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-
-import static com.mygdx.game.player.Character.*;
 
 /**
  *  The MimicGdx Class isolates nearly all input from the Gdx class
@@ -21,47 +18,6 @@ import static com.mygdx.game.player.Character.*;
  */
 public class MimicGdx
 {
-    /**
-     * This array stores Key input values
-     * 0    , 1   , 2    , 3   , 4
-     * NORTH, EAST, SOUTH, WEST, Attack
-     */
-    public static int[] CONTROLS = new int[]{ Input.Keys.W,
-                                                             Input.Keys.D,
-                                               Input.Keys.S,
-                                  Input.Keys.A,
-                Input.Buttons.LEFT
-             };
-    
-    // -------------------------- Player Controls --------------------- //
-    
-    /**
-     * Returns direction to go based on key input and an array that stores
-     * input values
-     * (Used by Player class)
-     * @return direction or -1 if no direction
-     */
-    public static int getInputDirection() {
-        int dirY = -1;
-        if ( isKeyPressed( CONTROLS[0] ) )
-            dirY = NORTH;
-        if ( isKeyPressed( CONTROLS[2] ) )
-            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
-        
-        int dirX = -1;
-        if ( isKeyPressed( CONTROLS[1] ) )
-            dirX = EAST;
-        if ( isKeyPressed( CONTROLS[3] ) )
-            dirX = ( dirX == EAST ) ? -1 : WEST;
-        
-        if ( dirY == -1 )
-            return dirX;
-        if ( dirX == -1 )
-            return dirY;
-        if ( dirY == NORTH && dirX == WEST )
-            return NORTHWEST;
-        return ( dirY + dirX ) / 2;
-    }
     
     /*** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * note:ALL METHODS BELOW ARE FOR TESTING AND ISOLATION OF THE GDX CLASS *

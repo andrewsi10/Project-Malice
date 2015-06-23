@@ -407,12 +407,12 @@ public class GameScreen implements Screen
 		if ( map.isCollidingWithWall( c ) )
 		{
 			c.setPosition( x, y );
-			c.setDirection( c.getDirection() - 1 );
+			c.setDirection( c.getDirection() - 45 );
 			c.move();
 			if ( map.isCollidingWithWall( c ) )
 			{
 				c.setPosition( x, y );
-				c.setDirection( c.getDirection() + 2 );
+				c.setDirection( c.getDirection() + 90 );
 				c.move();
 				if ( map.isCollidingWithWall( c ) )
 					c.setPosition( x, y );

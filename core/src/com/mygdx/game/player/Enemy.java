@@ -55,7 +55,7 @@ public class Enemy extends Character {
 	 * interval [minTravelTime, minTravelTime + travelTimeScalar).
 	 */
 	public Enemy() {
-		setDirection((int) (Math.random() * NUMDIRECTIONS));
+		setDirection((int) (Math.random() * Direction.NUMDEGREES.getDirection()));
 		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
 		setExperience(20); // set amount of exp Player will receive
 		setSpeed(3); // set speed of Enemy
@@ -105,7 +105,7 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-			setDirection((int) (Math.random() * NUMDIRECTIONS));
+			setDirection((int) (Math.random() * Direction.NUMDEGREES.getDirection()));
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);
 		}
@@ -132,21 +132,21 @@ public class Enemy extends Character {
 	 */
 	public int getDirection( float deltaX, float deltaY ) {
         if ( deltaX > marginOfDelta && deltaY > marginOfDelta )
-            return NORTHEAST;
+            return Direction.NORTHEAST.getDirection();
         if ( deltaX > marginOfDelta && deltaY < -marginOfDelta )
-            return SOUTHEAST;
+            return Direction.SOUTHEAST.getDirection();
 		if ( deltaX < -marginOfDelta && deltaY < -marginOfDelta )
-            return SOUTHWEST;
+            return Direction.SOUTHWEST.getDirection();
 		if ( deltaX < -marginOfDelta && deltaY > marginOfDelta )
-            return NORTHWEST;
+            return Direction.NORTHWEST.getDirection();
         if ( Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta )
-            return NORTH;
+            return Direction.NORTH.getDirection();
         if ( deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta )
-            return EAST;
+            return Direction.EAST.getDirection();
 		if ( Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta )
-            return SOUTH;
+            return Direction.SOUTH.getDirection();
 		if ( deltaX < -marginOfDelta && Math.abs(deltaY) < marginOfDelta )
-            return WEST;
+            return Direction.WEST.getDirection();
 		return -1;
 	}
 

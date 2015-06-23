@@ -1,10 +1,6 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.player.Character.EAST;
-import static com.mygdx.game.player.Character.NORTH;
-import static com.mygdx.game.player.Character.NORTHWEST;
-import static com.mygdx.game.player.Character.SOUTH;
-import static com.mygdx.game.player.Character.WEST;
+import static com.mygdx.game.player.AnimatedSprite.Direction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,6 +20,8 @@ public class Controller implements InputProcessor
                 Input.Buttons.LEFT
              };
     
+    public static float DIRECTION;
+    
     // -------------------------- Player Controls --------------------- //
     
     /**
@@ -33,31 +31,31 @@ public class Controller implements InputProcessor
      * @return direction or -1 if no direction
      */
     public static int getInputDirection() {
+//        if ( Gdx.app.getType().equals( ApplicationType.Desktop ) )
         int dirY = -1;
         if ( Gdx.input.isKeyPressed( CONTROLS[0] ) )
-            dirY = NORTH;
+            dirY = Direction.NORTH.getDirection();
         if ( Gdx.input.isKeyPressed( CONTROLS[2] ) )
-            dirY = ( dirY == NORTH ) ? -1 : SOUTH;
+            dirY = ( dirY == Direction.NORTH.getDirection() ) ? -1 : Direction.SOUTH.getDirection();
         
         int dirX = -1;
         if ( Gdx.input.isKeyPressed( CONTROLS[1] ) )
-            dirX = EAST;
+            dirX = Direction.EAST.getDirection();
         if ( Gdx.input.isKeyPressed( CONTROLS[3] ) )
-            dirX = ( dirX == EAST ) ? -1 : WEST;
+            dirX = ( dirX == Direction.EAST.getDirection() ) ? -1 : Direction.WEST.getDirection();
         
         if ( dirY == -1 )
             return dirX;
         if ( dirX == -1 )
             return dirY;
-        if ( dirY == NORTH && dirX == WEST )
-            return NORTHWEST;
+        if ( dirY == Direction.NORTH.getDirection() && dirX == Direction.WEST.getDirection() )
+            return Direction.NORTHWEST.getDirection();
         return ( dirY + dirX ) / 2;
     }
 
     @Override
     public boolean keyDown( int keycode )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 

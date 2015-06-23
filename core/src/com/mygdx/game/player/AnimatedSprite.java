@@ -6,21 +6,41 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class AnimatedSprite extends Sprite
 {
-    /**
-     * constant variables which represent 8 various directions
-     */
-    public static final int NORTH = 0;
-    public static final int NORTHEAST = 1;
-    public static final int EAST = 2;
-    public static final int SOUTHEAST = 3;
-    public static final int SOUTH = 4;
-    public static final int SOUTHWEST = 5;
-    public static final int WEST = 6;
-    public static final int NORTHWEST = 7;
-    /**
-     * The Number of Directions
-     */
-    public static final int NUMDIRECTIONS = 8;
+    public enum Direction {
+        NORTH( 0 ), 
+        NORTHEAST( 45 ), 
+        EAST( 90 ), 
+        SOUTHEAST( 135 ), 
+        SOUTH( 180 ), 
+        SOUTHWEST( 225 ), 
+        WEST( 270 ), 
+        NORTHWEST( 315 ),
+        NUMDEGREES( 360 );
+        
+        int direction;
+        Direction( int direction ) {
+            this.direction = direction;
+        }
+        
+        public int getDirection() {
+            return direction;
+        }
+    }
+//    /**
+//     * constant variables which represent 8 various directions
+//     */
+//    public static final int NORTH = 0;
+//    public static final int NORTHEAST = 1;
+//    public static final int EAST = 2;
+//    public static final int SOUTHEAST = 3;
+//    public static final int SOUTH = 4;
+//    public static final int SOUTHWEST = 5;
+//    public static final int WEST = 6;
+//    public static final int NORTHWEST = 7;
+//    /**
+//     * The Number of Directions
+//     */
+//    public static final int NUMDIRECTIONS = 8;
 
     /**
      * variables used to hold animation frames and initialize animations
@@ -29,8 +49,8 @@ public class AnimatedSprite extends Sprite
     private Animation[] animations;
     private Animation animation;
 
-    private int prevDirection = -1;
-    private int direction = -1;
+    private Direction prevDirection = Direction.SOUTH;
+    private double direction = -1;
     private float moveSpeed;
     
     public AnimatedSprite( Animation... a )
@@ -50,8 +70,8 @@ public class AnimatedSprite extends Sprite
              animations[i] = a[i%a.length];
          stateTime = 0f;
          animation = a[2%a.length];
-//         this.setRegion( a[2%a.length].getKeyFrame( stateTime ) );
-         set( new Sprite(a[2%a.length].getKeyFrame( stateTime ) ) );
+//         this.setRegion( animation.getKeyFrame( stateTime ) );
+         set( new Sprite(animation.getKeyFrame( stateTime ) ) );
      }
      
      /**
@@ -63,27 +83,28 @@ public class AnimatedSprite extends Sprite
       * is finished, set stateTime to 0.
       */
      protected void setAnimations() {
-         if ( Math.abs( direction - prevDirection ) > 1 ) {
-             switch (direction) {
-                 case NORTHWEST:
-                 case NORTH:
-                 case NORTHEAST:
-                     prevDirection = NORTH;
-                     break;
-                 case EAST:
-                     prevDirection = EAST;
-                     break;
-                 case SOUTHEAST:
-                 case SOUTH:
-                 case SOUTHWEST:
-                     prevDirection = SOUTH;
-                     break;
-                 case WEST:
-                     prevDirection = WEST;
-                     break;
-             }
-             animation = animations[prevDirection / 2];
+         Direction d = prevDirection;
+         
+         // can be changed into a loop
+         if ( direction > Direction.NORTHWEST.getDirection()
+           || direction < Direction.NORTHEAST.getDirection() ) {
+             prevDirection = Direction.NORTH;
          }
+         else if ( direction > Direction.NORTHEAST.getDirection() 
+                && direction < Direction.SOUTHEAST.getDirection() ) {
+             prevDirection = Direction.EAST;
+         }
+         else if ( direction > Direction.SOUTHEAST.getDirection() 
+                && direction < Direction.SOUTHWEST.getDirection() ) {
+             prevDirection = Direction.SOUTH;
+         }
+         else if ( direction > Direction.SOUTHWEST.getDirection() 
+                && direction < Direction.NORTHWEST.getDirection() ) {
+             prevDirection = Direction.WEST;
+         }
+         
+         if ( prevDirection != d )
+             animation = animations[prevDirection.getDirection() / 90];
 
          if ( !animation.isAnimationFinished( stateTime ) ) {
              stateTime += Gdx.graphics.getDeltaTime();
@@ -99,32 +120,7 @@ public class AnimatedSprite extends Sprite
       * translate(int, int) method.
       */
      public void move() {
-
-         int dx = 0;
-         int dy = 0;
-         switch (direction) {
-         case NORTHWEST:
-             dx = -1;
-         case NORTH:
-             dy = 1;
-             break;
-         case NORTHEAST:
-             dy = 1;
-         case EAST:
-             dx = 1;
-             break;
-         case SOUTHEAST:
-             dx = 1;
-         case SOUTH:
-             dy = -1;
-             break;
-         case SOUTHWEST:
-             dy = -1;
-         case WEST:
-             dx = -1;
-             break;
-         }
-         translate(dx, dy);
+         translate();
      }
 
      /**
@@ -138,14 +134,9 @@ public class AnimatedSprite extends Sprite
       * @param dy
       *            change in y-coordinate
       */
-     private void translate(int dx, int dy) {
-         if (dx == 0 || dy == 0) {
-             translateX((float) (moveSpeed * dx));
-             translateY((float) (moveSpeed * dy));
-         } else {
-             translateX((float) (moveSpeed * dx / Math.sqrt(2)));
-             translateY((float) (moveSpeed * dy / Math.sqrt(2)));
-         }
+     private void translate() {
+         translateY( (float) ( moveSpeed * Math.sin( Math.toRadians( 90 - direction ) ) ) );
+         translateX( (float) ( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) ) );
      }
 
      /**
@@ -154,8 +145,8 @@ public class AnimatedSprite extends Sprite
       * 
       * @param dir
       */
-     public void setDirection(int dir) {
-         direction = dir % NUMDIRECTIONS;
+     public void setDirection(double dir) {
+         direction = dir % 360;
      }
 
      /**
@@ -173,7 +164,7 @@ public class AnimatedSprite extends Sprite
       * 
       * @return direction
       */
-     public int getDirection() {
+     public double getDirection() {
          return direction;
      }
 
