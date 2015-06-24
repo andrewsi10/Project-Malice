@@ -22,7 +22,7 @@ public class AnimatedSprite extends Sprite
         NORTHWEST( 315 ),
         NUMDEGREES( 360 );
 
-        public static Direction[] DIRECTIONS = Direction.values();
+        public static final Direction[] DIRECTIONS = Direction.values();
         
         int direction;
         Direction( int direction ) {

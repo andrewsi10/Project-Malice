@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
@@ -47,6 +48,8 @@ public class GameScreen implements Screen
     private ShapeRenderer renderer;
 
 	private final Malice game;
+	
+	private Controller controller = new Controller();
 	
     /**
      * Volume of this screen
@@ -138,7 +141,7 @@ public class GameScreen implements Screen
 	public void show()
 	{
         Options.Audio.playTheme( VOLUME );
-        Gdx.input.setInputProcessor( null );
+        Gdx.input.setInputProcessor( controller );
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 

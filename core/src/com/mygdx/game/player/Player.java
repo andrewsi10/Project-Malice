@@ -81,7 +81,7 @@ public class Player extends Character {
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
 		double dir = Controller.getInputDirection();
-		if (dir != -1) {
+		if (dir >= 0) {
 			setDirection(dir);
 			super.move(character, projectiles, time);
 		}
