@@ -3,7 +3,6 @@ package com.mygdx.game.player;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Controller;
@@ -86,7 +85,7 @@ public class Player extends Character {
 			super.move(character, projectiles, time);
 		}
 
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+		if ( Gdx.input.isTouched() ) {
 			shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
 					Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
 					System.currentTimeMillis() );
