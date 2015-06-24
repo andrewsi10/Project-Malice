@@ -1,6 +1,10 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.player.AnimatedSprite.Direction.*;
+import static com.mygdx.game.player.AnimatedSprite.Direction.NORTH;
+import static com.mygdx.game.player.AnimatedSprite.Direction.EAST;
+import static com.mygdx.game.player.AnimatedSprite.Direction.SOUTH;
+import static com.mygdx.game.player.AnimatedSprite.Direction.WEST;
+import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -14,11 +18,12 @@ public class Controller implements InputProcessor
      * 0    , 1   , 2    , 3
      * NORTH, EAST, SOUTH, WEST
      */
-    public static int[] CONTROLS = new int[]{ Input.Keys.W,
-                                                             Input.Keys.D,
-                                               Input.Keys.S,
-                                  Input.Keys.A,
+    public static final int[] CONTROLS = new int[]{ Input.Keys.W,
+                                                                 Input.Keys.D,
+                                                    Input.Keys.S,
+                                       Input.Keys.A,
              };
+    public static final boolean[] PRESSED = new boolean[CONTROLS.length];
     
     public static float dir; // TODO android
     
@@ -41,35 +46,37 @@ public class Controller implements InputProcessor
         else
         {
 //            return (DIRECTION == -1 || DIRECTION == -2)? -1 : DIRECTIONS[DIRECTION].getDirection();
-            int dirY = -1;
-            if ( Gdx.input.isKeyPressed( CONTROLS[0] ) )
-                dirY = NORTH.getDirection();
-            if ( Gdx.input.isKeyPressed( CONTROLS[2] ) )
-                dirY = ( dirY == NORTH.getDirection() ) ? -1 : SOUTH.getDirection();
+            int dirY = PRESSED[0] ? NORTH.getDirection() : -1;
+            if ( PRESSED[2] )
+                dirY = ( dirY == -1 ) ? SOUTH.getDirection() : -1;
 
-            int dirX = -1;
-            if ( Gdx.input.isKeyPressed( CONTROLS[1] ) )
-                dirX = EAST.getDirection();
-            if ( Gdx.input.isKeyPressed( CONTROLS[3] ) )
-                dirX = ( dirX == EAST.getDirection() ) ? -1 : WEST.getDirection();
+            int dirX = PRESSED[1] ? EAST.getDirection() : -1;
+            if ( PRESSED[3] )
+                dirX = ( dirX == -1 ) ? WEST.getDirection() : -1;
 
-            if ( dirY == -1 )
-                return dirX;
-            if ( dirX == -1 )
-                return dirY;
+            if ( dirY == -1 ) return dirX;
+            if ( dirX == -1 ) return dirY;
             if ( dirY == NORTH.getDirection() && dirX == WEST.getDirection() )
-                return NORTHWEST.getDirection();
+                dirY = NUMDEGREES.getDirection();
             return ( dirY + dirX ) / 2;
         }
     }
-
-    // TODO get following 2 methods to change DIRECTION according to what getInputDirection() returns
-    // note: has been attempted once but contained too many issues after compression of code
-    @Override
-    public boolean keyDown( int keycode ) { return false; }
     
     @Override
-    public boolean keyUp( int keycode ) { return false; }
+    public boolean keyDown( int keycode ) { 
+        for ( int i = 0; i < CONTROLS.length; i++ )
+            if ( CONTROLS[i] == keycode )
+                PRESSED[i] = true;
+        return true; 
+    }
+    
+    @Override
+    public boolean keyUp( int keycode ) { 
+        for ( int i = 0; i < CONTROLS.length; i++ )
+            if ( CONTROLS[i] == keycode )
+                PRESSED[i] = false;
+        return true; 
+    }
 
     @Override
     public boolean keyTyped( char character ) { return false; }
