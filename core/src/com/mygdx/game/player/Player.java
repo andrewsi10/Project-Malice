@@ -22,7 +22,7 @@ import com.mygdx.game.Options;
  */
 public class Player extends Character {
 
-	private int playerPoints = 0;
+	private int playerPoints;
 
 	/**
 	 * The constructor for player. The first parameter is used to reference the
@@ -36,26 +36,33 @@ public class Player extends Character {
 	 * @param proj
 	 *            reference for the projectile atlas file
 	 */
-	public Player(Options.Names n) { // loads with default settings
-		super(Color.GREEN, 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
-		setExpToLevel(100);
+	public Player()
+	{
+	    super( Color.GREEN );
+        setExpToLevel(100);
 	}
+	
+//    public Player(Options.Names n) { // loads with default settings
+//        super(Color.GREEN, 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
+//        setExpToLevel(100);
+//    }
 
-	/**
-	 * Constructor used for testing only. It does not use the super constructor
-	 * or initialize projectile. Initialize speed, expToLevel, and level as
-	 * accordingly with the regular constructor.
-	 */
-	public Player() {
-		setSpeed(5);
-		setExpToLevel(100);
-		setLevel(1);
-	}
+//	/**
+//	 * Constructor used for testing only. It does not use the super constructor
+//	 * or initialize projectile. Initialize speed, expToLevel, and level as
+//	 * accordingly with the regular constructor.
+//	 */
+//	public Player() {
+//		setSpeed(5);
+//		setExpToLevel(100);
+//		setLevel(1);
+//	}
 	
 	public void reload() // reloads with default settings
 	{
 	    this.load( 50, 0, 1, 5, 500 );
 	    this.playerPoints = 0;
+	    Controller.PRESSED = new boolean[Controller.CONTROLS.length];
 	}
 	
 	public void change( Options.Names n )

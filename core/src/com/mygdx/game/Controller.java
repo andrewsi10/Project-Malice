@@ -23,7 +23,7 @@ public class Controller implements InputProcessor
                                                     Input.Keys.S,
                                        Input.Keys.A,
              };
-    public static final boolean[] PRESSED = new boolean[CONTROLS.length];
+    public static boolean[] PRESSED = new boolean[CONTROLS.length];
     
     public static float dir; // TODO android
     
@@ -43,9 +43,7 @@ public class Controller implements InputProcessor
                 // note: formula to convert from standard x,y grid to course navigation grid
 //            return 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
         }
-        else
-        {
-//            return (DIRECTION == -1 || DIRECTION == -2)? -1 : DIRECTIONS[DIRECTION].getDirection();
+        else {
             int dirY = PRESSED[0] ? NORTH.getDirection() : -1;
             if ( PRESSED[2] )
                 dirY = ( dirY == -1 ) ? SOUTH.getDirection() : -1;
@@ -62,6 +60,7 @@ public class Controller implements InputProcessor
         }
     }
     
+    /** @see com.badlogic.gdx.InputProcessor#keyDown(int) */
     @Override
     public boolean keyDown( int keycode ) { 
         for ( int i = 0; i < CONTROLS.length; i++ )
@@ -70,6 +69,7 @@ public class Controller implements InputProcessor
         return true; 
     }
     
+    /** @see com.badlogic.gdx.InputProcessor#keyUp(int) */
     @Override
     public boolean keyUp( int keycode ) { 
         for ( int i = 0; i < CONTROLS.length; i++ )

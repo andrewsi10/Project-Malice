@@ -69,10 +69,15 @@ public class Character extends AnimatedSprite {
 	                  int speed, 
 	                  int reloadSpeed, 
 	                  String projectile, Animation... a ) {
-	    super( a );
+	    this( hpColor );
+        this.initializeAnimations( a );
 	    this.hpColor = hpColor;
         this.load( maxHp, experience, level, speed, reloadSpeed );
         this.projectile = projectile;
+	}
+	
+	public Character( Color hpColor ) {
+        this.hpColor = hpColor;
 	}
 
     /**

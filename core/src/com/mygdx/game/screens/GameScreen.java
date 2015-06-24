@@ -116,14 +116,12 @@ public class GameScreen implements Screen
         map = new Map( MAP_SIZE, MAP_SIZE );
         cam = new OrthographicCamera( 1280, 720 );
         // cam.setToOrtho(false, 1280, 720);
+        player = new Player();
 	}
     
     public Screen update( Options.Names type )
     {
-        if ( player == null )
-            player = new Player( type );
-        else
-            player.change( type );
+        player.change( type );
         return this;
     }
 

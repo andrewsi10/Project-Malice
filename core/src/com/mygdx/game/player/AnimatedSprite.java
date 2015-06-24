@@ -22,6 +22,9 @@ public class AnimatedSprite extends Sprite
         NORTHWEST( 315 ),
         NUMDEGREES( 360 );
 
+        /**
+         * Array of Direction objects
+         */
         public static final Direction[] DIRECTIONS = Direction.values();
         
         int direction;
@@ -29,10 +32,20 @@ public class AnimatedSprite extends Sprite
             this.direction = direction;
         }
         
+        /**
+         * Returns this direction's angle in degrees where NORTH is 0 degrees
+         * and increases clockwise
+         * @return direction
+         */
         public int getDirection() {
             return direction;
         }
         
+        /**
+         * Returns Direction closest to given angle where NORTH is 0 degrees
+         * @param dir angle
+         * @return nearest Direction
+         */
         public static Direction nearestDirection( double dir ) {
             int tol = 22; // tolerance (45 degrees / 2)
             for ( int i = 1; i / 2 < DIRECTIONS.length - 1; i+=2 ) // TODO check for bugs
@@ -54,19 +67,26 @@ public class AnimatedSprite extends Sprite
     private Animation[] animations;
     private Animation animation;
 
-    private Direction prevDirection = Direction.SOUTH;
-    private double direction = -1;
+    private Direction prevDirection;
+    private double direction;
     private float moveSpeed;
     
-    public AnimatedSprite( Animation... a )
+    public AnimatedSprite()
     {
         this.animations = new Animation[4];
-        this.initializeAnimations( a );
+        direction = -1;
+        prevDirection = Direction.SOUTH;
     }
     
+    /**
+     * Constructor used for the Projectile Class
+     * @param dir starting direction going/facing
+     * @param a Animations to use
+     */
     public AnimatedSprite( double dir, Animation... a )
     {
-        this( a );
+        this();
+        this.initializeAnimations( a );
         this.direction = dir;
     }
     /**
@@ -74,6 +94,8 @@ public class AnimatedSprite extends Sprite
      * with upFrames, rightFrames, downFrames, and leftFrames respectively. Each
      * animation should have a frame duration of .2 seconds. Initialize
      * stateTime to 0f.
+     * 
+     * @param a Animations to use
      */
      public void initializeAnimations( Animation... a )
      {
@@ -135,15 +157,14 @@ public class AnimatedSprite extends Sprite
      }
 
      /**
-      * uses translateX and translateY to move Character by dx and dy multiplied
-      * by moveSpeed units respectively. If Character moves along a diagonal
-      * (neither dx nor dy are equal to 0), divide the value inside both
-      * translateX and translateY by Math.sqrt(2).
+      * Uses translateX and translateY to move Character according to the 
+      * direction multiplied by moveSpeed units respectively.
+      * If direction is -1, sprite will not move, else will move according to 
+      * the following:
       * 
-      * @param dx
-      *            change in x-coordinate
-      * @param dy
-      *            change in y-coordinate
+      * translateY( moveSpeed * Math.sin( Math.toRadians( 90 - direction ) ) );
+      * 
+      * translateX( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) );
       */
      private void translate() {
          if ( direction != -1 ) {
@@ -162,6 +183,10 @@ public class AnimatedSprite extends Sprite
          direction = dir % 360;
      }
      
+     /**
+      * Resets Direction to -1 and prevDirection to SOUTH and resets the 
+      * animation to SOUTH
+      */
      public void resetDirection() 
      {
          direction = -1;
@@ -189,6 +214,10 @@ public class AnimatedSprite extends Sprite
          return direction;
      }
      
+     /**
+      * Rounds this sprite's direction to the nearest of the basic 8 directions
+      * @return integer value of one of the 8 directions in degrees
+      */
      public int getRoundedDirection()
      {
          return Direction.nearestDirection( direction ).getDirection();
