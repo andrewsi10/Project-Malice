@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class AnimatedSprite extends Sprite
 {
+    /**
+     * Enum that represents the 8 various directions and stores their degrees 
+     * based on standard map directions that ship navigators use
+     * (where NORTH = 0 degrees and increases in a clockwise direction)
+     */
     public enum Direction {
         NORTH( 0 ), 
         NORTHEAST( 45 ), 
@@ -16,6 +21,8 @@ public class AnimatedSprite extends Sprite
         WEST( 270 ), 
         NORTHWEST( 315 ),
         NUMDEGREES( 360 );
+
+        public static Direction[] DIRECTIONS = Direction.values();
         
         int direction;
         Direction( int direction ) {
@@ -25,22 +32,20 @@ public class AnimatedSprite extends Sprite
         public int getDirection() {
             return direction;
         }
+        
+        public static Direction nearestDirection( double dir ) {
+            int tol = 22; // tolerance (45 degrees / 2)
+            for ( int i = 1; i / 2 < DIRECTIONS.length - 1; i+=2 ) // TODO check for bugs
+            {
+                if ( dir < tol * i )
+                    return DIRECTIONS[i/2];
+            }
+            return DIRECTIONS[0]; 
+            // note: collision will be slightly buggy (currently only affects Enemy) 
+            // because all angles not EXACTLY the standard 4 directions should 
+            // not be those 4 directions
+        }
     }
-//    /**
-//     * constant variables which represent 8 various directions
-//     */
-//    public static final int NORTH = 0;
-//    public static final int NORTHEAST = 1;
-//    public static final int EAST = 2;
-//    public static final int SOUTHEAST = 3;
-//    public static final int SOUTH = 4;
-//    public static final int SOUTHWEST = 5;
-//    public static final int WEST = 6;
-//    public static final int NORTHWEST = 7;
-//    /**
-//     * The Number of Directions
-//     */
-//    public static final int NUMDIRECTIONS = 8;
 
     /**
      * variables used to hold animation frames and initialize animations
@@ -57,6 +62,12 @@ public class AnimatedSprite extends Sprite
     {
         this.animations = new Animation[4];
         this.initializeAnimations( a );
+    }
+    
+    public AnimatedSprite( double dir, Animation... a )
+    {
+        this( a );
+        this.direction = dir;
     }
     /**
      * Initialize upAnimation, rightAnimation, downAnimation, and leftAnimation
@@ -82,7 +93,7 @@ public class AnimatedSprite extends Sprite
       * update stateTime while the animation is not finished. Once the animation
       * is finished, set stateTime to 0.
       */
-     protected void setAnimations() {
+     public void setAnimations() {
          Direction d = prevDirection;
          
          // can be changed into a loop
@@ -135,8 +146,10 @@ public class AnimatedSprite extends Sprite
       *            change in y-coordinate
       */
      private void translate() {
-         translateY( (float) ( moveSpeed * Math.sin( Math.toRadians( 90 - direction ) ) ) );
-         translateX( (float) ( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) ) );
+         if ( direction != -1 ) {
+             translateY( (float) ( moveSpeed * Math.sin( Math.toRadians( 90 - direction ) ) ) );
+             translateX( (float) ( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) ) );
+         }
      }
 
      /**
@@ -147,6 +160,14 @@ public class AnimatedSprite extends Sprite
       */
      public void setDirection(double dir) {
          direction = dir % 360;
+     }
+     
+     public void resetDirection() 
+     {
+         direction = -1;
+         prevDirection = Direction.SOUTH;
+         animation = animations[prevDirection.getDirection() / 90];
+         this.setRegion( animation.getKeyFrame( stateTime ) );
      }
 
      /**
@@ -166,6 +187,11 @@ public class AnimatedSprite extends Sprite
       */
      public double getDirection() {
          return direction;
+     }
+     
+     public int getRoundedDirection()
+     {
+         return Direction.nearestDirection( direction ).getDirection();
      }
 
      /**

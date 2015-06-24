@@ -56,6 +56,7 @@ public class Player extends Character {
 	public void reload() // reloads with default settings
 	{
 	    this.load( 50, 0, 1, 5, 500 );
+	    this.playerPoints = 0;
 	}
 	
 	public void change( Options.Names n )
@@ -79,7 +80,7 @@ public class Player extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
-		int dir = Controller.getInputDirection();
+		double dir = Controller.getInputDirection();
 		if (dir != -1) {
 			setDirection(dir);
 			super.move(character, projectiles, time);

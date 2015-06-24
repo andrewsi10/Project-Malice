@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.game.projectile.Projectile;
+import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
 
 /**
  *  This class represents an Enemy in the game that will attack the Player when
@@ -24,11 +25,13 @@ public class Enemy extends Character {
      * The margin of change for the Enemy to choose directions
      */
     public static final int marginOfDelta = 30;
+    public static final int travelTimeScalar = 100;
+    public static final int minTravelTime = 4;
+    
+    // TODO may change with a difficulty setting or depending on type of Enemy
+    public static final int aggroDistance = 400;
     
 	private int travelTime;
-	private int aggroDistance = 400;
-	private int travelTimeScalar = 100;
-	private int minTravelTime = 4;
 
 	/**
 	 * Enemy constructor. Parameter used to reference the images used for
@@ -44,8 +47,7 @@ public class Enemy extends Character {
 	 */
 	public Enemy( Animation a ) {
 		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", a );
-		setDirection((int) (Math.random() * 8));
-		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
+        setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
 
 	/**
@@ -55,8 +57,7 @@ public class Enemy extends Character {
 	 * interval [minTravelTime, minTravelTime + travelTimeScalar).
 	 */
 	public Enemy() {
-		setDirection((int) (Math.random() * Direction.NUMDEGREES.getDirection()));
-		travelTime = (int) (minTravelTime + Math.random() * travelTimeScalar);
+	    setRandomDirection();
 		setExperience(20); // set amount of exp Player will receive
 		setSpeed(3); // set speed of Enemy
 		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
@@ -89,11 +90,9 @@ public class Enemy extends Character {
 
 			float deltaX = character.getX() - getX();
 			float deltaY = character.getY() - getY();
-			int newDir = this.getDirection(deltaX, deltaY);
-			if (newDir != -1) {
-				setDirection(newDir);
-				shoot(projectiles, deltaX, deltaY, time);
-			}
+			double newDir = this.getDirection(deltaX, deltaY);
+			setDirection(newDir);
+			shoot(projectiles, deltaX, deltaY, time);
 			super.move(character, projectiles, time);
 		}
 	}
@@ -105,7 +104,7 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-			setDirection((int) (Math.random() * Direction.NUMDEGREES.getDirection()));
+			setDirection( Math.random() * NUMDEGREES.getDirection() );
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);
 		}
@@ -130,24 +129,8 @@ public class Enemy extends Character {
 	 * @return the Direction that the given parameters indicate
 	 *         -1 if no direction is indicated
 	 */
-	public int getDirection( float deltaX, float deltaY ) {
-        if ( deltaX > marginOfDelta && deltaY > marginOfDelta )
-            return Direction.NORTHEAST.getDirection();
-        if ( deltaX > marginOfDelta && deltaY < -marginOfDelta )
-            return Direction.SOUTHEAST.getDirection();
-		if ( deltaX < -marginOfDelta && deltaY < -marginOfDelta )
-            return Direction.SOUTHWEST.getDirection();
-		if ( deltaX < -marginOfDelta && deltaY > marginOfDelta )
-            return Direction.NORTHWEST.getDirection();
-        if ( Math.abs(deltaX) < marginOfDelta && deltaY > marginOfDelta )
-            return Direction.NORTH.getDirection();
-        if ( deltaX > marginOfDelta && Math.abs(deltaY) < marginOfDelta )
-            return Direction.EAST.getDirection();
-		if ( Math.abs(deltaX) < marginOfDelta && deltaY < -marginOfDelta )
-            return Direction.SOUTH.getDirection();
-		if ( deltaX < -marginOfDelta && Math.abs(deltaY) < marginOfDelta )
-            return Direction.WEST.getDirection();
-		return -1;
+	public double getDirection( float deltaX, float deltaY ) {
+	    return 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) ); 
 	}
 
 	/**
@@ -167,24 +150,7 @@ public class Enemy extends Character {
 	}
 
 	// ------------- Getters and Setters ----------------- //
-	/**
-	 * getter method for travelTimeScalar
-	 * 
-	 * @return travelTimeScalar
-	 */
-	public int getTravelTimeScalar() {
-		return travelTimeScalar;
-	}
-
-	/**
-	 * getter method for minTravelTime
-	 * 
-	 * @return minTravelTime
-	 */
-	public int getMinTravelTime() {
-		return minTravelTime;
-	}
-
+	
 	/**
 	 * getter method for travelTime
 	 * 
@@ -203,14 +169,4 @@ public class Enemy extends Character {
 	public void setTravelTime(int time) {
 		travelTime = time;
 	}
-
-	/**
-	 * getter method for aggroDistance
-	 * 
-	 * @return aggroDistance
-	 */
-	public int getAggroDistance() {
-		return aggroDistance;
-	}
-
 }

@@ -1,8 +1,7 @@
 package com.mygdx.game.projectile;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.mygdx.game.player.AnimatedSprite;
 import com.mygdx.game.player.Character;
 
 /**
@@ -17,16 +16,12 @@ import com.mygdx.game.player.Character;
  *
  *  @author  Sources: libgdx
  */
-public class Projectile extends Sprite
+public class Projectile extends AnimatedSprite
 {
     private Character myCharacter;
 
-	final private double angle;
-	final private int speed = 8;
 	final private int damage;
 
-	private Animation animation;
-	private float stateTime;
 
 	/**
 	 * Constructs a Projectile class
@@ -45,8 +40,8 @@ public class Projectile extends Sprite
 	public Projectile(Character c, int damage, 
 	                        float distanceX, float distanceY, Animation a)
 	{
+	    super( Math.toDegrees( Math.atan2( distanceX, distanceY ) ), a );
         this.myCharacter = c;
-		angle = Math.atan2( distanceY, distanceX );
 
 //		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
 //				projectileTexture.getWidth() / col,
@@ -61,11 +56,9 @@ public class Projectile extends Sprite
 //				frames[index++] = temp[i][j];
 //			}
 //		}
-        animation = a;
-        stateTime = 0f;
 		
-		this.set( new Sprite( animation.getKeyFrame( stateTime ) ) );
 		this.damage = damage;
+		setSpeed( 8 );
         setSize(getWidth() / 3, getHeight() / 3);
         setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 
                     c.getY() + c.getHeight() / 2 - getHeight() / 2);
@@ -86,7 +79,7 @@ public class Projectile extends Sprite
 	{
 	    setBounds( x, y, w, h );
 	    damage = d;
-	    angle = 0;
+	    setDirection( 0 );
 	}
 
 	/**
@@ -98,19 +91,8 @@ public class Projectile extends Sprite
 	 */
 	public void move()
 	{
-		if ( !animation.isAnimationFinished( stateTime ) )
-		{
-			stateTime += Gdx.graphics.getDeltaTime();
-		} else
-		{
-			stateTime = 0;
-		}
-
-		this.setRegion( animation.getKeyFrame( stateTime ) );
-
-		translateY( (float) ( speed * Math.sin( angle ) ) );
-		translateX( (float) ( speed * Math.cos( angle ) ) );
-
+	    super.move();
+	    setAnimations();
 	}
     
     /**

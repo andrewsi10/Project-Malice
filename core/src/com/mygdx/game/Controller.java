@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.player.AnimatedSprite.Direction;
+import static com.mygdx.game.player.AnimatedSprite.Direction.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -30,81 +30,84 @@ public class Controller implements InputProcessor
      * (Used by Player class)
      * @return direction or -1 if no direction
      */
-    public static int getInputDirection() {
-//        if ( Gdx.app.getType().equals( ApplicationType.Desktop ) )
+    public static double getInputDirection() {
+//        if ( Gdx.app.getType().equals( ApplicationType.Desktop ) ) // TODO implement Android vs Desktop
         int dirY = -1;
         if ( Gdx.input.isKeyPressed( CONTROLS[0] ) )
-            dirY = Direction.NORTH.getDirection();
+            dirY = NORTH.getDirection();
         if ( Gdx.input.isKeyPressed( CONTROLS[2] ) )
-            dirY = ( dirY == Direction.NORTH.getDirection() ) ? -1 : Direction.SOUTH.getDirection();
+            dirY = ( dirY == NORTH.getDirection() ) ? -1 : SOUTH.getDirection();
         
         int dirX = -1;
         if ( Gdx.input.isKeyPressed( CONTROLS[1] ) )
-            dirX = Direction.EAST.getDirection();
+            dirX = EAST.getDirection();
         if ( Gdx.input.isKeyPressed( CONTROLS[3] ) )
-            dirX = ( dirX == Direction.EAST.getDirection() ) ? -1 : Direction.WEST.getDirection();
+            dirX = ( dirX == EAST.getDirection() ) ? -1 : WEST.getDirection();
         
         if ( dirY == -1 )
             return dirX;
         if ( dirX == -1 )
             return dirY;
-        if ( dirY == Direction.NORTH.getDirection() && dirX == Direction.WEST.getDirection() )
-            return Direction.NORTHWEST.getDirection();
+        if ( dirY == NORTH.getDirection() && dirX == WEST.getDirection() )
+            return NORTHWEST.getDirection();
         return ( dirY + dirX ) / 2;
     }
 
+    // TODO get following 2 methods to change DIRECTION according to what getInputDirection() returns
     @Override
-    public boolean keyDown( int keycode )
+    public boolean keyDown( int keycode ) // incomplete
     {
+        if ( keycode == CONTROLS[0] )
+        {
+            DIRECTION = NORTH.getDirection();
+        }
+        if ( keycode == CONTROLS[1] )
+        {
+            DIRECTION = EAST.getDirection();
+        }
+        if ( keycode == CONTROLS[2] )
+        {
+            DIRECTION = SOUTH.getDirection();
+        }
+        if ( keycode == CONTROLS[3] )
+        {
+            DIRECTION = WEST.getDirection();
+        }
+        
         return false;
     }
 
     @Override
     public boolean keyUp( int keycode )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean keyTyped( char character )
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public boolean keyTyped( char character ) { return false; }
 
     @Override
     public boolean touchDown( int screenX, int screenY, int pointer, int button )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean touchUp( int screenX, int screenY, int pointer, int button )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean touchDragged( int screenX, int screenY, int pointer )
     {
-        // TODO Auto-generated method stub
+        // TODO implement Android controls here
         return false;
     }
 
     @Override
-    public boolean mouseMoved( int screenX, int screenY )
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public boolean mouseMoved( int screenX, int screenY ) { return false; }
 
     @Override
-    public boolean scrolled( int amount )
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public boolean scrolled( int amount ) { return false; }
 }

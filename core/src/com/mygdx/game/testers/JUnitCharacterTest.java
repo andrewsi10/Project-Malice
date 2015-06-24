@@ -1,6 +1,7 @@
 package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
+import static com.mygdx.game.player.AnimatedSprite.Direction.*;
 import org.junit.Test;
 import com.mygdx.game.player.Character;
 import com.mygdx.game.MimicGdx;
@@ -25,49 +26,49 @@ public class JUnitCharacterTest {
 	    float x = 0;
 	    float y = 0;
 		Character c = new Character(); // create Character at (0,0)
-		c.setDirection(Character.NORTH);
+		c.setDirection(NORTH.getDirection());
 		c.move();
 		assertEquals("", x, c.getX(), .0001);
         assertTrue("", y < c.getY()); // check if moved up
         x = c.getX();
         y = c.getY();
-        c.setDirection(Character.NORTHEAST);
+        c.setDirection(NORTHEAST.getDirection());
         c.move();
         assertTrue("", x < c.getX()); // check if moved right
         assertTrue("", y < c.getY()); // check if moved up
         x = c.getX();
         y = c.getY();
-        c.setDirection( Character.EAST );
+        c.setDirection( EAST.getDirection() );
         c.move();
         assertTrue("", x < c.getX()); // check if moved right
         assertEquals("", y, c.getY(), .0001);
         x = c.getX();
         y = c.getY();
-        c.setDirection( Character.SOUTHEAST );
+        c.setDirection( SOUTHEAST.getDirection() );
         c.move();
         assertTrue("", x < c.getX()); // check if moved right
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
-        c.setDirection( Character.SOUTH );
+        c.setDirection( SOUTH.getDirection() );
         c.move();
         assertEquals("", x, c.getX(), .0001);
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
-        c.setDirection( Character.SOUTHWEST );
+        c.setDirection( SOUTHWEST.getDirection() );
         c.move();
         assertTrue("", x > c.getX()); // check if moved left
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
-        c.setDirection( Character.WEST );
+        c.setDirection( WEST.getDirection() );
         c.move();
         assertTrue("", x > c.getX()); // check if moved left
         assertEquals("", y, c.getY(), .0001);
         x = c.getX();
         y = c.getY();
-        c.setDirection(Character.NORTHWEST);
+        c.setDirection(NORTHWEST.getDirection());
         c.move();
         assertTrue("", x > c.getX()); // check if moved left
         assertTrue("", y < c.getY()); // check if moved up

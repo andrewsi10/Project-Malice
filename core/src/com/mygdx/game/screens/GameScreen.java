@@ -118,7 +118,7 @@ public class GameScreen implements Screen
     public Screen update( Options.Names type )
     {
         if ( player == null )
-            player = new Player( type ); // TODO
+            player = new Player( type );
         else
             player.change( type );
         return this;
@@ -406,18 +406,20 @@ public class GameScreen implements Screen
 		c.move( player, projectiles, System.currentTimeMillis() );
 		if ( map.isCollidingWithWall( c ) )
 		{
+		    int dir = c.getRoundedDirection();
 			c.setPosition( x, y );
-			c.setDirection( c.getDirection() - 45 );
+			c.setDirection( dir - 45 );
 			c.move();
 			if ( map.isCollidingWithWall( c ) )
 			{
 				c.setPosition( x, y );
-				c.setDirection( c.getDirection() + 90 );
+				c.setDirection( dir + 45 );
 				c.move();
 				if ( map.isCollidingWithWall( c ) )
 					c.setPosition( x, y );
 			}
 		}
+		c.setAnimations(); // TODO be aware of the animation bugs produced by this line
 		c.draw( batch );
 	}
 

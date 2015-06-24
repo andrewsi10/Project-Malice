@@ -97,6 +97,7 @@ public class Character extends AnimatedSprite {
         this.level = level;
         setSpeed( speed );
         this.reloadSpeed = reloadSpeed;
+        resetDirection();
     }
 
 	// ---------------------Animation and Art ----------------------//
@@ -169,7 +170,7 @@ public class Character extends AnimatedSprite {
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
 		move();
-		setAnimations();
+        setAnimations();
 	}
 
 	/**

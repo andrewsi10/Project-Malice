@@ -1,6 +1,7 @@
 package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
+import static com.mygdx.game.player.AnimatedSprite.Direction.*;
 import org.junit.Test;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Character;
@@ -27,9 +28,9 @@ public class JUnitEnemyTest {
 		assertEquals(e.getExperience(), 20);
 		assertEquals(e.getSpeed(), 3, .001);
 		assertTrue(e.getDirection() >= 0 && e.getDirection() < 8);
-		assertTrue(e.getTravelTime() >= e.getMinTravelTime()
-				&& e.getTravelTime() < e.getMinTravelTime()
-						+ e.getTravelTimeScalar());
+		assertTrue(e.getTravelTime() >= Enemy.minTravelTime
+				&& e.getTravelTime() < Enemy.minTravelTime
+						+ Enemy.travelTimeScalar);
 	}
 
 	/**
@@ -48,9 +49,9 @@ public class JUnitEnemyTest {
 		e.setTravelTime(0);
 		e.setRandomDirection();
 		assertTrue(e.getDirection() >= 0 && e.getDirection() < 8);
-		assertTrue(e.getTravelTime() >= e.getMinTravelTime()
-				&& e.getTravelTime() < e.getMinTravelTime()
-						+ e.getTravelTimeScalar());
+		assertTrue(e.getTravelTime() >= Enemy.minTravelTime
+				&& e.getTravelTime() < Enemy.minTravelTime
+						+ Enemy.travelTimeScalar);
 	}
 
 	/**
@@ -64,21 +65,21 @@ public class JUnitEnemyTest {
         float dy = 0;
         assertEquals(-1, e.getDirection(dx,dy), .0001); // check for not moving
         dy = d + 1;
-        assertEquals(Character.NORTH, e.getDirection(dx,dy), .0001);
+        assertEquals(NORTH.getDirection(), e.getDirection(dx,dy), .0001);
         dx = d + 1;
-        assertEquals(Character.NORTHEAST, e.getDirection(dx,dy), .0001);
+        assertEquals(NORTHEAST.getDirection(), e.getDirection(dx,dy), .0001);
         dy = 0;
-        assertEquals(Character.EAST, e.getDirection(dx,dy), .0001);
+        assertEquals(EAST.getDirection(), e.getDirection(dx,dy), .0001);
         dy = -d - 1;
-        assertEquals(Character.SOUTHEAST, e.getDirection(dx,dy), .0001);
+        assertEquals(SOUTHEAST.getDirection(), e.getDirection(dx,dy), .0001);
         dx = 0;
-        assertEquals(Character.SOUTH, e.getDirection(dx,dy), .0001);
+        assertEquals(SOUTH.getDirection(), e.getDirection(dx,dy), .0001);
         dx = -d - 1;
-        assertEquals(Character.SOUTHWEST, e.getDirection(dx,dy), .0001);
+        assertEquals(SOUTHWEST.getDirection(), e.getDirection(dx,dy), .0001);
         dy = 0;
-        assertEquals(Character.WEST, e.getDirection(dx,dy), .0001);
+        assertEquals(WEST.getDirection(), e.getDirection(dx,dy), .0001);
         dy = d + 1;
-        assertEquals(Character.NORTHWEST, e.getDirection(dx,dy), .0001);
+        assertEquals(NORTHWEST.getDirection(), e.getDirection(dx,dy), .0001);
 	}
 
 	/**
@@ -89,20 +90,20 @@ public class JUnitEnemyTest {
 		Character c = new Character();
 		Enemy e = new Enemy();
 		// tests for character in the positive x-direction
-		c.setPosition(e.getAggroDistance() + 1, 0);
+		c.setPosition(Enemy.aggroDistance + 1, 0);
 		assertFalse(e.inRange(c));
 		// tests for character in the negative x-direction
-		c.setPosition(-e.getAggroDistance() + 1, 0);
+		c.setPosition(-Enemy.aggroDistance + 1, 0);
 		assertTrue(e.inRange(c));
 		// tests for character in the positive y-direction
-		c.setPosition(0, e.getAggroDistance() + 1);
+		c.setPosition(0, Enemy.aggroDistance + 1);
 		assertFalse(e.inRange(c));
 		// tests for character in the negative y-direction
-		c.setPosition(0, -e.getAggroDistance() + 1);
+		c.setPosition(0, -Enemy.aggroDistance + 1);
 		assertTrue(e.inRange(c));
 		// tests for inRange(Character)	using the Distance Formula
-		c.setPosition((float) (e.getAggroDistance() / Math.sqrt(2) - 1),
-				(float) (e.getAggroDistance() / Math.sqrt(2) - 1));
+		c.setPosition((float) (Enemy.aggroDistance / Math.sqrt(2) - 1),
+				(float) (Enemy.aggroDistance / Math.sqrt(2) - 1));
 		assertTrue(e.inRange(c));
 	}
 
