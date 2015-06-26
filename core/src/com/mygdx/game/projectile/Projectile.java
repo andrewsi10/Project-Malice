@@ -20,9 +20,6 @@ public class Projectile extends AnimatedSprite
 {
     private Character myCharacter;
 
-	final private int damage;
-
-
 	/**
 	 * Constructs a Projectile class
 	 * 
@@ -33,31 +30,15 @@ public class Projectile extends AnimatedSprite
 	 * 
 	 * @param c Character that this Projectile originates from.
 	 * @param damage The damage that this Projectile will deal
-	 * @param type the type of projectile, used for file input to get animation pictures
 	 * @param distanceX the x distance used to determine slope
 	 * @param distanceY the y distance used to determine slope
+     * @param a continuous Animation for this Projectile
 	 */
-	public Projectile(Character c, int damage, 
-	                        float distanceX, float distanceY, Animation a)
+	public Projectile(Character c, float distanceX, float distanceY, Animation a)
 	{
 	    super( Math.toDegrees( Math.atan2( distanceX, distanceY ) ), a );
         this.myCharacter = c;
-
-//		TextureRegion[][] temp = TextureRegion.split( projectileTexture,
-//				projectileTexture.getWidth() / col,
-//				projectileTexture.getHeight() / row );
-//		frames = new TextureRegion[col * row];
-//
-//		int index = 0;
-//		for ( int i = 0; i < row; i++ )
-//		{
-//			for ( int j = 0; j < col; j++ )
-//			{
-//				frames[index++] = temp[i][j];
-//			}
-//		}
-		
-		this.damage = damage;
+        
 		setSpeed( 8 );
         setSize(getWidth() / 3, getHeight() / 3);
         setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 
@@ -78,7 +59,6 @@ public class Projectile extends AnimatedSprite
 	public Projectile( float x, float y, float w, float h, int d )
 	{
 	    setBounds( x, y, w, h );
-	    damage = d;
 	    setDirection( 0 );
 	}
 
@@ -89,6 +69,7 @@ public class Projectile extends AnimatedSprite
 	 * 
 	 * Cannot be JUnit tested due to animations
 	 */
+	@Override
 	public void move()
 	{
 	    super.move();
@@ -100,6 +81,8 @@ public class Projectile extends AnimatedSprite
      * if Character is the same as the one that spawned this projectile,
      * this method should return false
      * 
+     * Will call c.takeDamage( int damage ) for the Character in the parameter
+     * 
      * @param c Character to check with
      * @return whether this projectile collides with Character
      */
@@ -109,7 +92,7 @@ public class Projectile extends AnimatedSprite
         boolean overlaps = c.getBoundingRectangle().overlaps( 
                             this.getBoundingRectangle() );
         if ( overlaps )
-            c.takeDamage( this.damage );
+            c.takeDamage( myCharacter.getDamageDealt() );
         return overlaps;
     }
     
@@ -119,14 +102,4 @@ public class Projectile extends AnimatedSprite
 //        return ( c1 instanceof Enemy && c2 instanceof Enemy )
 //            || ( c1 instanceof Player && c2 instanceof Player );
 //    }
-
-	/**
-	 * Returns the damage that this projectile deals
-	 * @return the damage that this projectile deals 
-	 */
-	public int getDamage()
-	{
-		return damage;
-	}
-
 }

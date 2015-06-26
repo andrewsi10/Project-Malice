@@ -315,7 +315,6 @@ public class GameScreen implements Screen
 				if ( hasHit || projectile.hitCharacter( sprite ) )
 				{
 					hasHit = true;
-					sprite.takeDamage( projectile.getDamage() );
 					if ( sprite.isDead() )
 					{
 						sprites.remove( sprite );

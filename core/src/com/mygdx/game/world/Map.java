@@ -44,14 +44,10 @@ public class Map
     private enum Tile { // 1st row is blocks, 2nd row is spaces (expansion: 3rd row is decoration)
         BLOCK, SPACE
     }
-
-    private static final EnumMap<Tile, Integer> tileIndex = new EnumMap<Tile, Integer>(Tile.class);
+    
     private static final EnumMap<Biome, Pixmap> biomes = new EnumMap<Biome, Pixmap>(Biome.class);
     
     static { // initialize EnumMaps
-        Tile[] tiles = Tile.values();
-        for ( int i = 0; i < tiles.length; i++ )
-            tileIndex.put( tiles[i], i );
         Texture texture;
         for ( Biome b : Biome.values() ) {
             if ( b == Biome.RANDOM ) continue;
@@ -79,30 +75,24 @@ public class Map
     
     private Texture map;
     private Texture expanse;
+    private boolean biomeChanged;
 
     // -------------------- Constructors ------------------- //
-//    /**
-//     * Constructs a map filled with walls
-//     * Prepares Pixmap arrays for use in createMap() from predetermined files
-//     * @param rows number of rows in map
-//     * @param cols number of columns in map
-//     */
-//    public Map( Biome b, int rows, int cols )
-//    {
-//        areSpaces = new boolean[rows][cols];
-//    }
-
-//    /**
-//     * For JUnit Testing only (in order to avoid graphics: Textures and Pixmaps)
-//     * @param rows number of rows in map
-//     * @param cols number of columns in map
-//     * @param b to differentiate from other constructor for testing
-//     */
+    /**
+     * Constructs a map filled with walls
+     * 
+     * @param rows number of rows in map
+     * @param cols number of columns in map
+     */
     public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
     }
-    
+
+    /**
+     * For JUnit Testing only (in order to avoid graphics: Textures and Pixmaps)
+     * @param size number of rows and columns in map
+     */
     public Map( int size )
     {
         areSpaces = new boolean[size][size];
@@ -124,10 +114,12 @@ public class Map
         map = null;
         if ( b == Biome.RANDOM )
             b = Biome.values()[randomNumber(Biome.values().length - 1) + 1];
+        biomeChanged = ( biome != biomes.get( b ) );
         biome = biomes.get( b );
         switch ( type )
         {
             case STORY:
+                // not implemented
                 break;
             case ARENA:
                 generateArena();
@@ -161,27 +153,33 @@ public class Map
                 int y = this.getMapPixelHeight() - tileToPixel(j+1);
                 pixmap1.drawPixmap( biome, x, y, 
                     tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                    tileToPixel(tileIndex.get( Tile.SPACE ) ), 
+                    tileToPixel( Tile.SPACE.ordinal() ), 
                     PIXELS_TO_TILES, PIXELS_TO_TILES );
                 if ( !areSpaces[i][j] )
                 {
                     pixmap1.drawPixmap( biome, x, y, 
                         tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                        tileToPixel(tileIndex.get( Tile.BLOCK )), 
+                        tileToPixel( Tile.BLOCK.ordinal() ), 
                         PIXELS_TO_TILES, PIXELS_TO_TILES );
                 }
-                pixmap2.drawPixmap( biome, x, y, 
-                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                    tileToPixel(tileIndex.get( Tile.SPACE )), 
-                    PIXELS_TO_TILES, PIXELS_TO_TILES );
-                pixmap2.drawPixmap( biome, x, y, 
-                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                    tileToPixel(tileIndex.get( Tile.BLOCK )), 
-                    PIXELS_TO_TILES, PIXELS_TO_TILES );
+                if ( biomeChanged &&
+                   ( i <= OUTER_BORDER || i >= getMapTileWidth() - OUTER_BORDER 
+                  || j <= OUTER_BORDER || j >= getMapTileHeight() - OUTER_BORDER ) )
+                {
+                    pixmap2.drawPixmap( biome, x, y, 
+                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                        tileToPixel( Tile.SPACE.ordinal() ), 
+                        PIXELS_TO_TILES, PIXELS_TO_TILES );
+                    pixmap2.drawPixmap( biome, x, y, 
+                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
+                        tileToPixel( Tile.BLOCK.ordinal() ), 
+                        PIXELS_TO_TILES, PIXELS_TO_TILES );
+                }
             }
         }
         map = new Texture( pixmap1 );
-        expanse = new Texture( pixmap2 );
+        if ( biomeChanged )
+            expanse = new Texture( pixmap2 );
         pixmap1.dispose();
         pixmap2.dispose();
     }
@@ -604,8 +602,7 @@ public class Map
             if ( method )
             {
                 size = sizeOfArea( x1, y1 );
-                if ( size > largest )
-                {
+                if ( size > largest ) {
                     largest = size;
                     fillArea( pX, pY );
                     pX = x1;

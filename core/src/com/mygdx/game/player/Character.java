@@ -35,7 +35,7 @@ public class Character extends AnimatedSprite {
 	private int experience;
     private int level;
 	private int expToLevel = -1;
-	private int baseDmg = 10; // base damage
+	private int baseDmg = 20; // base damage
 	private int randMod = 4; // random damage modifier
 	private int reloadSpeed;
 	private double previousTime = 0;
@@ -199,10 +199,9 @@ public class Character extends AnimatedSprite {
 			float yDistance, long time) {
 		if (time - previousTime >= reloadSpeed) {
 			previousTime = time;
-			Projectile p = new Projectile( this, getDamage(), xDistance, yDistance,
-			    Options.atlas.get( projectile ) );
 	        Options.Audio.playAudio( projectile );
-			projectiles.add( p );
+			projectiles.add( new Projectile( this, xDistance, yDistance,
+                                            Options.atlas.get( projectile ) ) );
 		}
 	}
 
@@ -394,7 +393,7 @@ public class Character extends AnimatedSprite {
 	 * 
 	 * @return baseDmg with an added random value scaled by randMod
 	 */
-	public int getDamage() {
+	public int getDamageDealt() {
 		return baseDmg + (int) (randMod * Math.random());
 	}
 
