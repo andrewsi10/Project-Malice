@@ -27,9 +27,7 @@ import com.badlogic.gdx.utils.Array;
 public class Options
 {
 
-//    public static final String[] spriteNames = { "BlackMage", "Monk", "RedMage", "Thief",
-//        "Warrior", "WhiteMage" };
-    public enum Names {
+    public enum Name {
         BlackMage( "Dark Wizard", "DarkFire" ), 
         Monk( "Brawler", "Boomerang" ), 
         RedMage( "Crimson Wizard", "Fireball" ), 
@@ -39,7 +37,7 @@ public class Options
         
         private String button, projectile;
         
-        Names( String button, String projectile ) {
+        Name( String button, String projectile ) {
             this.button = button;
             this.projectile = projectile;
         }
@@ -54,13 +52,10 @@ public class Options
             return projectile;
         }
     }
-    
-//    public static final String[] projectileNames = { "DarkFire", "Boomerang", "Fireball",
-//        "PoisonShot", "Sword1", "HolyCross" };
     public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
-    public static final Names[] NAMES = Names.values();
-    public static final EnumMap<Names, Animation[]> playerAtlas = new EnumMap<Names, Animation[]>(Names.class);
+    public static final Name[] NAMES = Name.values();
+    public static final EnumMap<Name, Animation[]> playerAtlas = new EnumMap<Name, Animation[]>(Name.class);
     public static final HashMap<String, Animation> atlas = new HashMap<String, Animation>();
     public static final int NUMENEMIES = 7;
     public static final float FRAME_DURATION = 0.2f;
@@ -76,7 +71,7 @@ public class Options
     {
         String s;
         Array<AtlasRegion> a;
-        for ( Names n : NAMES )
+        for ( Name n : NAMES )
         {
             a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
             playerAtlas.put( n, new Animation[]{
@@ -157,7 +152,7 @@ public class Options
             mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
             SOUNDS = new HashMap<String, Sound>();
             SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
-            for ( Names n : NAMES )
+            for ( Name n : NAMES )
                 SOUNDS.put( n.getProjectileName(), Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + n.getProjectileName().toLowerCase() + ".wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
 //            SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );

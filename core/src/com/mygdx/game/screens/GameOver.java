@@ -103,7 +103,13 @@ public class GameOver implements Screen
         stage.addActor( switchButton );
         stage.addActor( backButton );
 	}
-	
+    
+    /**
+     * Updates this Screen according to the parameters
+     * @param points integer amount of points the player had
+     * @param level integer representing the player's level
+     * @return this Screen for the game to be set to
+     */
 	public GameOver update( int points, int level )
 	{
 	    message = "You earned " + points + " points and reached level " + level

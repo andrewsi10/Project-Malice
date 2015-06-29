@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Controller;
-import com.mygdx.game.Options;
 
 /**
  *  This class represents a Player in the game. Takes in Input from the keyboard
@@ -65,10 +65,10 @@ public class Player extends Character {
 	    Controller.PRESSED = new boolean[Controller.CONTROLS.length];
 	}
 	
-	public void change( Options.Names n )
+	public void change( String projectile, Animation[] a )
 	{
-	    this.setProjectile( n.getProjectileName() );
-	    this.initializeAnimations( Options.playerAtlas.get( n ) );
+	    this.setProjectile( projectile );
+	    this.initializeAnimations( a );
 	}
 
 	/**

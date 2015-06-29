@@ -8,10 +8,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
@@ -45,11 +45,10 @@ public class GameScreen implements Screen
 
 	private SpriteBatch batch;
     private OrthographicCamera cam;
-    private ShapeRenderer renderer;
+    private ShapeRenderer renderer; // hp can use progressBars
 
 	private final Malice game;
-	
-	private Controller controller = new Controller();
+	private Controller controller;
 	
     /**
      * Volume of this screen
@@ -60,6 +59,8 @@ public class GameScreen implements Screen
 	 * Size of the map
 	 */
 	public final static int MAP_SIZE = 50;
+	
+	
 	private Map map;
     private Texture pauseTexture;
 	private Player player;
@@ -102,8 +103,8 @@ public class GameScreen implements Screen
 	 */
 	public GameScreen(Malice g)
 	{
-		new Stage();
 		game = g;
+		controller = new Controller();
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -119,9 +120,17 @@ public class GameScreen implements Screen
         player = new Player();
 	}
     
-    public Screen update( Options.Names type )
+    /**
+     * Updates this Screen according to the parameters where the parameters will 
+     * adjust the player Sprite
+     * 
+     * @param proj String representing the player's projectile type
+     * @param a Animation for the player
+     * @return this Screen for the game to be set to
+     */
+    public Screen update( String proj, Animation[] a )
     {
-        player.change( type );
+        player.change( proj, a );
         return this;
     }
 

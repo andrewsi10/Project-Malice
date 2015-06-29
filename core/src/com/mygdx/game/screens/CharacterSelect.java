@@ -74,7 +74,7 @@ public class CharacterSelect implements Screen
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
-            final Options.Names charName = Options.NAMES[i];
+            final Options.Name charName = Options.NAMES[i];
             final TextButton b = new TextButton( charName.getButtonName(), Options.buttonSkin );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
@@ -83,7 +83,7 @@ public class CharacterSelect implements Screen
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    game.setScreen( game.gameScreen.update( charName ) );
+                    game.setScreen( game.gameScreen.update( charName.getProjectileName(), Options.playerAtlas.get( charName ) ) );
                     b.toggle();
                 }
             } );
@@ -97,7 +97,8 @@ public class CharacterSelect implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen( game.gameScreen.update( Options.NAMES[(int)(Math.random() * NUMBUTTONS)] ) );
+                Options.Name n = Options.NAMES[(int)(Math.random() * NUMBUTTONS)];
+                game.setScreen( game.gameScreen.update( n.getProjectileName(), Options.playerAtlas.get( n ) ) );
                 randomButton.toggle();
             }
         } );

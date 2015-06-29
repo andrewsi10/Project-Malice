@@ -62,7 +62,14 @@ public class OptionsScreen implements Screen
         stage.addActor( musicButton );
         stage.addActor( soundButton );
     }
+
     
+    /**
+     * Updates this Screen according to the parameters
+     * 
+     * @param prev the Screen that called this one
+     * @return this Screen for the game to be set to
+     */
     public OptionsScreen update( final Screen prev )
     {
         if ( backButton != null ) backButton.remove();

@@ -34,7 +34,14 @@ public class LeaderScreen implements Screen
         stage.addActor( new Image( (Drawable) new SpriteDrawable( new Sprite(
             new Texture( "img/titlescreen.png" ) ) ) ) );
     }
+
     
+    /**
+     * Updates this Screen according to the parameters
+     * 
+     * @param prevScreen the Screen that called this one
+     * @return this Screen for the game to be set to
+     */
     public LeaderScreen update( final Screen prevScreen ) {
         if ( prevButton != null ) prevButton.remove();
         prevButton = new TextButton( "Back", Options.buttonSkin );
