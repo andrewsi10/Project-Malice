@@ -4,7 +4,9 @@ import com.badlogic.gdx.Game;
 import com.mygdx.game.screens.CharacterSelect;
 import com.mygdx.game.screens.GameOver;
 import com.mygdx.game.screens.GameScreen;
+import com.mygdx.game.screens.LeaderScreen;
 import com.mygdx.game.screens.MainMenu;
+import com.mygdx.game.screens.OptionsScreen;
 import com.mygdx.game.screens.Splash;
 
 /**
@@ -26,6 +28,8 @@ public class Malice extends Game
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.0.0";
 
     public MainMenu mainMenu;
+    public OptionsScreen optionsScreen;
+    public LeaderScreen leaderScreen;
     public CharacterSelect characterSelect;
 	public GameScreen gameScreen;
 	public GameOver gameOver;
@@ -41,6 +45,8 @@ public class Malice extends Game
         Options.initialize();
         setScreen( new Splash( this ) );
 	    mainMenu = new MainMenu( this );
+	    optionsScreen = new OptionsScreen( this );
+	    leaderScreen = new LeaderScreen( this );
 	    characterSelect = new CharacterSelect( this );
 	    gameScreen = new GameScreen( this );
 	    gameOver = new GameOver( this );

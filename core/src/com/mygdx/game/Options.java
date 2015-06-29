@@ -127,12 +127,21 @@ public class Options
         textButtonStyle.font = buttonSkin.getFont( "default" );
         buttonSkin.add( "default", textButtonStyle );
     }
-    
-    /*** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * note:ALL METHODS BELOW ARE FOR TESTING AND ISOLATION OF THE GDX CLASS *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // -------------------------- Music and Audio --------------------- //
+    /**
+     * This class supports all the Audio in the game
+     * 
+     * note: This class below can be taken out of the Options class and into a 
+     * separate class for organization
+     *
+     *  @author  Nathan Lui
+     *  @version Jun 29, 2015
+     *  @author  Period: 4
+     *  @author  Assignment: Project Malice-core
+     *
+     *  @author  Sources:
+     */
     public static class Audio {
         public static boolean SOUND_MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
         public static boolean MUSIC_MUTED = false;
@@ -201,9 +210,5 @@ public class Options
                 SOUNDS.get( s ).play();
         }
     }
-    
-    // -------------------------- File Input -------------------------- //
-    // note: File Input may have to be separated somehow through constructors, 
-    //       this class may not be able to do that
     
 }

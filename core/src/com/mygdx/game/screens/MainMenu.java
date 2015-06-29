@@ -33,17 +33,18 @@ public class MainMenu implements Screen
      * Volume of this screen
      */
     private static final float VOLUME = 0.55f;
-
-	private Image background;
-
+    
 	private final Malice game;
-
 	private Stage stage;
 
+    private Image background;
+
+
 	private TextButton playButton, 
-//	                optionsButton, 
+	                leaderButton,
+	                optionsButton, 
 	                exitButton;
-	private final TextButton muteButton;
+//	private final TextButton muteButton;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -73,32 +74,45 @@ public class MainMenu implements Screen
                 playButton.toggle();
             }
         } );
-
-//        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
-//        optionsButton.setPosition( 
-//                Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2, 
-//                Gdx.graphics.getHeight() / 3 );
-//        optionsButton.addListener( new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y)
-//            {
-//                game.setScreen( new OptionsScreen( game ) );
-//            }
-//        } );
-        muteButton = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
-        muteButton.setSize( 100, 64 );
-        muteButton.setPosition( Gdx.graphics.getWidth() - muteButton.getWidth(), 0 );
-        muteButton.addListener( new ClickListener() {
+        
+        leaderButton = new TextButton( "Leader Board", Options.buttonSkin );
+        leaderButton.setPosition(
+            Gdx.graphics.getWidth() / 2 - leaderButton.getWidth() / 2,
+            Gdx.graphics.getHeight() * 3 / 8 );
+        leaderButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
-                Options.Audio.SOUND_MUTED = !Options.Audio.SOUND_MUTED;
-                Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
-                muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
-                muteButton.toggle();
+                game.setScreen( game.leaderScreen.update( game.mainMenu ) );
+                leaderButton.toggle();
             }
-        });
+        } );
+
+        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
+        optionsButton.setSize( 100, 64 );
+        optionsButton.setPosition( Gdx.graphics.getWidth() - optionsButton.getWidth(), 0 );
+        optionsButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen( game.optionsScreen.update( game.mainMenu ) );
+                optionsButton.toggle();
+            }
+        } );
+//        muteButton = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
+//        muteButton.setSize( 100, 64 );
+//        muteButton.setPosition( Gdx.graphics.getWidth() - muteButton.getWidth(), 0 );
+//        muteButton.addListener( new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y)
+//            {
+//                Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
+//                Options.Audio.SOUND_MUTED = !Options.Audio.SOUND_MUTED;
+//                Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
+//                muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
+//                muteButton.toggle();
+//            }
+//        });
 
         exitButton = new TextButton( "Exit", Options.buttonSkin ); 
         exitButton.setPosition(
@@ -113,8 +127,9 @@ public class MainMenu implements Screen
         } );
         stage.addActor( background );
         stage.addActor( playButton );
-        stage.addActor( muteButton );
-//        stage.addActor( optionsButton );
+        stage.addActor( leaderButton );
+//        stage.addActor( muteButton );
+        stage.addActor( optionsButton );
         stage.addActor( exitButton );
 	}
 	
@@ -132,7 +147,7 @@ public class MainMenu implements Screen
 	{
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );
-        muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
+//        muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
 	}
 
 	/**
