@@ -2,7 +2,10 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,15 +24,24 @@ public class LeaderScreen implements Screen
      */
     private static final float VOLUME = 0.5f;
     
+    public static final FileHandle scoreFile = Gdx.files.local( "LeaderBoard.txt" );
+    
+    public static void addEntry( String name, int score )
+    {
+        scoreFile.writeString( name + " " + score + "\n", true );
+    }
+    
     
     private Malice game;
     private Stage stage;
+    private GlyphLayout layout;
     
     private TextButton prevButton;
     
     public LeaderScreen( Malice g ) {
         game = g;
         stage = new Stage();
+        layout = new GlyphLayout();
         
         stage.addActor( new Image( (Drawable) new SpriteDrawable( new Sprite(
             new Texture( "img/titlescreen.png" ) ) ) ) );
@@ -63,8 +75,12 @@ public class LeaderScreen implements Screen
     @Override
     public void show()
     {
+        Options.FONT.setColor( Color.WHITE );
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );
+        if ( scoreFile.exists() ) {
+            layout.setText( Options.FONT, scoreFile.readString() );
+        }
     }
 
     @Override
@@ -72,6 +88,10 @@ public class LeaderScreen implements Screen
     {
         stage.act();
         stage.draw();
+        stage.getBatch().begin();
+        Options.FONT.draw( stage.getBatch(), layout, 
+            Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 3 / 4 );
+        stage.getBatch().end();
     }
 
     @Override
