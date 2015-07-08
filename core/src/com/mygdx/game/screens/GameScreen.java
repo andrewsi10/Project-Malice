@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
@@ -46,8 +48,7 @@ public class GameScreen implements Screen
 	private SpriteBatch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
-
-	private final Malice game;
+    private final Malice game;
 	private Controller controller;
 	
     /**
@@ -133,6 +134,11 @@ public class GameScreen implements Screen
         player.change( proj, a );
         return this;
     }
+    
+    public void displayJoyStick()
+    {
+    	
+    }
 
 	/**
 	 * Shows gameplay with the player in the center of the screen inside a
@@ -149,8 +155,6 @@ public class GameScreen implements Screen
 	{
         Options.Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( controller );
-		timeResumed = System.currentTimeMillis();
-		state = State.RESUME;
 
         sprites.clear();
 		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
@@ -159,6 +163,12 @@ public class GameScreen implements Screen
         sprites.add( player );
 
         spawnEnemies();
+        if (Gdx.app.getType() == ApplicationType.Android)
+        {
+        	displayJoyStick();
+        }
+		timeResumed = System.currentTimeMillis();
+		state = State.RESUME;
 	}
 
 	/**
