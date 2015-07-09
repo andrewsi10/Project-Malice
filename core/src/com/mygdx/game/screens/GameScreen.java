@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Controller;
+import com.mygdx.game.AndroidController;
+import com.mygdx.game.DesktopController;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
@@ -49,7 +49,8 @@ public class GameScreen implements Screen
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
     private final Malice game;
-	private Controller controller;
+	private DesktopController desktopController;
+	private AndroidController androidController;
 	
     /**
      * Volume of this screen
@@ -105,7 +106,14 @@ public class GameScreen implements Screen
 	public GameScreen(Malice g)
 	{
 		game = g;
-		controller = new Controller();
+		if (Gdx.app.getType().equals( ApplicationType.Android ))
+		{
+			androidController = new AndroidController();
+		}
+		else
+		{
+			desktopController = new DesktopController();
+		}
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -134,11 +142,6 @@ public class GameScreen implements Screen
         player.change( proj, a );
         return this;
     }
-    
-    public void displayJoyStick()
-    {
-    	
-    }
 
 	/**
 	 * Shows gameplay with the player in the center of the screen inside a
@@ -154,8 +157,14 @@ public class GameScreen implements Screen
 	public void show()
 	{
         Options.Audio.playTheme( VOLUME );
-        Gdx.input.setInputProcessor( controller );
-
+        if (Gdx.app.getType().equals( ApplicationType.Android ))
+		{
+        	Gdx.input.setInputProcessor( androidController );
+		}
+		else
+		{
+			Gdx.input.setInputProcessor( desktopController );
+		}
         sprites.clear();
 		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
@@ -163,10 +172,6 @@ public class GameScreen implements Screen
         sprites.add( player );
 
         spawnEnemies();
-        if (Gdx.app.getType() == ApplicationType.Android)
-        {
-        	displayJoyStick();
-        }
 		timeResumed = System.currentTimeMillis();
 		state = State.RESUME;
 	}
@@ -268,6 +273,14 @@ public class GameScreen implements Screen
 						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
 						+ " seconds", fontX, fontY );
 		batch.end();
+		if (Gdx.app.getType().equals( ApplicationType.Android ))
+		{
+			androidController.draw();
+		}
+		else
+		{
+			desktopController.draw();
+		}
 		renderer.end();
 
 		if ( System.currentTimeMillis() - timeResumed > 2000 )
@@ -361,6 +374,16 @@ public class GameScreen implements Screen
 		}
 		drawPoints();
 		batch.end();
+		if (Gdx.app.getType().equals( ApplicationType.Android ))
+		{
+			androidController.act( delta );
+			androidController.draw();
+		}
+		else
+		{
+			desktopController.act( delta );
+			desktopController.draw();
+		}
 		renderer.end();
 
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
