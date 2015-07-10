@@ -180,7 +180,7 @@ public class AnimatedSprite extends Sprite
       * @param dir
       */
      public void setDirection(double dir) {
-         direction = dir % 360;
+         direction = ( dir % 360 + 360 ) % 360 ;
      }
      
      /**

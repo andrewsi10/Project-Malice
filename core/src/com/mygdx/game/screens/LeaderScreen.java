@@ -56,7 +56,7 @@ public class LeaderScreen implements Screen
      */
     public LeaderScreen update( final Screen prevScreen ) {
         if ( prevButton != null ) prevButton.remove();
-        prevButton = new TextButton( "Back", Options.buttonSkin );
+        prevButton = new TextButton( "Back", Options.SKIN );
         prevButton.setPosition(
             Gdx.graphics.getWidth() / 2 - prevButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 12 );

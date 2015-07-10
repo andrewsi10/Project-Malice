@@ -7,8 +7,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.game.projectile.Projectile;
-import com.mygdx.game.AndroidController;
-import com.mygdx.game.DesktopController;
+import com.mygdx.game.Controller;
 
 /**
  *  This class represents a Player in the game. Takes in Input from the keyboard
@@ -64,7 +63,7 @@ public class Player extends Character {
 	{
 	    this.load( 50, 0, 1, 5, 500 );
 	    this.playerPoints = 0;
-	    DesktopController.PRESSED = new boolean[DesktopController.CONTROLS.length];
+	    Controller.PRESSED = new boolean[Controller.CONTROLS.length];
 	}
 	
 	public void change( String projectile, Animation[] a )
@@ -88,25 +87,17 @@ public class Player extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) { // TODO change movement on Android so movement speed depends on joystick magnitude
-		double dir;
-		if (Gdx.app.getType().equals( ApplicationType.Desktop ))
-		{
-			dir = DesktopController.getInputDirection();
-			if (dir >= 0) {
-				setDirection(dir);
-				super.move(character, projectiles, time);
-			}
+		double dir = Controller.getInputDirection();
+        if (dir >= 0) {
+            setDirection(dir);
+            super.move(character, projectiles, time);
+        }
 
-			if ( Gdx.input.isTouched() ) {
-				shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
-						Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
-						System.currentTimeMillis() );
-			}
-		}
-		else
-		{
-			dir = AndroidController.getInputDirection();
-		}
+        if ( Gdx.input.isTouched() && Gdx.app.getType().equals( ApplicationType.Desktop ) ) {
+            shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
+                    Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
+                    System.currentTimeMillis() );
+        }
 	}
 
 	/**

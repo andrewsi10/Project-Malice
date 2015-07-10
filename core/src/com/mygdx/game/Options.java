@@ -52,7 +52,7 @@ public class Options
             return projectile;
         }
     }
-    public static final Skin buttonSkin = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
+    public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
     public static final Name[] NAMES = Name.values();
     public static final EnumMap<Name, Animation[]> playerAtlas = new EnumMap<Name, Animation[]>(Name.class);
@@ -103,24 +103,29 @@ public class Options
      */
     private static void createSkin()
     {
-        buttonSkin.add( "default", FONT );
+        SKIN.add( "default", FONT );
 
         // Create a texture
         Pixmap pixmap = new Pixmap( (int) Gdx.graphics.getWidth() / 4,
                 (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888 );
         pixmap.setColor( Color.WHITE );
         pixmap.fill();
-        buttonSkin.add( "background", new Texture( pixmap ) );
+        SKIN.add( "background", new Texture( pixmap ) );
         pixmap.dispose();
 
         // Create a button style
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = buttonSkin.newDrawable( "background", Color.GRAY );
-        textButtonStyle.down = buttonSkin.newDrawable( "background", Color.DARK_GRAY );
-        textButtonStyle.checked = buttonSkin.newDrawable( "background", Color.DARK_GRAY );
-        textButtonStyle.over = buttonSkin.newDrawable( "background", Color.LIGHT_GRAY );
-        textButtonStyle.font = buttonSkin.getFont( "default" );
-        buttonSkin.add( "default", textButtonStyle );
+        textButtonStyle.up = SKIN.newDrawable( "background", Color.GRAY );
+        textButtonStyle.down = SKIN.newDrawable( "background", Color.DARK_GRAY );
+        textButtonStyle.checked = SKIN.newDrawable( "background", Color.DARK_GRAY );
+        textButtonStyle.over = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
+        textButtonStyle.font = SKIN.getFont( "default" );
+        SKIN.add( "default", textButtonStyle );
+        // Set background image
+        SKIN.add( "touchBackground", new Texture(
+                "ui/touchBackground.png" ) );
+        // Set knob image
+        SKIN.add( "touchKnob", new Texture( "ui/touchKnob.png" ) );
     }
 
     // -------------------------- Music and Audio --------------------- //

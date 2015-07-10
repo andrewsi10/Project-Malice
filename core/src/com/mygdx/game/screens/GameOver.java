@@ -76,7 +76,7 @@ public class GameOver implements Screen
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
 
-        switchButton = new TextButton( "Switch Characters", Options.buttonSkin ); 
+        switchButton = new TextButton( "Switch Characters", Options.SKIN ); 
         switchButton.setPosition(
             Gdx.graphics.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 3 );
@@ -89,7 +89,7 @@ public class GameOver implements Screen
             }
         } );
         
-        leaderButton = new TextButton( "Leader Board", Options.buttonSkin ); 
+        leaderButton = new TextButton( "Leader Board", Options.SKIN ); 
         leaderButton.setPosition(
                 Gdx.graphics.getWidth() / 3 - leaderButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -102,7 +102,7 @@ public class GameOver implements Screen
             }
         } );
         
-        backButton = new TextButton( "Back To Main Menu", Options.buttonSkin ); 
+        backButton = new TextButton( "Back To Main Menu", Options.SKIN ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 2 / 3 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -135,7 +135,7 @@ public class GameOver implements Screen
         
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
-        retryButton = new TextButton( "Try Again", Options.buttonSkin );
+        retryButton = new TextButton( "Try Again", Options.SKIN );
         retryButton.setPosition(
             Gdx.graphics.getWidth() / 3 - retryButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 3 );
@@ -148,7 +148,7 @@ public class GameOver implements Screen
             }
         } );
         
-        textField = new TextField( "Enter Name ", Options.buttonSkin );
+        textField = new TextField( "Enter Name ", Options.SKIN );
         textField.setBounds( 
             Gdx.graphics.getWidth() / 2 - switchButton.getWidth() / 2, 
             Gdx.graphics.getHeight() / 2,

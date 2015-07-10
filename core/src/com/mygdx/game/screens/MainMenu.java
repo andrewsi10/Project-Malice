@@ -62,7 +62,7 @@ public class MainMenu implements Screen
 
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
-        playButton = new TextButton( "Play", Options.buttonSkin );
+        playButton = new TextButton( "Play", Options.SKIN );
         playButton.setPosition(
             Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 );
@@ -75,7 +75,7 @@ public class MainMenu implements Screen
             }
         } );
         
-        leaderButton = new TextButton( "Leader Board", Options.buttonSkin );
+        leaderButton = new TextButton( "Leader Board", Options.SKIN );
         leaderButton.setPosition(
             Gdx.graphics.getWidth() / 2 - leaderButton.getWidth() / 2,
             Gdx.graphics.getHeight() * 3 / 8 );
@@ -88,7 +88,7 @@ public class MainMenu implements Screen
             }
         } );
 
-        optionsButton = new TextButton( "Settings", Options.buttonSkin ); 
+        optionsButton = new TextButton( "Settings", Options.SKIN ); 
         optionsButton.setSize( 100, 64 );
         optionsButton.setPosition( Gdx.graphics.getWidth() - optionsButton.getWidth(), 0 );
         optionsButton.addListener( new ClickListener() {
@@ -114,7 +114,7 @@ public class MainMenu implements Screen
 //            }
 //        });
 
-        exitButton = new TextButton( "Exit", Options.buttonSkin ); 
+        exitButton = new TextButton( "Exit", Options.SKIN ); 
         exitButton.setPosition(
             Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
             Gdx.graphics.getHeight() / 4 );

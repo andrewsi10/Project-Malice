@@ -32,7 +32,7 @@ public class OptionsScreen implements Screen
         game = g;
         stage = new Stage();
         
-        musicButton = new TextButton( "Music", Options.buttonSkin ); 
+        musicButton = new TextButton( "Music", Options.SKIN ); 
         musicButton.setPosition( 
                     Gdx.graphics.getWidth() / 2 - musicButton.getWidth() / 2, 
                     Gdx.graphics.getHeight() / 2 );
@@ -46,7 +46,7 @@ public class OptionsScreen implements Screen
             }
         } );
 
-        soundButton = new TextButton( "Sound", Options.buttonSkin ); 
+        soundButton = new TextButton( "Sound", Options.SKIN ); 
         soundButton.setPosition( 
                     Gdx.graphics.getWidth() / 2 - soundButton.getWidth() / 2, 
                     Gdx.graphics.getHeight() / 3 );
@@ -73,7 +73,7 @@ public class OptionsScreen implements Screen
     public OptionsScreen update( final Screen prev )
     {
         if ( backButton != null ) backButton.remove();
-        backButton = new TextButton( "Back", Options.buttonSkin ); 
+        backButton = new TextButton( "Back", Options.SKIN ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );

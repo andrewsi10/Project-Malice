@@ -75,7 +75,7 @@ public class CharacterSelect implements Screen
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
             final Options.Name charName = Options.NAMES[i];
-            final TextButton b = new TextButton( charName.getButtonName(), Options.buttonSkin );
+            final TextButton b = new TextButton( charName.getButtonName(), Options.SKIN );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
                 Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
@@ -89,7 +89,7 @@ public class CharacterSelect implements Screen
             } );
             stage.addActor( b );
         }
-        randomButton = new TextButton( "Random Character", Options.buttonSkin );
+        randomButton = new TextButton( "Random Character", Options.SKIN );
         randomButton.setPosition(
                 Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
@@ -103,7 +103,7 @@ public class CharacterSelect implements Screen
             }
         } );
 
-        backButton = new TextButton( "Back to Main Menu", Options.buttonSkin ); 
+        backButton = new TextButton( "Back to Main Menu", Options.SKIN ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
