@@ -333,7 +333,7 @@ public class GameScreen implements Screen
 						{
 							player.increasePoints();
 							player.increaseExp( sprite.getExperience() );
-							spawnEnemies( player.getPoints() / 60 );
+							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
 						} else if ( sprite instanceof Player )
 						{
 						    Audio.stopTheme( 1 ); // stops the theme music
@@ -384,8 +384,7 @@ public class GameScreen implements Screen
 	 * Helper method that spawns enemies in random locations, where the number
 	 * of enemies spawned is based on the number of points the player has.
 	 * 
-	 * This method is called in the beginning of gameplay and if less than three
-	 * characters remain.
+	 * This method is called in the beginning of gameplay and whenever an enemy dies.
 	 * 
 	 */
 	private void spawnEnemies( int limit )
@@ -394,7 +393,9 @@ public class GameScreen implements Screen
 		{
 			int index = 1 + (int) ( Math.random() * Options.NUMENEMIES );
 			Enemy e = new Enemy( Options.atlas.get( "Enemy" + index ) );
-			e.increaseBdmg( -5 );
+			e.increaseBdmg( -5 + player.getPoints() / 50 );
+			e.increaseMaxHp( player.getPoints() / 20 );
+			e.increaseCurrentHp( player.getPoints() / 20 );
 			// set spawn for enemy
 			map.setSpawn( player.getX(), player.getY() );
 			e.setPosition( map.getSpawnX(), map.getSpawnY() );
