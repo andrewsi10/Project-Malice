@@ -1,18 +1,10 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
@@ -30,13 +22,8 @@ import com.mygdx.game.Options;
  *
  * @author Sources: libgdx
  */
-public class CharacterSelect implements Screen
+public class CharacterSelect extends StagedScreen
 {
-    /**
-     * Volume of this screen
-     */
-    private static final int VOLUME = 70;
-
     /**
      * Gets the array storing the names of the characters that will be used for
      * the buttons.
@@ -48,13 +35,6 @@ public class CharacterSelect implements Screen
 //            "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" }; // TODO
     
     private static final int NUMBUTTONS = Options.NAMES.length;
-    
-	private Image background;
-
-	private final Malice game;
-	private Skin skin;
-
-	private Stage stage;
 
 	private TextButton backButton, randomButton;
 
@@ -69,12 +49,7 @@ public class CharacterSelect implements Screen
 	 */
 	public CharacterSelect( Malice g, Skin s )
 	{
-		game = g;
-		skin = s;
-        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
-                new Texture( "img/titlescreen.png" ) ) ) );
-        stage = new Stage();
-        stage.addActor( background );
+	    super( g, s, 70 );
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
@@ -122,72 +97,5 @@ public class CharacterSelect implements Screen
         
         stage.addActor( backButton );
         stage.addActor( randomButton );
-	}
-
-	/**
-	 * Sets up the six character class buttons in a two by three grid as well as
-	 * an exit button beneath the six class buttons. The background image is the
-	 * same as the image from MainMenu.
-	 * 
-	 * @see com.badlogic.gdx.Screen#show()
-	 */
-	@Override
-	public void show()
-	{
-        Audio.changePercent( VOLUME );
-        Gdx.input.setInputProcessor( stage );// Make the stage consume events
-	}
-
-	/**
-	 * Refreshes the screen.
-	 * 
-	 * This method shouldn't change anything on the screen since none of the
-	 * images or anything are changed.
-	 * 
-	 * @see com.badlogic.gdx.Screen#render(float)
-	 */
-	@Override
-	public void render(float delta)
-	{
-		stage.act();
-		stage.draw();
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resize(int, int)
-	 */
-    @Override
-    public void resize( int width, int height ) {
-        background.setSize( width, height );
-        stage.getViewport().update( width, height );
-    }
-
-	/**
-	 * @see com.badlogic.gdx.Screen#pause()
-	 */
-	@Override
-	public void pause() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resume()
-	 */
-	@Override
-	public void resume() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#hide()
-	 */
-	@Override
-	public void hide() {}
-
-	/**
-	 * Disposes the Skin and Stage to prevent memory leakage.
-	 * 
-	 * @see com.badlogic.gdx.Screen#dispose()
-	 */
-	@Override
-	public void dispose()
-	{
-		stage.dispose();
 	}
 }

@@ -23,7 +23,7 @@ public class StagedScreen extends ScreenAdapter
     protected Skin skin;
     protected Stage stage;
     
-    private Image background;
+    protected Image background;
     
     public StagedScreen( Malice g, Skin s, int volume ) {
         this( g, s, new Stage(), volume );
@@ -31,6 +31,10 @@ public class StagedScreen extends ScreenAdapter
     
     public StagedScreen( Malice g, Skin s, Stage stg, int volume ) {
         this( g, s, stg, "img/titlescreen.png", volume );
+    }
+    
+    public StagedScreen( Malice g, Skin s, Image img, int volume ) {
+        this( g, s, new Stage(), img, volume );
     }
     
     public StagedScreen( Malice g, Skin s, Stage stg, String img, int volume ) {
@@ -57,7 +61,8 @@ public class StagedScreen extends ScreenAdapter
     @Override
     public void show()
     {
-        Audio.changePercent( VOLUME );
+        if ( VOLUME != -1 )
+            Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( stage ); // Make the stage consume events
     }
 

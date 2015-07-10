@@ -4,28 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
-public class LeaderScreen implements Screen
+public class LeaderScreen extends StagedScreen
 {
-    /**
-     * Volume of this screen
-     */
-    private static final int VOLUME = 50;
-    
     public static final FileHandle scoreFile = Gdx.files.local( "LeaderBoard.txt" );
     
     public static void addEntry( String name, int score )
@@ -33,24 +21,13 @@ public class LeaderScreen implements Screen
         scoreFile.writeString( name + " " + score + "\n", true );
     }
     
-    
-    private Malice game;
-    private Skin skin;
-    private Stage stage;
     private GlyphLayout layout;
     
-    private Image background;
     private TextButton prevButton;
     
     public LeaderScreen( Malice g, Skin s ) {
-        game = g;
-        skin = s;
-        stage = new Stage();
+        super( g, s, 50 );
         layout = new GlyphLayout();
-        
-        background =  new Image( (Drawable) new SpriteDrawable( new Sprite(
-                                    new Texture( "img/titlescreen.png" ) ) ) );
-        stage.addActor( background );
     }
 
     
@@ -81,9 +58,8 @@ public class LeaderScreen implements Screen
     @Override
     public void show()
     {
+        super.show();
         Options.FONT.setColor( Color.WHITE );
-        Audio.changePercent( VOLUME );
-        Gdx.input.setInputProcessor( stage );
         if ( scoreFile.exists() ) {
             layout.setText( Options.FONT, scoreFile.readString() );
         }
@@ -92,32 +68,10 @@ public class LeaderScreen implements Screen
     @Override
     public void render( float delta )
     {
-        stage.act();
-        stage.draw();
+        super.render( delta );
         stage.getBatch().begin();
         Options.FONT.draw( stage.getBatch(), layout, 
             Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 3 / 4 );
         stage.getBatch().end();
-    }
-
-    @Override
-    public void resize( int width, int height ) {
-        background.setSize( width, height );
-        stage.getViewport().update( width, height );
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
-    public void dispose()
-    {
-        stage.dispose();
     }
 }

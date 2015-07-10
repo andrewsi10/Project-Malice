@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,13 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 
-public class OptionsScreen implements Screen
+public class OptionsScreen extends StagedScreen
 {
-    private final Malice game;
-    private Stage stage;
     private TextButton musicButton, soundButton, backButton;
     private final Slider musicSlider, soundSlider;
-    private Skin skin;
     
     /**
      * Suggested outline:
@@ -28,14 +24,13 @@ public class OptionsScreen implements Screen
      *          Sound: slider
      *          
      *          Controls:   list of controls(all buttons to change them)
-     * 
-     * 
+     *          
+     *          Android controls: adjustable positions
      */
     public OptionsScreen( Malice g, Skin s )
     {
-        game = g;
-        skin = s;
-        stage = new Stage();
+        super( g, s, -1 );
+        background.setVisible( false );
 
         // initialize buttons
         musicButton = new TextButton( "Music", skin ); 
@@ -138,39 +133,12 @@ public class OptionsScreen implements Screen
     }
 
     @Override
-    public void show()
-    {
-        Gdx.input.setInputProcessor( stage );
-    }
-
-    @Override
     public void render( float delta )
     {
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
-        stage.act();
-        stage.draw();
+        super.render( delta );
 //        musicButton.setText( "Music: " + ( Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
 //        soundButton.setText( "Sound: " + ( Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
-    }
-
-    @Override
-    public void resize( int width, int height ) {
-        stage.getViewport().update( width, height );
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
-    public void dispose()
-    {
-        stage.dispose();
     }
 }

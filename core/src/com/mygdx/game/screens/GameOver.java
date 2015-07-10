@@ -1,22 +1,15 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
@@ -35,14 +28,10 @@ import com.mygdx.game.Options;
  *
  * @author Sources: libgdx
  */
-public class GameOver implements Screen
+public class GameOver extends StagedScreen
 {
-	private final Malice game;
-	private Skin skin;
-	private Stage stage;
     private Batch batch;
     
-    private Image background;
 	private TextButton retryButton, switchButton, leaderButton, backButton;
 	private TextField textField;
 
@@ -65,14 +54,10 @@ public class GameOver implements Screen
 	 */
 	public GameOver( Malice g, Skin s )
 	{
-		game = g;
-		skin = s;
+	    super( g, s, -1 );
 		layout = new GlyphLayout();
-        stage = new Stage();
 
         batch = stage.getBatch();
-        background = new Image( (Drawable) new SpriteDrawable( new Sprite(
-                new Texture( "img/titlescreen.png" ) ) ) );
 
         switchButton = new TextButton( "Switch Characters", skin ); 
         switchButton.setPosition(
@@ -113,7 +98,6 @@ public class GameOver implements Screen
             }
         } );
 
-        stage.addActor( background );
         stage.addActor( switchButton );
         stage.addActor( leaderButton );
         stage.addActor( backButton );
@@ -201,43 +185,5 @@ public class GameOver implements Screen
 		    Gdx.graphics.getWidth() / 2 - layout.width / 2, 
 		    Gdx.graphics.getHeight() * 67 / 100 );
 		batch.end();
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resize(int, int)
-	 */
-    @Override
-    public void resize( int width, int height ) {
-        background.setSize( width, height );
-        stage.getViewport().update( width, height );
-    }
-
-	/**
-	 * @see com.badlogic.gdx.Screen#pause()
-	 */
-	@Override
-	public void pause() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resume()
-	 */
-	@Override
-	public void resume() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#hide()
-	 */
-	@Override
-	public void hide() {}
-
-	/**
-	 * Removes the Skin, Stage, and Batch to prevent memory leakage.
-	 * 
-	 * @see com.badlogic.gdx.Screen#dispose()
-	 */
-	@Override
-	public void dispose()
-	{
-		stage.dispose();
 	}
 }

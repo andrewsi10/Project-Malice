@@ -7,10 +7,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -43,12 +41,8 @@ import com.mygdx.game.world.Map;
  *
  * @author Sources: libgdx
  */
-public class GameScreen implements Screen
+public class GameScreen extends StagedScreen
 {
-    private final Malice game;
-    private Skin skin;
-    private Controller controller;
-    
     private Batch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
@@ -65,7 +59,6 @@ public class GameScreen implements Screen
 	
 	
 	private Map map;
-    private Sprite pauseSprite;
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
@@ -106,14 +99,11 @@ public class GameScreen implements Screen
 	 */
 	public GameScreen( Malice g, Skin s )
 	{
-		game = g;
-		skin = s;
-		controller = new Controller();
+	    super( g, s, new Controller(), "img/pausescreen.png", 40 ); // TODO remove bugs and unnecessary processing
 		
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
-        batch = controller.getBatch();
-        pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
+        batch = stage.getBatch();
         sprites = new ArrayList<Character>();
 
         enemyMaxCount = -2;
@@ -152,8 +142,8 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
-        Audio.changePercent( VOLUME );
-        Gdx.input.setInputProcessor( controller );
+	    super.show();
+	    background.setVisible( false );
         
         sprites.clear();
 		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
@@ -209,15 +199,12 @@ public class GameScreen implements Screen
 	public void renderPaused(float delta)
 	{
 	    Audio.pauseTheme(); // pause the theme music
-		batch.begin();
-		pauseSprite.setPosition( cam.position.x - pauseSprite.getWidth() / 2, 
-                                 cam.position.y - pauseSprite.getHeight() / 2 );
-		pauseSprite.draw( batch );
-		batch.end();
+	    stage.draw();
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
 		{
 			state = State.RESUME;
 			timeResumed = System.currentTimeMillis();
+            background.setVisible( false );
 		}
 	}
 
@@ -264,7 +251,7 @@ public class GameScreen implements Screen
 						+ " seconds", fontX, fontY );
 		batch.end();
 		renderer.end();
-        controller.draw();
+        stage.draw();
 
 		if ( System.currentTimeMillis() - timeResumed > 2000 )
 		{
@@ -298,7 +285,7 @@ public class GameScreen implements Screen
 	 * @param delta
 	 *            The time in seconds since the last render
 	 */
-	public void renderRun(float delta)
+	public void renderRun( float delta )
 	{
 	    setMatrixAndCam();
 
@@ -358,12 +345,12 @@ public class GameScreen implements Screen
 		drawPoints();
 		batch.end();
 		renderer.end();
-        controller.act();
-        controller.draw();
+		super.render( delta );
 
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
 		{
 			state = State.PAUSE;
+			background.setVisible( true );
 		}
 	}
 	
@@ -475,27 +462,9 @@ public class GameScreen implements Screen
 	 */
     @Override
     public void resize( int width, int height ) {
-        pauseSprite.setSize( width, height );
-        controller.getViewport().update( width, height );
+        cam.setToOrtho( false, width, height );
+        super.resize( width, height );
     }
-
-	/**
-	 * @see com.badlogic.gdx.Screen#pause()
-	 */
-	@Override
-	public void pause() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resume()
-	 */
-	@Override
-	public void resume() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#hide()
-	 */
-	@Override
-	public void hide() {}
 
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.
@@ -505,10 +474,9 @@ public class GameScreen implements Screen
 	@Override
 	public void dispose()
 	{
+	    super.dispose();
 		map.dispose();
-		controller.dispose();
 		renderer.dispose();
-		pauseSprite.getTexture().dispose();
         player.getTexture().dispose();
         for ( Projectile p : projectiles )
             p.getTexture().dispose();
