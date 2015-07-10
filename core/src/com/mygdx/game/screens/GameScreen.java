@@ -47,9 +47,7 @@ public class GameScreen implements Screen
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
     private final Malice game;
-    private Controller controller; // TODO
-//	private DesktopController desktopController;
-//	private AndroidController androidController;
+    private Controller controller;
 	
     /**
      * Volume of this screen
@@ -106,14 +104,7 @@ public class GameScreen implements Screen
 	{
 		game = g;
 		controller = new Controller();
-//		if (Gdx.app.getType().equals( ApplicationType.Android ))
-//		{
-//			androidController = new AndroidController();
-//		}
-//		else
-//		{
-//			desktopController = new DesktopController();
-//		}
+		
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -157,15 +148,8 @@ public class GameScreen implements Screen
 	public void show()
 	{
         Options.Audio.playTheme( VOLUME );
-        Gdx.input.setInputProcessor( controller ); // TODO
-//        if (Gdx.app.getType().equals( ApplicationType.Android ))
-//		{
-//        	Gdx.input.setInputProcessor( androidController );
-//		}
-//		else
-//		{
-//			Gdx.input.setInputProcessor( desktopController );
-//		}
+        Gdx.input.setInputProcessor( controller );
+        
         sprites.clear();
 		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
@@ -274,16 +258,8 @@ public class GameScreen implements Screen
 						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
 						+ " seconds", fontX, fontY );
 		batch.end();
-		controller.draw(); // TODO
-//		if (Gdx.app.getType().equals( ApplicationType.Android ))
-//		{
-//			androidController.draw();
-//		}
-//		else
-//		{
-//			desktopController.draw();
-//		}
 		renderer.end();
+        controller.draw();
 
 		if ( System.currentTimeMillis() - timeResumed > 2000 )
 		{
@@ -376,20 +352,9 @@ public class GameScreen implements Screen
 		}
 		drawPoints();
 		batch.end();
-		controller.act(); // TODO
-		controller.draw();
-		
-//		if (Gdx.app.getType().equals( ApplicationType.Android ))
-//		{
-//			androidController.act( delta );
-//			androidController.draw();
-//		}
-//		else
-//		{
-//			desktopController.act( delta );
-//			desktopController.draw();
-//		}
 		renderer.end();
+        controller.act();
+        controller.draw();
 
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
 		{

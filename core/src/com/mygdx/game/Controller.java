@@ -25,9 +25,7 @@ public class Controller extends Stage
     public static final int[] CONTROLS = new int[] { Input.Keys.W,
             Input.Keys.D, Input.Keys.S, Input.Keys.A, };
     public static boolean[] PRESSED = new boolean[CONTROLS.length];
-
-    public static float dir; // TODO android
-
+    
     public Controller()
     {
         if ( Gdx.app.getType().equals( ApplicationType.Android ) ) {

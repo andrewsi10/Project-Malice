@@ -86,7 +86,7 @@ public class Player extends Character {
 	 */
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
-			long time) { // TODO change movement on Android so movement speed depends on joystick magnitude
+			long time) {
 		double dir = Controller.getInputDirection();
         if (dir >= 0) {
             setDirection(dir);

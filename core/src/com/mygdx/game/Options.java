@@ -122,8 +122,7 @@ public class Options
         textButtonStyle.font = SKIN.getFont( "default" );
         SKIN.add( "default", textButtonStyle );
         // Set background image
-        SKIN.add( "touchBackground", new Texture(
-                "ui/touchBackground.png" ) );
+        SKIN.add( "touchBackground", new Texture( "ui/touchBackground.png" ) );
         // Set knob image
         SKIN.add( "touchKnob", new Texture( "ui/touchKnob.png" ) );
     }
