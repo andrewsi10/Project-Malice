@@ -31,9 +31,6 @@ public class CharacterSelect extends StagedScreen
      * @return characterNames, the array containing the names of the characters
      *         that will be used for the buttons
      */
-//    public static final String[] characterNames = { "Dark Wizard", "Brawler",
-//            "Crimson Wizard", "Bandit", "Warrior", "Mage of Justice" }; // TODO
-    
     private static final int NUMBUTTONS = Options.NAMES.length;
 
 	private TextButton backButton, randomButton;

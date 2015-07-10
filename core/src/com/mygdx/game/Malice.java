@@ -27,7 +27,8 @@ public class Malice extends Game
 	 */
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.1.9";
 
-    public MainMenu mainMenu;
+	public Splash splash;
+    public MainMenu mainMenu; // note: can use a single array for all the screens
     public OptionsScreen optionsScreen;
     public LeaderScreen leaderScreen;
     public CharacterSelect characterSelect;
@@ -42,8 +43,9 @@ public class Malice extends Game
 	@Override
 	public void create()
 	{
+	    splash = new Splash( this, Options.SKIN );
 	    Audio.initializeAudio();
-        setScreen( new Splash( this ) );
+        setScreen( splash );
         Options.initialize();
 	    mainMenu = new MainMenu( this, Options.SKIN );
 	    optionsScreen = new OptionsScreen( this, Options.SKIN );
@@ -61,6 +63,7 @@ public class Malice extends Game
 	@Override
 	public void dispose() 
 	{
+	    this.splash.dispose();
 	    this.mainMenu.dispose();
 	    this.optionsScreen.dispose();
 	    this.leaderScreen.dispose();

@@ -1,10 +1,6 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Audio;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Malice;
 
 /**
@@ -19,21 +15,9 @@ import com.mygdx.game.Malice;
  *
  * @author Sources: libgdx
  */
-public class Splash implements Screen
+public class Splash extends StagedScreen
 {
-    /**
-     * Volume of this screen
-     */
-    private static final int VOLUME = 70;
-
-	private SpriteBatch batch;
-
-	private Sprite splashSprite;
-
 	private float elapsed;
-
-	private final Malice game;
-
 	/**
 	 * Creates a Splash screen object and stores the Malice object that created
 	 * the screen.
@@ -41,23 +25,9 @@ public class Splash implements Screen
 	 * @param g
 	 *            the Malice game that controls all the screens
 	 */
-	public Splash( Malice g )
+	public Splash( Malice g, Skin s )
 	{
-		game = g;
-        batch = new SpriteBatch();
-        splashSprite = new Sprite( new Texture( "img/splashscreen.png" ) );
-	}
-
-	/**
-	 * Loads the image displaying the credits and decreases the volume of the
-	 * music.
-	 * 
-	 * @see com.badlogic.gdx.Screen#show()
-	 */
-	@Override
-	public void show()
-	{
-        Audio.changePercent( VOLUME );
+	    super( g, s, "img/splashscreen.png", 70 );
 	}
 
 	/**
@@ -72,53 +42,10 @@ public class Splash implements Screen
 	public void render(float delta)
 	{
 		elapsed += delta;
-		batch.begin();
-		splashSprite.draw( batch );
-		batch.end();
+		super.render( delta );
 		if ( elapsed > 5 )
 		{
 			game.setScreen( game.mainMenu );
 		}
 	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resize(int, int)
-	 */
-	@Override
-	public void resize( int width, int height ) {
-        splashSprite.setSize( width, height );
-	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#pause()
-	 */
-	@Override
-	public void pause() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resume()
-	 */
-	@Override
-	public void resume() {}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#hide()
-	 */
-	@Override
-	public void hide() {}
-
-	/**
-	 * Gets rid of everything that can cause memory leakage.
-	 * 
-	 * Disposes the Batch, texture from the Sprite, and the Music.
-	 * 
-	 * @see com.badlogic.gdx.Screen#dispose()
-	 */
-	@Override
-	public void dispose()
-	{
-		batch.dispose();
-		splashSprite.getTexture().dispose();
-	}
-
 }
