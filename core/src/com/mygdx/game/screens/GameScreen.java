@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
@@ -147,7 +148,7 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
-        Options.Audio.playTheme( VOLUME );
+        Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( controller );
         
         sprites.clear();
@@ -203,7 +204,7 @@ public class GameScreen implements Screen
 	 */
 	public void renderPaused(float delta)
 	{
-	    Options.Audio.stopTheme( 0 ); // pause the theme music
+	    Audio.stopTheme( 0 ); // pause the theme music
 		batch.begin();
 		batch.draw( pauseTexture, 
 		    cam.position.x - pauseTexture.getWidth() / 2, 
@@ -297,7 +298,7 @@ public class GameScreen implements Screen
 	{
 	    setMatrixAndCam();
 
-		Options.Audio.playTheme( VOLUME ); // note: removed check, may cause lag without check for isPlaying()
+		Audio.playTheme( VOLUME ); // note: removed check, may cause lag without check for isPlaying()
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
@@ -335,7 +336,7 @@ public class GameScreen implements Screen
 							spawnEnemies( player.getPoints() / 60 );
 						} else if ( sprite instanceof Player )
 						{
-						    Options.Audio.stopTheme( 1 ); // stops the theme music
+						    Audio.stopTheme( 1 ); // stops the theme music
 							game.setScreen( game.gameOver.update( 
 							                       player.getPoints(), 
 							                       player.getCurrentLevel() ) );

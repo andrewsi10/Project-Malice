@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
@@ -76,7 +77,7 @@ public class LeaderScreen implements Screen
     public void show()
     {
         Options.FONT.setColor( Color.WHITE );
-        Options.Audio.playTheme( VOLUME );
+        Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );
         if ( scoreFile.exists() ) {
             layout.setText( Options.FONT, scoreFile.readString() );

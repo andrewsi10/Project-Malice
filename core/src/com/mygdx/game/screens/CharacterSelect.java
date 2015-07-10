@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
@@ -130,7 +131,7 @@ public class CharacterSelect implements Screen
 	@Override
 	public void show()
 	{
-        Options.Audio.playTheme( VOLUME );
+        Audio.playTheme( VOLUME );
         Gdx.input.setInputProcessor( stage );// Make the stage consume events
 	}
 

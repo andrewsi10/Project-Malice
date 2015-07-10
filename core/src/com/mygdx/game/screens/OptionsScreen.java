@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 import com.mygdx.game.Options;
 
@@ -40,8 +41,8 @@ public class OptionsScreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
-                Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
+                Audio.MUSIC_MUTED = !Audio.MUSIC_MUTED;
+                Audio.playTheme( Audio.mainTheme.getVolume() );
                 musicButton.toggle();
             }
         } );
@@ -54,8 +55,8 @@ public class OptionsScreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Options.Audio.SOUND_MUTED = !Options.Audio.SOUND_MUTED;
-                Options.Audio.playAudio( "levelup" );
+                Audio.SOUND_MUTED = !Audio.SOUND_MUTED;
+                Audio.playAudio( "levelup" );
                 soundButton.toggle();
             }
         } );
@@ -102,8 +103,8 @@ public class OptionsScreen implements Screen
         Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
         stage.act();
         stage.draw();
-        musicButton.setText( "Music: " + ( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
-        soundButton.setText( "Sound: " + ( Options.Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
+        musicButton.setText( "Music: " + ( Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
+        soundButton.setText( "Sound: " + ( Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Options;
 
 /**
@@ -199,7 +200,7 @@ public class Character extends AnimatedSprite {
 			float yDistance, long time) {
 		if (time - previousTime >= reloadSpeed) {
 			previousTime = time;
-	        Options.Audio.playAudio( projectile );
+	        Audio.playAudio( projectile );
 			projectiles.add( new Projectile( this, xDistance, yDistance,
                                             Options.atlas.get( projectile ) ) );
 		}
@@ -216,7 +217,7 @@ public class Character extends AnimatedSprite {
 	public void increaseCurrentLevel() {
 		// might need balancing
 		level++;
-		Options.Audio.playAudio("levelup");
+		Audio.playAudio("levelup");
 		double temp = getCurrentHp() / getMaxHp();
 		increaseBdmg(2);
 		increaseMaxHp(10);

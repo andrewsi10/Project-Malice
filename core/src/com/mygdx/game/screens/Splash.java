@@ -5,8 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 /**
  * Splash Screen is a Screen that shows the developers of the project and gives
@@ -61,7 +61,7 @@ public class Splash implements Screen
 	@Override
 	public void show()
 	{
-        Options.Audio.playTheme( VOLUME );
+        Audio.playTheme( VOLUME );
 	}
 
 	/**
