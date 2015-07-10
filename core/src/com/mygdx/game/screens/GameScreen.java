@@ -53,7 +53,7 @@ public class GameScreen implements Screen
     /**
      * Volume of this screen
      */
-    private static final float VOLUME = 0.4f;
+    private static final int VOLUME = 40;
 
 	/**
 	 * Size of the map
@@ -148,7 +148,7 @@ public class GameScreen implements Screen
 	@Override
 	public void show()
 	{
-        Audio.playTheme( VOLUME );
+        Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( controller );
         
         sprites.clear();
@@ -204,7 +204,7 @@ public class GameScreen implements Screen
 	 */
 	public void renderPaused(float delta)
 	{
-	    Audio.stopTheme( 0 ); // pause the theme music
+	    Audio.pauseTheme(); // pause the theme music
 		batch.begin();
 		batch.draw( pauseTexture, 
 		    cam.position.x - pauseTexture.getWidth() / 2, 
@@ -298,7 +298,7 @@ public class GameScreen implements Screen
 	{
 	    setMatrixAndCam();
 
-		Audio.playTheme( VOLUME ); // note: removed check, may cause lag without check for isPlaying()
+        Audio.changePercent( VOLUME );
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
@@ -336,7 +336,7 @@ public class GameScreen implements Screen
 							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
 						} else if ( sprite instanceof Player )
 						{
-						    Audio.stopTheme( 1 ); // stops the theme music
+						    Audio.stopTheme(); // stops the theme music
 							game.setScreen( game.gameOver.update( 
 							                       player.getPoints(), 
 							                       player.getCurrentLevel() ) );

@@ -23,7 +23,7 @@ public class LeaderScreen implements Screen
     /**
      * Volume of this screen
      */
-    private static final float VOLUME = 0.5f;
+    private static final int VOLUME = 50;
     
     public static final FileHandle scoreFile = Gdx.files.local( "LeaderBoard.txt" );
     
@@ -77,7 +77,7 @@ public class LeaderScreen implements Screen
     public void show()
     {
         Options.FONT.setColor( Color.WHITE );
-        Audio.playTheme( VOLUME );
+        Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( stage );
         if ( scoreFile.exists() ) {
             layout.setText( Options.FONT, scoreFile.readString() );

@@ -34,7 +34,7 @@ public class CharacterSelect implements Screen
     /**
      * Volume of this screen
      */
-    private static final float VOLUME = 0.7f;
+    private static final int VOLUME = 70;
 
     /**
      * Gets the array storing the names of the characters that will be used for
@@ -131,7 +131,7 @@ public class CharacterSelect implements Screen
 	@Override
 	public void show()
 	{
-        Audio.playTheme( VOLUME );
+        Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( stage );// Make the stage consume events
 	}
 

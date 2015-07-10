@@ -25,7 +25,7 @@ public class Malice extends Game
 	/**
 	 * Name of the application window is TITLE followed by VERSION
 	 */
-	public static final String TITLE = "Gauntlet", VERSION = "1.0.0.0";
+	public static final String TITLE = "Gauntlet", VERSION = "1.0.1.9";
 
     public MainMenu mainMenu;
     public OptionsScreen optionsScreen;

@@ -25,7 +25,7 @@ public class Splash implements Screen
     /**
      * Volume of this screen
      */
-    private static final float VOLUME = 0.7f;
+    private static final int VOLUME = 70;
 
 	private SpriteBatch batch;
 
@@ -61,7 +61,7 @@ public class Splash implements Screen
 	@Override
 	public void show()
 	{
-        Audio.playTheme( VOLUME );
+        Audio.changePercent( VOLUME );
 	}
 
 	/**

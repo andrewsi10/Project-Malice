@@ -33,7 +33,7 @@ public class MainMenu implements Screen
     /**
      * Volume of this screen
      */
-    private static final float VOLUME = 0.55f;
+    private static final int VOLUME = 55;
     
 	private final Malice game;
 	private Stage stage;
@@ -146,7 +146,7 @@ public class MainMenu implements Screen
 	@Override
 	public void show()
 	{
-        Audio.playTheme( VOLUME );
+        Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( stage );
 //        muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
 	}

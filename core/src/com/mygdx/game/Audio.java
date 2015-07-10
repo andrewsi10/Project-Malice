@@ -29,7 +29,7 @@ public class Audio
     public static HashMap<String,Sound> SOUNDS;
     
     public static int MUSIC_VOLUME = 100;
-    public static int SOUND_VOLUME = 100; // TODO
+    public static int SOUND_VOLUME = 100;
     
     public static int MUSIC_PERCENT = 100;
 
@@ -54,27 +54,24 @@ public class Audio
      *          0 - pauses playing;
      *          1 - stops playing (returns theme to the beginning)
      */
-    public static void stopTheme( int type )
-    {
-        if ( mainTheme.isPlaying() ) // may be able to remove
-            switch ( type )
-            {
-                case 0:
-                    mainTheme.pause();
-                    break;
-                case 1:
-                    mainTheme.stop();
-                    break;
-            }
+    public static void stopTheme() {
+        mainTheme.stop();
+    }
+    
+    /**
+     * Pauses theme music
+     */
+    public static void pauseTheme() {
+        mainTheme.pause();
     }
 
     /**
      * Plays the theme music
      * @param volume volume to set the theme music to
      */
-    public static void playTheme( float volume )
+    public static void changePercent( int volume )
     {
-        MUSIC_PERCENT = (int)( volume * 100 );
+        MUSIC_PERCENT = volume;
         playTheme();
     }
 
@@ -86,11 +83,11 @@ public class Audio
     {
         if ( mainTheme == null )
             initializeAudio();
-        mainTheme.setVolume( MUSIC_VOLUME / 100.0f * MUSIC_PERCENT / 100 );
+        updateVolume();
         if ( !isMusicMuted() )
             mainTheme.play();
         else
-            stopTheme( 0 );
+            pauseTheme();
     }
 
     /**
@@ -101,6 +98,11 @@ public class Audio
     {
         if ( !isSoundMuted() && SOUNDS.containsKey( s ) )
             SOUNDS.get( s ).play( SOUND_VOLUME / 100.0f );
+    }
+    
+    private static void updateVolume()
+    {
+        mainTheme.setVolume( MUSIC_VOLUME / 100.0f * MUSIC_PERCENT / 100 );
     }
     
     public static boolean isMusicMuted()
