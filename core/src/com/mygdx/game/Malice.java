@@ -53,6 +53,11 @@ public class Malice extends Game
 	    gameOver = new GameOver( this, Options.SKIN );
 	}
 	
+	/**
+	 * Dispose of all the resources of the game when exiting
+	 * 
+	 * @see com.badlogic.gdx.Game#dispose()
+	 */
 	@Override
 	public void dispose() 
 	{
@@ -62,6 +67,8 @@ public class Malice extends Game
 	    this.characterSelect.dispose();
 	    this.gameScreen.dispose();
 	    this.gameOver.dispose();
+	    Options.SKIN.dispose();
+	    Options.FONT.dispose();
 	}
 
 }
