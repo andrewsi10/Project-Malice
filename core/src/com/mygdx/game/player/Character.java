@@ -183,8 +183,6 @@ public class Character extends AnimatedSprite {
 	 * Puts a projectile that this Character shoots into the given Projectile 
 	 * array
 	 * 
-	 * 
-	 * 
 	 * @param projectiles ArrayList of Projectiles to add this Character's 
 	 *                     projectile to
 	 * @param xDistance the x distance for the slope that the projectile should 
@@ -205,6 +203,28 @@ public class Character extends AnimatedSprite {
                                             Options.atlas.get( projectile ) ) );
 		}
 	}
+    /**
+     * Puts a projectile that this Character shoots into the given Projectile 
+     * array
+     * 
+     * @param projectiles ArrayList of Projectiles to add this Character's 
+     *                     projectile to
+     * @param dir          double representing the angle direction that the 
+     *                         projectile should go
+     * @param time         Current time in milliseconds to determine if this 
+     *                         Character can shoot
+     * @param spriteType   String representing this what type of sprite this 
+     *                             Character is
+     */
+    public void shoot(ArrayList<Projectile> projectiles, double dir, long time) 
+    {
+        if (time - previousTime >= reloadSpeed) {
+            previousTime = time;
+            Audio.playAudio( projectile );
+            projectiles.add( new Projectile( this, dir,
+                                            Options.atlas.get( projectile ) ) );
+        }
+    }
 
 	// --------------------Setters and Incrementers --------------------//
 

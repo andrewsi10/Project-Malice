@@ -90,7 +90,7 @@ public class Audio
         if ( !isMusicMuted() )
             mainTheme.play();
         else
-            stopTheme( 1 );
+            stopTheme( 0 );
     }
 
     /**

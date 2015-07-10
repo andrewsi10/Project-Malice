@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class Controller extends Stage
 {
+    public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
+    
     private static Touchpad movementTouchpad;
     private static Touchpad shootTouchpad;
 
@@ -29,7 +31,7 @@ public class Controller extends Stage
     
     public Controller()
     {
-        if ( Gdx.app.getType().equals( ApplicationType.Android ) ) {
+        if ( isAndroid ) {
             // Create a touchpad skin
             Skin touchpadSkin = Options.SKIN;
             // Create TouchPad Style
@@ -62,7 +64,7 @@ public class Controller extends Stage
      */
     public static double getInputDirection()
     {
-        if ( Gdx.app.getType().equals( ApplicationType.Android ) ) {
+        if ( isAndroid ) {
             if ( movementTouchpad.isTouched() ) {
                 // this return statement converts to navigation coordinates with ( 90 - degrees )
                 // then it returns a positive number with ( + 360 )
@@ -93,23 +95,26 @@ public class Controller extends Stage
     }
     
     /**
-     * This method will only be called if the application is being run on Android
+     * This method will return the angle that the player should shoot
      * @return direction or -1 if no direction
      */
     public static double getShootingDirection()
     {
-    	if (shootTouchpad.isTouched())
-    	{
-    		return 90 + 360 - Math.toDegrees( 
-                    Math.atan2( shootTouchpad.getKnobPercentY(), 
-                            shootTouchpad.getKnobPercentX() ) );
-    	}
+        float deltaX = 0, deltaY = 0;
+        if ( Gdx.input.isTouched() ) {
+            if ( isAndroid ) {
+                deltaX = shootTouchpad.getKnobPercentY();
+                deltaY = shootTouchpad.getKnobPercentX();
+            }
+            else {
+                deltaX = Gdx.input.getX() - Gdx.graphics.getWidth() / 2;
+                deltaY = Gdx.graphics.getHeight() / 2 - Gdx.input.getY();
+            }
+        }
+        
+        if ( deltaX != 0 && deltaY != 0 )
+            return 90 + 360 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
     	return -1;
-    }
-    
-    public static Touchpad getShootTouchpad()
-    {
-    	return shootTouchpad;
     }
 
     /** @see com.badlogic.gdx.InputProcessor#keyDown(int) */

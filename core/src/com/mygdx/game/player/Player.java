@@ -2,8 +2,6 @@ package com.mygdx.game.player;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.mygdx.game.projectile.Projectile;
@@ -90,20 +88,13 @@ public class Player extends Character {
 		double dir = Controller.getInputDirection();
         if (dir >= 0) {
             setDirection(dir);
-            super.move(character, projectiles, time);
+            move();
+            setAnimations();
         }
-
-        if ( Gdx.input.isTouched() && Gdx.app.getType().equals( ApplicationType.Desktop ) ) {
-            shoot(projectiles, Gdx.input.getX() - Gdx.graphics.getWidth() / 2,
-                    Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
-                    System.currentTimeMillis() );
-        }
-        else if (Controller.getShootingDirection() != -1)
-        {
-        	shoot(projectiles, Controller.getShootTouchpad().getKnobPercentX(),
-        			Controller.getShootTouchpad().getKnobPercentY(),
-                    System.currentTimeMillis() );
-        }
+        
+        dir = Controller.getShootingDirection();
+        if ( dir >= 0 )
+            shoot( projectiles, dir, System.currentTimeMillis() );
 	}
 
 	/**

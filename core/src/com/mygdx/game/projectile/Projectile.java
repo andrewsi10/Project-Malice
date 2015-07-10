@@ -34,17 +34,21 @@ public class Projectile extends AnimatedSprite
 	 * @param distanceY the y distance used to determine slope
      * @param a continuous Animation for this Projectile
 	 */
-	public Projectile(Character c, float distanceX, float distanceY, Animation a)
+	public Projectile( Character c, double dir, Animation a )
 	{
-	    super( Math.toDegrees( Math.atan2( distanceX, distanceY ) ), a );
+	    super( dir, a );
         this.myCharacter = c;
         
-		setSpeed( 8 );
+        setSpeed( 8 );
         setSize(getWidth() / 3, getHeight() / 3);
         setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 
                     c.getY() + c.getHeight() / 2 - getHeight() / 2);
 	}
-	
+    public Projectile(Character c, float distanceX, float distanceY, Animation a)
+    {
+        this( c, 90 - Math.toDegrees( Math.atan2( distanceY, distanceX ) ), a );
+    }
+    
 	/**
 	 * Constructs this Projectile without animations, For testing only
 	 * 
