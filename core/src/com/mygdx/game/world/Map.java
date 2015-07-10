@@ -7,8 +7,8 @@ import java.util.Queue;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -429,7 +429,7 @@ public class Map
      * (expanse covers dark areas outside of map with walls
      * @param batch SpriteBatch used to draw the map
      */
-    public void draw( SpriteBatch batch )
+    public void draw( Batch batch )
     {
         if ( map == null )
             createMap();

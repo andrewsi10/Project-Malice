@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -42,14 +41,11 @@ public class Splash implements Screen
 	 * @param g
 	 *            the Malice game that controls all the screens
 	 */
-	public Splash(Malice g)
+	public Splash( Malice g )
 	{
 		game = g;
         batch = new SpriteBatch();
-        Texture splashTexture = new Texture( "img/splashscreen.png" );
-        splashSprite = new Sprite( splashTexture );
-        splashSprite
-                .setSize( Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
+        splashSprite = new Sprite( new Texture( "img/splashscreen.png" ) );
 	}
 
 	/**
@@ -81,7 +77,7 @@ public class Splash implements Screen
 		batch.end();
 		if ( elapsed > 5 )
 		{
-			game.setScreen( new MainMenu( game ) );
+			game.setScreen( game.mainMenu );
 		}
 	}
 
@@ -89,7 +85,9 @@ public class Splash implements Screen
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
-	public void resize(int width, int height) {}
+	public void resize( int width, int height ) {
+        splashSprite.setSize( width, height );
+	}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()

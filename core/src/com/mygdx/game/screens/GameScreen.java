@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
@@ -43,12 +45,13 @@ import com.mygdx.game.world.Map;
  */
 public class GameScreen implements Screen
 {
-
-	private SpriteBatch batch;
+    private final Malice game;
+    private Skin skin;
+    private Controller controller;
+    
+    private Batch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
-    private final Malice game;
-    private Controller controller;
 	
     /**
      * Volume of this screen
@@ -62,7 +65,7 @@ public class GameScreen implements Screen
 	
 	
 	private Map map;
-    private Texture pauseTexture;
+    private Sprite pauseSprite;
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
@@ -101,15 +104,16 @@ public class GameScreen implements Screen
 	 *  playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameScreen(Malice g)
+	public GameScreen( Malice g, Skin s )
 	{
 		game = g;
+		skin = s;
 		controller = new Controller();
 		
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
-        batch = new SpriteBatch();
-        pauseTexture = new Texture( "img/pausescreen.png" );
+        batch = controller.getBatch();
+        pauseSprite = new Sprite( new Texture( "img/pausescreen.png" ) );
         sprites = new ArrayList<Character>();
 
         enemyMaxCount = -2;
@@ -206,9 +210,9 @@ public class GameScreen implements Screen
 	{
 	    Audio.pauseTheme(); // pause the theme music
 		batch.begin();
-		batch.draw( pauseTexture, 
-		    cam.position.x - pauseTexture.getWidth() / 2, 
-		    cam.position.y - pauseTexture.getHeight() / 2 );
+		pauseSprite.setPosition( cam.position.x - pauseSprite.getWidth() / 2, 
+                                 cam.position.y - pauseSprite.getHeight() / 2 );
+		pauseSprite.draw( batch );
 		batch.end();
 		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
 		{
@@ -420,7 +424,7 @@ public class GameScreen implements Screen
 		c.move( player, projectiles, System.currentTimeMillis() );
 		if ( map.isCollidingWithWall( c ) )
 		{
-		    int dir = c.getRoundedDirection();
+		    int dir = c.getRoundedDirection(); // TODO fix glitchy collision
 			c.setPosition( x, y );
 			c.setDirection( dir - 45 );
 			c.translate();
@@ -469,8 +473,11 @@ public class GameScreen implements Screen
 	/**
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
-	@Override
-	public void resize(int width, int height) {}
+    @Override
+    public void resize( int width, int height ) {
+        pauseSprite.setSize( width, height );
+        controller.getViewport().update( width, height );
+    }
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()
@@ -499,9 +506,9 @@ public class GameScreen implements Screen
 	public void dispose()
 	{
 		map.dispose();
-		batch.dispose();
+		controller.dispose();
 		renderer.dispose();
-		pauseTexture.dispose();
+		pauseSprite.getTexture().dispose();
         player.getTexture().dispose();
         for ( Projectile p : projectiles )
             p.getTexture().dispose();

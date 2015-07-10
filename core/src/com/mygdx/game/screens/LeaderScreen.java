@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -34,18 +35,22 @@ public class LeaderScreen implements Screen
     
     
     private Malice game;
+    private Skin skin;
     private Stage stage;
     private GlyphLayout layout;
     
+    private Image background;
     private TextButton prevButton;
     
-    public LeaderScreen( Malice g ) {
+    public LeaderScreen( Malice g, Skin s ) {
         game = g;
+        skin = s;
         stage = new Stage();
         layout = new GlyphLayout();
         
-        stage.addActor( new Image( (Drawable) new SpriteDrawable( new Sprite(
-            new Texture( "img/titlescreen.png" ) ) ) ) );
+        background =  new Image( (Drawable) new SpriteDrawable( new Sprite(
+                                    new Texture( "img/titlescreen.png" ) ) ) );
+        stage.addActor( background );
     }
 
     
@@ -57,7 +62,7 @@ public class LeaderScreen implements Screen
      */
     public LeaderScreen update( final Screen prevScreen ) {
         if ( prevButton != null ) prevButton.remove();
-        prevButton = new TextButton( "Back", Options.SKIN );
+        prevButton = new TextButton( "Back", skin );
         prevButton.setPosition(
             Gdx.graphics.getWidth() / 2 - prevButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 12 );
@@ -96,7 +101,10 @@ public class LeaderScreen implements Screen
     }
 
     @Override
-    public void resize( int width, int height ) {}
+    public void resize( int width, int height ) {
+        background.setSize( width, height );
+        stage.getViewport().update( width, height );
+    }
 
     @Override
     public void pause() {}

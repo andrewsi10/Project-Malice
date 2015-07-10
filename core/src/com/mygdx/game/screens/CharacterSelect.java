@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -51,6 +52,7 @@ public class CharacterSelect implements Screen
 	private Image background;
 
 	private final Malice game;
+	private Skin skin;
 
 	private Stage stage;
 
@@ -65,9 +67,10 @@ public class CharacterSelect implements Screen
 	 * @param m
 	 *            the music currently playing
 	 */
-	public CharacterSelect(Malice g)
+	public CharacterSelect( Malice g, Skin s )
 	{
 		game = g;
+		skin = s;
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
         stage = new Stage();
@@ -76,7 +79,7 @@ public class CharacterSelect implements Screen
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
             final Options.Name charName = Options.NAMES[i];
-            final TextButton b = new TextButton( charName.getButtonName(), Options.SKIN );
+            final TextButton b = new TextButton( charName.getButtonName(), skin );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
                 Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
@@ -90,7 +93,7 @@ public class CharacterSelect implements Screen
             } );
             stage.addActor( b );
         }
-        randomButton = new TextButton( "Random Character", Options.SKIN );
+        randomButton = new TextButton( "Random Character", skin );
         randomButton.setPosition(
                 Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
@@ -104,7 +107,7 @@ public class CharacterSelect implements Screen
             }
         } );
 
-        backButton = new TextButton( "Back to Main Menu", Options.SKIN ); 
+        backButton = new TextButton( "Back to Main Menu", skin ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
@@ -153,8 +156,11 @@ public class CharacterSelect implements Screen
 	/**
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
-	@Override
-	public void resize(int width, int height) {}
+    @Override
+    public void resize( int width, int height ) {
+        background.setSize( width, height );
+        stage.getViewport().update( width, height );
+    }
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()

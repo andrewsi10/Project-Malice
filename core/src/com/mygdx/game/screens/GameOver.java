@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
@@ -36,20 +37,16 @@ import com.mygdx.game.Options;
  */
 public class GameOver implements Screen
 {
-	private Image background;
-
 	private final Malice game;
-
+	private Skin skin;
 	private Stage stage;
-
+    private Batch batch;
+    
+    private Image background;
 	private TextButton retryButton, switchButton, leaderButton, backButton;
-	
 	private TextField textField;
-	
-	private Batch batch;
 
 	private GlyphLayout layout;
-	
 	private String message;
 
 	/**
@@ -66,9 +63,10 @@ public class GameOver implements Screen
 	 * @param playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameOver(Malice g)
+	public GameOver( Malice g, Skin s )
 	{
 		game = g;
+		skin = s;
 		layout = new GlyphLayout();
         stage = new Stage();
 
@@ -76,7 +74,7 @@ public class GameOver implements Screen
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
 
-        switchButton = new TextButton( "Switch Characters", Options.SKIN ); 
+        switchButton = new TextButton( "Switch Characters", skin ); 
         switchButton.setPosition(
             Gdx.graphics.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 3 );
@@ -89,7 +87,7 @@ public class GameOver implements Screen
             }
         } );
         
-        leaderButton = new TextButton( "Leader Board", Options.SKIN ); 
+        leaderButton = new TextButton( "Leader Board", skin ); 
         leaderButton.setPosition(
                 Gdx.graphics.getWidth() / 3 - leaderButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -102,7 +100,7 @@ public class GameOver implements Screen
             }
         } );
         
-        backButton = new TextButton( "Back To Main Menu", Options.SKIN ); 
+        backButton = new TextButton( "Back To Main Menu", skin ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 2 / 3 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -135,7 +133,7 @@ public class GameOver implements Screen
         
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
-        retryButton = new TextButton( "Try Again", Options.SKIN );
+        retryButton = new TextButton( "Try Again", skin );
         retryButton.setPosition(
             Gdx.graphics.getWidth() / 3 - retryButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 3 );
@@ -148,7 +146,7 @@ public class GameOver implements Screen
             }
         } );
         
-        textField = new TextField( "Enter Name ", Options.SKIN );
+        textField = new TextField( "Enter Name ", skin );
         textField.setBounds( 
             Gdx.graphics.getWidth() / 2 - switchButton.getWidth() / 2, 
             Gdx.graphics.getHeight() / 2,
@@ -208,8 +206,11 @@ public class GameOver implements Screen
 	/**
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
-	@Override
-	public void resize(int width, int height) {}
+    @Override
+    public void resize( int width, int height ) {
+        background.setSize( width, height );
+        stage.getViewport().update( width, height );
+    }
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()
@@ -238,6 +239,5 @@ public class GameOver implements Screen
 	public void dispose()
 	{
 		stage.dispose();
-		batch.dispose();
 	}
 }

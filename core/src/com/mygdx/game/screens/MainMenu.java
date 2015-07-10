@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 /**
  * This screen is the main menu of Gauntlet. It has a background image and
@@ -45,6 +45,7 @@ public class MainMenu implements Screen
 	                leaderButton,
 	                optionsButton, 
 	                exitButton;
+	private Skin skin;
 //	private final TextButton muteButton;
 
 	/**
@@ -56,14 +57,15 @@ public class MainMenu implements Screen
 	 * @param m
 	 *            the music currently playing
 	 */
-	public MainMenu(Malice g)
+	public MainMenu( Malice g, Skin s )
 	{
 		game = g;
+		skin = s;
         stage = new Stage();
 
         background = new Image( (Drawable) new SpriteDrawable( new Sprite(
                 new Texture( "img/titlescreen.png" ) ) ) );
-        playButton = new TextButton( "Play", Options.SKIN );
+        playButton = new TextButton( "Play", skin );
         playButton.setPosition(
             Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 );
@@ -76,7 +78,7 @@ public class MainMenu implements Screen
             }
         } );
         
-        leaderButton = new TextButton( "Leader Board", Options.SKIN );
+        leaderButton = new TextButton( "Leader Board", skin );
         leaderButton.setPosition(
             Gdx.graphics.getWidth() / 2 - leaderButton.getWidth() / 2,
             Gdx.graphics.getHeight() * 3 / 8 );
@@ -89,7 +91,7 @@ public class MainMenu implements Screen
             }
         } );
 
-        optionsButton = new TextButton( "Settings", Options.SKIN ); 
+        optionsButton = new TextButton( "Settings", skin ); 
         optionsButton.setSize( 100, 64 );
         optionsButton.setPosition( Gdx.graphics.getWidth() - optionsButton.getWidth(), 0 );
         optionsButton.addListener( new ClickListener() {
@@ -100,22 +102,8 @@ public class MainMenu implements Screen
                 optionsButton.toggle();
             }
         } );
-//        muteButton = new TextButton( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE", Options.buttonSkin );
-//        muteButton.setSize( 100, 64 );
-//        muteButton.setPosition( Gdx.graphics.getWidth() - muteButton.getWidth(), 0 );
-//        muteButton.addListener( new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y)
-//            {
-//                Options.Audio.MUSIC_MUTED = !Options.Audio.MUSIC_MUTED;
-//                Options.Audio.SOUND_MUTED = !Options.Audio.SOUND_MUTED;
-//                Options.Audio.playTheme( Options.Audio.mainTheme.getVolume() );
-//                muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
-//                muteButton.toggle();
-//            }
-//        });
 
-        exitButton = new TextButton( "Exit", Options.SKIN ); 
+        exitButton = new TextButton( "Exit", skin ); 
         exitButton.setPosition(
             Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
             Gdx.graphics.getHeight() / 4 );
@@ -129,7 +117,6 @@ public class MainMenu implements Screen
         stage.addActor( background );
         stage.addActor( playButton );
         stage.addActor( leaderButton );
-//        stage.addActor( muteButton );
         stage.addActor( optionsButton );
         stage.addActor( exitButton );
 	}
@@ -148,7 +135,6 @@ public class MainMenu implements Screen
 	{
         Audio.changePercent( VOLUME );
         Gdx.input.setInputProcessor( stage );
-//        muteButton.setText( Options.Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" );
 	}
 
 	/**
@@ -167,7 +153,10 @@ public class MainMenu implements Screen
 	 * @see com.badlogic.gdx.Screen#resize(int, int)
 	 */
 	@Override
-	public void resize( int width, int height ) {}
+	public void resize( int width, int height ) {
+        background.setSize( width, height );
+        stage.getViewport().update( width, height );
+	}
 
 	/**
 	 * @see com.badlogic.gdx.Screen#pause()

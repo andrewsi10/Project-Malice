@@ -45,12 +45,23 @@ public class Malice extends Game
 	    Audio.initializeAudio();
         setScreen( new Splash( this ) );
         Options.initialize();
-	    mainMenu = new MainMenu( this );
+	    mainMenu = new MainMenu( this, Options.SKIN );
 	    optionsScreen = new OptionsScreen( this, Options.SKIN );
-	    leaderScreen = new LeaderScreen( this );
-	    characterSelect = new CharacterSelect( this );
-	    gameScreen = new GameScreen( this );
-	    gameOver = new GameOver( this );
+	    leaderScreen = new LeaderScreen( this, Options.SKIN );
+	    characterSelect = new CharacterSelect( this, Options.SKIN );
+	    gameScreen = new GameScreen( this, Options.SKIN );
+	    gameOver = new GameOver( this, Options.SKIN );
+	}
+	
+	@Override
+	public void dispose() 
+	{
+	    this.mainMenu.dispose();
+	    this.optionsScreen.dispose();
+	    this.leaderScreen.dispose();
+	    this.characterSelect.dispose();
+	    this.gameScreen.dispose();
+	    this.gameOver.dispose();
 	}
 
 }
