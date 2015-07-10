@@ -3,65 +3,112 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 public class OptionsScreen implements Screen
 {
     private final Malice game;
     private Stage stage;
-    private TextButton backButton;
-    private TextButton musicButton;
-    private TextButton soundButton;
+    private TextButton musicButton, soundButton, backButton;
+    private final Slider musicSlider, soundSlider;
+    private Skin skin;
+    
     /**
      * Suggested outline:
-     *          Music: scrollBar
-     *          Sound: scrollBar
+     *          Music: slider
+     *          Sound: slider
      *          
      *          Controls:   list of controls(all buttons to change them)
      * 
      * 
      */
-    
-    public OptionsScreen( Malice g )
+    public OptionsScreen( Malice g, Skin s )
     {
         game = g;
+        skin = s;
         stage = new Stage();
+
+        // initialize buttons
+        musicButton = new TextButton( "Music", skin ); 
+        soundButton = new TextButton( "Sound", skin ); 
+        // initialize sliders
+        musicSlider = new Slider( 0, 100, 5, false, skin ); // TODO
+        soundSlider = new Slider( 0, 100, 5, false, skin ); // TODO
         
-        musicButton = new TextButton( "Music", Options.SKIN ); 
-        musicButton.setPosition( 
-                    Gdx.graphics.getWidth() / 2 - musicButton.getWidth() / 2, 
-                    Gdx.graphics.getHeight() / 2 );
+        // xy -coordinates of music and sound settings
+        float buttonX = Gdx.graphics.getWidth() / 4 - musicButton.getWidth() / 2;
+        float musicY = Gdx.graphics.getHeight() * 2 / 3;
+        float sliderX = Gdx.graphics.getWidth() / 2;
+        float soundY = Gdx.graphics.getHeight() / 2;
+        float sliderWidth = musicButton.getWidth();
+        
+        // set buttons
+        musicButton.setPosition( buttonX, musicY );
         musicButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Audio.MUSIC_MUTED = !Audio.MUSIC_MUTED;
-                Audio.playTheme( Audio.mainTheme.getVolume() );
+                Audio.MUSIC_VOLUME = Audio.isMusicMuted() ? 100 : 0;
+                musicSlider.setValue( Audio.MUSIC_VOLUME );
+                Audio.playTheme();
                 musicButton.toggle();
             }
         } );
-
-        soundButton = new TextButton( "Sound", Options.SKIN ); 
-        soundButton.setPosition( 
-                    Gdx.graphics.getWidth() / 2 - soundButton.getWidth() / 2, 
-                    Gdx.graphics.getHeight() / 3 );
+        
+        soundButton.setPosition( buttonX, soundY );
         soundButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Audio.SOUND_MUTED = !Audio.SOUND_MUTED;
+                Audio.SOUND_VOLUME = Audio.isSoundMuted() ? 100 : 0;
+                soundSlider.setValue( Audio.SOUND_VOLUME );
                 Audio.playAudio( "levelup" );
                 soundButton.toggle();
             }
         } );
+        
+        // set sliders
+        musicSlider.setWidth( sliderWidth );
+        musicSlider.setPosition( sliderX, musicY );
+        musicSlider.setValue( Audio.MUSIC_VOLUME );
+        musicSlider.addListener( new ChangeListener() {
+            @Override
+            public void changed( ChangeEvent event, Actor actor )
+            {
+                Slider slider = (Slider)actor;
+                Audio.MUSIC_VOLUME = (int)slider.getValue();
+                Audio.playTheme();
+            }
+        } );
+
+        soundSlider.setWidth( sliderWidth );
+        soundSlider.setPosition( sliderX, soundY );
+        soundSlider.setValue( Audio.SOUND_VOLUME );
+        soundSlider.addListener( new ChangeListener() {
+            @Override
+            public void changed( ChangeEvent event, Actor actor )
+            {
+                Slider slider = (Slider)actor;
+                Audio.SOUND_VOLUME = (int)slider.getValue();
+                if ( !slider.isDragging() )
+                    Audio.playAudio( "levelup" );
+            }
+        } );
+        
+        // add Actors
         stage.addActor( musicButton );
         stage.addActor( soundButton );
+        stage.addActor( musicSlider );
+        stage.addActor( soundSlider );
     }
 
     
@@ -74,7 +121,7 @@ public class OptionsScreen implements Screen
     public OptionsScreen update( final Screen prev )
     {
         if ( backButton != null ) backButton.remove();
-        backButton = new TextButton( "Back", Options.SKIN ); 
+        backButton = new TextButton( "Back", skin ); 
         backButton.setPosition(
                 Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -103,12 +150,14 @@ public class OptionsScreen implements Screen
         Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
         stage.act();
         stage.draw();
-        musicButton.setText( "Music: " + ( Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
-        soundButton.setText( "Sound: " + ( Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
+//        musicButton.setText( "Music: " + ( Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
+//        soundButton.setText( "Sound: " + ( Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
     }
 
     @Override
-    public void resize( int width, int height ) {}
+    public void resize( int width, int height ) {
+        stage.getViewport().update( width, height );
+    }
 
     @Override
     public void pause() {}

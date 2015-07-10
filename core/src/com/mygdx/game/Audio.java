@@ -24,14 +24,14 @@ public class Audio
 {
 
     // -------------------------- Music and Audio --------------------- //
-    public static boolean SOUND_MUTED = false; // not implemented into the game, provides ability to mute once all audio is isolated
-    public static boolean MUSIC_MUTED = false;
 
     public static Music mainTheme;
     public static HashMap<String,Sound> SOUNDS;
     
-    public static double VOLUME = 1.0; // TODO
-    public static int VOLUME_PERCENT = 100;
+    public static int MUSIC_VOLUME = 100;
+    public static int SOUND_VOLUME = 100; // TODO
+    
+    public static int MUSIC_PERCENT = 100;
 
     /**
      * Initializes all the audio
@@ -39,19 +39,19 @@ public class Audio
     public static void initializeAudio()
     {
         mainTheme = Gdx.audio.newMusic( Gdx.files.internal( "audio/music/revivedpower.mp3" ) );
+        mainTheme.setLooping( true );
+        
         SOUNDS = new HashMap<String, Sound>();
         SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
         for ( Name n : Options.NAMES )
             SOUNDS.put( n.getProjectileName(), Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + n.getProjectileName().toLowerCase() + ".wav" ) ) );
-//        SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
-//        SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
-//        SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
+        // add more sounds here
     }
 
     /**
      * Stops the theme music from playing
      * @param type method of stopping:
-     *          0 - pauses playing
+     *          0 - pauses playing;
      *          1 - stops playing (returns theme to the beginning)
      */
     public static void stopTheme( int type )
@@ -74,11 +74,20 @@ public class Audio
      */
     public static void playTheme( float volume )
     {
+        MUSIC_PERCENT = (int)( volume * 100 );
+        playTheme();
+    }
+
+    /**
+     * Plays the theme music
+     * @param volume volume to set the theme music to
+     */
+    public static void playTheme()
+    {
         if ( mainTheme == null )
             initializeAudio();
-        mainTheme.setLooping( true );
-        mainTheme.setVolume( volume );
-        if ( !MUSIC_MUTED )
+        mainTheme.setVolume( MUSIC_VOLUME / 100.0f * MUSIC_PERCENT / 100 );
+        if ( !isMusicMuted() )
             mainTheme.play();
         else
             stopTheme( 1 );
@@ -90,7 +99,17 @@ public class Audio
      */
     public static void playAudio( String s )
     {
-        if ( !SOUND_MUTED && SOUNDS.containsKey( s ) )
-            SOUNDS.get( s ).play();
+        if ( !isSoundMuted() && SOUNDS.containsKey( s ) )
+            SOUNDS.get( s ).play( SOUND_VOLUME / 100.0f );
+    }
+    
+    public static boolean isMusicMuted()
+    {
+        return MUSIC_VOLUME == 0;
+    }
+    
+    public static boolean isSoundMuted()
+    {
+        return SOUND_VOLUME == 0;
     }
 }

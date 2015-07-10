@@ -60,7 +60,6 @@ public class Options
     
     public static void initialize()
     {
-        Audio.initializeAudio();
         loadAtlas();
         createSkin();
     }

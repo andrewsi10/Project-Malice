@@ -42,10 +42,11 @@ public class Malice extends Game
 	@Override
 	public void create()
 	{
-        Options.initialize();
+	    Audio.initializeAudio();
         setScreen( new Splash( this ) );
+        Options.initialize();
 	    mainMenu = new MainMenu( this );
-	    optionsScreen = new OptionsScreen( this );
+	    optionsScreen = new OptionsScreen( this, Options.SKIN );
 	    leaderScreen = new LeaderScreen( this );
 	    characterSelect = new CharacterSelect( this );
 	    gameScreen = new GameScreen( this );
