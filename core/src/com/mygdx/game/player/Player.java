@@ -98,6 +98,12 @@ public class Player extends Character {
                     Gdx.graphics.getHeight() / 2 - Gdx.input.getY(),
                     System.currentTimeMillis() );
         }
+        else if (Controller.getShootingDirection() != -1)
+        {
+        	shoot(projectiles, Controller.getShootTouchpad().getKnobPercentX(),
+        			Controller.getShootTouchpad().getKnobPercentY(),
+                    System.currentTimeMillis() );
+        }
 	}
 
 	/**

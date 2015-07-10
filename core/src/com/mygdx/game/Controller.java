@@ -17,7 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class Controller extends Stage
 {
-    private static Touchpad touchpad;
+    private static Touchpad movementTouchpad;
+    private static Touchpad shootTouchpad;
 
     /**
      * This array stores Key input values 0 , 1 , 2 , 3 NORTH, EAST, SOUTH, WEST
@@ -40,10 +41,14 @@ public class Controller extends Stage
             touchpadStyle.background = touchBackground;
             touchpadStyle.knob = touchKnob;
             // Create new TouchPad with the created style
-            touchpad = new Touchpad( 10, touchpadStyle );
+            movementTouchpad = new Touchpad( 10, touchpadStyle );
             // setBounds(x,y,width,height)
-            touchpad.setBounds( 15, 15, 300, 300 );
-            addActor( touchpad );
+            movementTouchpad.setBounds( 30, 30, 300, 300 );
+            addActor( movementTouchpad );
+            
+            shootTouchpad = new Touchpad( 10, touchpadStyle );
+            shootTouchpad.setBounds( getWidth() - 330, 30, 300, 300 );
+            addActor( shootTouchpad );
         }
     }
 
@@ -58,12 +63,12 @@ public class Controller extends Stage
     public static double getInputDirection()
     {
         if ( Gdx.app.getType().equals( ApplicationType.Android ) ) {
-            if ( touchpad.isTouched() ) {
+            if ( movementTouchpad.isTouched() ) {
                 // this return statement converts to navigation coordinates with ( 90 - degrees )
                 // then it returns a positive number with ( + 360 )
                 return 90 + 360 - Math.toDegrees( 
-                                    Math.atan2( touchpad.getKnobPercentY(), 
-                                                touchpad.getKnobPercentX() ) );
+                                    Math.atan2( movementTouchpad.getKnobPercentY(), 
+                                                movementTouchpad.getKnobPercentX() ) );
             }
             return -1;
         }
@@ -85,6 +90,26 @@ public class Controller extends Stage
             dirY = NUMDEGREES.getDirection();
         return ( dirY + dirX ) / 2;
 
+    }
+    
+    /**
+     * This method will only be called if the application is being run on Android
+     * @return direction or -1 if no direction
+     */
+    public static double getShootingDirection()
+    {
+    	if (shootTouchpad.isTouched())
+    	{
+    		return 90 + 360 - Math.toDegrees( 
+                    Math.atan2( shootTouchpad.getKnobPercentY(), 
+                            shootTouchpad.getKnobPercentX() ) );
+    	}
+    	return -1;
+    }
+    
+    public static Touchpad getShootTouchpad()
+    {
+    	return shootTouchpad;
     }
 
     /** @see com.badlogic.gdx.InputProcessor#keyDown(int) */
