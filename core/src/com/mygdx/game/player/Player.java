@@ -88,7 +88,7 @@ public class Player extends Character {
 		double dir = Controller.getInputDirection();
         if (dir >= 0) {
             setDirection(dir);
-            move();
+            translate();
             setAnimations();
         }
         

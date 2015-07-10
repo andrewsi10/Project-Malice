@@ -2,6 +2,7 @@ package com.mygdx.game.testers;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Character;
 import com.mygdx.game.projectile.Projectile;
 
@@ -32,7 +33,7 @@ public class JUnitProjectileTest {
 	    int h = 5;
 	    int d = 5;
         Projectile p = new Projectile( x, y, w, h, d );
-	    Character c = new Character(); // new Character at (0,0)
+	    Character c = new Enemy(); // new Character at (0,0)
 	    c.setSize( w, h );
 	    
 	    int hp = c.getCurrentHp();

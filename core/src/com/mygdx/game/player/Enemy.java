@@ -80,26 +80,23 @@ public class Enemy extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
-		if (!inRange(character)) {
+        float deltaX = character.getX() - getX();
+        float deltaY = character.getY() - getY();
+		if ( !inRange( deltaX, deltaY ) ) {
 			setRandomDirection();
-			super.move(character, projectiles, time);
+		} else {
+	        // move towards the player
+			double newDir = 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
+			setDirection( newDir );
+			shoot( projectiles, newDir, time );
 		}
-		// moves towards the player
-		else {
-			setRandomDirection();
-
-			float deltaX = character.getX() - getX();
-			float deltaY = character.getY() - getY();
-			double newDir = this.getDirection(deltaX, deltaY);
-			setDirection(newDir);
-			shoot(projectiles, deltaX, deltaY, time);
-			super.move(character, projectiles, time);
-		}
+        translate();
+        setAnimations();
 	}
 
 	/**
 	 * If travelTime < 1, reassign direction to a random number in the interval
-	 * [0, 8) and travelTime to a random number in the interval [minTravelTime,
+	 * [0, 360) and travelTime to a random number in the interval [minTravelTime,
 	 * minTravelTime + travelTimeScalar). Otherwise decrement travelTime by one.
 	 */
 	public void setRandomDirection() {
@@ -112,39 +109,15 @@ public class Enemy extends Character {
 	}
 
 	/**
-	 * Returns the Direction that the given parameters indicate
-	 * 
-	 * If both deltaX and deltaY are greater than the marginOfDelta,
-	 * move diagonal
-	 * else if one of them is greater than the marginOfDelta,
-	 *   move straight in that direction
-	 * else return -1
-	 * 
-	 * after above conditions are met,
-	 * EAST when deltaX is positive and WEST when negative
-	 * NORTH when deltaY is positive and SOUTH when negative
-	 * 
-	 * @param deltaX change in x
-	 * @param deltaY change in y
-	 * @return the Direction that the given parameters indicate
-	 *         -1 if no direction is indicated
-	 */
-	public double getDirection( float deltaX, float deltaY ) {
-	    return 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) ); 
-	}
-
-	/**
 	 * Determines whether the enemy is in shooting range of the character. Enemy
 	 * is in shooting range when character is inside aggroDistance. Use the
 	 * distance formula in relation to Enemy.
 	 * 
-	 * @param character
-	 *            Character enemy will be compared to
+	 * @param dx change in x
+     * @param dy change in y
 	 * @return whether enemy is within aggroDistance
 	 */
-	public boolean inRange(Character character) {
-		float dx = character.getX() - this.getX();
-		float dy = character.getY() - this.getY();
+	public boolean inRange( float dx, float dy ) {
 		int distance = (int) Math.sqrt(dx * dx + dy * dy);
 		return distance <= aggroDistance;
 	}

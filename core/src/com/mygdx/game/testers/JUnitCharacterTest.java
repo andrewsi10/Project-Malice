@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static com.mygdx.game.player.AnimatedSprite.Direction.*;
 import org.junit.Test;
 import com.mygdx.game.player.Character;
+import com.mygdx.game.player.Enemy;
 import com.mygdx.game.MimicGdx;
 
 /**
@@ -25,51 +26,51 @@ public class JUnitCharacterTest {
 	public void testMove() {
 	    float x = 0;
 	    float y = 0;
-		Character c = new Character(); // create Character at (0,0)
+		Character c = new Enemy(); // create Character at (0,0)
 		c.setDirection(NORTH.getDirection());
-		c.move();
+		c.translate();
 		assertEquals("", x, c.getX(), .0001);
         assertTrue("", y < c.getY()); // check if moved up
         x = c.getX();
         y = c.getY();
         c.setDirection(NORTHEAST.getDirection());
-        c.move();
+        c.translate();
         assertTrue("", x < c.getX()); // check if moved right
         assertTrue("", y < c.getY()); // check if moved up
         x = c.getX();
         y = c.getY();
         c.setDirection( EAST.getDirection() );
-        c.move();
+        c.translate();
         assertTrue("", x < c.getX()); // check if moved right
         assertEquals("", y, c.getY(), .0001);
         x = c.getX();
         y = c.getY();
         c.setDirection( SOUTHEAST.getDirection() );
-        c.move();
+        c.translate();
         assertTrue("", x < c.getX()); // check if moved right
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
         c.setDirection( SOUTH.getDirection() );
-        c.move();
+        c.translate();
         assertEquals("", x, c.getX(), .0001);
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
         c.setDirection( SOUTHWEST.getDirection() );
-        c.move();
+        c.translate();
         assertTrue("", x > c.getX()); // check if moved left
         assertTrue("", y > c.getY()); // check if moved down
         x = c.getX();
         y = c.getY();
         c.setDirection( WEST.getDirection() );
-        c.move();
+        c.translate();
         assertTrue("", x > c.getX()); // check if moved left
         assertEquals("", y, c.getY(), .0001);
         x = c.getX();
         y = c.getY();
         c.setDirection(NORTHWEST.getDirection());
-        c.move();
+        c.translate();
         assertTrue("", x > c.getX()); // check if moved left
         assertTrue("", y < c.getY()); // check if moved up
 	}
@@ -81,7 +82,7 @@ public class JUnitCharacterTest {
 	@Test
 	public void testTranslate() {
 		// initializes new Character and moves it
-		Character c = new Character();
+		Character c = new Enemy();
 		float moveSpeed = c.getSpeed();
 		int dx = 1;
 		int dy = 1;
@@ -102,7 +103,7 @@ public class JUnitCharacterTest {
 	@Test
 	public void testIncreaseCurrentLevel() {
 		MimicGdx.isTesting = true;
-		Character c = new Character();
+		Character c = new Enemy();
 		c.takeDamage(25);
 		int level = c.getCurrentLevel() + 1;
 		int BDmg = c.getBDmg() + 2;

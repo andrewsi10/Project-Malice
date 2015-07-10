@@ -1,10 +1,10 @@
 package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
-import static com.mygdx.game.player.AnimatedSprite.Direction.*;
+
 import org.junit.Test;
+
 import com.mygdx.game.player.Enemy;
-import com.mygdx.game.player.Character;
 
 /**
  *  JUnit tester for the Enemy class
@@ -54,57 +54,29 @@ public class JUnitEnemyTest {
 						+ Enemy.travelTimeScalar);
 	}
 
-	/**
-	 * tests every possible case for Enemy's getDirection(float, float) method
-	 */
-	@Test
-	public void testGetDirection() {
-	    int d = Enemy.marginOfDelta;
-	    Enemy e = new Enemy();
-        float dx = 0;
-        float dy = 0;
-        assertEquals(-1, e.getDirection(dx,dy), .0001); // check for not moving
-        dy = d + 1;
-        assertEquals(NORTH.getDirection(), e.getDirection(dx,dy), .0001);
-        dx = d + 1;
-        assertEquals(NORTHEAST.getDirection(), e.getDirection(dx,dy), .0001);
-        dy = 0;
-        assertEquals(EAST.getDirection(), e.getDirection(dx,dy), .0001);
-        dy = -d - 1;
-        assertEquals(SOUTHEAST.getDirection(), e.getDirection(dx,dy), .0001);
-        dx = 0;
-        assertEquals(SOUTH.getDirection(), e.getDirection(dx,dy), .0001);
-        dx = -d - 1;
-        assertEquals(SOUTHWEST.getDirection(), e.getDirection(dx,dy), .0001);
-        dy = 0;
-        assertEquals(WEST.getDirection(), e.getDirection(dx,dy), .0001);
-        dy = d + 1;
-        assertEquals(NORTHWEST.getDirection(), e.getDirection(dx,dy), .0001);
-	}
-
-	/**
-	 * tests inRange(Character) method for Enemy
-	 */
-	@Test
-	public void testInRange() {
-		Character c = new Character();
-		Enemy e = new Enemy();
-		// tests for character in the positive x-direction
-		c.setPosition(Enemy.aggroDistance + 1, 0);
-		assertFalse(e.inRange(c));
-		// tests for character in the negative x-direction
-		c.setPosition(-Enemy.aggroDistance + 1, 0);
-		assertTrue(e.inRange(c));
-		// tests for character in the positive y-direction
-		c.setPosition(0, Enemy.aggroDistance + 1);
-		assertFalse(e.inRange(c));
-		// tests for character in the negative y-direction
-		c.setPosition(0, -Enemy.aggroDistance + 1);
-		assertTrue(e.inRange(c));
-		// tests for inRange(Character)	using the Distance Formula
-		c.setPosition((float) (Enemy.aggroDistance / Math.sqrt(2) - 1),
-				(float) (Enemy.aggroDistance / Math.sqrt(2) - 1));
-		assertTrue(e.inRange(c));
-	}
+//	/**
+//	 * tests inRange(Character) method for Enemy
+//	 */
+//	@Test
+//	public void testInRange() {
+//		Character c = new Enemy();
+//		Enemy e = new Enemy();
+//		// tests for character in the positive x-direction
+//		c.setPosition(Enemy.aggroDistance + 1, 0);
+//		assertFalse(e.inRange(c));
+//		// tests for character in the negative x-direction
+//		c.setPosition(-Enemy.aggroDistance + 1, 0);
+//		assertTrue(e.inRange(c));
+//		// tests for character in the positive y-direction
+//		c.setPosition(0, Enemy.aggroDistance + 1);
+//		assertFalse(e.inRange(c));
+//		// tests for character in the negative y-direction
+//		c.setPosition(0, -Enemy.aggroDistance + 1);
+//		assertTrue(e.inRange(c));
+//		// tests for inRange(Character)	using the Distance Formula
+//		c.setPosition((float) (Enemy.aggroDistance / Math.sqrt(2) - 1),
+//				(float) (Enemy.aggroDistance / Math.sqrt(2) - 1));
+//		assertTrue(e.inRange(c));
+//	}
 
 }

@@ -73,10 +73,9 @@ public class Projectile extends AnimatedSprite
 	 * 
 	 * Cannot be JUnit tested due to animations
 	 */
-	@Override
 	public void move()
 	{
-	    super.move();
+	    translate();
 	    setAnimations();
 	}
     

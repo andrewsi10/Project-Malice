@@ -22,7 +22,7 @@ import com.mygdx.game.Options;
  *
  *  @author  Sources: libgdx
  */
-public class Character extends AnimatedSprite {
+public abstract class Character extends AnimatedSprite {
 	/**
 	 * Variable used to determine the height in pixels of the status bars
 	 */
@@ -173,36 +173,10 @@ public class Character extends AnimatedSprite {
 	 *            Time in game (used in order to determine delays in moving or
 	 *            shooting)
 	 */
-	public void move(Character character, ArrayList<Projectile> projectiles,
-			long time) {
-		move();
-        setAnimations();
-	}
-
-	/**
-	 * Puts a projectile that this Character shoots into the given Projectile 
-	 * array
-	 * 
-	 * @param projectiles ArrayList of Projectiles to add this Character's 
-	 *                     projectile to
-	 * @param xDistance the x distance for the slope that the projectile should 
-	 *                     take
-	 * @param yDistance the y distance for the slope that the projectile should 
-     *                     take
-	 * @param time         Current time in milliseconds to determine if this 
-	 *                         Character can shoot
-	 * @param spriteType   String representing this what type of sprite this 
-	 *                             Character is
-	 */
-	public void shoot(ArrayList<Projectile> projectiles, float xDistance,
-			float yDistance, long time) {
-		if (time - previousTime >= reloadSpeed) {
-			previousTime = time;
-	        Audio.playAudio( projectile );
-			projectiles.add( new Projectile( this, xDistance, yDistance,
-                                            Options.atlas.get( projectile ) ) );
-		}
-	}
+	public abstract void move( Character character, 
+	                           ArrayList<Projectile> projectiles,
+	                           long time);
+	
     /**
      * Puts a projectile that this Character shoots into the given Projectile 
      * array
@@ -348,8 +322,11 @@ public class Character extends AnimatedSprite {
 		hpColor = newColor;
 	}
 	
-	public void setProjectile( String s )
-	{
+	/**
+	 * Sets this Character's projectile type
+	 * @param s String representing the new projectile type
+	 */
+	public void setProjectile( String s ) {
 	    projectile = s;
 	}
 

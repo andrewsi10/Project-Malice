@@ -71,6 +71,9 @@ public class AnimatedSprite extends Sprite
     private double direction;
     private float moveSpeed;
     
+    /**
+     * Creates an Empty Sprite
+     */
     public AnimatedSprite()
     {
         this.animations = new Animation[4];
@@ -151,12 +154,7 @@ public class AnimatedSprite extends Sprite
       * Moves sprite according to its current direction. Then translates
       * Character in the appropriate direction by one unit using the
       * translate(int, int) method.
-      */
-     public void move() {
-         translate();
-     }
-
-     /**
+      * 
       * Uses translateX and translateY to move Character according to the 
       * direction multiplied by moveSpeed units respectively.
       * If direction is -1, sprite will not move, else will move according to 
@@ -166,7 +164,7 @@ public class AnimatedSprite extends Sprite
       * 
       * translateX( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) );
       */
-     private void translate() {
+     public void translate() {
          if ( direction != -1 ) {
              translateY( (float) ( moveSpeed * Math.sin( Math.toRadians( 90 - direction ) ) ) );
              translateX( (float) ( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) ) );
@@ -179,7 +177,7 @@ public class AnimatedSprite extends Sprite
       * 
       * @param dir
       */
-     public void setDirection(double dir) {
+     public void setDirection( double dir ) {
          direction = ( dir % 360 + 360 ) % 360 ;
      }
      
@@ -201,7 +199,7 @@ public class AnimatedSprite extends Sprite
       * @param speed
       *            new value for moveSpeed
       */
-     public void setSpeed(int speed) {
+     public void setSpeed( int speed ) {
          moveSpeed = speed;
      }
 
