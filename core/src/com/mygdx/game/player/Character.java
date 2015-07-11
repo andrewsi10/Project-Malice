@@ -28,6 +28,7 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public static final int BARHEIGHT = 5;
 
+	private Animation projectileAnimation;
 	private GlyphLayout layout = new GlyphLayout();
 	private Color hpColor = Color.GREEN;
 
@@ -69,12 +70,13 @@ public abstract class Character extends AnimatedSprite {
 	                  int level,
 	                  int speed, 
 	                  int reloadSpeed, 
-	                  String projectile, Animation... a ) {
+	                  String projectile, Animation proj, Animation... a ) {
 	    this( hpColor );
         this.initializeAnimations( a );
 	    this.hpColor = hpColor;
         this.load( maxHp, experience, level, speed, reloadSpeed );
         this.projectile = projectile;
+        this.projectileAnimation = proj;
 	}
 	
 	public Character( Color hpColor ) {
@@ -195,8 +197,7 @@ public abstract class Character extends AnimatedSprite {
         if (time - previousTime >= reloadSpeed) {
             previousTime = time;
             Audio.playAudio( projectile );
-            projectiles.add( new Projectile( this, dir,
-                                            Options.atlas.get( projectile ) ) );
+            projectiles.add( new Projectile( this, dir, projectileAnimation ) );
         }
     }
 
@@ -326,8 +327,9 @@ public abstract class Character extends AnimatedSprite {
 	 * Sets this Character's projectile type
 	 * @param s String representing the new projectile type
 	 */
-	public void setProjectile( String s ) {
+	public void setProjectile( String s, Animation a ) {
 	    projectile = s;
+	    projectileAnimation = a;
 	}
 
 	// -----------------------Getters -----------------//

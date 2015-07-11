@@ -123,9 +123,9 @@ public class GameScreen extends StagedScreen
      * @param a Animation for the player
      * @return this Screen for the game to be set to
      */
-    public Screen update( String proj, Animation[] a )
+    public Screen update( String projectile, Animation proj, Animation[] a )
     {
-        player.change( proj, a );
+        player.change( projectile, proj, a );
         return this;
     }
 

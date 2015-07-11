@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.mygdx.game.Options.Name;
+import com.mygdx.game.screens.CharacterSelect;
 
 /**
  * This class supports all the Audio in the game
@@ -43,7 +43,7 @@ public class Audio
         
         SOUNDS = new HashMap<String, Sound>();
         SOUNDS.put( "levelup", Gdx.audio.newSound( Gdx.files.internal( "audio/sound/levelup.wav" ) ) );
-        for ( Name n : Options.NAMES )
+        for ( CharacterSelect.Name n : CharacterSelect.NAMES )
             SOUNDS.put( n.getProjectileName(), Gdx.audio.newSound( Gdx.files.internal( "audio/sound/" + n.getProjectileName().toLowerCase() + ".wav" ) ) );
         // add more sounds here
     }

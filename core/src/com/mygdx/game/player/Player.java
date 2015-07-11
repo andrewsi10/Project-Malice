@@ -57,6 +57,13 @@ public class Player extends Character {
 //		setLevel(1);
 //	}
 	
+	/**
+	 * Reloads the Player with default settings:
+	 * 
+	 * maxHp 50; exp 0; level 1; speed 5; reloadSpeed 500; playerPoints 0;
+	 * 
+     * Controller.PRESSED = new boolean[Controller.CONTROLS.length];
+	 */
 	public void reload() // reloads with default settings
 	{
 	    this.load( 50, 0, 1, 5, 500 );
@@ -64,9 +71,15 @@ public class Player extends Character {
 	    Controller.PRESSED = new boolean[Controller.CONTROLS.length];
 	}
 	
-	public void change( String projectile, Animation[] a )
+	/**
+	 * Changes this player to a different "texture"
+	 * @param projectile projectile name
+	 * @param proj Projectile Animation
+	 * @param a new Animations
+	 */
+	public void change( String projectile, Animation proj, Animation[] a )
 	{
-	    this.setProjectile( projectile );
+	    this.setProjectile( projectile, proj );
 	    this.initializeAnimations( a );
 	}
 

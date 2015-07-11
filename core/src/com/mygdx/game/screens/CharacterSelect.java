@@ -1,12 +1,17 @@
 package com.mygdx.game.screens;
 
+import java.util.EnumMap;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 /**
  * This screen displays six different classes for the player to choose from and
@@ -24,6 +29,54 @@ import com.mygdx.game.Options;
  */
 public class CharacterSelect extends StagedScreen
 {
+    public static final float FRAME_DURATION = 0.2f;
+    
+    public enum Name {
+        BlackMage( "Dark Wizard", "DarkFire" ), 
+        Monk( "Brawler", "Boomerang" ), 
+        RedMage( "Crimson Wizard", "Fireball" ), 
+        Thief( "Bandit", "PoisonShot" ), 
+        Warrior( "Warrior", "Sword1" ), 
+        WhiteMage( "Mage of Justice", "HolyCross" );
+        
+        private String button, projectile;
+        
+        Name( String button, String projectile ) {
+            this.button = button;
+            this.projectile = projectile;
+        }
+        
+        public String getButtonName()
+        {
+            return button;
+        }
+        
+        public String getProjectileName()
+        {
+            return projectile;
+        }
+    }
+    public static final Name[] NAMES = Name.values();
+    public static final EnumMap<Name, Animation[]> PLAYER_ANIMATIONS = new EnumMap<Name, Animation[]>(Name.class);
+    public static final EnumMap<Name, Animation> PROJECTILE_ANIMATIONS = new EnumMap<Name, Animation>(Name.class);
+    public static void loadMap() {
+        String s;
+        Array<AtlasRegion> a;
+        for ( Name n : NAMES )
+        {
+            a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
+            PLAYER_ANIMATIONS.put( n, new Animation[]{
+                new Animation( FRAME_DURATION, a.get( 0 ), a.get( 1 ) ),
+                new Animation( FRAME_DURATION, a.get( 2 ), a.get( 3 ) ),
+                new Animation( FRAME_DURATION, a.get( 4 ), a.get( 5 ) ),
+                new Animation( FRAME_DURATION, a.get( 6 ), a.get( 7 ) ) } );
+            
+            s = n.getProjectileName() + "/" + n.getProjectileName() + ".atlas";
+            a = new TextureAtlas( "img/sprites/Projectiles/" + s ).getRegions();
+            PROJECTILE_ANIMATIONS.put( n, new Animation( FRAME_DURATION, a ) );
+        }
+    }
+    
     /**
      * Gets the array storing the names of the characters that will be used for
      * the buttons.
@@ -31,7 +84,7 @@ public class CharacterSelect extends StagedScreen
      * @return characterNames, the array containing the names of the characters
      *         that will be used for the buttons
      */
-    private static final int NUMBUTTONS = Options.NAMES.length;
+    private static final int NUMBUTTONS = NAMES.length;
 
 	private TextButton backButton, randomButton;
 
@@ -50,7 +103,7 @@ public class CharacterSelect extends StagedScreen
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
-            final Options.Name charName = Options.NAMES[i];
+            final Name charName = NAMES[i];
             final TextButton b = new TextButton( charName.getButtonName(), skin );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
@@ -59,7 +112,10 @@ public class CharacterSelect extends StagedScreen
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    game.setScreen( game.gameScreen.update( charName.getProjectileName(), Options.playerAtlas.get( charName ) ) );
+                    game.setScreen( game.gameScreen.update( 
+                        charName.getProjectileName(), 
+                        PROJECTILE_ANIMATIONS.get( charName ),
+                        PLAYER_ANIMATIONS.get( charName ) ) );
                     b.toggle();
                 }
             } );
@@ -73,8 +129,10 @@ public class CharacterSelect extends StagedScreen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Options.Name n = Options.NAMES[(int)(Math.random() * NUMBUTTONS)];
-                game.setScreen( game.gameScreen.update( n.getProjectileName(), Options.playerAtlas.get( n ) ) );
+                Name n = NAMES[(int)(Math.random() * NUMBUTTONS)];
+                game.setScreen( game.gameScreen.update( n.getProjectileName(), 
+                                            PROJECTILE_ANIMATIONS.get( n ),
+                                            PLAYER_ANIMATIONS.get( n ) ) );
                 randomButton.toggle();
             }
         } );

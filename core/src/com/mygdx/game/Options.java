@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.screens.CharacterSelect;
 
 /**
  *
@@ -24,62 +24,30 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Options
 {
-
-    public enum Name {
-        BlackMage( "Dark Wizard", "DarkFire" ), 
-        Monk( "Brawler", "Boomerang" ), 
-        RedMage( "Crimson Wizard", "Fireball" ), 
-        Thief( "Bandit", "PoisonShot" ), 
-        Warrior( "Warrior", "Sword1" ), 
-        WhiteMage( "Mage of Justice", "HolyCross" );
+    public enum Enemy {
         
-        private String button, projectile;
-        
-        Name( String button, String projectile ) {
-            this.button = button;
-            this.projectile = projectile;
-        }
-        
-        public String getButtonName()
-        {
-            return button;
-        }
-        
-        public String getProjectileName()
-        {
-            return projectile;
-        }
     }
+    
     public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
-    public static final Name[] NAMES = Name.values();
-    public static final EnumMap<Name, Animation[]> playerAtlas = new EnumMap<Name, Animation[]>(Name.class);
     public static final HashMap<String, Animation> atlas = new HashMap<String, Animation>();
     public static final int NUMENEMIES = 7;
     public static final float FRAME_DURATION = 0.2f;
     
     public static void initialize()
     {
-        loadAtlas();
         createSkin();
+        CharacterSelect.loadMap();
+        loadAtlas();
     }
     
     private static void loadAtlas()
     {
         String s;
         Array<AtlasRegion> a;
-        for ( Name n : NAMES )
+        for ( CharacterSelect.Name n : CharacterSelect.NAMES )
         {
-            a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
-            playerAtlas.put( n, new Animation[]{
-                new Animation( FRAME_DURATION, a.get( 0 ), a.get( 1 ) ),
-                new Animation( FRAME_DURATION, a.get( 2 ), a.get( 3 ) ),
-                new Animation( FRAME_DURATION, a.get( 4 ), a.get( 5 ) ),
-                new Animation( FRAME_DURATION, a.get( 6 ), a.get( 7 ) ) } );
-            
-            s = n.getProjectileName();
-            a = new TextureAtlas( "img/sprites/Projectiles/" + s + "/" + s + ".atlas" ).getRegions();
-            atlas.put( s, new Animation( FRAME_DURATION, a ) );
+            atlas.put( n.getProjectileName(), CharacterSelect.PROJECTILE_ANIMATIONS.get( n ) );
         }
         for ( int i = 1; i <= NUMENEMIES; i++ )
         {

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.mygdx.game.Options;
 import com.mygdx.game.projectile.Projectile;
+
 import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
 
 /**
@@ -46,7 +48,7 @@ public class Enemy extends Character {
 	 *            reference to the atlas file used to get the images for Enemy
 	 */
 	public Enemy( Animation a ) {
-		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", a );
+		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", Options.atlas.get( "EnemyBullet" ), a );
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
 
