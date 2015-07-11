@@ -62,7 +62,6 @@ public class Enemy extends Character {
 	    setRandomDirection();
 		setExperience(20); // set amount of exp Player will receive
 		setSpeed(3); // set speed of Enemy
-		setReloadSpeed(getReloadSpeed() * 2); // set reload speed
 	}
 
     /**

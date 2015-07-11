@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -61,6 +62,7 @@ public class GameScreen extends StagedScreen
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
+	private BitmapFont font;
 
 	/**
 	 * Enum for handling the various states of the game screen.
@@ -98,7 +100,8 @@ public class GameScreen extends StagedScreen
 	 */
 	public GameScreen( Malice g, Skin s )
 	{
-	    super( g, s, new Controller(), "img/pausescreen.png", 40 ); // TODO remove bugs and unnecessary processing
+	    super( g, s, new Controller(), "img/pausescreen.png", 40 );
+	    font = s.getFont( "default" );
 		
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
@@ -244,7 +247,7 @@ public class GameScreen extends StagedScreen
 		float fontY = cam.position.y + cam.viewportHeight / 3;
 		drawPoints();
 		setFontColor( fontX, fontY );
-		Options.FONT.draw( batch,
+		font.draw( batch,
 				"Game resumes in "
 						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
 						+ " seconds", fontX, fontY );
@@ -436,7 +439,7 @@ public class GameScreen extends StagedScreen
 		float fontX = cam.position.x - cam.viewportWidth / 2;
 		float fontY = cam.position.y + cam.viewportHeight / 2;
 		setFontColor( fontX, fontY );
-		Options.FONT.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
+		font.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
 	}
 
 	/**
@@ -453,7 +456,7 @@ public class GameScreen extends StagedScreen
 	 */
 	private void setFontColor(float fontX, float fontY)
 	{
-	    Options.FONT.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
+	    font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
 
 	/**

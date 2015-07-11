@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.projectile.Projectile;
@@ -27,10 +28,11 @@ public abstract class Character extends AnimatedSprite {
 	 * Variable used to determine the height in pixels of the status bars
 	 */
 	public static final int BARHEIGHT = 5;
+	public static final BitmapFont FONT = Options.FONT;
+    public static final GlyphLayout LAYOUT = new GlyphLayout();
 
 	private Animation projectileAnimation;
-	private GlyphLayout layout = new GlyphLayout();
-	private Color hpColor = Color.GREEN;
+	private Color hpColor;
 
 	private int maxHp; // max health
 	private int currentHp; // current health
@@ -42,28 +44,22 @@ public abstract class Character extends AnimatedSprite {
 	private int reloadSpeed;
 	private double previousTime = 0;
 	private String projectile;
-
+	
 	/**
-	 * The Character constructor for Enemy, which uses the same
-	 * Array<AtlasRegion> to create the same Animation for each direction.
+	 * Creates a Character with stats based on the parameters
 	 * 
-	 * @param frames
-	 *            the animation frame used for every direction
-	 *
-     * The Character constructor for Player, which takes four Array<AtlasRegion>
-     * and uses them to initialize the animations for each direction. Also
-     * initializes font to display information about the Character on-screen.
-     * Initial frame to be drawn for Character is set.
-     * 
-     * @param up
-     *            north-ward animation frames
-     * @param right
-     *            east-ward animation frames
-     * @param down
-     *            south-ward animation frames
-     * @param left
-     *            west-ward animation frames
-     */
+	 * Used by Enemy
+	 * 
+	 * @param hpColor Color of hp bar
+     * @param maxHp for both currentHp and maxHp
+	 * @param experience
+	 * @param level
+	 * @param speed
+	 * @param reloadSpeed
+	 * @param projectile String representing the projectile name
+	 * @param proj Animation of Projectile
+	 * @param a Animations for this Character
+	 */
 	public Character( Color hpColor, 
 	                  int maxHp, 
 	                  int experience, 
@@ -73,25 +69,29 @@ public abstract class Character extends AnimatedSprite {
 	                  String projectile, Animation proj, Animation... a ) {
 	    this( hpColor );
         this.initializeAnimations( a );
-	    this.hpColor = hpColor;
         this.load( maxHp, experience, level, speed, reloadSpeed );
         this.projectile = projectile;
         this.projectileAnimation = proj;
 	}
 	
+	/**
+	 * Creates an empty Character setting only the hp bar color
+	 * 
+	 * Used by Player to allow constant changing of stats (may be buggy though)
+	 * 
+     * @param hpColor Color of hp bar
+	 */
 	public Character( Color hpColor ) {
         this.hpColor = hpColor;
 	}
 
     /**
-     * loads this Character based on parameters
-     * @param maxHp
+     * Sets this Character's stats based on parameters
+     * @param maxHp for both currentHp and maxHp
      * @param experience
      * @param level
      * @param speed
      * @param reloadSpeed
-     * @param projectile
-     * @param a
      */
     public void load( int maxHp, 
                       int experience, 
@@ -108,7 +108,7 @@ public abstract class Character extends AnimatedSprite {
         resetDirection();
     }
 
-	// ---------------------Animation and Art ----------------------//
+	// --------------------- Art ----------------------//
 
 	/**
 	 * Draws the stats of the Character around the sprite.
@@ -140,8 +140,8 @@ public abstract class Character extends AnimatedSprite {
 			renderer.setColor(hpColor);
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getCurrentHp()
 					/ getMaxHp(), hpH - 2);
-			Options.FONT.setColor(Color.MAROON);
-			Options.FONT.draw(batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY);
+			FONT.setColor( Color.MAROON );
+			FONT.draw( batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY) ;
 		}
 		if (getExperience() < getExpToLevel() && getExperience() > 0) {
 			hpY -= BARHEIGHT - 2;
@@ -151,11 +151,12 @@ public abstract class Character extends AnimatedSprite {
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getExperience()
 					/ getExpToLevel(), hpH - 2);
 		}
-		if (level > 0) {
-		    Options.FONT.setColor(Color.MAGENTA);
-			layout.setText(Options.FONT, "Level " + level);
-			Options.FONT.draw(batch, "Level " + level, getX() - layout.width / 4,
-					getY() + 1.8f * getHeight());
+		if ( level > 0 ) {
+		    FONT.setColor( Color.MAGENTA );
+			LAYOUT.setText( FONT, "Level " + level );
+			FONT.draw( batch, LAYOUT, 
+			                getX() + ( getWidth() - LAYOUT.width ) / 2, 
+			                getY() + 1.8f * getHeight() );
 		}
 	}
 
@@ -212,11 +213,11 @@ public abstract class Character extends AnimatedSprite {
 	public void increaseCurrentLevel() {
 		// might need balancing
 		level++;
-		Audio.playAudio("levelup");
-		double temp = getCurrentHp() / getMaxHp();
-		increaseBdmg(2);
-		increaseMaxHp(10);
-		increaseCurrentHp((int) (10 * (temp + 1)));
+		Audio.playAudio( "levelup" );
+		int hpIncrement = (int)( 10 * ( getCurrentHp() / getMaxHp() + 1 ) );
+		increaseBdmg( 2 );
+		increaseMaxHp( 10 );
+		increaseCurrentHp( hpIncrement );
 	}
 
 	/**
@@ -237,11 +238,9 @@ public abstract class Character extends AnimatedSprite {
 	 *            integer to increase currentHp by
 	 */
 	public void increaseCurrentHp(int i) {
-		if (currentHp + i > maxHp) {
+	    currentHp += i;
+		if ( currentHp > maxHp )
 			currentHp = maxHp;
-		} else {
-			currentHp += i;
-		}
 	}
 
 	/**
@@ -291,36 +290,6 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public void increaseBdmg(int i) {
 		baseDmg += i;
-	}
-
-	/**
-	 * setter method for reloadSpeed
-	 * 
-	 * @param newReloadSpeed
-	 *            new value of reloadSpeed
-	 */
-	public void setReloadSpeed(int newReloadSpeed) {
-		reloadSpeed = newReloadSpeed;
-	}
-
-	/**
-	 * setter method for level
-	 * 
-	 * @param newLevel
-	 *            new value of level
-	 */
-	public void setLevel(int newLevel) {
-		level = newLevel;
-	}
-
-	/**
-	 * setter method for hpColor
-	 * 
-	 * @param newColor
-	 *            new color of hpColor
-	 */
-	public void setHpColor(Color newColor) {
-		hpColor = newColor;
 	}
 	
 	/**
@@ -432,7 +401,8 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public Character() {
 		setSpeed(10);
-		setLevel(1);
+		level = 1;
+		reloadSpeed = 1000;
 	}
 
 }

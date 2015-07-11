@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 /**
  * The Game Over screen displays the same background image as the Main Menu and
@@ -30,12 +30,14 @@ import com.mygdx.game.Options;
  */
 public class GameOver extends StagedScreen
 {
+    public static final GlyphLayout LAYOUT = new GlyphLayout();
+    
     private Batch batch;
+    private BitmapFont font;
     
 	private TextButton retryButton, switchButton, leaderButton, backButton;
 	private TextField textField;
-
-	private GlyphLayout layout;
+	
 	private String message;
 
 	/**
@@ -55,8 +57,7 @@ public class GameOver extends StagedScreen
 	public GameOver( Malice g, Skin s )
 	{
 	    super( g, s, -1 );
-		layout = new GlyphLayout();
-
+	    font = s.getFont( "default" );
         batch = stage.getBatch();
 
         switchButton = new TextButton( "Switch Characters", skin ); 
@@ -113,7 +114,7 @@ public class GameOver extends StagedScreen
 	{
 	    message = "You earned " + points + " points and reached level " + level
 	                    + ". Better luck next time!";
-        layout.setText( Options.FONT, message );
+	    LAYOUT.setText( font, message );
         
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
@@ -165,8 +166,8 @@ public class GameOver extends StagedScreen
 	@Override
 	public void show()
 	{
-        Options.FONT.setColor( Color.WHITE );
-        Gdx.input.setInputProcessor( stage );// Make the stage consume events
+	    super.show();
+	    font.setColor( Color.WHITE );
 	}
 
 	/**
@@ -176,13 +177,12 @@ public class GameOver extends StagedScreen
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
-	public void render(float delta)
+	public void render( float delta )
 	{
-		stage.act();
-		stage.draw();
+	    super.render( delta );
 		batch.begin();
-		Options.FONT.draw( batch, layout, 
-		    Gdx.graphics.getWidth() / 2 - layout.width / 2, 
+		font.draw( batch, LAYOUT, 
+		    Gdx.graphics.getWidth() / 2 - LAYOUT.width / 2, 
 		    Gdx.graphics.getHeight() * 67 / 100 );
 		batch.end();
 	}

@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 public class LeaderScreen extends StagedScreen
 {
@@ -59,9 +58,9 @@ public class LeaderScreen extends StagedScreen
     public void show()
     {
         super.show();
-        Options.FONT.setColor( Color.WHITE );
+        skin.getFont( "default" ).setColor( Color.WHITE );
         if ( scoreFile.exists() ) {
-            layout.setText( Options.FONT, scoreFile.readString() );
+            layout.setText( skin.getFont( "default" ), scoreFile.readString() );
         }
     }
 
@@ -70,7 +69,7 @@ public class LeaderScreen extends StagedScreen
     {
         super.render( delta );
         stage.getBatch().begin();
-        Options.FONT.draw( stage.getBatch(), layout, 
+        skin.getFont( "default" ).draw( stage.getBatch(), layout, 
             Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 3 / 4 );
         stage.getBatch().end();
     }
