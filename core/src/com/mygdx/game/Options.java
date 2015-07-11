@@ -1,19 +1,15 @@
 package com.mygdx.game;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
+import com.mygdx.game.world.Map;
 
 /**
  *
@@ -26,29 +22,19 @@ public class Options
 {
     public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
-    public static final HashMap<String, Animation> atlas = new HashMap<String, Animation>();
-    public static final int NUMENEMIES = 7;
-    public static final float FRAME_DURATION = 0.2f;
     
     public static void initialize()
     {
         createSkin();
         Player.loadMaps();
-        loadAtlas();
+        Enemy.loadAnimations();
+        Map.loadBiomes();
     }
     
-    private static void loadAtlas()
-    {
-        String s;
-        Array<AtlasRegion> a;
-        for ( int i = 1; i <= NUMENEMIES; i++ )
-        {
-            s = "Enemy" + i;
-            a = new TextureAtlas( "img/sprites/Enemies/" + s + "/" + s + ".atlas" ).getRegions();
-            atlas.put( s, new Animation( FRAME_DURATION, a ) );
-        }
-        a = new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ).getRegions();
-        atlas.put( "EnemyBullet", new Animation( FRAME_DURATION, a ) );
+    public static void dispose() {
+        SKIN.dispose();
+        FONT.dispose();
+        Map.disposeBiomes();
     }
 
     /**

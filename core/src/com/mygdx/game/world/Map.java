@@ -47,7 +47,7 @@ public class Map
     
     private static final EnumMap<Biome, Pixmap> biomes = new EnumMap<Biome, Pixmap>(Biome.class);
     
-    static { // initialize EnumMaps
+    public static void loadBiomes() { // initialize EnumMaps
         Texture texture;
         for ( Biome b : Biome.values() ) {
             if ( b == Biome.RANDOM ) continue;
@@ -56,6 +56,12 @@ public class Map
             texture.getTextureData().prepare();
             biomes.put( b, texture.getTextureData().consumePixmap() );
             texture.dispose();
+        }
+    }
+    public static void disposeBiomes() {
+        for ( Biome b : Biome.values() ) {
+            if ( b != Biome.RANDOM )
+                biomes.get( b ).dispose();
         }
     }
     
@@ -448,9 +454,10 @@ public class Map
      */
     public void dispose()
     {
-        map.dispose();
-        expanse.dispose();
-        biome.dispose();
+        if ( map != null ) {
+            map.dispose();
+            expanse.dispose();
+        }
     }
     
     

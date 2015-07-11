@@ -24,7 +24,6 @@ import com.mygdx.game.Controller;
  *  @author  Sources: libgdx
  */
 public class Player extends Character {
-    public static final float FRAME_DURATION = 0.2f;
     
     public enum Name {
         BlackMage( "Dark Wizard", "DarkFire" ), 

@@ -70,8 +70,7 @@ public class Malice extends Game
 	    this.characterSelect.dispose();
 	    this.gameScreen.dispose();
 	    this.gameOver.dispose();
-	    Options.SKIN.dispose();
-	    Options.FONT.dispose();
+	    Options.dispose();
 	}
 
 }

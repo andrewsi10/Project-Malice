@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 import com.mygdx.game.player.Character;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
@@ -384,8 +383,8 @@ public class GameScreen extends StagedScreen
 	{
 		for ( int i = 0; i < limit; i++ )
 		{
-			int index = 1 + (int) ( Math.random() * Options.NUMENEMIES );
-			Enemy e = new Enemy( Options.atlas.get( "Enemy" + index ) );
+			int index = (int) ( Math.random() * Enemy.NUMENEMIES );
+			Enemy e = new Enemy( index );
 			e.increaseBdmg( -5 + player.getPoints() / 50 );
 			e.increaseMaxHp( player.getPoints() / 20 );
 			e.increaseCurrentHp( player.getPoints() / 20 );

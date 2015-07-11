@@ -31,6 +31,8 @@ public abstract class Character extends AnimatedSprite {
 	public static final BitmapFont FONT = Options.FONT;
     public static final GlyphLayout LAYOUT = new GlyphLayout();
 
+    public static final float FRAME_DURATION = 0.2f;
+
 	private Animation projectileAnimation;
 	private Color hpColor;
 

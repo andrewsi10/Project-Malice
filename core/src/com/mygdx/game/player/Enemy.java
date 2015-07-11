@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.mygdx.game.Options;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
 import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
@@ -22,6 +24,23 @@ import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
  *  @author  Sources: libgdx
  */
 public class Enemy extends Character {
+    
+    public static final int NUMENEMIES = 7;
+    public static final Animation[] ANIMATIONS = new Animation[NUMENEMIES];
+    public static final Animation PROJECTILE = new Animation( FRAME_DURATION, 
+        new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ).getRegions() );
+    
+    public static void loadAnimations()
+    {
+        String s;
+        Array<AtlasRegion> a;
+        for ( int i = 1; i <= NUMENEMIES; i++ )
+        {
+            s = "img/sprites/Enemies/Enemy" + i + "/Enemy" + i + ".atlas";
+            a = new TextureAtlas( s ).getRegions();
+            ANIMATIONS[i-1] = new Animation( FRAME_DURATION, a );
+        }
+    }
 
     /**
      * The margin of change for the Enemy to choose directions
@@ -36,22 +55,26 @@ public class Enemy extends Character {
 	private int travelTime;
 
 	/**
-	 * Enemy constructor. Parameter used to reference the images used for
-	 * animation frames. Create an Array<AtlasRegion> and input it in the super
-	 * constructor. Initialize experience to 20, speed to 3, reloadSpeed to
-	 * getReloadSpeed() * 2, and projectile to the file name of the atlas file
-	 * for the enemy projectiles. Initialize direction to a random integer in
-	 * the interval [0, 8) and travelTime to a random integer in the interval
-	 * [minTravelTime, minTravelTime + travelTimeScalar).
+	 * Creates an Enemy with default stats:
 	 * 
-	 * @param file
-	 *            reference to the atlas file used to get the images for Enemy
+	 * hpBar: red; maxHp: 50; exp: 20; level: 0; speed: 3; reloadSpeed: 1000;
+	 * projectile: "EnemyBullet"
+	 * 
+	 * sets a random starting direction
+	 * 
+	 * @param index integer index of the Enemy Animations for the type of Enemy.
+	 *         Should be in the range from [0,NUMENEMIES)
 	 */
-	public Enemy( Animation a ) {
-		super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", Options.atlas.get( "EnemyBullet" ), a );
+	public Enemy( int index ) {
+        super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
 
+//    public Enemy( Animation a ) {
+//        super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, a );
+//        setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
+//    }
+    
 	/**
 	 * Constructor used for testing. Initialize experience to 20, speed to 3,
 	 * and reloadSpeed to getReloadSpeed() * 2. Initialize direction to a random
@@ -79,16 +102,15 @@ public class Enemy extends Character {
      *            shooting)
      */
 	@Override
-	public void move(Character character, ArrayList<Projectile> projectiles,
-			long time) {
+	public void move( Character character, ArrayList<Projectile> projectiles,
+			long time ) {
+        setRandomDirection();
         float deltaX = character.getX() - getX();
         float deltaY = character.getY() - getY();
-		if ( !inRange( deltaX, deltaY ) ) {
-			setRandomDirection();
-		} else {
+		if ( inRange( deltaX, deltaY ) ) {
 	        // move towards the player
 			double newDir = 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
-			setDirection( newDir );
+			setDirection( newDir + getDirection() / marginOfDelta );
 			shoot( projectiles, newDir, time );
 		}
         translate();
