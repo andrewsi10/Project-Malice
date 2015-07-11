@@ -1,9 +1,13 @@
 package com.mygdx.game.player;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Controller;
 
@@ -20,6 +24,44 @@ import com.mygdx.game.Controller;
  *  @author  Sources: libgdx
  */
 public class Player extends Character {
+    public static final float FRAME_DURATION = 0.2f;
+    
+    public enum Name {
+        BlackMage( "Dark Wizard", "DarkFire" ), 
+        Monk( "Brawler", "Boomerang" ), 
+        RedMage( "Crimson Wizard", "Fireball" ), 
+        Thief( "Bandit", "PoisonShot" ), 
+        Warrior( "Warrior", "Sword1" ), 
+        WhiteMage( "Mage of Justice", "HolyCross" );
+        
+        public final String buttonName, projectileName;
+        
+        Name( String button, String projectile ) {
+            this.buttonName = button;
+            this.projectileName = projectile;
+        }
+    }
+    public static final Name[] NAMES = Name.values();
+    public static final EnumMap<Name, Animation[]> PLAYER_ANIMATIONS = new EnumMap<Name, Animation[]>(Name.class);
+    public static final EnumMap<Name, Animation> PROJECTILE_ANIMATIONS = new EnumMap<Name, Animation>(Name.class);
+    
+    public static void loadMaps() {
+        String s;
+        Array<AtlasRegion> a;
+        for ( Name n : NAMES )
+        {
+            a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
+            PLAYER_ANIMATIONS.put( n, new Animation[]{
+                new Animation( FRAME_DURATION, a.get( 0 ), a.get( 1 ) ),
+                new Animation( FRAME_DURATION, a.get( 2 ), a.get( 3 ) ),
+                new Animation( FRAME_DURATION, a.get( 4 ), a.get( 5 ) ),
+                new Animation( FRAME_DURATION, a.get( 6 ), a.get( 7 ) ) } );
+            
+            s = n.projectileName + "/" + n.projectileName + ".atlas";
+            a = new TextureAtlas( "img/sprites/Projectiles/" + s ).getRegions();
+            PROJECTILE_ANIMATIONS.put( n, new Animation( FRAME_DURATION, a ) );
+        }
+    }
 
 	private int playerPoints;
 
@@ -40,11 +82,6 @@ public class Player extends Character {
 	    super( Color.GREEN );
         setExpToLevel(100);
 	}
-	
-//    public Player(Options.Names n) { // loads with default settings
-//        super(Color.GREEN, 50, 0, 1, 5, 500, n.getProjectileName(), Options.playerAtlas.get( n ) );
-//        setExpToLevel(100);
-//    }
 
 //	/**
 //	 * Constructor used for testing only. It does not use the super constructor
@@ -77,10 +114,10 @@ public class Player extends Character {
 	 * @param proj Projectile Animation
 	 * @param a new Animations
 	 */
-	public void change( String projectile, Animation proj, Animation[] a )
+	public void change( Name n )
 	{
-	    this.setProjectile( projectile, proj );
-	    this.initializeAnimations( a );
+	    this.setProjectile( n.projectileName, PROJECTILE_ANIMATIONS.get( n ) );
+	    this.initializeAnimations( PLAYER_ANIMATIONS.get( n ) );
 	}
 
 	/**

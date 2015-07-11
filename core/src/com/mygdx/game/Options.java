@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.screens.CharacterSelect;
+import com.mygdx.game.player.Player;
 
 /**
  *
@@ -24,10 +24,6 @@ import com.mygdx.game.screens.CharacterSelect;
  */
 public class Options
 {
-    public enum Enemy {
-        
-    }
-    
     public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
     public static final HashMap<String, Animation> atlas = new HashMap<String, Animation>();
@@ -37,7 +33,7 @@ public class Options
     public static void initialize()
     {
         createSkin();
-        CharacterSelect.loadMap();
+        Player.loadMaps();
         loadAtlas();
     }
     
@@ -45,10 +41,6 @@ public class Options
     {
         String s;
         Array<AtlasRegion> a;
-        for ( CharacterSelect.Name n : CharacterSelect.NAMES )
-        {
-            atlas.put( n.getProjectileName(), CharacterSelect.PROJECTILE_ANIMATIONS.get( n ) );
-        }
         for ( int i = 1; i <= NUMENEMIES; i++ )
         {
             s = "Enemy" + i;

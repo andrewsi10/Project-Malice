@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -123,9 +122,9 @@ public class GameScreen extends StagedScreen
      * @param a Animation for the player
      * @return this Screen for the game to be set to
      */
-    public Screen update( String projectile, Animation proj, Animation[] a )
+    public Screen update( Player.Name n )
     {
-        player.change( projectile, proj, a );
+        player.change( n );
         return this;
     }
 
