@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
 import com.mygdx.game.world.Map;
@@ -64,10 +66,21 @@ public class Options
         textButtonStyle.over = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = SKIN.getFont( "default" );
         SKIN.add( "default", textButtonStyle );
+        
+        // Create TouchPad Style
         // Set background image
         SKIN.add( "touchBackground", new Texture( "ui/touchBackground.png" ) );
         // Set knob image
         SKIN.add( "touchKnob", new Texture( "ui/touchKnob.png" ) );
+        TouchpadStyle touchpadStyle = new TouchpadStyle();
+        // Create Drawable's from TouchPad skin
+        Drawable touchBackground = SKIN.getDrawable( "touchBackground" );
+        Drawable touchKnob = SKIN.getDrawable( "touchKnob" );
+        // Apply the Drawables to the TouchPad Style
+        touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        
+        SKIN.add( "touchPad", touchpadStyle );
     }
     
 }
