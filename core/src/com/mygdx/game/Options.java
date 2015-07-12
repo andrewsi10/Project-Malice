@@ -1,16 +1,20 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.player.Enemy;
 import com.mygdx.game.player.Player;
+import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.world.Map;
 
 /**
@@ -25,18 +29,59 @@ public class Options
     public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
     public static final BitmapFont FONT = new BitmapFont();
     
+    public static final FileHandle SETTINGS = Gdx.files.local( "settings.txt" );
+    
     public static void initialize()
     {
+        Audio.initializeAudio();
         createSkin();
         Player.loadMaps();
         Enemy.loadAnimations();
         Map.loadBiomes();
+        if ( SETTINGS.exists() )
+            loadSettings();
+        else
+            defaultSettings();
     }
     
+    /**
+     * Disposes of Resources
+     */
     public static void dispose() {
         SKIN.dispose();
         FONT.dispose();
         Map.disposeBiomes();
+    }
+    
+    /**
+     * Loads the settings
+     */
+    public static void loadSettings() {
+        String[] strings = SETTINGS.readString().split( "\\s+" );
+        int music = Integer.parseInt( strings[1] );
+        int sound = Integer.parseInt( strings[3] );
+        float zoom = Float.parseFloat( strings[5] );
+        setSettings( music, sound, zoom );
+    }
+    
+    public static void defaultSettings() {
+        float zoom = Gdx.app.getType().equals( ApplicationType.Android ) ? 0.7f : 1.1f;
+        setSettings( 100, 100, zoom );
+    }
+    
+    public static void setSettings( int music, int sound, float zoom ) {
+        Audio.MUSIC_VOLUME = music;
+        Audio.SOUND_VOLUME = sound;
+        GameScreen.ZOOM = zoom;
+    }
+    
+    /**
+     * Saves the settings
+     */
+    public static void saveSettings() {
+        SETTINGS.writeString( "Music: " + Audio.MUSIC_VOLUME + "\n", false );
+        SETTINGS.writeString( "Sound: " + Audio.SOUND_VOLUME + "\n", true );
+        SETTINGS.writeString( "Zoom: " + GameScreen.ZOOM + "\n", true );
     }
 
     /**
@@ -81,6 +126,9 @@ public class Options
         touchpadStyle.knob = touchKnob;
         
         SKIN.add( "touchPad", touchpadStyle );
+        
+        LabelStyle labelStyle = new LabelStyle( FONT, Color.WHITE );
+        SKIN.add( "label", labelStyle );
     }
     
 }

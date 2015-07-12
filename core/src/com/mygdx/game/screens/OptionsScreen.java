@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
+import com.mygdx.game.Options;
 
 public class OptionsScreen extends StagedScreen
 {
@@ -108,7 +109,7 @@ public class OptionsScreen extends StagedScreen
         
         zoomSlider.setWidth( sliderWidth );
         zoomSlider.setPosition( sliderX, zoomY );
-        zoomSlider.setValue( GameScreen.ZOOM );
+        zoomSlider.setValue( GameScreen.ZOOM * 100 );
         zoomSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )
@@ -121,7 +122,7 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
-        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s );
+        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s, "label" );
         zoomLabel.setPosition( buttonX, zoomY );
         
         // Additional properties
@@ -169,6 +170,12 @@ public class OptionsScreen extends StagedScreen
         } );
         stage.addActor( backButton );
         return this;
+    }
+    
+    @Override
+    public void hide() {
+        Options.saveSettings();
+        super.hide();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -51,12 +50,11 @@ public class GameScreen extends StagedScreen
      * Size of the map
      */
     public final static int MAP_SIZE = 50;
-    private static boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
     
     /**
      * The Zoom of the Camera
      */
-    public static float ZOOM = isAndroid ? 1.1f : 0.7f;
+    public static float ZOOM;
 
     private Batch batch;
     private OrthographicCamera cam;
@@ -108,10 +106,6 @@ public class GameScreen extends StagedScreen
 	public GameScreen( Malice g, Skin s, Controller c )
 	{
 	    super( g, s, c, "img/pausescreen.png", 40 );
-	    if ( isAndroid )
-	    {
-	    	ZOOM = 0.7f;
-	    }
 	    font = s.getFont( "default" );
 	    pauseButton = new Button( skin );
 	    pauseButton.setSize( 100, 100 );

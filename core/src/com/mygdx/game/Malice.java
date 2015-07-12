@@ -46,9 +46,8 @@ public class Malice extends Game
 	public void create()
 	{
 	    splash = new Splash( this, Options.SKIN );
-	    Audio.initializeAudio();
-        setScreen( splash );
         Options.initialize();
+        setScreen( splash );
         Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
                         ? new AndroidController( Options.SKIN ) 
                         : new DesktopController( this );

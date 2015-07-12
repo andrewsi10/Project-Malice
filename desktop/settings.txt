@@ -1,0 +1,3 @@
+Music: 30
+Sound: 65
+Zoom: 1.1
