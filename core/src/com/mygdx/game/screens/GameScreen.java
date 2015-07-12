@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -50,12 +51,13 @@ public class GameScreen extends StagedScreen
      * Size of the map
      */
     public final static int MAP_SIZE = 50;
+    private static boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
     
     /**
      * The Zoom of the Camera
      */
-    public static float ZOOM = 0.8f;
-    
+    public static float ZOOM = isAndroid ? 1.1f : 0.7f;
+
     private Batch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
@@ -106,9 +108,13 @@ public class GameScreen extends StagedScreen
 	public GameScreen( Malice g, Skin s, Controller c )
 	{
 	    super( g, s, c, "img/pausescreen.png", 40 );
+	    if ( isAndroid )
+	    {
+	    	ZOOM = 0.7f;
+	    }
 	    font = s.getFont( "default" );
 	    pauseButton = new Button( skin );
-	    pauseButton.setSize( 50, 50 );
+	    pauseButton.setSize( 100, 100 );
 	    pauseButton.setPosition( stage.getWidth() - pauseButton.getWidth(), 
 	                             stage.getHeight() - pauseButton.getHeight() );
 	    pauseButton.addListener( new ClickListener() {
