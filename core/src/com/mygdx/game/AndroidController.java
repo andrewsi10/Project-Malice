@@ -44,8 +44,8 @@ public class AndroidController extends Controller
     {
         float deltaX = 0, deltaY = 0;
         if ( shootTouchpad.isTouched() ) {
-            deltaX = shootTouchpad.getKnobPercentY();
-            deltaY = shootTouchpad.getKnobPercentX();
+            deltaX = shootTouchpad.getKnobPercentX();
+            deltaY = shootTouchpad.getKnobPercentY();
         }
         if ( deltaX != 0 && deltaY != 0 )
             return 90 + 360 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
