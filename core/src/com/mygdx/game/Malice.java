@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.screens.CharacterSelect;
 import com.mygdx.game.screens.GameOver;
 import com.mygdx.game.screens.GameScreen;
@@ -47,11 +49,15 @@ public class Malice extends Game
 	    Audio.initializeAudio();
         setScreen( splash );
         Options.initialize();
+        Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
+                        ? new AndroidController( Options.SKIN ) 
+                        : new DesktopController();
+                        
 	    mainMenu = new MainMenu( this, Options.SKIN );
 	    optionsScreen = new OptionsScreen( this, Options.SKIN );
 	    leaderScreen = new LeaderScreen( this, Options.SKIN );
 	    characterSelect = new CharacterSelect( this, Options.SKIN );
-	    gameScreen = new GameScreen( this, Options.SKIN );
+	    gameScreen = new GameScreen( this, Options.SKIN, c );
 	    gameOver = new GameOver( this, Options.SKIN );
 	}
 	

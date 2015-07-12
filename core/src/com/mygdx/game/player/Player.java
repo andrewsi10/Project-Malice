@@ -62,6 +62,7 @@ public class Player extends Character {
         }
     }
 
+    private Controller controller;
 	private int playerPoints;
 
 	/**
@@ -76,22 +77,22 @@ public class Player extends Character {
 	 * @param proj
 	 *            reference for the projectile atlas file
 	 */
-	public Player()
+	public Player( Controller c )
 	{
 	    super( Color.GREEN );
-        setExpToLevel(100);
+        controller = c;
+        setExpToLevel( 100 );
 	}
 
-//	/**
-//	 * Constructor used for testing only. It does not use the super constructor
-//	 * or initialize projectile. Initialize speed, expToLevel, and level as
-//	 * accordingly with the regular constructor.
-//	 */
-//	public Player() {
-//		setSpeed(5);
-//		setExpToLevel(100);
-//		setLevel(1);
-//	}
+	/**
+	 * Constructor used for testing only. It does not use the super constructor
+	 * or initialize projectile. Initialize speed, expToLevel, and level as
+	 * accordingly with the regular constructor.
+	 */
+	public Player() {
+		setSpeed( 5 );
+		setExpToLevel( 100 );
+	}
 	
 	/**
 	 * Reloads the Player with default settings:
@@ -104,7 +105,7 @@ public class Player extends Character {
 	{
 	    this.load( 50, 0, 1, 5, 500 );
 	    this.playerPoints = 0;
-	    Controller.PRESSED = new boolean[Controller.CONTROLS.length];
+	    controller.reset();
 	}
 	
 	/**
@@ -134,14 +135,14 @@ public class Player extends Character {
 	@Override
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
-		double dir = Controller.getInputDirection();
+		double dir = controller.getInputDirection();
         if (dir >= 0) {
             setDirection(dir);
             translate();
             setAnimations();
         }
         
-        dir = Controller.getShootingDirection();
+        dir = controller.getShootingDirection();
         if ( dir >= 0 )
             shoot( projectiles, dir, System.currentTimeMillis() );
 	}

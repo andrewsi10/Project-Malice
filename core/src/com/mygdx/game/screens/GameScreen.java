@@ -97,9 +97,9 @@ public class GameScreen extends StagedScreen
 	 *  playerType
 	 *            the class that the player chose in the CharacterSelect screen
 	 */
-	public GameScreen( Malice g, Skin s )
+	public GameScreen( Malice g, Skin s, Controller c )
 	{
-	    super( g, s, new Controller(), "img/pausescreen.png", 40 );
+	    super( g, s, c, "img/pausescreen.png", 40 );
 	    font = s.getFont( "default" );
 		
         projectiles = new ArrayList<Projectile>();
@@ -113,7 +113,7 @@ public class GameScreen extends StagedScreen
         map = new Map( MAP_SIZE, MAP_SIZE );
         cam = new OrthographicCamera( 1280, 720 );
         // cam.setToOrtho(false, 1280, 720);
-        player = new Player();
+        player = new Player( c );
 	}
     
     /**
