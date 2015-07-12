@@ -19,8 +19,10 @@ public class DesktopController extends Controller
             Input.Keys.D, Input.Keys.S, Input.Keys.A, };
     
     private boolean[] isKeyPressed;
+    private final Malice game;
     
-    public DesktopController() {
+    public DesktopController( Malice g ) {
+        game = g;
         reset();
     }
 
@@ -68,6 +70,8 @@ public class DesktopController extends Controller
     @Override
     public boolean keyDown( int keycode )
     {
+        if ( keycode == Input.Keys.ESCAPE )
+            game.gameScreen.toggleGameState();
         for ( int i = 0; i < CONTROLS.length; i++ )
             if ( CONTROLS[i] == keycode )
                 isKeyPressed[i] = true;

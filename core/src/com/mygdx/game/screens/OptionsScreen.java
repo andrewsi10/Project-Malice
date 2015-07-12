@@ -6,6 +6,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,7 +18,8 @@ import com.mygdx.game.Malice;
 public class OptionsScreen extends StagedScreen
 {
     private TextButton musicButton, soundButton, backButton;
-    private final Slider musicSlider, soundSlider;
+    private Slider musicSlider, soundSlider, zoomSlider;
+    private Label zoomLabel;
     private boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
     private float fontScale = 1.7f;
     
@@ -36,19 +38,12 @@ public class OptionsScreen extends StagedScreen
         background.setVisible( false );
 
         // initialize buttons
-        musicButton = new TextButton( "Music", skin ); 
-        if ( isAndroid )
-        {
-        	musicButton.getLabel().setFontScale( fontScale, fontScale );
-        }
-        soundButton = new TextButton( "Sound", skin ); 
-        if ( isAndroid )
-        {
-        	soundButton.getLabel().setFontScale( fontScale, fontScale );
-        }
+        musicButton = new TextButton( "Music", skin );
+        soundButton = new TextButton( "Sound", skin );
         // initialize sliders
-        musicSlider = new Slider( 0, 100, 5, false, skin ); // TODO
-        soundSlider = new Slider( 0, 100, 5, false, skin ); // TODO
+        musicSlider = new Slider( 0, 100, 5, false, skin );
+        soundSlider = new Slider( 0, 100, 5, false, skin );
+        zoomSlider = new Slider( 20, 200, 5, false, skin ); // TODO
         
         // xy -coordinates of music and sound settings
         float buttonX = Gdx.graphics.getWidth() / 4 - musicButton.getWidth() / 2;
@@ -56,6 +51,7 @@ public class OptionsScreen extends StagedScreen
         float sliderX = Gdx.graphics.getWidth() / 2;
         float soundY = Gdx.graphics.getHeight() / 2;
         float sliderWidth = musicButton.getWidth();
+        float zoomY = Gdx.graphics.getHeight() / 3;
         
         // set buttons
         musicButton.setPosition( buttonX, musicY );
@@ -110,11 +106,39 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
+        zoomSlider.setWidth( sliderWidth );
+        zoomSlider.setPosition( sliderX, zoomY );
+        zoomSlider.setValue( GameScreen.ZOOM );
+        zoomSlider.addListener( new ChangeListener() {
+            @Override
+            public void changed( ChangeEvent event, Actor actor )
+            {
+                Slider slider = (Slider)actor;
+                float value = (int)slider.getValue() / 100.0f;
+                if ( !slider.isDragging() )
+                    GameScreen.ZOOM = value;
+                zoomLabel.setText( "Zoom: " + value );
+            }
+        } );
+        
+        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s );
+        zoomLabel.setPosition( buttonX, zoomY );
+        
+        // Additional properties
+        if ( isAndroid )
+        {
+            musicButton.getLabel().setFontScale( fontScale, fontScale );
+            soundButton.getLabel().setFontScale( fontScale, fontScale );
+            zoomLabel.setFontScale( fontScale, fontScale );
+        }
+        
         // add Actors
         stage.addActor( musicButton );
         stage.addActor( soundButton );
         stage.addActor( musicSlider );
         stage.addActor( soundSlider );
+        stage.addActor( zoomSlider );
+        stage.addActor( zoomLabel );
     }
 
     

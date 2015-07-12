@@ -3,15 +3,19 @@ package com.mygdx.game.screens;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
@@ -50,7 +54,7 @@ public class GameScreen extends StagedScreen
     /**
      * The Zoom of the Camera
      */
-    public static final float ZOOM = 0.8f;
+    public static float ZOOM = 0.8f;
     
     private Batch batch;
     private OrthographicCamera cam;
@@ -61,6 +65,9 @@ public class GameScreen extends StagedScreen
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
 	private BitmapFont font;
+	
+	private Button pauseButton;
+	private TextButton settingsButton, backButton;
 
 	/**
 	 * Enum for handling the various states of the game screen.
@@ -100,6 +107,39 @@ public class GameScreen extends StagedScreen
 	{
 	    super( g, s, c, "img/pausescreen.png", 40 );
 	    font = s.getFont( "default" );
+	    pauseButton = new Button( skin );
+	    pauseButton.setSize( 50, 50 );
+	    pauseButton.setPosition( stage.getWidth() - pauseButton.getWidth(), 
+	                             stage.getHeight() - pauseButton.getHeight() );
+	    pauseButton.addListener( new ClickListener() {
+	        @Override
+	        public void clicked( InputEvent event, float x, float y ) {
+	            game.gameScreen.toggleGameState();
+	        }
+	    });
+	    settingsButton = new TextButton( "Settings", skin );
+	    settingsButton.setPosition( stage.getWidth() / 2 - settingsButton.getWidth() / 2, 
+	                                stage.getHeight() / 2 );
+	    settingsButton.addListener( new ClickListener() {
+            @Override
+            public void clicked( InputEvent event, float x, float y ) {
+                game.setScreen( game.optionsScreen.update( game.gameScreen ) );
+                settingsButton.toggle();
+            }
+	    } );
+	    backButton = new TextButton( "Back to Main Menu", skin );
+	    backButton.setPosition( stage.getWidth() / 2 - backButton.getWidth() / 2, 
+                                    stage.getHeight() / 4 );
+	    backButton.addListener( new ClickListener() {
+            @Override
+            public void clicked( InputEvent event, float x, float y ) {
+                game.setScreen( game.mainMenu );
+                backButton.toggle();
+            }
+        } );
+	    stage.addActor( pauseButton );
+	    stage.addActor( settingsButton );
+        stage.addActor( backButton );
 		
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
@@ -112,7 +152,6 @@ public class GameScreen extends StagedScreen
         map = new Map( MAP_SIZE, MAP_SIZE );
 //        cam = (OrthographicCamera)stage.getCamera();
         cam = new OrthographicCamera();
-        cam.zoom = ZOOM;
         player = new Player( c );
 	}
     
@@ -127,6 +166,19 @@ public class GameScreen extends StagedScreen
     public Screen update( Player.Name n )
     {
         player.change( n );
+        return update();
+    }
+    
+    public Screen update() {
+        sprites.clear();
+        map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
+        player.setPosition( map.getSpawnX(), map.getSpawnY() );
+        player.reload();
+        sprites.add( player );
+
+        spawnEnemies();
+        
+        resume();
         return this;
     }
 
@@ -144,17 +196,7 @@ public class GameScreen extends StagedScreen
 	public void show()
 	{
 	    super.show();
-	    background.setVisible( false );
-        
-        sprites.clear();
-		map.generate( Map.Generation.RANDOM, Map.Biome.RANDOM );
-        player.setPosition( map.getSpawnX(), map.getSpawnY() );
-        player.reload();
-        sprites.add( player );
-
-        spawnEnemies();
-		timeResumed = System.currentTimeMillis();
-		state = State.RESUME;
+        cam.zoom = ZOOM;
 	}
 
 	/**
@@ -199,14 +241,7 @@ public class GameScreen extends StagedScreen
 	 */
 	public void renderPaused(float delta)
 	{
-	    Audio.pauseTheme(); // pause the theme music
 	    stage.draw();
-		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
-		{
-			state = State.RESUME;
-			timeResumed = System.currentTimeMillis();
-            background.setVisible( false );
-		}
 	}
 
 	/**
@@ -243,7 +278,7 @@ public class GameScreen extends StagedScreen
 			projectile.draw( batch );
 		}
 		float fontX = cam.position.x - 100;
-		float fontY = cam.position.y + cam.viewportHeight / 3;
+		float fontY = cam.position.y + cam.viewportHeight * ZOOM / 3;
 		drawPoints();
 		setFontColor( fontX, fontY );
 		font.draw( batch,
@@ -256,11 +291,11 @@ public class GameScreen extends StagedScreen
 
 		if ( System.currentTimeMillis() - timeResumed > 2000 )
 		{
-			state = State.RUN;
+		    run();
 		}
 	}
 
-	/**
+    /**
 	 * Displays all characters and projectiles on the map and moves each of
 	 * them.
 	 * 
@@ -344,19 +379,15 @@ public class GameScreen extends StagedScreen
 		drawPoints();
 		batch.end();
 		renderer.end();
-		super.render( delta );
-
-		if ( Gdx.input.isKeyJustPressed( Input.Keys.ESCAPE ) )
-		{
-			state = State.PAUSE;
-			background.setVisible( true );
-		}
+        super.render( delta );
 	}
 	
 	private void setMatrixAndCam()
 	{
-        cam.position.x = player.getX();
-        cam.position.y = player.getY();
+        Gdx.gl.glClearColor( 0, 0, 0, 1 );
+        Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
+        cam.position.x = player.getX() + player.getWidth() / 2;
+        cam.position.y = player.getY() + player.getHeight() / 2;
         cam.update();
 
         // tell the SpriteBatch to render in the
@@ -423,7 +454,7 @@ public class GameScreen extends StagedScreen
 					c.setPosition( x, y );
 			}
 		}
-		c.setAnimations(); // TODO be aware of the animation bugs produced by this line
+		c.setAnimations(); // be aware of the animation bugs produced by this line
 		c.draw( batch );
 	}
 
@@ -455,6 +486,57 @@ public class GameScreen extends StagedScreen
 	{
 	    font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
+	
+	/**
+	 * @see com.badlogic.gdx.ScreenAdapter#pause()
+	 */
+	@Override
+	public void pause() { // TODO note: these methods will affect game when going in and out of focus
+        Audio.pauseTheme(); // pause the theme music
+        state = State.PAUSE;
+        background.setVisible( true );
+        settingsButton.setDisabled( false );
+        settingsButton.setVisible( true );
+        backButton.setDisabled( false );
+        backButton.setVisible( true );
+	}
+	
+	/**
+	 * @see com.badlogic.gdx.ScreenAdapter#resume()
+	 */
+	@Override
+	public void resume() {
+        state = State.RESUME;
+        timeResumed = System.currentTimeMillis();
+        background.setVisible( false );
+        settingsButton.setDisabled( true );
+        settingsButton.setVisible( false );
+        backButton.setDisabled( true );
+        backButton.setVisible( false );
+	}
+
+    private void run()
+    {
+        state = State.RUN;
+        Audio.playTheme();
+    }
+	
+	/**
+	 * Toggles the game state based on what it is
+	 */
+	public void toggleGameState() {
+	    switch ( state )
+	    {
+	        case RUN:
+	            pause();
+	            break;
+	        case PAUSE:
+	            resume();
+	            break;
+	        case RESUME:
+	            break;
+	    }
+	}
 
     /**
      * Resizes the screen according to both the resolution and any resize 
@@ -479,7 +561,8 @@ public class GameScreen extends StagedScreen
 	    super.dispose();
 		map.dispose();
 		renderer.dispose();
-        player.getTexture().dispose();
+		if ( player.getTexture() != null )
+		    player.getTexture().dispose();
         for ( Projectile p : projectiles )
             p.getTexture().dispose();
         for ( Character e : sprites )

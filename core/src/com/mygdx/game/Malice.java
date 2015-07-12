@@ -51,7 +51,7 @@ public class Malice extends Game
         Options.initialize();
         Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
                         ? new AndroidController( Options.SKIN ) 
-                        : new DesktopController();
+                        : new DesktopController( this );
                         
 	    mainMenu = new MainMenu( this, Options.SKIN );
 	    optionsScreen = new OptionsScreen( this, Options.SKIN );
