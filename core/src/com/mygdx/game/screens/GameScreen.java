@@ -42,21 +42,20 @@ import com.mygdx.game.world.Map;
  */
 public class GameScreen extends StagedScreen
 {
+    /**
+     * Size of the map
+     */
+    public final static int MAP_SIZE = 50;
+    
+    /**
+     * The Zoom of the Camera
+     */
+    public static final float ZOOM = 0.8f;
+    
     private Batch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
-	
-    /**
-     * Volume of this screen
-     */
-    private static final int VOLUME = 40;
-
-	/**
-	 * Size of the map
-	 */
-	public final static int MAP_SIZE = 50;
-	
-	
+    
 	private Map map;
 	private Player player;
 	private ArrayList<Character> sprites;
@@ -111,8 +110,8 @@ public class GameScreen extends StagedScreen
         enemyMinCount = 10;
         
         map = new Map( MAP_SIZE, MAP_SIZE );
-        cam = new OrthographicCamera( 1280, 720 );
-        // cam.setToOrtho(false, 1280, 720);
+        cam = (OrthographicCamera)stage.getCamera();
+        cam.zoom = ZOOM;
         player = new Player( c );
 	}
     
@@ -290,8 +289,6 @@ public class GameScreen extends StagedScreen
 	{
 	    setMatrixAndCam();
 
-        Audio.changePercent( VOLUME );
-
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
 		map.draw( batch );
@@ -435,8 +432,8 @@ public class GameScreen extends StagedScreen
 	 */
 	private void drawPoints()
 	{
-		float fontX = cam.position.x - cam.viewportWidth / 2;
-		float fontY = cam.position.y + cam.viewportHeight / 2;
+		float fontX = cam.position.x - cam.viewportWidth * ZOOM / 2;
+		float fontY = cam.position.y + cam.viewportHeight * ZOOM / 2;
 		setFontColor( fontX, fontY );
 		font.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
 	}
@@ -457,15 +454,6 @@ public class GameScreen extends StagedScreen
 	{
 	    font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
-
-	/**
-	 * @see com.badlogic.gdx.Screen#resize(int, int)
-	 */
-    @Override
-    public void resize( int width, int height ) {
-        cam.setToOrtho( false, width, height );
-        super.resize( width, height );
-    }
 
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.
