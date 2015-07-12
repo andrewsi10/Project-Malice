@@ -110,7 +110,8 @@ public class GameScreen extends StagedScreen
         enemyMinCount = 10;
         
         map = new Map( MAP_SIZE, MAP_SIZE );
-        cam = (OrthographicCamera)stage.getCamera();
+//        cam = (OrthographicCamera)stage.getCamera();
+        cam = new OrthographicCamera();
         cam.zoom = ZOOM;
         player = new Player( c );
 	}
@@ -454,6 +455,18 @@ public class GameScreen extends StagedScreen
 	{
 	    font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
+
+    /**
+     * Resizes the screen according to both the resolution and any resize 
+     * changes
+     * 
+     * @see com.badlogic.gdx.Screen#resize(int, int)
+     */
+    @Override
+    public void resize( int width, int height ) {
+        cam.setToOrtho( false, width, height );
+        super.resize( width, height );
+    }
 
 	/**
 	 * Removes the Map, SpriteBatch, and Font to prevent memory leakage.
