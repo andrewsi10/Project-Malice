@@ -19,10 +19,9 @@ public class DesktopController extends Controller
             Input.Keys.D, Input.Keys.S, Input.Keys.A, };
     
     private boolean[] isKeyPressed;
-    private final Malice game;
     
     public DesktopController( Malice g ) {
-        game = g;
+        super( g );
         reset();
     }
 

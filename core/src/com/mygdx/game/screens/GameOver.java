@@ -1,12 +1,9 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -31,17 +28,9 @@ import com.mygdx.game.Malice;
  */
 public class GameOver extends StagedScreen
 {
-    public static final GlyphLayout LAYOUT = new GlyphLayout();
-    
-    private Batch batch;
-    private BitmapFont font;
-    
 	private TextButton retryButton, switchButton, leaderButton, backButton;
 	private TextField textField;
-	private boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-	private float fontScale = 1.7f;
-	
-	private String message;
+	private Label message;
 
 	/**
 	 * Creates a GameOver screen and stores the Malice object that created this
@@ -60,14 +49,8 @@ public class GameOver extends StagedScreen
 	public GameOver( Malice g, Skin s )
 	{
 	    super( g, s, -1 );
-	    font = s.getFont( "default" );
-        batch = stage.getBatch();
 
         switchButton = new TextButton( "Switch Characters", skin ); 
-        if ( isAndroid )
-        {
-        	switchButton.getLabel().setFontScale( fontScale, fontScale );
-        }
         switchButton.setPosition(
             Gdx.graphics.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 3 );
@@ -80,11 +63,7 @@ public class GameOver extends StagedScreen
             }
         } );
         
-        leaderButton = new TextButton( "Leader Board", skin ); 
-        if ( isAndroid )
-        {
-        	leaderButton.getLabel().setFontScale( fontScale, fontScale );
-        }
+        leaderButton = new TextButton( "Leader Board", skin );
         leaderButton.setPosition(
                 Gdx.graphics.getWidth() / 3 - leaderButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -97,11 +76,7 @@ public class GameOver extends StagedScreen
             }
         } );
         
-        backButton = new TextButton( "Back To Main Menu", skin ); 
-        if ( isAndroid )
-        {
-        	backButton.getLabel().setFontScale( fontScale, fontScale );
-        }
+        backButton = new TextButton( "Back To Main Menu", skin );
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 2 / 3 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 6 );
@@ -113,10 +88,21 @@ public class GameOver extends StagedScreen
                 backButton.toggle();
             }
         } );
+        
+        message = new Label( "", skin, "label" );
+        message.setColor( Color.WHITE );
 
+        if ( isAndroid )
+        {
+            switchButton.getLabel().setFontScale( fontScale );
+            leaderButton.getLabel().setFontScale( fontScale );
+            backButton.getLabel().setFontScale( fontScale );
+            message.setFontScale( fontScale );
+        }
         stage.addActor( switchButton );
         stage.addActor( leaderButton );
         stage.addActor( backButton );
+        stage.addActor( message );
 	}
     
     /**
@@ -127,16 +113,17 @@ public class GameOver extends StagedScreen
      */
 	public GameOver update( final int points, int level )
 	{
-	    message = "You earned " + points + " points and reached level " + level
-	                    + ". Better luck next time!";
-	    LAYOUT.setText( font, message );
+	    message.setText( "You earned " + points + " points and reached level " 
+	                    + level + ". Better luck next time!" );
+        message.setPosition( Gdx.graphics.getWidth() / 2 - message.getPrefWidth() / 2, 
+                             Gdx.graphics.getHeight() * 67 / 100 );
         
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
         retryButton = new TextButton( "Try Again", skin );
         if ( isAndroid )
         {
-        	retryButton.getLabel().setFontScale( fontScale, fontScale);
+        	retryButton.getLabel().setFontScale( fontScale );
         }
         retryButton.setPosition(
             Gdx.graphics.getWidth() / 3 - retryButton.getWidth() / 2,
@@ -172,37 +159,5 @@ public class GameOver extends StagedScreen
         stage.addActor( textField );
         stage.addActor( retryButton );
 	    return this;
-	}
-	
-	/**
-	 * Shows the Game Over screen by displaying the background image and the
-	 * three buttons the user can select.
-	 * 
-	 * Sets up the Stage and background image and buttons.
-	 * 
-	 * @see com.badlogic.gdx.Screen#show()
-	 */
-	@Override
-	public void show()
-	{
-	    super.show();
-	    font.setColor( Color.WHITE );
-	}
-
-	/**
-	 * Displays the amount of points the player received and the level that the
-	 * player reached.
-	 * 
-	 * @see com.badlogic.gdx.Screen#render(float)
-	 */
-	@Override
-	public void render( float delta )
-	{
-	    super.render( delta );
-		batch.begin();
-		font.draw( batch, LAYOUT, 
-		    Gdx.graphics.getWidth() / 2 - LAYOUT.width / 2, 
-		    Gdx.graphics.getHeight() * 67 / 100 );
-		batch.end();
 	}
 }

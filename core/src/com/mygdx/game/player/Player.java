@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Controller;
@@ -64,6 +65,8 @@ public class Player extends Character {
 
     private Controller controller;
 	private int playerPoints;
+	
+	private Label pointsLabel;
 
 	/**
 	 * The constructor for player. The first parameter is used to reference the
@@ -82,6 +85,8 @@ public class Player extends Character {
 	    super( Color.GREEN );
         controller = c;
         setExpToLevel( 100 );
+        pointsLabel = new Label( "", SKIN, "label" );
+        updatePointsLabel();
 	}
 
 	/**
@@ -152,6 +157,7 @@ public class Player extends Character {
 	 */
 	public void increasePoints() {
 		playerPoints += 10;
+		updatePointsLabel();
 	}
 
 	/**
@@ -170,6 +176,10 @@ public class Player extends Character {
 			setExpToLevel(getExpToLevel() * getCurrentLevel() / 2);
 		}
 	}
+	
+	public void updatePointsLabel() {
+	    pointsLabel.setText( "POINTS: " + playerPoints );
+	}
 
 	// --------------------Getters & Setters------------------ //
 
@@ -181,5 +191,16 @@ public class Player extends Character {
 	public int getPoints() {
 		return playerPoints;
 	}
-
+	
+	/**
+	 * Returns a Label where the text of the Label will display:
+	 * 
+	 * "POINTS: " + this player's points
+	 * 
+	 * Positioning, drawing, and Color must be managed by Screen
+	 * @return pointsLabel
+	 */
+	public Label getPointsLabel() {
+	    return pointsLabel;
+	}
 }

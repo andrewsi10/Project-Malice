@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,10 +37,12 @@ public class StagedScreen extends ScreenAdapter
      */
     private final int VOLUME;
     
+    public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
+    public static final float fontScale = 1.7f;
+    
     protected final Malice game;
     protected Skin skin;
     protected Stage stage;
-    
     protected Image background;
     
     /**

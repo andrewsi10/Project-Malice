@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,9 +22,7 @@ import com.mygdx.game.Malice;
  */
 public class MainMenu extends StagedScreen
 {
-	private TextButton playButton, leaderButton, optionsButton, exitButton;
-	private boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-	private float fontScale = (float) 1.7;
+	private TextButton playButton, leaderButton, settingsButton, exitButton;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -40,10 +37,6 @@ public class MainMenu extends StagedScreen
 	{
 	    super( g, s, 55 );
         playButton = new TextButton( "Play", skin );
-        if ( isAndroid )
-        {
-            playButton.getLabel().setFontScale( fontScale, fontScale );
-        }
         playButton.setPosition(
             Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 );
@@ -57,10 +50,6 @@ public class MainMenu extends StagedScreen
         } );
         
         leaderButton = new TextButton( "Leader Board", skin );
-        if ( isAndroid )
-        {
-        	leaderButton.getLabel().setFontScale( fontScale, fontScale );
-        }
         leaderButton.setPosition(
             Gdx.graphics.getWidth() / 2 - leaderButton.getWidth() / 2,
             Gdx.graphics.getHeight() * 3 / 8 );
@@ -73,27 +62,19 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        optionsButton = new TextButton( "Settings", skin ); 
-        optionsButton.setSize( 150, 96 );
-        if ( isAndroid )
-        {
-            optionsButton.getLabel().setFontScale( fontScale, fontScale );
-        }
-        optionsButton.setPosition( Gdx.graphics.getWidth() - optionsButton.getWidth(), 0 );
-        optionsButton.addListener( new ClickListener() {
+        settingsButton = new TextButton( "Settings", skin ); 
+        settingsButton.setSize( 150, 96 );
+        settingsButton.setPosition( Gdx.graphics.getWidth() - settingsButton.getWidth(), 0 );
+        settingsButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
                 game.setScreen( game.optionsScreen.update( game.mainMenu ) );
-                optionsButton.toggle();
+                settingsButton.toggle();
             }
         } );
 
         exitButton = new TextButton( "Exit", skin );
-        if ( isAndroid )
-        {
-            exitButton.getLabel().setFontScale( fontScale, fontScale );
-        }
         exitButton.setPosition(
             Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
             Gdx.graphics.getHeight() / 4 );
@@ -104,10 +85,17 @@ public class MainMenu extends StagedScreen
                 Gdx.app.exit();
             }
         } );
-        
+
+        if ( isAndroid )
+        {
+            playButton.getLabel().setFontScale( fontScale );
+            leaderButton.getLabel().setFontScale( fontScale );
+            settingsButton.getLabel().setFontScale( fontScale );
+            exitButton.getLabel().setFontScale( fontScale );
+        }
         stage.addActor( playButton );
         stage.addActor( leaderButton );
-        stage.addActor( optionsButton );
+        stage.addActor( settingsButton );
         stage.addActor( exitButton );
 	}
 }

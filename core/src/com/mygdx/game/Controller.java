@@ -14,6 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  */
 public abstract class Controller extends Stage
 {
+    protected final Malice game;
+    
+    public Controller ( Malice g ) {
+        game = g;
+    }
+    
     /**
      * Returns direction to go based on key input and an array that stores input
      * values (Used by Player class)
@@ -32,5 +38,5 @@ public abstract class Controller extends Stage
     /**
      * Called to reset the controller when the player is switched
      */
-    public abstract void reset();
+    public void reset() {}
 }

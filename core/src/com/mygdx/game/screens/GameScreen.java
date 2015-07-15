@@ -8,11 +8,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -52,7 +51,7 @@ public class GameScreen extends StagedScreen
     public final static int MAP_SIZE = 50;
     
     /**
-     * The Zoom of the Camera
+     * The Zoom of the Camera, set in Options/OptionsScreen classes
      */
     public static float ZOOM;
 
@@ -64,10 +63,9 @@ public class GameScreen extends StagedScreen
 	private Player player;
 	private ArrayList<Character> sprites;
 	private ArrayList<Projectile> projectiles;
-	private BitmapFont font;
 	
-	private Button pauseButton;
 	private TextButton settingsButton, backButton;
+	private Label resumeLabel, pointsLabel;
 
 	/**
 	 * Enum for handling the various states of the game screen.
@@ -89,8 +87,7 @@ public class GameScreen extends StagedScreen
 	}
 
 	private State state;
-	private int enemyMaxCount;
-	private int enemyMinCount;
+    private int enemyMinCount, enemyMaxCount;
 	private long timeResumed;
 
 	/**
@@ -106,17 +103,17 @@ public class GameScreen extends StagedScreen
 	public GameScreen( Malice g, Skin s, Controller c )
 	{
 	    super( g, s, c, "img/pausescreen.png", 40 );
-	    font = s.getFont( "default" );
-	    pauseButton = new Button( skin );
-	    pauseButton.setSize( 100, 100 );
-	    pauseButton.setPosition( stage.getWidth() - pauseButton.getWidth(), 
-	                             stage.getHeight() - pauseButton.getHeight() );
-	    pauseButton.addListener( new ClickListener() {
-	        @Override
-	        public void clicked( InputEvent event, float x, float y ) {
-	            game.gameScreen.toggleGameState();
-	        }
-	    });
+        enemyMinCount = 10; enemyMaxCount = -2;
+        
+        projectiles = new ArrayList<Projectile>();
+        renderer = new ShapeRenderer();
+        batch = stage.getBatch();
+        sprites = new ArrayList<Character>();
+        
+        map = new Map( MAP_SIZE, MAP_SIZE );
+        cam = new OrthographicCamera();
+        player = new Player( c );
+        
 	    settingsButton = new TextButton( "Settings", skin );
 	    settingsButton.setPosition( stage.getWidth() / 2 - settingsButton.getWidth() / 2, 
 	                                stage.getHeight() / 2 );
@@ -129,7 +126,7 @@ public class GameScreen extends StagedScreen
 	    } );
 	    backButton = new TextButton( "Back to Main Menu", skin );
 	    backButton.setPosition( stage.getWidth() / 2 - backButton.getWidth() / 2, 
-                                    stage.getHeight() / 4 );
+                                stage.getHeight() / 4 );
 	    backButton.addListener( new ClickListener() {
             @Override
             public void clicked( InputEvent event, float x, float y ) {
@@ -137,22 +134,24 @@ public class GameScreen extends StagedScreen
                 backButton.toggle();
             }
         } );
-	    stage.addActor( pauseButton );
+	    
+	    resumeLabel = new Label( "", skin, "label" );
+	    resumeLabel.setPosition( stage.getWidth() / 2 - 100, 
+	                             stage.getHeight() * 2 / 3 );
+	 // this screen will manage the color, positioning, and drawing of this label:
+	    pointsLabel = player.getPointsLabel(); 
+	    pointsLabel.setPosition( 2, stage.getHeight() - pointsLabel.getPrefHeight() / 2 );
+	    
+	    if ( isAndroid ) {
+	        settingsButton.getLabel().setFontScale( fontScale );
+	        backButton.getLabel().setFontScale( fontScale );
+	        resumeLabel.setFontScale( fontScale );
+	        pointsLabel.setFontScale( fontScale );
+	    }
+	    stage.addActor( resumeLabel );
+	    stage.addActor( pointsLabel );
 	    stage.addActor( settingsButton );
         stage.addActor( backButton );
-		
-        projectiles = new ArrayList<Projectile>();
-        renderer = new ShapeRenderer();
-        batch = stage.getBatch();
-        sprites = new ArrayList<Character>();
-
-        enemyMaxCount = -2;
-        enemyMinCount = 10;
-        
-        map = new Map( MAP_SIZE, MAP_SIZE );
-//        cam = (OrthographicCamera)stage.getCamera();
-        cam = new OrthographicCamera();
-        player = new Player( c );
 	}
     
     /**
@@ -267,7 +266,6 @@ public class GameScreen extends StagedScreen
 		{
 			spawnEnemies();
 		}
-
 		for ( Character sprite : sprites )
 		{
 			sprite.draw( batch );
@@ -277,21 +275,19 @@ public class GameScreen extends StagedScreen
 		{
 			projectile.draw( batch );
 		}
+        batch.end();
+        renderer.end();
+        // set labels
 		float fontX = cam.position.x - 100;
 		float fontY = cam.position.y + cam.viewportHeight * ZOOM / 3;
-		drawPoints();
-		setFontColor( fontX, fontY );
-		font.draw( batch,
-				"Game resumes in "
-						+ ( 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000 )
-						+ " seconds", fontX, fontY );
-		batch.end();
-		renderer.end();
+		setPointsLabelColor();
+		setFontColor( resumeLabel, fontX, fontY );
+		long time = 1 + ( 2000 - System.currentTimeMillis() + timeResumed ) / 1000;
+		resumeLabel.setText( "Game resumes in " + time + " seconds" );
         stage.draw();
 
-		if ( System.currentTimeMillis() - timeResumed > 2000 )
-		{
-		    run();
+		if ( System.currentTimeMillis() - timeResumed > 2000 ) {
+		    toggleGameState();
 		}
 	}
 
@@ -333,7 +329,6 @@ public class GameScreen extends StagedScreen
 		{
 			spawnEnemies();
 		}
-
 		for ( Character sprite : sprites )
 		{
 			moveSprite( sprite );
@@ -359,7 +354,7 @@ public class GameScreen extends StagedScreen
 							player.increasePoints();
 							player.increaseExp( sprite.getExperience() );
 							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
-						} else if ( sprite instanceof Player )
+						} else // if ( sprite instanceof Player )
 						{
 						    Audio.stopTheme(); // stops the theme music
 							game.setScreen( game.gameOver.update( 
@@ -376,9 +371,9 @@ public class GameScreen extends StagedScreen
 				i--;
 			}
 		}
-		drawPoints();
-		batch.end();
-		renderer.end();
+        batch.end();
+        renderer.end();
+		setPointsLabelColor();
         super.render( delta );
 	}
 	
@@ -462,12 +457,11 @@ public class GameScreen extends StagedScreen
 	 * Draws the number of points the player has at the top left of the game
 	 * screen.
 	 */
-	private void drawPoints()
+	private void setPointsLabelColor()
 	{
 		float fontX = cam.position.x - cam.viewportWidth * ZOOM / 2;
 		float fontY = cam.position.y + cam.viewportHeight * ZOOM / 2;
-		setFontColor( fontX, fontY );
-		font.draw( batch, "POINTS: " + player.getPoints(), fontX, fontY );
+		setFontColor( pointsLabel, fontX, fontY );
 	}
 
 	/**
@@ -482,9 +476,9 @@ public class GameScreen extends StagedScreen
 	 * @param fontY
 	 *            y coordinate of the font location
 	 */
-	private void setFontColor(float fontX, float fontY)
+	private void setFontColor( Label label, float fontX, float fontY)
 	{
-	    font.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
+	    label.setColor( map.inPixelBounds( fontX, fontY ) ? Color.BLACK : Color.WHITE );
 	}
 	
 	/**
@@ -499,6 +493,8 @@ public class GameScreen extends StagedScreen
         settingsButton.setVisible( true );
         backButton.setDisabled( false );
         backButton.setVisible( true );
+        
+        pointsLabel.setVisible( false );
 	}
 	
 	/**
@@ -513,12 +509,16 @@ public class GameScreen extends StagedScreen
         settingsButton.setVisible( false );
         backButton.setDisabled( true );
         backButton.setVisible( false );
+        
+        pointsLabel.setVisible( true );
+        resumeLabel.setVisible( true );
 	}
 
     private void run()
     {
         state = State.RUN;
         Audio.playTheme();
+        resumeLabel.setVisible( false );
     }
 	
 	/**
@@ -534,6 +534,7 @@ public class GameScreen extends StagedScreen
 	            resume();
 	            break;
 	        case RESUME:
+	            run();
 	            break;
 	    }
 	}

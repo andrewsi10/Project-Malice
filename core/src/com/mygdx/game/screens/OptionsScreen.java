@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,8 +20,6 @@ public class OptionsScreen extends StagedScreen
     private TextButton musicButton, soundButton, backButton;
     private Slider musicSlider, soundSlider, zoomSlider;
     private Label zoomLabel;
-    private boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-    private float fontScale = 1.7f;
     
     /**
      * Suggested outline:
@@ -128,9 +125,9 @@ public class OptionsScreen extends StagedScreen
         // Additional properties
         if ( isAndroid )
         {
-            musicButton.getLabel().setFontScale( fontScale, fontScale );
-            soundButton.getLabel().setFontScale( fontScale, fontScale );
-            zoomLabel.setFontScale( fontScale, fontScale );
+            musicButton.getLabel().setFontScale( fontScale );
+            soundButton.getLabel().setFontScale( fontScale );
+            zoomLabel.setFontScale( fontScale );
         }
         
         // add Actors
@@ -155,7 +152,7 @@ public class OptionsScreen extends StagedScreen
         backButton = new TextButton( "Back", skin ); 
         if ( isAndroid )
         {
-        	backButton.getLabel().setFontScale( fontScale, fontScale );
+        	backButton.getLabel().setFontScale( fontScale );
         }
         backButton.setPosition(
                 Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,

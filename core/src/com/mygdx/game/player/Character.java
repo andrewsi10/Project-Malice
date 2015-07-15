@@ -2,12 +2,14 @@ package com.mygdx.game.player;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Options;
@@ -28,13 +30,19 @@ public abstract class Character extends AnimatedSprite {
 	 * Variable used to determine the height in pixels of the status bars
 	 */
 	public static final int BARHEIGHT = 5;
-	public static final BitmapFont FONT = Options.FONT;
-    public static final GlyphLayout LAYOUT = new GlyphLayout();
+	
+	// these variables are not simply static imported in case of changing, 
+	// though may be better to just staticly import them.
+	public static final Skin SKIN = Options.SKIN;
 
     public static final float FRAME_DURATION = 0.2f;
 
-	private Animation projectileAnimation;
+    public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
+    public static final float fontScale = 1.7f;
+
 	private Color hpColor;
+	
+	private Label levelLabel, hpLabel;
 
 	private int maxHp; // max health
 	private int currentHp; // current health
@@ -46,6 +54,7 @@ public abstract class Character extends AnimatedSprite {
 	private int reloadSpeed;
 	private double previousTime = 0;
 	private String projectile;
+    private Animation projectileAnimation;
 	
 	/**
 	 * Creates a Character with stats based on the parameters
@@ -85,6 +94,15 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public Character( Color hpColor ) {
         this.hpColor = hpColor;
+        levelLabel = new Label( "", SKIN, "label" );
+        levelLabel.setColor( Color.MAGENTA );
+        hpLabel = new Label( "", SKIN, "label" );
+        hpLabel.setColor( Color.MAROON );
+        
+        if ( isAndroid ) {
+            levelLabel.setFontScale( fontScale );
+            hpLabel.setFontScale( fontScale );
+        }
 	}
 
     /**
@@ -108,6 +126,9 @@ public abstract class Character extends AnimatedSprite {
         setSpeed( speed );
         this.reloadSpeed = reloadSpeed;
         resetDirection();
+
+        updateLevelLabel();
+        updateHpLabel();
     }
 
 	// --------------------- Art ----------------------//
@@ -136,16 +157,16 @@ public abstract class Character extends AnimatedSprite {
 		// note: merge if statements in order to make them appear at same time
 		// suggestion: should we make exp a vertical bar or make hp above
 		// sprite?
-		if (getCurrentHp() < getMaxHp()) {
+		if ( hpLabel.isVisible() ) {
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
 			renderer.setColor(hpColor);
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getCurrentHp()
 					/ getMaxHp(), hpH - 2);
-			FONT.setColor( Color.MAROON );
-			FONT.draw( batch, getCurrentHp() + "/" + getMaxHp(), hpX + hpW, hpY) ;
+			hpLabel.setPosition( hpX + hpW, hpY );
+			hpLabel.draw( batch, 1 );
 		}
-		if (getExperience() < getExpToLevel() && getExperience() > 0) {
+		if ( getExperience() < getExpToLevel() && getExperience() > 0 ) {
 			hpY -= BARHEIGHT - 2;
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
@@ -153,12 +174,10 @@ public abstract class Character extends AnimatedSprite {
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getExperience()
 					/ getExpToLevel(), hpH - 2);
 		}
-		if ( level > 0 ) {
-		    FONT.setColor( Color.MAGENTA );
-			LAYOUT.setText( FONT, "Level " + level );
-			FONT.draw( batch, LAYOUT, 
-			                getX() + ( getWidth() - LAYOUT.width ) / 2, 
-			                getY() + 1.8f * getHeight() );
+		if ( levelLabel.isVisible() ) {
+		    levelLabel.setPosition( getX() + ( getWidth() - levelLabel.getPrefWidth() ) / 2, 
+		                            getY() + 1.8f * getHeight() );
+		    levelLabel.draw( batch, 1 );
 		}
 	}
 
@@ -215,6 +234,7 @@ public abstract class Character extends AnimatedSprite {
 	public void increaseCurrentLevel() {
 		// might need balancing
 		level++;
+		updateLevelLabel();
 		Audio.playAudio( "levelup" );
 		int hpIncrement = (int)( 10 * ( getCurrentHp() / getMaxHp() + 1 ) );
 		increaseBdmg( 2 );
@@ -228,8 +248,9 @@ public abstract class Character extends AnimatedSprite {
 	 * @param i
 	 *            integer to increase maxHp by
 	 */
-	public void increaseMaxHp(int i) {
+	public void increaseMaxHp( int i ) {
 		maxHp += i;
+        updateHpLabel();
 	}
 
 	/**
@@ -239,10 +260,11 @@ public abstract class Character extends AnimatedSprite {
 	 * @param i
 	 *            integer to increase currentHp by
 	 */
-	public void increaseCurrentHp(int i) {
+	public void increaseCurrentHp( int i ) {
 	    currentHp += i;
 		if ( currentHp > maxHp )
 			currentHp = maxHp;
+        updateHpLabel();
 	}
 
 	/**
@@ -280,8 +302,9 @@ public abstract class Character extends AnimatedSprite {
 	 * @param damage
 	 *            value of damage taken
 	 */
-	public void takeDamage(int damage) {
+	public void takeDamage( int damage ) {
 		currentHp -= damage;
+        updateHpLabel();
 	}
 
 	/**
@@ -301,6 +324,22 @@ public abstract class Character extends AnimatedSprite {
 	public void setProjectile( String s, Animation a ) {
 	    projectile = s;
 	    projectileAnimation = a;
+	}
+	
+	/**
+	 * Updates the text and visibility of LevelLabel
+	 */
+	public void updateLevelLabel() {
+        levelLabel.setText( "Level " + level );
+        levelLabel.setVisible( level > 0 );
+	}
+
+    /**
+     * Updates the text and visibility of hpLabel
+     */
+	public void updateHpLabel() {
+        hpLabel.setText( getCurrentHp() + "/" + getMaxHp() );
+        hpLabel.setVisible( currentHp < maxHp );
 	}
 
 	// -----------------------Getters -----------------//

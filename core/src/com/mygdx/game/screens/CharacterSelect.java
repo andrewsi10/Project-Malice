@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -33,8 +32,6 @@ public class CharacterSelect extends StagedScreen
      *         that will be used for the buttons
      */
     private static final int NUMBUTTONS = Player.NAMES.length;
-    private boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-    private float fontScale = 1.7f;
 
 	private TextButton backButton, randomButton;
 
@@ -57,7 +54,7 @@ public class CharacterSelect extends StagedScreen
             final TextButton b = new TextButton( n.buttonName, skin );
             if ( isAndroid )
             {
-            	b.getLabel().setFontScale( fontScale, fontScale );
+            	b.getLabel().setFontScale( fontScale );
             }
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
@@ -73,10 +70,6 @@ public class CharacterSelect extends StagedScreen
             stage.addActor( b );
         }
         randomButton = new TextButton( "Random Character", skin );
-        if ( isAndroid )
-        {
-        	randomButton.getLabel().setFontScale( fontScale, fontScale );
-        }
         randomButton.setPosition(
                 Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
@@ -90,11 +83,7 @@ public class CharacterSelect extends StagedScreen
             }
         } );
 
-        backButton = new TextButton( "Back to Main Menu", skin ); 
-        if ( isAndroid )
-        {
-        	backButton.getLabel().setFontScale( fontScale, fontScale );
-        }
+        backButton = new TextButton( "Back to Main Menu", skin );
         backButton.setPosition(
                 Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 12 );
@@ -106,7 +95,12 @@ public class CharacterSelect extends StagedScreen
                 backButton.toggle();
             }
         } );
-        
+
+        if ( isAndroid )
+        {
+            randomButton.getLabel().setFontScale( fontScale );
+            backButton.getLabel().setFontScale( fontScale );
+        }
         stage.addActor( backButton );
         stage.addActor( randomButton );
 	}

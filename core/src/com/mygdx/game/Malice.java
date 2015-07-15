@@ -49,7 +49,7 @@ public class Malice extends Game
         Options.initialize();
         setScreen( splash );
         Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
-                        ? new AndroidController( Options.SKIN ) 
+                        ? new AndroidController( this, Options.SKIN ) 
                         : new DesktopController( this );
                         
 	    mainMenu = new MainMenu( this, Options.SKIN );
