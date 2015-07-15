@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
-import com.mygdx.game.Options;
 
 public class OptionsScreen extends StagedScreen
 {
@@ -167,12 +166,6 @@ public class OptionsScreen extends StagedScreen
         } );
         stage.addActor( backButton );
         return this;
-    }
-    
-    @Override
-    public void hide() {
-        Options.saveSettings();
-        super.hide();
     }
 
     @Override
