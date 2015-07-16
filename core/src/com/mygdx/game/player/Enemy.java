@@ -45,7 +45,7 @@ public class Enemy extends Character {
     /**
      * The margin of change for the Enemy to choose directions
      */
-    public static final int marginOfDelta = 30;
+    public static final int marginOfDelta = 10;
     public static final int travelTimeScalar = 100;
     public static final int minTravelTime = 4;
     
@@ -110,7 +110,7 @@ public class Enemy extends Character {
 		if ( inRange( deltaX, deltaY ) ) {
 	        // move towards the player
 			double newDir = 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
-			setDirection( newDir + getDirection() / marginOfDelta );
+			setDirection( newDir + ( getDirection() - 180 ) / marginOfDelta );
 			shoot( projectiles, newDir, time );
 		}
         translate();

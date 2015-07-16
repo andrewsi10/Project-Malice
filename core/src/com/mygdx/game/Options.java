@@ -26,11 +26,21 @@ import com.mygdx.game.world.Map;
  */
 public class Options
 {
+    /**
+     * Skin containing the resources for many of this game's assets
+     */
     public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-    public static final BitmapFont FONT = new BitmapFont();
+    private static final BitmapFont FONT = new BitmapFont();
     
+    /**
+     * The FileHandle for the settings file
+     */
     public static final FileHandle SETTINGS = Gdx.files.local( "settings.txt" );
     
+    /**
+     * Initializes Audio, SKIN, player EnumMaps, Enemy Animations, map biomes,
+     * and settings values from file
+     */
     public static void initialize()
     {
         Audio.initializeAudio();
@@ -64,11 +74,20 @@ public class Options
         setSettings( music, sound, zoom );
     }
     
+    /**
+     * Loads default settings
+     */
     public static void defaultSettings() {
         float zoom = Gdx.app.getType().equals( ApplicationType.Android ) ? 0.7f : 1.1f;
         setSettings( 100, 100, zoom );
     }
     
+    /**
+     * Settings settings based on parameters
+     * @param music music volume
+     * @param sound sound volume
+     * @param zoom zoom amount
+     */
     public static void setSettings( int music, int sound, float zoom ) {
         Audio.MUSIC_VOLUME = music;
         Audio.SOUND_VOLUME = sound;

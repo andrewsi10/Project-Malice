@@ -47,16 +47,34 @@ public class AnimatedSprite extends Sprite
          * @return nearest Direction
          */
         public static Direction nearestDirection( double dir ) {
-            int tol = 22; // tolerance (45 degrees / 2)
-            for ( int i = 1; i / 2 < DIRECTIONS.length - 1; i+=2 ) // TODO check for bugs
+            // rounds to nearest diagonal angle
+            for ( int i = 0; i < DIRECTIONS.length - 1; i++ )
             {
-                if ( dir < tol * i )
-                    return DIRECTIONS[i/2];
+                if ( i % 2 == 0 )
+                {
+                    if ( dir == DIRECTIONS[i].getDirection() ) 
+                        return DIRECTIONS[i];
+                }
+                else // if ( i % 2 == 1 )
+                {
+                    if ( dir < DIRECTIONS[i+1].getDirection() ) 
+                        return DIRECTIONS[i];
+                }
             }
-            return DIRECTIONS[0]; 
-            // note: collision will be slightly buggy (currently only affects Enemy) 
+            return NUMDEGREES;
+            
+            
+            // true rounding:
+            // collision will be slightly buggy (currently only affects Enemy) 
             // because all angles not EXACTLY the standard 4 directions should 
             // not be those 4 directions
+//            int tol = 22; // tolerance (45 degrees / 2)
+//            for ( int i = 1; i / 2 < DIRECTIONS.length - 1; i+=2 ) // TODO check for bugs
+//            {
+//                if ( dir < tol * i )
+//                    return DIRECTIONS[i/2];
+//            }
+//            return DIRECTIONS[0]; 
         }
     }
 
