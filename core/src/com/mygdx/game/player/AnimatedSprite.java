@@ -43,26 +43,19 @@ public class AnimatedSprite extends Sprite
         
         /**
          * Returns Direction closest to given angle where NORTH is 0 degrees
+         * 
+         * edit: rounds to nearest diagonal direction
          * @param dir angle
          * @return nearest Direction
          */
         public static Direction nearestDirection( double dir ) {
             // rounds to nearest diagonal angle
-            for ( int i = 0; i < DIRECTIONS.length - 1; i++ )
+            for ( int i = 1; i < DIRECTIONS.length - 1; i += 2 )
             {
-                if ( i % 2 == 0 )
-                {
-                    if ( dir == DIRECTIONS[i].getDirection() ) 
-                        return DIRECTIONS[i];
-                }
-                else // if ( i % 2 == 1 )
-                {
-                    if ( dir < DIRECTIONS[i+1].getDirection() ) 
-                        return DIRECTIONS[i];
-                }
+                if ( dir < DIRECTIONS[i+1].getDirection() ) 
+                    return DIRECTIONS[i];
             }
             return NUMDEGREES;
-            
             
             // true rounding:
             // collision will be slightly buggy (currently only affects Enemy) 
@@ -251,5 +244,21 @@ public class AnimatedSprite extends Sprite
       */
      public float getSpeed() {
          return moveSpeed;
+     }
+     
+     /**
+      * Returns the center x of this sprite
+      * @return x + width / 2
+      */
+     public float getCenterX() {
+         return this.getX() + this.getWidth() / 2;
+     }
+
+     /**
+      * Returns the center y of this sprite
+      * @return y + height / 2
+      */
+     public float getCenterY() {
+         return this.getY() + this.getHeight() / 2;
      }
 }

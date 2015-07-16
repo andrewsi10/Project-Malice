@@ -29,9 +29,7 @@ public class Projectile extends AnimatedSprite
 	 * game.
 	 * 
 	 * @param c Character that this Projectile originates from.
-	 * @param damage The damage that this Projectile will deal
-	 * @param distanceX the x distance used to determine slope
-	 * @param distanceY the y distance used to determine slope
+	 * @param dir direction this Projectile will go 
      * @param a continuous Animation for this Projectile
 	 */
 	public Projectile( Character c, double dir, Animation a )
@@ -40,9 +38,9 @@ public class Projectile extends AnimatedSprite
         this.myCharacter = c;
         
         setSpeed( 8 );
-        setSize(getWidth() / 3, getHeight() / 3);
-        setPosition(c.getX() + c.getWidth() / 2 - getWidth() / 2, 
-                    c.getY() + c.getHeight() / 2 - getHeight() / 2);
+        setSize( getWidth() / 3, getHeight() / 3 );
+        setPosition( c.getCenterX() - getWidth() / 2, 
+                     c.getCenterY() - getHeight() / 2 );
 	}
     public Projectile(Character c, float distanceX, float distanceY, Animation a)
     {

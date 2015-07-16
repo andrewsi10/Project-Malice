@@ -381,8 +381,8 @@ public class GameScreen extends StagedScreen
 	{
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
         Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
-        cam.position.x = player.getX() + player.getWidth() / 2;
-        cam.position.y = player.getY() + player.getHeight() / 2;
+        cam.position.x = player.getCenterX();
+        cam.position.y = player.getCenterY();
         cam.update();
 
         // tell the SpriteBatch to render in the

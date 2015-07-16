@@ -152,7 +152,7 @@ public abstract class Character extends AnimatedSprite {
 	public void drawBars(Batch batch, ShapeRenderer renderer) {
 		float hpW = BARWIDTH;
 		float hpH = BARHEIGHT;
-		float hpX = getX() + getWidth() / 2 - hpW / 2;
+		float hpX = getCenterX() - hpW / 2;
 		float hpY = getY() - BARHEIGHT;
 
 		// note: merge if statements in order to make them appear at same time
@@ -177,7 +177,7 @@ public abstract class Character extends AnimatedSprite {
 					/ getExpToLevel(), hpH - 2);
 		}
 		if ( levelLabel.isVisible() ) { // level > 0
-		    levelLabel.setPosition( getX() + ( getWidth() - levelLabel.getPrefWidth() ) / 2, 
+		    levelLabel.setPosition( getCenterX() - levelLabel.getPrefWidth() / 2, 
 		                            getY() + 1.8f * getHeight() );
 		    levelLabel.draw( batch, 1 );
 		}

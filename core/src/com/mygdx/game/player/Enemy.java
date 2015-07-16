@@ -43,7 +43,7 @@ public class Enemy extends Character {
     /**
      * The margin of change for the Enemy to choose directions
      */
-    public static final int marginOfDelta = 10;
+    public static final int marginOfDelta = 5;
     public static final int travelTimeScalar = 100;
     public static final int minTravelTime = 4;
     
@@ -51,6 +51,7 @@ public class Enemy extends Character {
     public static final int aggroDistance = 400;
     
 	private int travelTime;
+	private double tempDirection;
 
 	/**
 	 * Creates an Enemy with default stats:
@@ -98,15 +99,14 @@ public class Enemy extends Character {
 	public void move( Character character, ArrayList<Projectile> projectiles,
 			long time ) {
         setRandomDirection();
-        float deltaX = character.getX() - getX();
-        float deltaY = character.getY() - getY();
+        float deltaX = character.getCenterX() - getCenterX();
+        float deltaY = character.getCenterY() - getCenterY();
 		if ( inRange( deltaX, deltaY ) ) {
 	        // move towards the player
-			double newDir = 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
-			newDir += ( getDirection() - 180 ) / marginOfDelta; // random adjustment
-			newDir = ( newDir % 360 + 360 ) % 360; // perfect modding
+			double newDir = 90 + 360 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
+            shoot( projectiles, newDir, time );
+			newDir += ( tempDirection - 180 ) / marginOfDelta; // random adjustment
 			setDirection( newDir );
-			shoot( projectiles, newDir, time );
 		}
         translate();
         setAnimations();
@@ -119,7 +119,8 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-			setDirection( Math.random() * 360 * 1.25 - 90 ); // 90/450 chance of stopping
+		    tempDirection = Math.random() * 360;
+			setDirection( tempDirection );
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);
 		}
@@ -135,7 +136,7 @@ public class Enemy extends Character {
      * @param dy change in y
 	 * @return whether enemy is within aggroDistance
 	 */
-	public boolean inRange( float dx, float dy ) {
+	public static boolean inRange( float dx, float dy ) {
 		int distance = (int) Math.sqrt(dx * dx + dy * dy);
 		return distance <= aggroDistance;
 	}

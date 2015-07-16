@@ -16,6 +16,8 @@ import com.mygdx.game.Malice;
 
 public class OptionsScreen extends StagedScreen
 {
+    public static boolean hasChanged = false;
+    
     private TextButton musicButton, soundButton, backButton;
     private Slider musicSlider, soundSlider, zoomSlider;
     private Label zoomLabel;
@@ -56,6 +58,7 @@ public class OptionsScreen extends StagedScreen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                hasChanged = true;
                 Audio.MUSIC_VOLUME = Audio.isMusicMuted() ? 100 : 0;
                 musicSlider.setValue( Audio.MUSIC_VOLUME );
                 Audio.playTheme();
@@ -68,6 +71,7 @@ public class OptionsScreen extends StagedScreen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                hasChanged = true;
                 Audio.SOUND_VOLUME = Audio.isSoundMuted() ? 100 : 0;
                 soundSlider.setValue( Audio.SOUND_VOLUME );
                 Audio.playAudio( "levelup" );
@@ -83,6 +87,7 @@ public class OptionsScreen extends StagedScreen
             @Override
             public void changed( ChangeEvent event, Actor actor )
             {
+                hasChanged = true;
                 Slider slider = (Slider)actor;
                 Audio.MUSIC_VOLUME = (int)slider.getValue();
                 Audio.playTheme();
@@ -96,6 +101,7 @@ public class OptionsScreen extends StagedScreen
             @Override
             public void changed( ChangeEvent event, Actor actor )
             {
+                hasChanged = true;
                 Slider slider = (Slider)actor;
                 Audio.SOUND_VOLUME = (int)slider.getValue();
                 if ( !slider.isDragging() )
@@ -110,6 +116,7 @@ public class OptionsScreen extends StagedScreen
             @Override
             public void changed( ChangeEvent event, Actor actor )
             {
+                hasChanged = true;
                 Slider slider = (Slider)actor;
                 float value = (int)slider.getValue() / 100.0f;
                 if ( !slider.isDragging() )

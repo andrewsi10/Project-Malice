@@ -68,7 +68,8 @@ public class Malice extends Game
 	@Override
 	public void dispose() 
 	{
-        Options.saveSettings();
+	    if ( OptionsScreen.hasChanged )
+	        Options.saveSettings();
 	    this.splash.dispose();
 	    this.mainMenu.dispose();
 	    this.optionsScreen.dispose();
