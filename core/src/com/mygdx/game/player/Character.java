@@ -29,7 +29,8 @@ public abstract class Character extends AnimatedSprite {
 	/**
 	 * Variable used to determine the height in pixels of the status bars
 	 */
-	public static final int BARHEIGHT = 5;
+	public static final int BARHEIGHT = 7;
+	public static final int BARWIDTH = 80;
 	
 	// these variables are not simply static imported in case of changing, 
 	// though may be better to just staticly import them.
@@ -38,7 +39,7 @@ public abstract class Character extends AnimatedSprite {
     public static final float FRAME_DURATION = 0.2f;
 
     public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-    public static final float fontScale = 1.7f;
+    public static final float fontScale = 1.7f; //TODO make use of pixel density libgdx function so text size will scale with pixel density
 
 	private Color hpColor;
 	
@@ -149,9 +150,9 @@ public abstract class Character extends AnimatedSprite {
 	 *                 the bars
 	 */
 	public void drawBars(Batch batch, ShapeRenderer renderer) {
-		float hpW = getWidth();
+		float hpW = BARWIDTH;
 		float hpH = BARHEIGHT;
-		float hpX = getX();
+		float hpX = getX() + getWidth() / 2 - hpW / 2;
 		float hpY = getY() - BARHEIGHT;
 
 		// note: merge if statements in order to make them appear at same time
@@ -163,11 +164,11 @@ public abstract class Character extends AnimatedSprite {
 			renderer.setColor(hpColor);
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getCurrentHp()
 					/ getMaxHp(), hpH - 2);
-			hpLabel.setPosition( hpX + hpW, hpY );
+			hpLabel.setPosition( hpX + hpW + 2, hpY + BARHEIGHT / 2 );
 			hpLabel.draw( batch, 1 );
 		}
-		if ( getExperience() < getExpToLevel() && getExperience() > 0 ) {
-			hpY -= BARHEIGHT - 2;
+		if ( getExperience() < getExpToLevel() && getCurrentLevel() > 0 ) {
+			hpY -= BARHEIGHT + 3;
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
 			renderer.setColor(Color.CYAN);

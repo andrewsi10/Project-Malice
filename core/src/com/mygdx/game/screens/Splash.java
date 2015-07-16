@@ -43,7 +43,7 @@ public class Splash extends StagedScreen
 	{
 		elapsed += delta;
 		super.render( delta );
-		if ( elapsed > 5 )
+		if ( elapsed > 3 )
 		{
 			game.setScreen( game.mainMenu );
 		}
