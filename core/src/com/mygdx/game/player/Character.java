@@ -158,7 +158,7 @@ public abstract class Character extends AnimatedSprite {
 		// note: merge if statements in order to make them appear at same time
 		// suggestion: should we make exp a vertical bar or make hp above
 		// sprite?
-		if ( hpLabel.isVisible() ) {
+		if ( hpLabel.isVisible() ) { // currenHp < maxHp
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
 			renderer.setColor(hpColor);
@@ -167,7 +167,8 @@ public abstract class Character extends AnimatedSprite {
 			hpLabel.setPosition( hpX + hpW + 2, hpY + BARHEIGHT / 2 );
 			hpLabel.draw( batch, 1 );
 		}
-		if ( getExperience() < getExpToLevel() && getCurrentLevel() > 0 ) {
+		// if experience is between (0,expToLevel)
+		if ( getExperience() < getExpToLevel() && getExperience() > 0 ) {
 			hpY -= BARHEIGHT + 3;
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
@@ -175,7 +176,7 @@ public abstract class Character extends AnimatedSprite {
 			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getExperience()
 					/ getExpToLevel(), hpH - 2);
 		}
-		if ( levelLabel.isVisible() ) {
+		if ( levelLabel.isVisible() ) { // level > 0
 		    levelLabel.setPosition( getX() + ( getWidth() - levelLabel.getPrefWidth() ) / 2, 
 		                            getY() + 1.8f * getHeight() );
 		    levelLabel.draw( batch, 1 );

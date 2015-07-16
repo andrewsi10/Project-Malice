@@ -141,11 +141,9 @@ public class Player extends Character {
 	public void move(Character character, ArrayList<Projectile> projectiles,
 			long time) {
 		double dir = controller.getInputDirection();
-        if (dir >= 0) {
-            setDirection(dir);
-            translate();
-            setAnimations();
-        }
+		setDirection( dir );
+		translate();
+		setAnimations();
         
         dir = controller.getShootingDirection();
         if ( dir >= 0 )

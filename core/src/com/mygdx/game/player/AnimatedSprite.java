@@ -135,8 +135,11 @@ public class AnimatedSprite extends Sprite
       * different directions. Use stateTime to display the correct keyFrame and
       * update stateTime while the animation is not finished. Once the animation
       * is finished, set stateTime to 0.
+      * 
+      * Assumes no idle animations
       */
      public void setAnimations() {
+         if ( direction == -1 ) return; // assumes no idle animations
          Direction d = prevDirection;
          
          // can be changed into a loop
@@ -190,13 +193,15 @@ public class AnimatedSprite extends Sprite
      }
 
      /**
-      * Setter method for setDirection. Input will be modded by 8 so that
-      * direction will be a valid integer in the range [0, 8)
+      * Setter method for setDirection. Input will be modded by 360 so that
+      * direction will be a valid integer in the range [0, 360)
+      * 
+      * if dir < 0, sprite will not move and direction is set to -1
       * 
       * @param dir
       */
      public void setDirection( double dir ) {
-         direction = ( dir % 360 + 360 ) % 360 ;
+         direction = ( dir < 0 ) ? -1 : ( dir % 360 );
      }
      
      /**

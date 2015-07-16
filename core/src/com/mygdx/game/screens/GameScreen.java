@@ -438,15 +438,18 @@ public class GameScreen extends StagedScreen
 		{
 		    int dir = c.getRoundedDirection(); // TODO fix glitchy collision
 			c.setPosition( x, y );
-			c.setDirection( dir - 45 );
-			c.translate();
-			if ( map.isCollidingWithWall( c ) )
+			if ( c.getDirection() % 90 != 0 )
 			{
-				c.setPosition( x, y );
-				c.setDirection( dir + 45 );
-				c.translate();
-				if ( map.isCollidingWithWall( c ) )
-					c.setPosition( x, y );
+			    c.setDirection( dir - 45 );
+			    c.translate();
+			    if ( map.isCollidingWithWall( c ) )
+			    {
+			        c.setPosition( x, y );
+			        c.setDirection( dir + 45 );
+			        c.translate();
+			        if ( map.isCollidingWithWall( c ) )
+			            c.setPosition( x, y );
+			    }
 			}
 		}
 		c.setAnimations(); // be aware of the animation bugs produced by this line

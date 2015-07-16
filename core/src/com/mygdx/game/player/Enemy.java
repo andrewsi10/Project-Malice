@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
-import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
-
 /**
  *  This class represents an Enemy in the game that will attack the Player when
  *  conditions are met. Uses basic AI programming
@@ -69,11 +67,6 @@ public class Enemy extends Character {
         super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
-
-//    public Enemy( Animation a ) {
-//        super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, a );
-//        setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
-//    }
     
 	/**
 	 * Constructor used for testing. Initialize experience to 20, speed to 3,
@@ -110,7 +103,9 @@ public class Enemy extends Character {
 		if ( inRange( deltaX, deltaY ) ) {
 	        // move towards the player
 			double newDir = 90 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
-			setDirection( newDir + ( getDirection() - 180 ) / marginOfDelta );
+			newDir += ( getDirection() - 180 ) / marginOfDelta; // random adjustment
+			newDir = ( newDir % 360 + 360 ) % 360; // perfect modding
+			setDirection( newDir );
 			shoot( projectiles, newDir, time );
 		}
         translate();
@@ -124,7 +119,7 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-			setDirection( Math.random() * NUMDEGREES.getDirection() );
+			setDirection( Math.random() * 360 * 1.25 - 90 ); // 90/450 chance of stopping
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);
 		}
