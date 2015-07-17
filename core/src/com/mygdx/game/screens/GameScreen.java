@@ -115,8 +115,28 @@ public class GameScreen extends StagedScreen
         player = new Player( c );
         
 	    settingsButton = new TextButton( "Settings", skin );
-	    settingsButton.setPosition( stage.getWidth() / 2 - settingsButton.getWidth() / 2, 
-	                                stage.getHeight() / 2 );
+        backButton = new TextButton( "Back to Main Menu", skin );
+        resumeLabel = new Label( "", skin, "label" );
+        pointsLabel = player.getPointsLabel(); // this screen will manage the color, positioning, and drawing of this label
+        
+        // Scaling
+        if ( isAndroid ) {
+            settingsButton.getLabel().setFontScale( fontScale );
+            backButton.getLabel().setFontScale( fontScale );
+            resumeLabel.setFontScale( fontScale );
+            pointsLabel.setFontScale( fontScale );
+        }
+        // xy -coordinates
+        float centerX = stage.getWidth() / 2;
+        float centerY = stage.getHeight() / 2;
+        
+        // Positioning
+        settingsButton.setPosition( centerX - settingsButton.getWidth() / 2, centerY );
+        backButton.setPosition( centerX - backButton.getWidth() / 2, centerY / 2 );
+        resumeLabel.setPosition( centerX - 100, stage.getHeight() * 2 / 3 );
+        pointsLabel.setPosition( 5, stage.getHeight() - pointsLabel.getPrefHeight() / 2 );
+        
+        // Listeners
 	    settingsButton.addListener( new ClickListener() {
             @Override
             public void clicked( InputEvent event, float x, float y ) {
@@ -124,9 +144,6 @@ public class GameScreen extends StagedScreen
                 settingsButton.toggle();
             }
 	    } );
-	    backButton = new TextButton( "Back to Main Menu", skin );
-	    backButton.setPosition( stage.getWidth() / 2 - backButton.getWidth() / 2, 
-                                stage.getHeight() / 4 );
 	    backButton.addListener( new ClickListener() {
             @Override
             public void clicked( InputEvent event, float x, float y ) {
@@ -135,19 +152,7 @@ public class GameScreen extends StagedScreen
             }
         } );
 	    
-	    resumeLabel = new Label( "", skin, "label" );
-	    resumeLabel.setPosition( stage.getWidth() / 2 - 100, 
-	                             stage.getHeight() * 2 / 3 );
-	 // this screen will manage the color, positioning, and drawing of this label:
-	    pointsLabel = player.getPointsLabel(); 
-	    pointsLabel.setPosition( 2, stage.getHeight() - pointsLabel.getPrefHeight() / 2 );
-	    
-	    if ( isAndroid ) {
-	        settingsButton.getLabel().setFontScale( fontScale );
-	        backButton.getLabel().setFontScale( fontScale );
-	        resumeLabel.setFontScale( fontScale );
-	        pointsLabel.setFontScale( fontScale );
-	    }
+	    // add Actors
 	    stage.addActor( resumeLabel );
 	    stage.addActor( pointsLabel );
 	    stage.addActor( settingsButton );

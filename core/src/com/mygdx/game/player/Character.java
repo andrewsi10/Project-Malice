@@ -159,11 +159,11 @@ public abstract class Character extends AnimatedSprite {
 		// suggestion: should we make exp a vertical bar or make hp above
 		// sprite?
 		if ( hpLabel.isVisible() ) { // currenHp < maxHp
-			renderer.setColor(Color.GRAY);
-			renderer.rect(hpX, hpY, hpW, hpH);
-			renderer.setColor(hpColor);
-			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getCurrentHp()
-					/ getMaxHp(), hpH - 2);
+			renderer.setColor( Color.GRAY );
+			renderer.rect( hpX, hpY, hpW, hpH );
+			renderer.setColor( hpColor );
+			renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * currentHp / maxHp, 
+			               hpH - 2 );
 			hpLabel.setPosition( hpX + hpW + 2, hpY + BARHEIGHT / 2 );
 			hpLabel.draw( batch, 1 );
 		}
@@ -238,7 +238,7 @@ public abstract class Character extends AnimatedSprite {
 		level++;
 		updateLevelLabel();
 		Audio.playAudio( "levelup" );
-		int hpIncrement = (int)( 10 * ( getCurrentHp() / getMaxHp() + 1 ) );
+		int hpIncrement = (int)( 10 * ( currentHp / maxHp + 1 ) );
 		increaseBdmg( 2 );
 		increaseMaxHp( 10 );
 		increaseCurrentHp( hpIncrement );
@@ -328,10 +328,11 @@ public abstract class Character extends AnimatedSprite {
 	    projectileAnimation = a;
 	}
 	
+	// ----------------------- Updaters ---------------------//
 	/**
 	 * Updates the text and visibility of LevelLabel
 	 */
-	public void updateLevelLabel() {
+	private void updateLevelLabel() {
         levelLabel.setText( "Level " + level );
         levelLabel.setVisible( level > 0 );
 	}
@@ -339,8 +340,8 @@ public abstract class Character extends AnimatedSprite {
     /**
      * Updates the text and visibility of hpLabel
      */
-	public void updateHpLabel() {
-        hpLabel.setText( getCurrentHp() + "/" + getMaxHp() );
+	private void updateHpLabel() {
+        hpLabel.setText( currentHp + "/" + maxHp );
         hpLabel.setVisible( currentHp < maxHp );
 	}
 
@@ -353,24 +354,6 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public int getCurrentLevel() {
 		return level;
-	}
-
-	/**
-	 * getter method for maxHp
-	 * 
-	 * @return maxHp
-	 */
-	public int getMaxHp() {
-		return maxHp;
-	}
-
-	/**
-	 * getter method for currentHp
-	 * 
-	 * @return currentHp
-	 */
-	public int getCurrentHp() {
-		return currentHp;
 	}
 
 	/**
@@ -392,30 +375,12 @@ public abstract class Character extends AnimatedSprite {
 	}
 
 	/**
-	 * getter method for baseDmg
-	 * 
-	 * @return baseDmg
-	 */
-	public int getBDmg() {
-		return baseDmg;
-	}
-
-	/**
 	 * damage dealt by Character
 	 * 
 	 * @return baseDmg with an added random value scaled by randMod
 	 */
 	public int getDamageDealt() {
 		return baseDmg + (int) (randMod * Math.random());
-	}
-
-	/**
-	 * getter method for reloadSpeed
-	 * 
-	 * @return reloadSpeed
-	 */
-	public int getReloadSpeed() {
-		return reloadSpeed;
 	}
 
 	// --------------------For Testing --------------//
@@ -447,5 +412,32 @@ public abstract class Character extends AnimatedSprite {
 		level = 1;
 		reloadSpeed = 1000;
 	}
+
+    /**
+     * getter method for maxHp
+     * 
+     * @return maxHp
+     */
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    /**
+     * getter method for currentHp
+     * 
+     * @return currentHp
+     */
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    /**
+     * getter method for baseDmg
+     * 
+     * @return baseDmg
+     */
+    public int getBDmg() {
+        return baseDmg;
+    }
 
 }

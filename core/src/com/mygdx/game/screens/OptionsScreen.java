@@ -20,7 +20,7 @@ public class OptionsScreen extends StagedScreen
     
     private TextButton musicButton, soundButton, backButton;
     private Slider musicSlider, soundSlider, zoomSlider;
-    private Label zoomLabel;
+    private Label titleLabel, zoomLabel;
     
     /**
      * Suggested outline:
@@ -36,6 +36,8 @@ public class OptionsScreen extends StagedScreen
         super( g, s, -1 );
         background.setVisible( false );
 
+        titleLabel = new Label( "Settings", s, "label" );
+        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s, "label" );
         // initialize buttons
         musicButton = new TextButton( "Music", skin );
         soundButton = new TextButton( "Sound", skin );
@@ -44,7 +46,9 @@ public class OptionsScreen extends StagedScreen
         soundSlider = new Slider( 0, 100, 5, false, skin );
         zoomSlider = new Slider( 20, 200, 5, false, skin ); // TODO
         
-        // xy -coordinates of music and sound settings
+        // xy -coordinates of settings
+        float centerX = Gdx.graphics.getWidth() / 2;
+        float titleY = Gdx.graphics.getHeight() * 7 / 8;
         float buttonX = Gdx.graphics.getWidth() / 4 - musicButton.getWidth() / 2;
         float musicY = Gdx.graphics.getHeight() * 2 / 3;
         float sliderX = Gdx.graphics.getWidth() / 2;
@@ -52,8 +56,34 @@ public class OptionsScreen extends StagedScreen
         float sliderWidth = musicButton.getWidth();
         float zoomY = Gdx.graphics.getHeight() / 3;
         
-        // set buttons
+        // Scaling
+        titleLabel.setFontScale( 4.0f ); // title scale
+        if ( isAndroid )
+        {
+            titleLabel.setFontScale( titleLabel.getFontScaleX() * fontScale );
+            musicButton.getLabel().setFontScale( fontScale );
+            soundButton.getLabel().setFontScale( fontScale );
+            zoomLabel.setFontScale( fontScale );
+        }
+        
+        // setPositions
+        titleLabel.setPosition( centerX - titleLabel.getPrefWidth() / 2, titleY );
+        zoomLabel.setPosition( buttonX, zoomY );
         musicButton.setPosition( buttonX, musicY );
+        soundButton.setPosition( buttonX, soundY );
+        musicSlider.setPosition( sliderX, musicY );
+        soundSlider.setPosition( sliderX, soundY );
+        zoomSlider.setPosition( sliderX, zoomY );
+
+        // set slider width and values
+        musicSlider.setWidth( sliderWidth );
+        musicSlider.setValue( Audio.MUSIC_VOLUME );
+        soundSlider.setWidth( sliderWidth );
+        soundSlider.setValue( Audio.SOUND_VOLUME );
+        zoomSlider.setWidth( sliderWidth );
+        zoomSlider.setValue( GameScreen.ZOOM * 100 );
+        
+        // set button Listeners
         musicButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -66,7 +96,6 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
-        soundButton.setPosition( buttonX, soundY );
         soundButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -79,10 +108,7 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
-        // set sliders
-        musicSlider.setWidth( sliderWidth );
-        musicSlider.setPosition( sliderX, musicY );
-        musicSlider.setValue( Audio.MUSIC_VOLUME );
+        // set Slider Listeners
         musicSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )
@@ -94,9 +120,6 @@ public class OptionsScreen extends StagedScreen
             }
         } );
 
-        soundSlider.setWidth( sliderWidth );
-        soundSlider.setPosition( sliderX, soundY );
-        soundSlider.setValue( Audio.SOUND_VOLUME );
         soundSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )
@@ -109,9 +132,6 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
-        zoomSlider.setWidth( sliderWidth );
-        zoomSlider.setPosition( sliderX, zoomY );
-        zoomSlider.setValue( GameScreen.ZOOM * 100 );
         zoomSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )
@@ -125,18 +145,8 @@ public class OptionsScreen extends StagedScreen
             }
         } );
         
-        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s, "label" );
-        zoomLabel.setPosition( buttonX, zoomY );
-        
-        // Additional properties
-        if ( isAndroid )
-        {
-            musicButton.getLabel().setFontScale( fontScale );
-            soundButton.getLabel().setFontScale( fontScale );
-            zoomLabel.setFontScale( fontScale );
-        }
-        
         // add Actors
+        stage.addActor( titleLabel );
         stage.addActor( musicButton );
         stage.addActor( soundButton );
         stage.addActor( musicSlider );
