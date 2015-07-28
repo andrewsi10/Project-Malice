@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -48,14 +49,14 @@ public class StagedScreen extends ScreenAdapter
     protected Stage stage;
     protected Image background;
     
-//    private static Viewport viewport = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
-//    private static Batch batch;
-//    
-//    public static Stage newStage() {
-//        if ( batch == null )
-//            return new Stage( viewport );
-//        else return new Stage( viewport, batch );
-//    }
+    private static Viewport VIEWPORT = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+    private static Batch BATCH;
+    
+    public static Stage newStage() {
+        Stage newStage = ( BATCH == null ) ? new Stage( VIEWPORT ) : new Stage( VIEWPORT, BATCH );
+        BATCH = newStage.getBatch(); // update batch
+        return newStage;
+    }
     
     /**
      * Used by all Menu Screens
@@ -69,7 +70,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, Skin s, int volume ) {
-        this( g, s, new Stage(), volume );
+        this( g, s, newStage(), volume );
     }
     private StagedScreen( Malice g, Skin s, Stage stg, int volume ) {
         this( g, s, stg, "img/titlescreen.png", volume );
@@ -89,7 +90,7 @@ public class StagedScreen extends ScreenAdapter
                                         new Texture( img ) ) ) ), volume );
     }
     private StagedScreen( Malice g, Skin s, Image img, int volume ) {
-        this( g, s, new Stage(), img, volume );
+        this( g, s, newStage(), img, volume );
     }
     
     /**
@@ -153,6 +154,8 @@ public class StagedScreen extends ScreenAdapter
     @Override
     public void render( float delta )
     {
+        Gdx.gl.glClearColor( 0, 0, 0, 1 );
+        Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
         stage.act();
         stage.draw();
     }
@@ -167,15 +170,14 @@ public class StagedScreen extends ScreenAdapter
      */
     @Override
     public void resize( int width, int height ) {
-        Viewport viewport = stage.getViewport();
 //        if ( width > height && viewport.getWorldWidth() < viewport.getWorldHeight() ) {
 //            viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
 //        }
 //        if ( width < height && viewport.getWorldWidth() > viewport.getWorldHeight() ) {
 //            viewport.setWorldSize( Malice.GAME_HEIGHT, Malice.GAME_WIDTH );
 //        }
-        viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
-        viewport.update(width, height, true);
+        VIEWPORT.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+        VIEWPORT.update( width, height, true );
     }
 
     /**

@@ -379,7 +379,8 @@ public class GameScreen extends StagedScreen
         batch.end();
         renderer.end();
 		setPointsLabelColor();
-        super.render( delta );
+        stage.act();
+        stage.draw();
 	}
 	
 	private void setMatrixAndCam()
