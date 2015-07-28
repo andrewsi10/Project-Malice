@@ -122,12 +122,8 @@ public class GameScreen extends StagedScreen
         pointsLabel = player.getPointsLabel(); // this screen will manage the color, positioning, and drawing of this label
         
         // Scaling
-        if ( isAndroid ) {
-            settingsButton.getLabel().setFontScale( fontScale );
-            backButton.getLabel().setFontScale( fontScale );
-            resumeLabel.setFontScale( fontScale );
-            pointsLabel.setFontScale( fontScale );
-        }
+        scaleLabels( settingsButton.getLabel(), backButton.getLabel(), resumeLabel, pointsLabel );
+
         // xy -coordinates
         float centerX = stage.getWidth() / 2;
         float centerY = stage.getHeight() / 2;

@@ -2,13 +2,13 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -40,8 +40,13 @@ public class StagedScreen extends ScreenAdapter
      */
     private final int VOLUME;
     
-    public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
+    public static final boolean isAndroid = Malice.isAndroid;
     public static final float fontScale = 1.7f;
+    public static void scaleLabels( Label... labels ) {
+        if ( isAndroid )
+            for ( Label l : labels )
+                l.setFontScale( l.getFontScaleX() * fontScale );
+    }
     
     protected final Malice game;
     protected Skin skin;

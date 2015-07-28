@@ -58,13 +58,7 @@ public class OptionsScreen extends StagedScreen
         
         // Scaling
         titleLabel.setFontScale( 4.0f ); // title scale
-        if ( isAndroid )
-        {
-            titleLabel.setFontScale( titleLabel.getFontScaleX() * fontScale );
-            musicButton.getLabel().setFontScale( fontScale );
-            soundButton.getLabel().setFontScale( fontScale );
-            zoomLabel.setFontScale( fontScale );
-        }
+        scaleLabels( titleLabel, musicButton.getLabel(), soundButton.getLabel(), zoomLabel );
         
         // setPositions
         titleLabel.setPosition( centerX - titleLabel.getPrefWidth() / 2, titleY );

@@ -2,8 +2,6 @@ package com.mygdx.game.player;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.screens.StagedScreen;
 import com.mygdx.game.Audio;
 
 /**
@@ -32,9 +31,6 @@ public abstract class Character extends AnimatedSprite {
 	public static final int BARWIDTH = 80;
 
     public static final float FRAME_DURATION = 0.2f;
-
-    public static final boolean isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
-    public static final float fontScale = 1.7f; //TODO make use of pixel density libgdx function so text size will scale with pixel density
 
 	private Color hpColor;
 	
@@ -95,10 +91,7 @@ public abstract class Character extends AnimatedSprite {
         hpLabel = new Label( "", skin, "label" );
         hpLabel.setColor( Color.MAROON );
         
-        if ( isAndroid ) {
-            levelLabel.setFontScale( fontScale );
-            hpLabel.setFontScale( fontScale );
-        }
+        StagedScreen.scaleLabels( levelLabel, hpLabel );
 	}
 
     /**

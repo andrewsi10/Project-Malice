@@ -32,6 +32,7 @@ public class Malice extends Game
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.1.9";
 	public static final int GAME_WIDTH = 1280;
 	public static final int GAME_HEIGHT = 720;
+    public static boolean isAndroid;
 
 	public Splash splash;
     public MainMenu mainMenu; // note: can use a single array for all the screens
@@ -51,11 +52,12 @@ public class Malice extends Game
 	@Override
 	public void create()
 	{
+	    isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
 	    viewport = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
 	    splash = new Splash( this );
         Options.initialize();
         setScreen( splash );
-        Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
+        Controller c = ( isAndroid ) 
                         ? new AndroidController( this, Options.SKIN ) 
                         : new DesktopController( this );
                         

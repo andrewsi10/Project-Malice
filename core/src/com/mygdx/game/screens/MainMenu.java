@@ -86,13 +86,9 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        if ( isAndroid )
-        {
-            playButton.getLabel().setFontScale( fontScale );
-            leaderButton.getLabel().setFontScale( fontScale );
-            settingsButton.getLabel().setFontScale( fontScale );
-            exitButton.getLabel().setFontScale( fontScale );
-        }
+        scaleLabels( playButton.getLabel(), leaderButton.getLabel(), 
+                     settingsButton.getLabel(), exitButton.getLabel() );
+        
         stage.addActor( playButton );
         stage.addActor( leaderButton );
         stage.addActor( settingsButton );

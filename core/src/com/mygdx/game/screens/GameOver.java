@@ -91,13 +91,8 @@ public class GameOver extends StagedScreen
         message = new Label( "", skin, "label" );
         message.setColor( Color.WHITE );
 
-        if ( isAndroid )
-        {
-            switchButton.getLabel().setFontScale( fontScale );
-            leaderButton.getLabel().setFontScale( fontScale );
-            backButton.getLabel().setFontScale( fontScale );
-            message.setFontScale( fontScale );
-        }
+        scaleLabels( switchButton.getLabel(), leaderButton.getLabel(), backButton.getLabel(), message );
+        
         stage.addActor( switchButton );
         stage.addActor( leaderButton );
         stage.addActor( backButton );
@@ -120,10 +115,7 @@ public class GameOver extends StagedScreen
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
         retryButton = new TextButton( "Try Again", skin );
-        if ( isAndroid )
-        {
-        	retryButton.getLabel().setFontScale( fontScale );
-        }
+        scaleLabels( retryButton.getLabel() );
         retryButton.setPosition(
             stage.getWidth() / 3 - retryButton.getWidth() / 2,
             stage.getHeight() / 3 );

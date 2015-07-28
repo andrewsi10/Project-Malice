@@ -96,11 +96,8 @@ public class CharacterSelect extends StagedScreen
             }
         } );
 
-        if ( isAndroid )
-        {
-            randomButton.getLabel().setFontScale( fontScale );
-            backButton.getLabel().setFontScale( fontScale );
-        }
+        scaleLabels( randomButton.getLabel(), backButton.getLabel() );
+
         stage.addActor( backButton );
         stage.addActor( randomButton );
 	}
