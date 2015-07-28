@@ -88,6 +88,18 @@ public class DesktopController extends Controller
     }
 
     @Override
+    public void pause()
+    {
+        
+    }
+
+    @Override
+    public void resume()
+    {
+        
+    }
+
+    @Override
     public void reset()
     {
         isKeyPressed = new boolean[CONTROLS.length];

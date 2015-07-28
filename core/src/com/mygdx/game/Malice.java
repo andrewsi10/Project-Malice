@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.screens.CharacterSelect;
 import com.mygdx.game.screens.GameOver;
 import com.mygdx.game.screens.GameScreen;
@@ -39,6 +41,8 @@ public class Malice extends Game
 	public GameScreen gameScreen;
 	public GameOver gameOver;
 	
+	public Viewport viewport;
+	
 	/**
 	 * Sets the screen to a new Splash Screen.
 	 * 
@@ -47,6 +51,7 @@ public class Malice extends Game
 	@Override
 	public void create()
 	{
+	    viewport = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
 	    splash = new Splash( this );
         Options.initialize();
         setScreen( splash );

@@ -58,6 +58,7 @@ public class GameScreen extends StagedScreen
     private Batch batch;
     private OrthographicCamera cam;
     private ShapeRenderer renderer; // hp can use progressBars
+    private Controller controller;
     
 	private Map map;
 	private Player player;
@@ -105,6 +106,7 @@ public class GameScreen extends StagedScreen
 	    super( g, s, c, "img/pausescreen.png", 40 );
         enemyMinCount = 10; enemyMaxCount = -2;
         
+        controller = c;
         projectiles = new ArrayList<Projectile>();
         renderer = new ShapeRenderer();
         batch = stage.getBatch();
@@ -504,6 +506,7 @@ public class GameScreen extends StagedScreen
         backButton.setVisible( true );
         
         pointsLabel.setVisible( false );
+        controller.pause();
 	}
 	
 	/**
@@ -521,6 +524,7 @@ public class GameScreen extends StagedScreen
         
         pointsLabel.setVisible( true );
         resumeLabel.setVisible( true );
+        controller.resume();
 	}
 
     private void run()
@@ -556,8 +560,9 @@ public class GameScreen extends StagedScreen
      */
     @Override
     public void resize( int width, int height ) {
-        cam.setToOrtho( false, width, height );
+        cam.setToOrtho( false, Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
         super.resize( width, height );
+//        stage.getViewport().update( width, height, true );
     }
 
 	/**

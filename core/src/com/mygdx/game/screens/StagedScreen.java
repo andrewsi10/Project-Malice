@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
@@ -49,14 +48,7 @@ public class StagedScreen extends ScreenAdapter
     protected Stage stage;
     protected Image background;
     
-    private static Viewport VIEWPORT = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
     private static Batch BATCH;
-    
-    public static Stage newStage() {
-        Stage newStage = ( BATCH == null ) ? new Stage( VIEWPORT ) : new Stage( VIEWPORT, BATCH );
-        BATCH = newStage.getBatch(); // update batch
-        return newStage;
-    }
     
     /**
      * Used by all Menu Screens
@@ -70,10 +62,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, Skin s, int volume ) {
-        this( g, s, newStage(), volume );
-    }
-    private StagedScreen( Malice g, Skin s, Stage stg, int volume ) {
-        this( g, s, stg, "img/titlescreen.png", volume );
+        this( g, s, null, "img/titlescreen.png", volume );
     }
     
     /**
@@ -86,11 +75,8 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, String img, int volume ) {
-        this( g, new Image( new SpriteDrawable( new Sprite( 
+        this( g, null, null, new Image( new SpriteDrawable( new Sprite( 
                                         new Texture( img ) ) ) ), volume );
-    }
-    private StagedScreen( Malice g, Image img, int volume ) {
-        this( g, null, newStage(), img, volume );
     }
     
     /**
@@ -109,21 +95,26 @@ public class StagedScreen extends ScreenAdapter
     }
     
     /**
-     * Main Constructor
+     * Main Constructor used by all the other constructors
      * 
      * @param g the Game that this Screen is in
      * @param s Skin for this screen to use
-     * @param stg Stage for this screen to use
+     * @param stg Stage for this screen to use. If null, sets own stage.
      * @param img background image
      * @param volume new volume percent of this screen; 
      *                  if Volume is -1, it will not change
      */
-    public StagedScreen( Malice g, Skin s, Stage stg, Image img, int volume ) {
+    private StagedScreen( Malice g, Skin s, Stage stg, Image img, int volume ) {
         game = g;
         skin = s;
         stage = stg;
         background = img;
         VOLUME = volume;
+        
+        if ( stage == null ) {
+            stage = ( BATCH == null ) ? new Stage( game.viewport ) : new Stage( game.viewport, BATCH );
+        }
+        BATCH = stage.getBatch(); // only use one spriteBatch
         
         stage.addActor( background );
     }
@@ -170,14 +161,15 @@ public class StagedScreen extends ScreenAdapter
      */
     @Override
     public void resize( int width, int height ) {
+        Viewport viewport = stage.getViewport();
 //        if ( width > height && viewport.getWorldWidth() < viewport.getWorldHeight() ) {
 //            viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
 //        }
 //        if ( width < height && viewport.getWorldWidth() > viewport.getWorldHeight() ) {
 //            viewport.setWorldSize( Malice.GAME_HEIGHT, Malice.GAME_WIDTH );
 //        }
-        VIEWPORT.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
-        VIEWPORT.update( width, height, true );
+        viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+        viewport.update( width, height, true );
     }
 
     /**

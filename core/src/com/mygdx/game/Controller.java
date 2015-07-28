@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  * 
  * This class provides the base that Controllers need for the player to 
  * function
+ * 
+ * Used only by GameScreen
  *
  *  @author  Nathan Lui
  *  @version Jul 11, 2015
@@ -17,6 +19,7 @@ public abstract class Controller extends Stage
     protected final Malice game;
     
     public Controller ( Malice g ) {
+        super( g.viewport );
         game = g;
     }
     
@@ -34,9 +37,21 @@ public abstract class Controller extends Stage
      */
     public abstract double getShootingDirection();
     
+    /**
+     * Allows controllers to hide and show actors in pausing, called by 
+     * GameScreen's pause()
+     */
+    public abstract void pause();
+
+    /**
+     * Allows controllers to hide and show actors in resuming, called by 
+     * GameScreen's resume()
+     */
+    public abstract void resume();
     
     /**
-     * Called to reset the controller when the player is switched
+     * Called to reset the controller when the player is switched 
+     * (called by player)
      */
-    public void reset() {}
+    public abstract void reset();
 }

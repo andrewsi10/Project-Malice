@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class AndroidController extends Controller
 {
-    private static Touchpad movementTouchpad;
-    private static Touchpad shootTouchpad;
+    private Touchpad movementTouchpad;
+    private Touchpad shootTouchpad;
     private Button pauseButton;
     public AndroidController( Malice g, Skin skin )
     {
@@ -66,5 +66,23 @@ public class AndroidController extends Controller
         if ( deltaX != 0 && deltaY != 0 )
             return 90 + 360 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
         return -1;
+    }
+
+    @Override
+    public void pause()
+    {
+        // TODO need to reset the values for the touchpads
+    }
+
+    @Override
+    public void resume()
+    {
+        
+    }
+
+    @Override
+    public void reset()
+    {
+        pauseButton.toFront();
     }
 }
