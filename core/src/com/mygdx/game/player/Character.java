@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Audio;
-import com.mygdx.game.Options;
 
 /**
  *  This class represents a sprite in the game with animations and movement
@@ -31,10 +30,6 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public static final int BARHEIGHT = 7;
 	public static final int BARWIDTH = 80;
-	
-	// these variables are not simply static imported in case of changing, 
-	// though may be better to just staticly import them.
-	public static final Skin SKIN = Options.SKIN;
 
     public static final float FRAME_DURATION = 0.2f;
 
@@ -72,14 +67,14 @@ public abstract class Character extends AnimatedSprite {
 	 * @param proj Animation of Projectile
 	 * @param a Animations for this Character
 	 */
-	public Character( Color hpColor, 
+	public Character( Skin skin, Color hpColor, 
 	                  int maxHp, 
 	                  int experience, 
 	                  int level,
 	                  int speed, 
 	                  int reloadSpeed, 
 	                  String projectile, Animation proj, Animation... a ) {
-	    this( hpColor );
+	    this( skin, hpColor );
         this.initializeAnimations( a );
         this.load( maxHp, experience, level, speed, reloadSpeed );
         this.projectile = projectile;
@@ -93,11 +88,11 @@ public abstract class Character extends AnimatedSprite {
 	 * 
      * @param hpColor Color of hp bar
 	 */
-	public Character( Color hpColor ) {
+	public Character( Skin skin, Color hpColor ) {
         this.hpColor = hpColor;
-        levelLabel = new Label( "", SKIN, "label" );
+        levelLabel = new Label( "", skin, "label" );
         levelLabel.setColor( Color.MAGENTA );
-        hpLabel = new Label( "", SKIN, "label" );
+        hpLabel = new Label( "", skin, "label" );
         hpLabel.setColor( Color.MAROON );
         
         if ( isAndroid ) {

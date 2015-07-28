@@ -29,8 +29,8 @@ public class Options
     /**
      * Skin containing the resources for many of this game's assets
      */
-    public static final Skin SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-    private static final BitmapFont FONT = new BitmapFont();
+    public static Skin SKIN;
+    private static BitmapFont FONT;
     
     /**
      * The FileHandle for the settings file
@@ -112,6 +112,8 @@ public class Options
      */
     private static void createSkin()
     {
+        SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
+        FONT = new BitmapFont();
         SKIN.add( "default", FONT );
 
         // Create a texture

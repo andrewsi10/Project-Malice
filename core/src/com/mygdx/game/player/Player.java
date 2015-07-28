@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 import com.mygdx.game.Controller;
@@ -80,12 +81,12 @@ public class Player extends Character {
 	 * @param proj
 	 *            reference for the projectile atlas file
 	 */
-	public Player( Controller c )
+	public Player( Skin skin, Controller c )
 	{
-	    super( Color.GREEN );
+	    super( skin, Color.GREEN );
         controller = c;
         setExpToLevel( 100 );
-        pointsLabel = new Label( "", SKIN, "label" );
+        pointsLabel = new Label( "", skin, "label" );
         updatePointsLabel();
 	}
 

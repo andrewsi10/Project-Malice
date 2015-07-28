@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.projectile.Projectile;
 
@@ -64,8 +65,8 @@ public class Enemy extends Character {
 	 * @param index integer index of the Enemy Animations for the type of Enemy.
 	 *         Should be in the range from [0,NUMENEMIES)
 	 */
-	public Enemy( int index ) {
-        super( Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
+	public Enemy( Skin skin, int index ) {
+        super( skin, Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
     

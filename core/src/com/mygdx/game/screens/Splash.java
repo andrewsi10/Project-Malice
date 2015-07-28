@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Malice;
 
 /**
@@ -25,9 +24,9 @@ public class Splash extends StagedScreen
 	 * @param g
 	 *            the Malice game that controls all the screens
 	 */
-	public Splash( Malice g, Skin s )
+	public Splash( Malice g )
 	{
-	    super( g, s, "img/splashscreen.png", 70 );
+	    super( g, "img/splashscreen.png", 70 );
 	}
 
 	/**

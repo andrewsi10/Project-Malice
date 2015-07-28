@@ -85,12 +85,12 @@ public class StagedScreen extends ScreenAdapter
      * @param volume new volume percent of this screen; 
      *                  if Volume is -1, it will not change
      */
-    public StagedScreen( Malice g, Skin s, String img, int volume ) {
-        this( g, s, new Image( new SpriteDrawable( new Sprite( 
+    public StagedScreen( Malice g, String img, int volume ) {
+        this( g, new Image( new SpriteDrawable( new Sprite( 
                                         new Texture( img ) ) ) ), volume );
     }
-    private StagedScreen( Malice g, Skin s, Image img, int volume ) {
-        this( g, s, newStage(), img, volume );
+    private StagedScreen( Malice g, Image img, int volume ) {
+        this( g, null, newStage(), img, volume );
     }
     
     /**

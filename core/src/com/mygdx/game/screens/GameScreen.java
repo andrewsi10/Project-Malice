@@ -112,7 +112,7 @@ public class GameScreen extends StagedScreen
         
         map = new Map( MAP_SIZE, MAP_SIZE );
         cam = new OrthographicCamera();
-        player = new Player( c );
+        player = new Player( skin, c );
         
 	    settingsButton = new TextButton( "Settings", skin );
         backButton = new TextButton( "Back to Main Menu", skin );
@@ -414,7 +414,7 @@ public class GameScreen extends StagedScreen
 		for ( int i = 0; i < limit; i++ )
 		{
 			int index = (int) ( Math.random() * Enemy.NUMENEMIES );
-			Enemy e = new Enemy( index );
+			Enemy e = new Enemy( skin, index );
 			e.increaseBdmg( -5 + player.getPoints() / 50 );
 			e.increaseMaxHp( player.getPoints() / 20 );
 			e.increaseCurrentHp( player.getPoints() / 20 );

@@ -47,7 +47,7 @@ public class Malice extends Game
 	@Override
 	public void create()
 	{
-	    splash = new Splash( this, Options.SKIN );
+	    splash = new Splash( this );
         Options.initialize();
         setScreen( splash );
         Controller c = ( Gdx.app.getType().equals( ApplicationType.Android ) ) 
