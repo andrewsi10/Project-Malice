@@ -38,8 +38,8 @@ public class MainMenu extends StagedScreen
 	    super( g, s, 55 );
         playButton = new TextButton( "Play", skin );
         playButton.setPosition(
-            Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 );
+            stage.getWidth() / 2 - playButton.getWidth() / 2,
+            stage.getHeight() / 2 );
         playButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -51,8 +51,8 @@ public class MainMenu extends StagedScreen
         
         leaderButton = new TextButton( "Leader Board", skin );
         leaderButton.setPosition(
-            Gdx.graphics.getWidth() / 2 - leaderButton.getWidth() / 2,
-            Gdx.graphics.getHeight() * 3 / 8 );
+            stage.getWidth() / 2 - leaderButton.getWidth() / 2,
+            stage.getHeight() * 3 / 8 );
         leaderButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -64,7 +64,7 @@ public class MainMenu extends StagedScreen
 
         settingsButton = new TextButton( "Settings", skin ); 
         settingsButton.setSize( 150, 96 );
-        settingsButton.setPosition( Gdx.graphics.getWidth() - settingsButton.getWidth(), 0 );
+        settingsButton.setPosition( stage.getWidth() - settingsButton.getWidth(), 0 );
         settingsButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -76,8 +76,8 @@ public class MainMenu extends StagedScreen
 
         exitButton = new TextButton( "Exit", skin );
         exitButton.setPosition(
-            Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 8,
-            Gdx.graphics.getHeight() / 4 );
+            stage.getWidth() / 2 - exitButton.getWidth() / 2,
+            stage.getHeight() / 4 );
         exitButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)

@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Malice;
 
@@ -44,6 +47,15 @@ public class StagedScreen extends ScreenAdapter
     protected Skin skin;
     protected Stage stage;
     protected Image background;
+    
+//    private static Viewport viewport = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+//    private static Batch batch;
+//    
+//    public static Stage newStage() {
+//        if ( batch == null )
+//            return new Stage( viewport );
+//        else return new Stage( viewport, batch );
+//    }
     
     /**
      * Used by all Menu Screens
@@ -155,8 +167,15 @@ public class StagedScreen extends ScreenAdapter
      */
     @Override
     public void resize( int width, int height ) {
-        background.setSize( width, height );
-        stage.getViewport().update( width, height );
+        Viewport viewport = stage.getViewport();
+//        if ( width > height && viewport.getWorldWidth() < viewport.getWorldHeight() ) {
+//            viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+//        }
+//        if ( width < height && viewport.getWorldWidth() > viewport.getWorldHeight() ) {
+//            viewport.setWorldSize( Malice.GAME_HEIGHT, Malice.GAME_WIDTH );
+//        }
+        viewport.setWorldSize( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
+        viewport.update(width, height, true);
     }
 
     /**

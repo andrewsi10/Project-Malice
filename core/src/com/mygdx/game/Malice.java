@@ -28,6 +28,8 @@ public class Malice extends Game
 	 * Name of the application window is TITLE followed by VERSION
 	 */
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.1.9";
+	public static final int GAME_WIDTH = 1280;
+	public static final int GAME_HEIGHT = 720;
 
 	public Splash splash;
     public MainMenu mainMenu; // note: can use a single array for all the screens

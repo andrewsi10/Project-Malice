@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -52,8 +51,8 @@ public class GameOver extends StagedScreen
 
         switchButton = new TextButton( "Switch Characters", skin ); 
         switchButton.setPosition(
-            Gdx.graphics.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 3 );
+            stage.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
+            stage.getHeight() / 3 );
         switchButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -65,8 +64,8 @@ public class GameOver extends StagedScreen
         
         leaderButton = new TextButton( "Leader Board", skin );
         leaderButton.setPosition(
-                Gdx.graphics.getWidth() / 3 - leaderButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 6 );
+                stage.getWidth() / 3 - leaderButton.getWidth() / 2,
+                stage.getHeight() / 6 );
         leaderButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -78,8 +77,8 @@ public class GameOver extends StagedScreen
         
         backButton = new TextButton( "Back To Main Menu", skin );
         backButton.setPosition(
-                Gdx.graphics.getWidth() * 2 / 3 - backButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 6 );
+                stage.getWidth() * 2 / 3 - backButton.getWidth() / 2,
+                stage.getHeight() / 6 );
         backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -115,8 +114,8 @@ public class GameOver extends StagedScreen
 	{
 	    message.setText( "You earned " + points + " points and reached level " 
 	                    + level + ". Better luck next time!" );
-        message.setPosition( Gdx.graphics.getWidth() / 2 - message.getPrefWidth() / 2, 
-                             Gdx.graphics.getHeight() * 67 / 100 );
+        message.setPosition( stage.getWidth() / 2 - message.getPrefWidth() / 2, 
+                             stage.getHeight() * 67 / 100 );
         
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
@@ -126,8 +125,8 @@ public class GameOver extends StagedScreen
         	retryButton.getLabel().setFontScale( fontScale );
         }
         retryButton.setPosition(
-            Gdx.graphics.getWidth() / 3 - retryButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 3 );
+            stage.getWidth() / 3 - retryButton.getWidth() / 2,
+            stage.getHeight() / 3 );
         retryButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -139,8 +138,8 @@ public class GameOver extends StagedScreen
         
         textField = new TextField( "Enter Name ", skin );
         textField.setBounds( 
-            Gdx.graphics.getWidth() / 2 - switchButton.getWidth() / 2, 
-            Gdx.graphics.getHeight() / 2,
+            stage.getWidth() / 2 - switchButton.getWidth() / 2, 
+            stage.getHeight() / 2,
             retryButton.getWidth(), 
             retryButton.getHeight() );
         textField.setFocusTraversal( false );

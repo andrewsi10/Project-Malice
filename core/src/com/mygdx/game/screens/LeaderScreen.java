@@ -40,8 +40,8 @@ public class LeaderScreen extends StagedScreen
         if ( prevButton != null ) prevButton.remove();
         prevButton = new TextButton( "Back", skin );
         prevButton.setPosition(
-            Gdx.graphics.getWidth() / 2 - prevButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 12 );
+            stage.getWidth() / 2 - prevButton.getWidth() / 2,
+            stage.getHeight() / 12 );
         prevButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -70,7 +70,7 @@ public class LeaderScreen extends StagedScreen
         super.render( delta );
         stage.getBatch().begin();
         skin.getFont( "default" ).draw( stage.getBatch(), layout, 
-            Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() * 3 / 4 );
+            stage.getWidth() / 4, stage.getHeight() * 3 / 4 );
         stage.getBatch().end();
     }
 }

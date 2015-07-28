@@ -25,8 +25,8 @@ public class DesktopLauncher
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = Malice.TITLE + " v" + Malice.VERSION;
 		config.vSyncEnabled = true;
-		config.width = 1280;
-		config.height = 720;
+		config.width = Malice.GAME_WIDTH;
+		config.height = Malice.GAME_HEIGHT;
 		new LwjglApplication( new Malice(), config );
 	}
 }

@@ -47,14 +47,14 @@ public class OptionsScreen extends StagedScreen
         zoomSlider = new Slider( 20, 200, 5, false, skin ); // TODO
         
         // xy -coordinates of settings
-        float centerX = Gdx.graphics.getWidth() / 2;
-        float titleY = Gdx.graphics.getHeight() * 7 / 8;
-        float buttonX = Gdx.graphics.getWidth() / 4 - musicButton.getWidth() / 2;
-        float musicY = Gdx.graphics.getHeight() * 2 / 3;
-        float sliderX = Gdx.graphics.getWidth() / 2;
-        float soundY = Gdx.graphics.getHeight() / 2;
+        float centerX = stage.getWidth() / 2;
+        float titleY = stage.getHeight() * 7 / 8;
+        float buttonX = stage.getWidth() / 4 - musicButton.getWidth() / 2;
+        float musicY = stage.getHeight() * 2 / 3;
+        float sliderX = stage.getWidth() / 2;
+        float soundY = stage.getHeight() / 2;
         float sliderWidth = musicButton.getWidth();
-        float zoomY = Gdx.graphics.getHeight() / 3;
+        float zoomY = stage.getHeight() / 3;
         
         // Scaling
         titleLabel.setFontScale( 4.0f ); // title scale
@@ -171,8 +171,8 @@ public class OptionsScreen extends StagedScreen
         	backButton.getLabel().setFontScale( fontScale );
         }
         backButton.setPosition(
-                Gdx.graphics.getWidth() / 2 - backButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 6 );
+                stage.getWidth() / 2 - backButton.getWidth() / 2,
+                stage.getHeight() / 6 );
         backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
