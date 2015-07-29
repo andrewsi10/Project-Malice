@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.player.Enemy;
@@ -125,13 +126,26 @@ public class Options
         pixmap.dispose();
 
         // Create a button style
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.up = SKIN.newDrawable( "background", Color.GRAY );
         textButtonStyle.down = SKIN.newDrawable( "background", Color.DARK_GRAY );
         textButtonStyle.checked = SKIN.newDrawable( "background", Color.DARK_GRAY );
         textButtonStyle.over = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
         textButtonStyle.font = SKIN.getFont( "default" );
         SKIN.add( "default", textButtonStyle );
+        
+        // Create Settings Button icon
+        SKIN.add( "settingsIcon", new Texture( "ui/settingsIcon.png" ) );
+        
+        ImageButtonStyle imageButtonStyle = new ImageButtonStyle();
+        imageButtonStyle.up           = SKIN.newDrawable( "background", Color.GRAY );
+        imageButtonStyle.down         = SKIN.newDrawable( "background", Color.DARK_GRAY );
+        imageButtonStyle.checked      = SKIN.newDrawable( "background", Color.DARK_GRAY );
+        imageButtonStyle.over         = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
+        imageButtonStyle.imageUp      = SKIN.getDrawable( "settingsIcon" );
+        imageButtonStyle.imageDown    = SKIN.getDrawable( "settingsIcon" );
+        imageButtonStyle.imageChecked = SKIN.getDrawable( "settingsIcon" );
+        SKIN.add( "settingsButtonStyle", imageButtonStyle );
         
         // Create TouchPad Style
         // Set background image

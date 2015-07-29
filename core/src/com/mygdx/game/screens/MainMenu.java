@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -22,7 +23,8 @@ import com.mygdx.game.Malice;
  */
 public class MainMenu extends StagedScreen
 {
-	private TextButton playButton, leaderButton, settingsButton, exitButton;
+	private TextButton playButton, leaderButton, exitButton;
+	private ImageButton settingsButton;
 
 	/**
 	 * Creates a MainMenu screen and stores the Malice object that created this
@@ -62,8 +64,8 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        settingsButton = new TextButton( "Settings", skin ); 
-        settingsButton.setSize( 150, 96 );
+        settingsButton = new ImageButton( skin, "settingsButtonStyle" ); 
+        settingsButton.setSize( 100, 100 );
         settingsButton.setPosition( stage.getWidth() - settingsButton.getWidth(), 0 );
         settingsButton.addListener( new ClickListener() {
             @Override
@@ -86,8 +88,9 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        scaleLabels( playButton.getLabel(), leaderButton.getLabel(), 
-                     settingsButton.getLabel(), exitButton.getLabel() );
+        scaleLabels( playButton.getLabel(), 
+                     leaderButton.getLabel(),
+                     exitButton.getLabel() );
         
         stage.addActor( playButton );
         stage.addActor( leaderButton );
