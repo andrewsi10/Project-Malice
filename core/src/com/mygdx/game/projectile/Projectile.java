@@ -1,7 +1,6 @@
 package com.mygdx.game.projectile;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.mygdx.game.player.AnimatedSprite;
 import com.mygdx.game.player.Character;
 
 /**
@@ -16,7 +15,7 @@ import com.mygdx.game.player.Character;
  *
  *  @author  Sources: libgdx
  */
-public class Projectile extends AnimatedSprite
+public class Projectile extends Entity
 {
     private Character myCharacter;
 
@@ -39,8 +38,7 @@ public class Projectile extends AnimatedSprite
         
         setSpeed( 8 );
         setSize( getWidth() / 3, getHeight() / 3 );
-        setPosition( c.getCenterX() - getWidth() / 2, 
-                     c.getCenterY() - getHeight() / 2 );
+        setCenterPosition( c.getCenterX(), c.getCenterY() );
 	}
     public Projectile(Character c, float distanceX, float distanceY, Animation a)
     {
@@ -76,7 +74,7 @@ public class Projectile extends AnimatedSprite
 	    translate();
 	    setAnimations();
 	}
-    
+	
     /**
      * Returns whether this projectile hits a given character based on bounding rectangles
      * if Character is the same as the one that spawned this projectile,
@@ -86,21 +84,15 @@ public class Projectile extends AnimatedSprite
      * 
      * @param c Character to check with
      * @return whether this projectile collides with Character
-     */
+	 * @see com.mygdx.game.projectile.Entity#hitCharacter(com.mygdx.game.player.Character)
+	 */
+	@Override
     public boolean hitCharacter( Character c )
     {
         if ( c == this.myCharacter ) return false;
-        boolean overlaps = c.getBoundingRectangle().overlaps( 
-                            this.getBoundingRectangle() );
+        boolean overlaps = super.hitCharacter( c );
         if ( overlaps )
             c.takeDamage( myCharacter.getDamageDealt() );
         return overlaps;
     }
-    
-    // for expansion: returns whether two sprites are of the same Team, should use strings if more than two teams
-//    private boolean sameTeam( Character c1, Character c2 )
-//    {
-//        return ( c1 instanceof Enemy && c2 instanceof Enemy )
-//            || ( c1 instanceof Player && c2 instanceof Player );
-//    }
 }

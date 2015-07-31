@@ -30,8 +30,6 @@ public abstract class Character extends AnimatedSprite {
 	public static final int BARHEIGHT = 7;
 	public static final int BARWIDTH = 80;
 
-    public static final float FRAME_DURATION = 0.2f;
-
 	private Color hpColor;
 	
 	private Label levelLabel, hpLabel;

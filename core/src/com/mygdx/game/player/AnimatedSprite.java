@@ -71,6 +71,8 @@ public class AnimatedSprite extends Sprite
         }
     }
 
+    public static final float FRAME_DURATION = 0.2f;
+
     /**
      * variables used to hold animation frames and initialize animations
      */
@@ -217,6 +219,11 @@ public class AnimatedSprite extends Sprite
       */
      public void setSpeed( int speed ) {
          moveSpeed = speed;
+     }
+     
+     public void setCenterPosition( float x, float y )
+     {
+         setPosition( x - getWidth() / 2, y - getHeight() / 2 );
      }
 
      /**
