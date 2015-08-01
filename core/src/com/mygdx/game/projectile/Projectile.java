@@ -89,10 +89,11 @@ public class Projectile extends Entity
 	@Override
     public boolean hitCharacter( Character c )
     {
-        if ( c == this.myCharacter ) return false;
-        boolean overlaps = super.hitCharacter( c );
-        if ( overlaps )
+        if ( c == this.myCharacter ) return false; // all not colliding conditions
+        if ( collidesWith( c ) ) {
             c.takeDamage( myCharacter.getDamageDealt() );
-        return overlaps;
+            return true;
+        }
+        return false;
     }
 }

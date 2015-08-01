@@ -29,4 +29,18 @@ public class ItemSprite extends Entity
         setSize( 64, 64 );
         setCenterPosition( c.getCenterX(), c.getCenterY() );
     }
+
+    @Override
+    public void move() {}
+
+    /**
+     * Does stuff according to Item type to Character colliding with
+     * 
+     * @see com.mygdx.game.projectile.Entity#hitCharacter(com.mygdx.game.player.Character)
+     */
+    @Override
+    public boolean hitCharacter( Character c )
+    {
+        return false;
+    }
 }
