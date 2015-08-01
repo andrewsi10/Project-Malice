@@ -1,11 +1,11 @@
-package com.mygdx.game.projectile;
+package com.mygdx.game.entities;
 
 import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.player.Character;
+import com.mygdx.game.sprites.Character;
 
 public class ItemSprite extends Entity
 {
@@ -36,7 +36,7 @@ public class ItemSprite extends Entity
     /**
      * Does stuff according to Item type to Character colliding with
      * 
-     * @see com.mygdx.game.projectile.Entity#hitCharacter(com.mygdx.game.player.Character)
+     * @see com.mygdx.game.entities.Entity#hitCharacter(com.mygdx.game.sprites.Character)
      */
     @Override
     public boolean hitCharacter( Character c )

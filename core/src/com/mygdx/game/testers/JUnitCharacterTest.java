@@ -1,11 +1,13 @@
 package com.mygdx.game.testers;
 
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.*;
 import static org.junit.Assert.*;
-import static com.mygdx.game.player.AnimatedSprite.Direction.*;
+
 import org.junit.Test;
-import com.mygdx.game.player.Character;
-import com.mygdx.game.player.Enemy;
+
 import com.mygdx.game.MimicGdx;
+import com.mygdx.game.sprites.Character;
+import com.mygdx.game.sprites.Enemy;
 
 /**
  *  JUnit tester for the Character class

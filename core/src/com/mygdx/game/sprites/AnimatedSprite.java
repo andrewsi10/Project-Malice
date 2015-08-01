@@ -1,4 +1,4 @@
-package com.mygdx.game.player;
+package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;

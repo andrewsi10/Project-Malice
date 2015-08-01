@@ -1,10 +1,11 @@
 package com.mygdx.game.testers;
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-import com.mygdx.game.player.Enemy;
-import com.mygdx.game.player.Character;
-import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.entities.Projectile;
+import com.mygdx.game.sprites.Character;
+import com.mygdx.game.sprites.Enemy;
 
 /**
  *  Tests the only testable method in Projectile

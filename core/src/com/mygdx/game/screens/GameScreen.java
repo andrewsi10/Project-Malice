@@ -18,10 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Audio;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Malice;
-import com.mygdx.game.player.Character;
-import com.mygdx.game.player.Enemy;
-import com.mygdx.game.player.Player;
-import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.entities.Entity;
+import com.mygdx.game.sprites.Character;
+import com.mygdx.game.sprites.Enemy;
+import com.mygdx.game.sprites.Player;
 import com.mygdx.game.world.Map;
 
 /**
@@ -63,7 +63,7 @@ public class GameScreen extends StagedScreen
 	private Map map;
 	private Player player;
 	private ArrayList<Character> sprites;
-	private ArrayList<Projectile> projectiles;
+	private ArrayList<Entity> entities;
 	
 	private TextButton settingsButton, backButton;
 	private Label resumeLabel, pointsLabel;
@@ -107,7 +107,7 @@ public class GameScreen extends StagedScreen
         enemyMinCount = 10; enemyMaxCount = -2;
         
         controller = c;
-        projectiles = new ArrayList<Projectile>();
+        entities = new ArrayList<Entity>();
         renderer = new ShapeRenderer();
         batch = stage.getBatch();
         sprites = new ArrayList<Character>();
@@ -274,9 +274,9 @@ public class GameScreen extends StagedScreen
 			sprite.draw( batch );
 			sprite.drawBars( batch, renderer );
 		}
-		for ( Projectile projectile : projectiles )
+		for ( Entity entity : entities )
 		{
-			projectile.draw( batch );
+			entity.draw( batch );
 		}
         batch.end();
         renderer.end();
@@ -337,16 +337,16 @@ public class GameScreen extends StagedScreen
 			moveSprite( sprite );
 			sprite.drawBars( batch, renderer );
 		}
-		for ( int i = 0; i < projectiles.size(); i++ )
+		for ( int i = 0; i < entities.size(); i++ )
 		{
-			Projectile projectile = projectiles.get( i );
-			projectile.move();
-			projectile.draw( batch );
+			Entity entity = entities.get( i );
+			entity.move();
+			entity.draw( batch );
 
 			boolean hasHit = false;
 			for ( Character sprite : sprites )
 			{
-				if ( hasHit || projectile.hitCharacter( sprite ) )
+				if ( hasHit || entity.hitCharacter( sprite ) )
 				{
 					hasHit = true;
 					if ( sprite.isDead() )
@@ -368,9 +368,9 @@ public class GameScreen extends StagedScreen
 					break;
 				}
 			}
-			if ( hasHit || map.isCollidingWithWall( projectile ) )
+			if ( hasHit || map.isCollidingWithWall( entity ) )
 			{
-				projectiles.remove( i );
+				entities.remove( i );
 				i--;
 			}
 		}
@@ -437,7 +437,7 @@ public class GameScreen extends StagedScreen
 	{
 		float x = c.getX();
 		float y = c.getY();
-		c.move( player, projectiles, System.currentTimeMillis() );
+		c.move( player, entities, System.currentTimeMillis() );
 		if ( map.isCollidingWithWall( c ) )
 		{
 		    int dir = c.getRoundedDirection(); // TODO fix glitchy collision
@@ -574,8 +574,8 @@ public class GameScreen extends StagedScreen
 		renderer.dispose();
 		if ( player.getTexture() != null )
 		    player.getTexture().dispose();
-        for ( Projectile p : projectiles )
-            p.getTexture().dispose();
+        for ( Entity e : entities )
+            e.getTexture().dispose();
         for ( Character e : sprites )
             e.getTexture().dispose();
 	}

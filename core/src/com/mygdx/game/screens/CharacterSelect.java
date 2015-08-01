@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Malice;
-import com.mygdx.game.player.Player;
+import com.mygdx.game.sprites.Player;
 
 /**
  * This screen displays six different classes for the player to choose from and

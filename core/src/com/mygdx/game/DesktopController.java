@@ -1,10 +1,10 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.player.AnimatedSprite.Direction.EAST;
-import static com.mygdx.game.player.AnimatedSprite.Direction.NORTH;
-import static com.mygdx.game.player.AnimatedSprite.Direction.NUMDEGREES;
-import static com.mygdx.game.player.AnimatedSprite.Direction.SOUTH;
-import static com.mygdx.game.player.AnimatedSprite.Direction.WEST;
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.EAST;
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.NORTH;
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.NUMDEGREES;
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.SOUTH;
+import static com.mygdx.game.sprites.AnimatedSprite.Direction.WEST;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

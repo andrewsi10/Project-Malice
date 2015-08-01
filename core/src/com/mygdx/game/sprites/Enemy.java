@@ -1,4 +1,4 @@
-package com.mygdx.game.player;
+package com.mygdx.game.sprites;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.entities.Entity;
 
 /**
  *  This class represents an Enemy in the game that will attack the Player when
@@ -83,7 +83,7 @@ public class Enemy extends Character {
 	}
 
     /**
-     * @see com.mygdx.game.player.Character#move(com.mygdx.game.player.Character, java.util.ArrayList, long)
+     * @see com.mygdx.game.sprites.Character#move(com.mygdx.game.sprites.Character, java.util.ArrayList, long)
      * 
      * moves this Character according to a basic AI algorithm
      * 
@@ -97,16 +97,17 @@ public class Enemy extends Character {
      *            shooting)
      */
 	@Override
-	public void move( Character character, ArrayList<Projectile> projectiles,
-			long time ) {
+	public void move( Character character, ArrayList<Entity> entities, long time ) {
         setRandomDirection();
         float deltaX = character.getCenterX() - getCenterX();
         float deltaY = character.getCenterY() - getCenterY();
 		if ( inRange( deltaX, deltaY ) ) {
 	        // move towards the player
 			double newDir = 90 + 360 - Math.toDegrees( Math.atan2( deltaY, deltaX ) );
-            shoot( projectiles, newDir, time );
-			newDir += ( tempDirection - 180 ) / marginOfDelta; // random adjustment
+            shoot( entities, newDir, time );
+            if ( tempDirection < 0 )
+                tempDirection *= -4;
+            newDir += ( ( tempDirection - 180 ) / marginOfDelta ); // random adjustment
 			setDirection( newDir );
 		}
         translate();
@@ -120,7 +121,7 @@ public class Enemy extends Character {
 	 */
 	public void setRandomDirection() {
 		if (travelTime < 1) {
-		    tempDirection = Math.random() * 360;
+		    tempDirection = Math.random() * 450 - 90;
 			setDirection( tempDirection );
 			travelTime = (int) (minTravelTime + Math.random()
 					* travelTimeScalar);

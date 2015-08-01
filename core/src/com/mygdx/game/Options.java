@@ -13,9 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.mygdx.game.player.Enemy;
-import com.mygdx.game.player.Player;
 import com.mygdx.game.screens.GameScreen;
+import com.mygdx.game.sprites.Enemy;
+import com.mygdx.game.sprites.Player;
 import com.mygdx.game.world.Map;
 
 /**

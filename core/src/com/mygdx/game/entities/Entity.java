@@ -1,8 +1,8 @@
-package com.mygdx.game.projectile;
+package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.mygdx.game.player.AnimatedSprite;
-import com.mygdx.game.player.Character;
+import com.mygdx.game.sprites.AnimatedSprite;
+import com.mygdx.game.sprites.Character;
 
 public abstract class Entity extends AnimatedSprite
 {

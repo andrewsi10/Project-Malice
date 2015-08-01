@@ -1,4 +1,4 @@
-package com.mygdx.game.player;
+package com.mygdx.game.sprites;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.entities.Entity;
 import com.mygdx.game.Controller;
 
 /**
@@ -127,7 +127,7 @@ public class Player extends Character {
 	}
 
 	/**
-	 * @see com.mygdx.game.player.Character#move(com.mygdx.game.player.Character, java.util.ArrayList, long)
+	 * @see com.mygdx.game.sprites.Character#move(com.mygdx.game.sprites.Character, java.util.ArrayList, long)
 	 * 
 	 * moves the Character according to the input of keyboard gotten from 
 	 * MimicGdx class
@@ -139,8 +139,7 @@ public class Player extends Character {
      *            shooting)
 	 */
 	@Override
-	public void move(Character character, ArrayList<Projectile> projectiles,
-			long time) {
+	public void move( Character character, ArrayList<Entity> entities, long time ) {
 		double dir = controller.getInputDirection();
 		setDirection( dir );
 		translate();
@@ -148,7 +147,7 @@ public class Player extends Character {
         
         dir = controller.getShootingDirection();
         if ( dir >= 0 )
-            shoot( projectiles, dir, System.currentTimeMillis() );
+            shoot( entities, dir, System.currentTimeMillis() );
 	}
 
 	/**

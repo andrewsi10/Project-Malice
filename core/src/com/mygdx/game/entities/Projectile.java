@@ -1,7 +1,7 @@
-package com.mygdx.game.projectile;
+package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.mygdx.game.player.Character;
+import com.mygdx.game.sprites.Character;
 
 /**
  *  Represents a Projectile in the game. Always moves in a straight line based
@@ -84,7 +84,7 @@ public class Projectile extends Entity
      * 
      * @param c Character to check with
      * @return whether this projectile collides with Character
-	 * @see com.mygdx.game.projectile.Entity#hitCharacter(com.mygdx.game.player.Character)
+	 * @see com.mygdx.game.entities.Entity#hitCharacter(com.mygdx.game.sprites.Character)
 	 */
 	@Override
     public boolean hitCharacter( Character c )

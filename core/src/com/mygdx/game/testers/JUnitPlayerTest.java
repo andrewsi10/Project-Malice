@@ -1,9 +1,11 @@
 package com.mygdx.game.testers;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
-import com.mygdx.game.player.Player;
+
 import com.mygdx.game.MimicGdx;
+import com.mygdx.game.sprites.Player;
 
 /**
  *  JUnit tester for Player

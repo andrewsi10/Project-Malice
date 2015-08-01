@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.mygdx.game.player.Enemy;
+import com.mygdx.game.sprites.Enemy;
 
 /**
  *  JUnit tester for the Enemy class

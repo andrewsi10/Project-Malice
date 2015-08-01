@@ -1,4 +1,4 @@
-package com.mygdx.game.player;
+package com.mygdx.game.sprites;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mygdx.game.projectile.Projectile;
+import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.Projectile;
 import com.mygdx.game.screens.StagedScreen;
 import com.mygdx.game.Audio;
 
@@ -186,8 +187,8 @@ public abstract class Character extends AnimatedSprite {
 	 *            shooting)
 	 */
 	public abstract void move( Character character, 
-	                           ArrayList<Projectile> projectiles,
-	                           long time);
+	                           ArrayList<Entity> entities,
+	                           long time );
 	
     /**
      * Puts a projectile that this Character shoots into the given Projectile 
@@ -202,12 +203,12 @@ public abstract class Character extends AnimatedSprite {
      * @param spriteType   String representing this what type of sprite this 
      *                             Character is
      */
-    public void shoot(ArrayList<Projectile> projectiles, double dir, long time) 
+    public void shoot( ArrayList<Entity> entities, double dir, long time ) 
     {
         if (time - previousTime >= reloadSpeed) {
             previousTime = time;
             Audio.playAudio( projectile );
-            projectiles.add( new Projectile( this, dir, projectileAnimation ) );
+            entities.add( new Projectile( this, dir, projectileAnimation ) );
         }
     }
 
