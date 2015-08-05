@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -265,15 +266,8 @@ public class GameScreen extends StagedScreen
 		renderer.begin( ShapeType.Filled );
 		map.draw( batch );
 
-		if ( sprites.size() < 3 )
-		{
-			spawnEnemies();
-		}
-		for ( Character sprite : sprites )
-		{
-			sprite.draw( batch );
-			sprite.drawBars( batch, renderer );
-		}
+		spawnEnemies();
+		drawCharacters( false );
 		for ( Entity entity : entities )
 		{
 			entity.draw( batch );
@@ -327,16 +321,9 @@ public class GameScreen extends StagedScreen
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
 		map.draw( batch );
-
-		if ( sprites.size() < 3 )
-		{
-			spawnEnemies();
-		}
-		for ( Character sprite : sprites )
-		{
-			moveSprite( sprite );
-			sprite.drawBars( batch, renderer );
-		}
+		
+		spawnEnemies();
+		drawCharacters( true );
 		for ( int i = 0; i < entities.size(); i++ )
 		{
 			Entity entity = entities.get( i );
@@ -397,7 +384,8 @@ public class GameScreen extends StagedScreen
 	
 	private void spawnEnemies()
 	{
-	    spawnEnemies( enemyMinCount + (int) ( Math.random() * enemyMaxCount ) );
+        if ( sprites.size() < 3 )
+            spawnEnemies( enemyMinCount + (int) ( Math.random() * enemyMaxCount ) );
 	}
 
 	/**
@@ -421,6 +409,26 @@ public class GameScreen extends StagedScreen
 			e.setPosition( map.getSpawnX(), map.getSpawnY() );
 			sprites.add( e );
 		}
+	}
+	
+	/**
+	 * Draws all the Characters and moves them if requested
+	 * @param move whether to move the Characters
+	 */
+	private void drawCharacters( boolean move ) {
+	    Rectangle checkRectangle = new Rectangle(); // TODO see if this works to lessen Sprite rendering
+	    checkRectangle.setSize( cam.viewportWidth * ZOOM, cam.viewportHeight * ZOOM );
+	    checkRectangle.setPosition( cam.position.x - cam.viewportWidth * ZOOM / 2, 
+	                                cam.position.y - cam.viewportHeight * ZOOM / 2);
+        for ( Character sprite : sprites )
+        {
+            if ( move )
+                moveSprite( sprite );
+            if ( sprite.getBoundingRectangle().overlaps( checkRectangle ) ) {
+                sprite.draw( batch );
+                sprite.drawBars( batch, renderer );
+            }
+        }
 	}
 
 	/**
@@ -457,7 +465,6 @@ public class GameScreen extends StagedScreen
 			}
 		}
 		c.setAnimations(); // be aware of the animation bugs produced by this line
-		c.draw( batch );
 	}
 
 	/**

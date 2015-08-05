@@ -111,7 +111,7 @@ public class Enemy extends Character {
 			setDirection( newDir );
 		}
         translate();
-        setAnimations();
+        setAnimations( true );
 	}
 
 	/**

@@ -134,7 +134,11 @@ public class AnimatedSprite extends Sprite
       * Assumes no idle animations
       */
      public void setAnimations() {
-         if ( direction == -1 ) return; // assumes no idle animations
+         setAnimations( false );
+     }
+     
+     public void setAnimations( boolean hasIdle ) {
+         if ( !hasIdle && direction == -1 ) return; // assumes no idle animations
          Direction d = prevDirection;
          
          // can be changed into a loop
