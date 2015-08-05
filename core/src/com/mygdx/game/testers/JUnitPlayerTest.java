@@ -28,7 +28,7 @@ public class JUnitPlayerTest {
 		Player p = new Player();
 		assertNotNull(p.getSpeed());
 		assertNotNull(p.getExpToLevel());
-		assertNotNull(p.getCurrentLevel());
+		assertNotNull(p.getLevel());
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class JUnitPlayerTest {
 		p.setExperience(95);
 		p.increaseExp(10);
 		assertEquals(p.getExperience(), 5);
-		assertEquals(p.getCurrentLevel(), 2);
+		assertEquals(p.getLevel(), 2);
 		assertEquals(p.getExpToLevel(), 100);
 		MimicGdx.isTesting = false;
 	}

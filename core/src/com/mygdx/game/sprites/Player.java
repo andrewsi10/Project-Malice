@@ -85,7 +85,7 @@ public class Player extends Character {
 	{
 	    super( skin, Color.GREEN );
         controller = c;
-        setExpToLevel( 100 );
+        setStat( Stats.EXPTOLEVEL, 100 );
         pointsLabel = new Label( "", skin, "label" );
         updatePointsLabel();
 	}
@@ -97,7 +97,7 @@ public class Player extends Character {
 	 */
 	public Player() {
 		setSpeed( 5 );
-		setExpToLevel( 100 );
+		setStat( Stats.EXPTOLEVEL, 100 );
 	}
 	
 	/**
@@ -169,9 +169,9 @@ public class Player extends Character {
 	public void increaseExp(int exp) {
 		this.setExperience(getExperience() + exp);
 		if (getExperience() >= getExpToLevel()) {
-			setExperience(getExperience() - getExpToLevel());
+			increaseStat( Stats.EXPERIENCE, -getExpToLevel() );
 			increaseCurrentLevel();
-			setExpToLevel(getExpToLevel() * getCurrentLevel() / 2);
+			setStat( Stats.EXPTOLEVEL, getExpToLevel() * getLevel() / 2 );
 		}
 	}
 	

@@ -217,7 +217,7 @@ public class AnimatedSprite extends Sprite
       * @param speed
       *            new value for moveSpeed
       */
-     public void setSpeed( int speed ) {
+     public void setMoveSpeed( int speed ) {
          moveSpeed = speed;
      }
      
@@ -249,7 +249,7 @@ public class AnimatedSprite extends Sprite
       * 
       * @return moveSpeed;
       */
-     public float getSpeed() {
+     public float getMoveSpeed() {
          return moveSpeed;
      }
      

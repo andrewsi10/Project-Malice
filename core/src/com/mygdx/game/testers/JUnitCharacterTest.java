@@ -8,6 +8,7 @@ import org.junit.Test;
 import com.mygdx.game.MimicGdx;
 import com.mygdx.game.sprites.Character;
 import com.mygdx.game.sprites.Enemy;
+import com.mygdx.game.sprites.Player;
 
 /**
  *  JUnit tester for the Character class
@@ -84,7 +85,7 @@ public class JUnitCharacterTest {
 	@Test
 	public void testTranslate() {
 		// initializes new Character and moves it
-		Character c = new Enemy();
+		Character c = new Player();
 		float moveSpeed = c.getSpeed();
 		int dx = 1;
 		int dy = 1;
@@ -105,15 +106,15 @@ public class JUnitCharacterTest {
 	@Test
 	public void testIncreaseCurrentLevel() {
 		MimicGdx.isTesting = true;
-		Character c = new Enemy();
+		Character c = new Player();
 		c.takeDamage(25);
-		int level = c.getCurrentLevel() + 1;
+		int level = c.getLevel() + 1;
 		int BDmg = c.getBDmg() + 2;
 		int increasedHp = c.getCurrentHp()
 				+ (int) (10 * (c.getCurrentHp() / c.getMaxHp() + 1));
 		int maxHp = c.getMaxHp() + 10;
 		c.increaseCurrentLevel();
-		assertEquals(c.getCurrentLevel(), level);
+		assertEquals(c.getLevel(), level);
 		assertEquals(c.getBDmg(), BDmg);
 		assertEquals(c.getMaxHp(), maxHp);
 		assertEquals(c.getCurrentHp(), increasedHp);

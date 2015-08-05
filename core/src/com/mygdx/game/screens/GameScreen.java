@@ -362,7 +362,7 @@ public class GameScreen extends StagedScreen
 						    Audio.stopTheme(); // stops the theme music
 							game.setScreen( game.gameOver.update( 
 							                       player.getPoints(), 
-							                       player.getCurrentLevel() ) );
+							                       player.getLevel() ) );
 						}
 					}
 					break;

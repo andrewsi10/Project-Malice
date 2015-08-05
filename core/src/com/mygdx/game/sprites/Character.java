@@ -24,7 +24,7 @@ import com.mygdx.game.Audio;
  *
  *  @author  Sources: libgdx
  */
-public abstract class Character extends AnimatedSprite {
+public abstract class Character extends StatsSprite {
 	/**
 	 * Variable used to determine the height in pixels of the status bars
 	 */
@@ -35,14 +35,14 @@ public abstract class Character extends AnimatedSprite {
 	
 	private Label levelLabel, hpLabel;
 
-	private int maxHp; // max health
-	private int currentHp; // current health
-	private int experience;
-    private int level;
-	private int expToLevel = -1;
-	private int baseDmg = 20; // base damage
-	private int randMod = 4; // random damage modifier
-	private int reloadSpeed;
+//	private int maxHp; // max health
+//	private int currentHp; // current health
+//	private int experience;
+//    private int level;
+//	private int expToLevel = -1;
+//	private int baseDmg = 20; // base damage
+//	private int randMod = 4; // random damage modifier
+//	private int reloadSpeed;
 	private double previousTime = 0;
 	private String projectile;
     private Animation projectileAnimation;
@@ -107,12 +107,12 @@ public abstract class Character extends AnimatedSprite {
                       int speed, 
                       int reloadSpeed )
     {
-        this.maxHp = maxHp;
-        this.currentHp = maxHp;
-        this.experience = experience;
-        this.level = level;
+        setStat( Stats.MAXHP, maxHp );
+        resetHp();
+        setStat( Stats.EXPERIENCE, experience );
+        setStat( Stats.LEVEL, level );
         setSpeed( speed );
-        this.reloadSpeed = reloadSpeed;
+        setStat( Stats.RELOADSPEED, reloadSpeed );
         resetDirection();
 
         updateLevelLabel();
@@ -149,8 +149,9 @@ public abstract class Character extends AnimatedSprite {
 			renderer.setColor( Color.GRAY );
 			renderer.rect( hpX, hpY, hpW, hpH );
 			renderer.setColor( hpColor );
-			renderer.rect( hpX + 1, hpY + 1, ( hpW - 2 ) * currentHp / maxHp, 
-			               hpH - 2 );
+			renderer.rect( hpX + 1, hpY + 1, 
+			        ( hpW - 2 ) * getHp() / getMaxHp(), 
+			        hpH - 2 );
 			hpLabel.setPosition( hpX + hpW + 2, hpY + BARHEIGHT / 2 );
 			hpLabel.draw( batch, 1 );
 		}
@@ -205,7 +206,7 @@ public abstract class Character extends AnimatedSprite {
      */
     public void shoot( ArrayList<Entity> entities, double dir, long time ) 
     {
-        if (time - previousTime >= reloadSpeed) {
+        if ( time - previousTime >= getReloadSpeed() ) {
             previousTime = time;
             Audio.playAudio( projectile );
             entities.add( new Projectile( this, dir, projectileAnimation ) );
@@ -222,10 +223,10 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public void increaseCurrentLevel() {
 		// might need balancing
-		level++;
+		incrementStat( Stats.LEVEL );
 		updateLevelLabel();
 		Audio.playAudio( "levelup" );
-		int hpIncrement = (int)( 10 * ( currentHp / maxHp + 1 ) );
+		int hpIncrement = (int)( 10 * ( getHp() / getMaxHp() + 1 ) );
 		increaseBdmg( 2 );
 		increaseMaxHp( 10 );
 		increaseCurrentHp( hpIncrement );
@@ -238,7 +239,7 @@ public abstract class Character extends AnimatedSprite {
 	 *            integer to increase maxHp by
 	 */
 	public void increaseMaxHp( int i ) {
-		maxHp += i;
+	    increaseStat( Stats.MAXHP, i );
         updateHpLabel();
 	}
 
@@ -247,14 +248,24 @@ public abstract class Character extends AnimatedSprite {
 	 * currentHp is reduced to equal maxHp.
 	 * 
 	 * @param i
-	 *            integer to increase currentHp by
+	 *            absolute value of integer to increase currentHp by
 	 */
 	public void increaseCurrentHp( int i ) {
-	    currentHp += i;
-		if ( currentHp > maxHp )
-			currentHp = maxHp;
+        increaseStat( Stats.HP, i );
+		if ( getHp() > getMaxHp() )
+			resetHp();
         updateHpLabel();
 	}
+
+    /**
+     * decrements currentHp by damage taken
+     * 
+     * @param damage
+     *            absolute value of damage taken
+     */
+    public void takeDamage( int damage ) {
+        increaseCurrentHp( -damage );
+    }
 
 	/**
 	 * returns whether character is dead
@@ -262,38 +273,7 @@ public abstract class Character extends AnimatedSprite {
 	 * @return true if currentHp <= 0. False otherwise.
 	 */
 	public boolean isDead() {
-		return currentHp <= 0;
-	}
-
-	/**
-	 * setter for experience
-	 * 
-	 * @param experience
-	 *            new value for experience
-	 */
-	public void setExperience(int experience) {
-		this.experience = experience;
-	}
-
-	/**
-	 * setter for expToLevel
-	 * 
-	 * @param exp
-	 *            new value for expToLevel
-	 */
-	public void setExpToLevel(int exp) {
-		this.expToLevel = exp;
-	}
-
-	/**
-	 * decrements currentHp by damage taken
-	 * 
-	 * @param damage
-	 *            value of damage taken
-	 */
-	public void takeDamage( int damage ) {
-		currentHp -= damage;
-        updateHpLabel();
+		return getHp() <= 0;
 	}
 
 	/**
@@ -303,7 +283,7 @@ public abstract class Character extends AnimatedSprite {
 	 *            value to increase baseDmg by
 	 */
 	public void increaseBdmg(int i) {
-		baseDmg += i;
+	    increaseStat( Stats.ATTACK, i );
 	}
 	
 	/**
@@ -320,6 +300,7 @@ public abstract class Character extends AnimatedSprite {
 	 * Updates the text and visibility of LevelLabel
 	 */
 	private void updateLevelLabel() {
+	    int level = getLevel();
         levelLabel.setText( "Level " + level );
         levelLabel.setVisible( level > 0 );
 	}
@@ -328,6 +309,8 @@ public abstract class Character extends AnimatedSprite {
      * Updates the text and visibility of hpLabel
      */
 	private void updateHpLabel() {
+	    int currentHp = getHp();
+	    int maxHp = getMaxHp();
         hpLabel.setText( currentHp + "/" + maxHp );
         hpLabel.setVisible( currentHp < maxHp );
 	}
@@ -335,39 +318,12 @@ public abstract class Character extends AnimatedSprite {
 	// -----------------------Getters -----------------//
 
 	/**
-	 * getter method for level
-	 * 
-	 * @return level
-	 */
-	public int getCurrentLevel() {
-		return level;
-	}
-
-	/**
-	 * getter method for experience
-	 * 
-	 * @return experience
-	 */
-	public int getExperience() {
-		return experience;
-	}
-
-	/**
-	 * getter method for expToLevel
-	 * 
-	 * @return expToLevel
-	 */
-	public int getExpToLevel() {
-		return expToLevel;
-	}
-
-	/**
 	 * damage dealt by Character
 	 * 
 	 * @return baseDmg with an added random value scaled by randMod
 	 */
 	public int getDamageDealt() {
-		return baseDmg + (int) (randMod * Math.random());
+		return getAttack() + (int)( getLuck() * Math.random() );
 	}
 
 	// --------------------For Testing --------------//
@@ -382,10 +338,15 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	@Override
 	public String toString() {
-		String s = "HP: " + currentHp + "/" + maxHp + "; Base Damage: "
-				+ baseDmg + ", RandomMod: " + randMod + ", " + "Direction: "
-				+ getDirection() + ", Reload; " + reloadSpeed + ", previousTime: "
-				+ previousTime + ", moveSpeed: " + getSpeed();
+		String s = "Direction: " + getDirection();
+		for ( Stats stat : Stats.values() ) {
+		    s += stat + ": " + getStat( stat );
+		}
+		s += "Previous Time: " + previousTime;
+//		s= "HP: " + currentHp + "/" + maxHp + "; Base Damage: "
+//				+ baseDmg + ", RandomMod: " + randMod + ", " + "Direction: "
+//				+ getDirection() + ", Reload; " + reloadSpeed + ", previousTime: "
+//				+ previousTime + ", moveSpeed: " + getSpeed();
 
 		return s;
 	}
@@ -396,18 +357,9 @@ public abstract class Character extends AnimatedSprite {
 	 */
 	public Character() {
 		setSpeed(10);
-		level = 1;
-		reloadSpeed = 1000;
+		setStat( Stats.LEVEL, 1 );
+		setStat( Stats.RELOADSPEED, 1000 );
 	}
-
-    /**
-     * getter method for maxHp
-     * 
-     * @return maxHp
-     */
-    public int getMaxHp() {
-        return maxHp;
-    }
 
     /**
      * getter method for currentHp
@@ -415,7 +367,7 @@ public abstract class Character extends AnimatedSprite {
      * @return currentHp
      */
     public int getCurrentHp() {
-        return currentHp;
+        return getHp();
     }
 
     /**
@@ -424,7 +376,7 @@ public abstract class Character extends AnimatedSprite {
      * @return baseDmg
      */
     public int getBDmg() {
-        return baseDmg;
+        return getAttack();
     }
 
 }
