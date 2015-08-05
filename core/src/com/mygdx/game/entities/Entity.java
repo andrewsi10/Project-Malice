@@ -27,11 +27,6 @@ public abstract class Entity extends AnimatedSprite
      */
     public abstract boolean hitCharacter( Character c );
     
-    public boolean collidesWith( Character c )
-    {
-        return c.getBoundingRectangle().overlaps( this.getBoundingRectangle() );
-    }
-    
     // for expansion: returns whether two sprites are of the same Team, should use strings if more than two teams
 //    private boolean sameTeam( Character c1, Character c2 )
 //    {

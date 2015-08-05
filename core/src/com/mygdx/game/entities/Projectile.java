@@ -36,7 +36,7 @@ public class Projectile extends Entity
 	    super( dir, a );
         this.myCharacter = c;
         
-        setSpeed( 8 );
+        setMoveSpeed( 8 );
         setSize( getWidth() / 3, getHeight() / 3 );
         setCenterPosition( c.getCenterX(), c.getCenterY() );
 	}
@@ -89,8 +89,8 @@ public class Projectile extends Entity
 	@Override
     public boolean hitCharacter( Character c )
     {
-        if ( c == this.myCharacter ) return false; // all not colliding conditions
-        if ( collidesWith( c ) ) {
+	    // all not colliding conditions
+        if ( c != this.myCharacter && collidesWith( c ) ) {
             c.takeDamage( myCharacter.getDamageDealt() );
             return true;
         }

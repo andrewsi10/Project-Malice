@@ -155,7 +155,7 @@ public class AnimatedSprite extends Sprite
              prevDirection = Direction.WEST;
          }
          
-         if ( prevDirection != d )
+         if ( prevDirection != d ) // if direction changed set new Animation
              animation = animations[prevDirection.getDirection() / 90];
 
          if ( !animation.isAnimationFinished( stateTime ) ) {
@@ -186,7 +186,18 @@ public class AnimatedSprite extends Sprite
              translateX( (float) ( moveSpeed * Math.cos( Math.toRadians( 90 - direction ) ) ) );
          }
      }
+     
+     /**
+      * Returns whether this Sprite Collides with given sprite
+      * @param c
+      * @return true if this sprite overlaps the other
+      */
+     public boolean collidesWith( Sprite s )
+     {
+         return getBoundingRectangle().overlaps( s.getBoundingRectangle() );
+     }
 
+     // ---------------------- Setters --------------------- //
      /**
       * Setter method for setDirection. Input will be modded by 360 so that
       * direction will be a valid integer in the range [0, 360)
@@ -226,6 +237,7 @@ public class AnimatedSprite extends Sprite
          setPosition( x - getWidth() / 2, y - getHeight() / 2 );
      }
 
+     // ---------------------- Getters --------------------- //
      /**
       * getter method for direction
       * 

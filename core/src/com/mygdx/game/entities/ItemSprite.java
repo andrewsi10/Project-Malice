@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.sprites.Character;
+import com.mygdx.game.sprites.StatsSprite.Stats;
 
 public class ItemSprite extends Entity
 {
@@ -23,24 +24,54 @@ public class ItemSprite extends Entity
         }
     }
     
+    // TODO should create an Effect class to store Stats and the effect for more flexibility 
+    // i.e. timers for status effects
+    private static final EnumMap<Item, Stats> stats = new EnumMap<Item, Stats>( Item.class );
+    private static final EnumMap<Item, Integer> effects = new EnumMap<Item, Integer>( Item.class );
+    
+    public static void loadMaps() { // TODO note: should use a file to load properties
+        stats.put( Item.HealthKit, Stats.HP );
+        effects.put( Item.HealthKit, +10 ); // HealthKits add 10 hp when picked up
+    }
+    
+    
+    private Character myCharacter; // To be used to determine team if necessary
+    private Item item;
+    
+    /**
+     * Constructs an ItemSprite
+     * @param c Character that "dropped" this ItemSprite
+     * @param i Item that this ItemSprite is to represent
+     */
     public ItemSprite( Character c, Item i ) {
         super( -1, itemAnimations.get( i ) );
+        myCharacter = c;
+        item = i;
         
         setSize( 64, 64 );
         setCenterPosition( c.getCenterX(), c.getCenterY() );
     }
 
+    /**
+     * ItemSprites currently do not move (may change depending on items added)
+     * 
+     * @see com.mygdx.game.entities.Entity#move()
+     */
     @Override
     public void move() {}
 
     /**
-     * Does stuff according to Item type to Character colliding with
+     * Does stuff to Character colliding with according to Item type
      * 
      * @see com.mygdx.game.entities.Entity#hitCharacter(com.mygdx.game.sprites.Character)
      */
     @Override
     public boolean hitCharacter( Character c )
     {
+        if ( c != myCharacter && collidesWith( c ) ) {
+            c.increaseStat( stats.get( item ), effects.get( item ) );
+            return true;
+        }
         return false;
     }
 }
