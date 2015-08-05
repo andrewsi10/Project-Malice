@@ -34,8 +34,6 @@ public class ItemSprite extends Entity
         effects.put( Item.HealthKit, +10 ); // HealthKits add 10 hp when picked up
     }
     
-    
-    private Character myCharacter; // To be used to determine team if necessary
     private Item item;
     
     /**
@@ -44,8 +42,7 @@ public class ItemSprite extends Entity
      * @param i Item that this ItemSprite is to represent
      */
     public ItemSprite( Character c, Item i ) {
-        super( -1, itemAnimations.get( i ) );
-        myCharacter = c;
+        super( c, -1, itemAnimations.get( i ) );
         item = i;
         
         setSize( 64, 64 );
@@ -68,7 +65,7 @@ public class ItemSprite extends Entity
     @Override
     public boolean hitCharacter( Character c )
     {
-        if ( !c.getClass().equals( myCharacter.getClass() ) && collidesWith( c ) ) {
+        if ( !sameTeamWith( c ) && collidesWith( c ) ) {
             c.increaseStat( stats.get( item ), effects.get( item ) );
             c.updateLabels();
             return true;

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -270,7 +271,7 @@ public class GameScreen extends StagedScreen
 		drawCharacters( false );
 		for ( Entity entity : entities )
 		{
-			entity.draw( batch );
+            drawSprite( entity );
 		}
         batch.end();
         renderer.end();
@@ -328,7 +329,7 @@ public class GameScreen extends StagedScreen
 		{
 			Entity entity = entities.get( i );
 			entity.move();
-			entity.draw( batch );
+			drawSprite( entity );
 
 			boolean hasHit = false;
 			for ( Character sprite : sprites )
@@ -412,24 +413,32 @@ public class GameScreen extends StagedScreen
 		}
 	}
 	
+
+    private Rectangle checkRectangle = new Rectangle(); // TODO see if this works to lessen Sprite rendering
 	/**
 	 * Draws all the Characters and moves them if requested
 	 * @param move whether to move the Characters
 	 */
 	private void drawCharacters( boolean move ) {
-	    Rectangle checkRectangle = new Rectangle(); // TODO see if this works to lessen Sprite rendering
-	    checkRectangle.setSize( cam.viewportWidth * ZOOM, cam.viewportHeight * ZOOM );
-	    checkRectangle.setPosition( cam.position.x - cam.viewportWidth * ZOOM / 2, 
-	                                cam.position.y - cam.viewportHeight * ZOOM / 2);
         for ( Character sprite : sprites )
         {
             if ( move )
                 moveSprite( sprite );
-            if ( sprite.getBoundingRectangle().overlaps( checkRectangle ) ) {
-                sprite.draw( batch );
+            if ( drawSprite( sprite ) ) {
                 sprite.drawBars( batch, renderer );
             }
         }
+	}
+	
+	private boolean drawSprite( Sprite sprite ) {
+        checkRectangle.setSize( cam.viewportWidth * ZOOM, cam.viewportHeight * ZOOM );
+        checkRectangle.setPosition( cam.position.x - cam.viewportWidth * ZOOM / 2, 
+                                    cam.position.y - cam.viewportHeight * ZOOM / 2);
+        if ( sprite.getBoundingRectangle().overlaps( checkRectangle ) ) {
+            sprite.draw( batch );
+            return true;
+        }
+        return false;
 	}
 
 	/**
@@ -566,7 +575,6 @@ public class GameScreen extends StagedScreen
     public void resize( int width, int height ) {
         cam.setToOrtho( false, Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
         super.resize( width, height );
-//        stage.getViewport().update( width, height, true );
     }
 
 	/**

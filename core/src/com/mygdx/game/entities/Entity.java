@@ -6,7 +6,9 @@ import com.mygdx.game.sprites.Character;
 
 public abstract class Entity extends AnimatedSprite
 {
-    public Entity(  double dir, Animation a )
+    protected Character myCharacter;
+    
+    public Entity( Character c, double dir, Animation a )
     {
         super( dir, a );
     }
@@ -28,9 +30,15 @@ public abstract class Entity extends AnimatedSprite
     public abstract boolean hitCharacter( Character c );
     
     // for expansion: returns whether two sprites are of the same Team, should use strings if more than two teams
-//    private boolean sameTeam( Character c1, Character c2 )
-//    {
-//        return ( c1 instanceof Enemy && c2 instanceof Enemy )
-//            || ( c1 instanceof Player && c2 instanceof Player );
-//    }
+    /**
+     * Returns whether two sprites are of the same Team, should use strings or
+     * integers if not determined by Class
+     * 
+     * @param c Character to compare with
+     * @return
+     */
+    public boolean sameTeamWith( Character c )
+    {
+        return c.getClass().equals( myCharacter.getClass() );
+    }
 }

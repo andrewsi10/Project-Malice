@@ -17,7 +17,6 @@ import com.mygdx.game.sprites.Character;
  */
 public class Projectile extends Entity
 {
-    private Character myCharacter;
 
 	/**
 	 * Constructs a Projectile class
@@ -33,8 +32,7 @@ public class Projectile extends Entity
 	 */
 	public Projectile( Character c, double dir, Animation a )
 	{
-	    super( dir, a );
-        this.myCharacter = c;
+	    super( c, dir, a );
         
         setMoveSpeed( 8 );
         setSize( getWidth() / 3, getHeight() / 3 );
