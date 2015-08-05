@@ -212,6 +212,12 @@ public abstract class Character extends StatsSprite {
             entities.add( new Projectile( this, dir, projectileAnimation ) );
         }
     }
+    
+    /**
+     * Called when Character dies
+     * @param entities
+     */
+    public abstract void die( ArrayList<Entity> entities );
 
 	// --------------------Setters and Incrementers --------------------//
 
@@ -296,6 +302,12 @@ public abstract class Character extends StatsSprite {
 	}
 	
 	// ----------------------- Updaters ---------------------//
+	
+	public void updateLabels() {
+	    this.updateLevelLabel();
+	    this.updateHpLabel();
+	}
+	
 	/**
 	 * Updates the text and visibility of LevelLabel
 	 */
@@ -343,10 +355,6 @@ public abstract class Character extends StatsSprite {
 		    s += stat + ": " + getStat( stat );
 		}
 		s += "Previous Time: " + previousTime;
-//		s= "HP: " + currentHp + "/" + maxHp + "; Base Damage: "
-//				+ baseDmg + ", RandomMod: " + randMod + ", " + "Direction: "
-//				+ getDirection() + ", Reload; " + reloadSpeed + ", previousTime: "
-//				+ previousTime + ", moveSpeed: " + getSpeed();
 
 		return s;
 	}

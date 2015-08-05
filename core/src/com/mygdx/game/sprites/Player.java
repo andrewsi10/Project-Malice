@@ -149,6 +149,9 @@ public class Player extends Character {
         if ( dir >= 0 )
             shoot( entities, dir, System.currentTimeMillis() );
 	}
+	
+	@Override
+	public void die( ArrayList<Entity> entities ) {}
 
 	/**
 	 * increases displayed player points by a unit of 10

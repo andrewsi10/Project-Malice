@@ -68,8 +68,9 @@ public class ItemSprite extends Entity
     @Override
     public boolean hitCharacter( Character c )
     {
-        if ( c != myCharacter && collidesWith( c ) ) {
+        if ( !c.getClass().equals( myCharacter.getClass() ) && collidesWith( c ) ) {
             c.increaseStat( stats.get( item ), effects.get( item ) );
+            c.updateLabels();
             return true;
         }
         return false;

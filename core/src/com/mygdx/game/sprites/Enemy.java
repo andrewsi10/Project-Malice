@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.ItemSprite;
+import com.mygdx.game.entities.ItemSprite.Item;
 
 /**
  *  This class represents an Enemy in the game that will attack the Player when
@@ -28,6 +30,8 @@ public class Enemy extends Character {
     public static final Animation[] ANIMATIONS = new Animation[NUMENEMIES];
     public static final Animation PROJECTILE = new Animation( FRAME_DURATION, 
         new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ).getRegions() );
+    public static final Item[] ITEMS = new Item[NUMENEMIES];
+    public static final int DROP_RATE = 25;
     
     public static void loadAnimations()
     {
@@ -38,6 +42,7 @@ public class Enemy extends Character {
             s = "img/sprites/Enemies/Enemy" + i + "/Enemy" + i + ".atlas";
             a = new TextureAtlas( s ).getRegions();
             ANIMATIONS[i-1] = new Animation( FRAME_DURATION, a );
+            ITEMS[i-1] = Item.HealthKit;
         }
     }
 
@@ -53,6 +58,7 @@ public class Enemy extends Character {
     
 	private int travelTime;
 	private double tempDirection;
+	private Item item;
 
 	/**
 	 * Creates an Enemy with default stats:
@@ -67,6 +73,7 @@ public class Enemy extends Character {
 	 */
 	public Enemy( Skin skin, int index ) {
         super( skin, Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
+        item = ITEMS[index];
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
 	}
     
@@ -113,6 +120,14 @@ public class Enemy extends Character {
         translate();
         setAnimations( true );
 	}
+	
+	/**
+	 * @see com.mygdx.game.sprites.Character#die(java.util.ArrayList)
+	 */
+	@Override
+	public void die( ArrayList<Entity> entities ) {
+        dropItem( entities ); // TODO drop when dead
+	}
 
 	/**
 	 * If travelTime < 1, reassign direction to a random number in the interval
@@ -127,6 +142,18 @@ public class Enemy extends Character {
 					* travelTimeScalar);
 		}
 		travelTime--;
+	}
+	
+	/**
+	 * Drops this Sprite's items
+	 * @param entities ArrayList of items to drop items into
+	 */
+	public void dropItem( ArrayList<Entity> entities ) {
+	    if ( isDead() ) {
+	        int temp = (int)( Math.random() * 100 );
+	        if ( temp < DROP_RATE )
+	            entities.add( new ItemSprite( this, item ) );
+	    }
 	}
 
 	/**

@@ -339,7 +339,7 @@ public class GameScreen extends StagedScreen
 					if ( sprite.isDead() )
 					{
 						sprites.remove( sprite );
-						if ( sprite instanceof Enemy )
+						if ( sprite != player )
 						{
 							player.increasePoints();
 							player.increaseExp( sprite.getExperience() );
@@ -351,6 +351,7 @@ public class GameScreen extends StagedScreen
 							                       player.getPoints(), 
 							                       player.getLevel() ) );
 						}
+						sprite.die( entities );
 					}
 					break;
 				}
