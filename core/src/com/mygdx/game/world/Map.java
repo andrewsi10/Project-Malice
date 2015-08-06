@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.entities.Entity;
 
 /**
  *  Map class displays a map using tiles in a 2D array. Does not use a separate 
@@ -398,6 +399,8 @@ public class Map
 
     // -----------------------Collision ------------------ //
 
+
+    private Rectangle check = new Rectangle();
     /**
      * Returns true if Sprite is in a wall, checks the sprite's bounding 
      * Rectangle with a created Rectangle to represent the walls near that 
@@ -408,7 +411,8 @@ public class Map
      */
     public boolean isCollidingWithWall( Sprite s )
     {
-        Rectangle check = new Rectangle();
+        if ( s instanceof Entity && !( (Entity)s ).collidesWithWalls() )
+            return false;
         check.setSize( PIXELS_TO_TILES );
         int x = pixelToTile( s.getX() );
         int y = pixelToTile( s.getY() );

@@ -45,6 +45,7 @@ public class ItemSprite extends Entity
         super( c, -1, itemAnimations.get( i ) );
         item = i;
         
+        setWallCollision( false );
         setSize( 64, 64 );
         setCenterPosition( c.getCenterX(), c.getCenterY() );
     }

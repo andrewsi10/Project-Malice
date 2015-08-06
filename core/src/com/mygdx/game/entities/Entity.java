@@ -7,10 +7,12 @@ import com.mygdx.game.sprites.Character;
 public abstract class Entity extends AnimatedSprite
 {
     protected Character myCharacter;
+    private boolean wallCollides = true;
     
     public Entity( Character c, double dir, Animation a )
     {
         super( dir, a );
+        myCharacter = c;
     }
     
     /**
@@ -40,5 +42,15 @@ public abstract class Entity extends AnimatedSprite
     public boolean sameTeamWith( Character c )
     {
         return c.getClass().equals( myCharacter.getClass() );
+    }
+    
+    public void setWallCollision( boolean collides ) 
+    {
+        wallCollides = collides;
+    }
+    
+    public boolean collidesWithWalls()
+    {
+        return wallCollides;
     }
 }
