@@ -108,6 +108,14 @@ public class StatsSprite extends AnimatedSprite
     public void incrementStat( Stats s ) {
         increaseStat( s, 1 );
     }
+    
+    /**
+     * Returns whether this sprite has full Hp
+     * @return hp >= maxHp
+     */
+    public boolean atFullHp() {
+        return getHp() >= getMaxHp();
+    }
 
     // ----------------------- Getters ------------------------- //
     /**
@@ -119,38 +127,47 @@ public class StatsSprite extends AnimatedSprite
         return stats.get( s );
     }
     // Personal getters for all the Stats
+    /** Returns the level of this sprite */
     public int getLevel() {
         return stats.get( Stats.LEVEL );
     }
-    
+
+    /** Returns the experience of this sprite */
     public int getExperience() {
         return stats.get( Stats.EXPERIENCE );
     }
-    
+
+    /** Returns the exp needed for the next level of this sprite */
     public int getExpToLevel() {
         return stats.get( Stats.EXPTOLEVEL );
     }
-    
+
+    /** Returns the hp of this sprite */
     public int getHp() {
         return stats.get( Stats.HP );
     }
-    
+
+    /** Returns the maxHp of this sprite */
     public int getMaxHp() {
         return stats.get( Stats.MAXHP );
     }
-    
+
+    /** Returns the attack/strength of this sprite */
     public int getAttack() {
         return stats.get( Stats.ATTACK );
     }
-    
+
+    /** Returns the speed of this sprite */
     public int getSpeed() {
         return stats.get( Stats.SPEED );
     }
-    
+
+    /** Returns the time to reload for this sprite */
     public int getReloadSpeed() {
         return stats.get( Stats.RELOADSPEED );
     }
-    
+
+    /** Returns the luck of this sprite */
     public int getLuck() {
         return stats.get( Stats.LUCK );
     }

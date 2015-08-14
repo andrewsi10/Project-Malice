@@ -11,7 +11,22 @@ import com.mygdx.game.sprites.StatsSprite.Stats;
 public class ItemSprite extends Entity
 {
     public enum Item {
-        HealthKit
+        HealthKit;
+        
+        /**
+         * Returns whether conditions are right for this Item to collide with 
+         * Character
+         * @param c Character to collide with
+         * @return whether conditions are right for this Item to collide
+         */
+        public boolean specificallyCollidesWith( Character c ) {
+            boolean b = false;
+            switch ( this ) {
+                case HealthKit:
+                    b = !c.atFullHp();
+            }
+            return b;
+        }
     }
     
     public static final EnumMap<Item, Animation> itemAnimations = new EnumMap<Item, Animation>( Item.class );
@@ -66,7 +81,8 @@ public class ItemSprite extends Entity
     @Override
     public boolean hitCharacter( Character c )
     {
-        if ( !sameTeamWith( c ) && collidesWith( c ) ) {
+        if ( !sameTeamWith( c ) && collidesWith( c ) 
+                        && item.specificallyCollidesWith( c ) ) {
             c.increaseStat( stats.get( item ), effects.get( item ) );
             c.updateLabels();
             return true;
