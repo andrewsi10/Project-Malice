@@ -268,11 +268,11 @@ public class GameScreen extends StagedScreen
 		map.draw( batch );
 
 		spawnEnemies();
-		drawCharacters( false );
-		for ( Entity entity : entities )
-		{
+        for ( Entity entity : entities )
+        {
             drawSprite( entity );
-		}
+        }
+		drawCharacters( false );
         batch.end();
         renderer.end();
         // set labels
@@ -324,7 +324,6 @@ public class GameScreen extends StagedScreen
 		map.draw( batch );
 		
 		spawnEnemies();
-		drawCharacters( true );
 		for ( int i = 0; i < entities.size(); i++ )
 		{
 			Entity entity = entities.get( i );
@@ -363,6 +362,7 @@ public class GameScreen extends StagedScreen
 				i--;
 			}
 		}
+        drawCharacters( true );
         batch.end();
         renderer.end();
 		setPointsLabelColor();
