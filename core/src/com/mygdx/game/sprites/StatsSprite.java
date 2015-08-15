@@ -30,7 +30,10 @@ public class StatsSprite extends AnimatedSprite
      * For Testing
      */
     public StatsSprite() { 
-        defaultStats();
+        this( true );
+    }
+    public StatsSprite( boolean defaultStats ) {
+        if ( defaultStats ) defaultStats();
     }
     
     /**
