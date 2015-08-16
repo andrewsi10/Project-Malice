@@ -342,14 +342,14 @@ public class GameScreen extends StagedScreen
 						if ( sprite != player )
 						{
 							player.increasePoints();
-							player.increaseExp( sprite.getExperience() );
+							player.increaseExp( sprite.getSpriteData().getExperience() );
 							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
 						} else // if ( sprite instanceof Player )
 						{
 						    Audio.stopTheme(); // stops the theme music
 							game.setScreen( game.gameOver.update( 
 							                       player.getPoints(), 
-							                       player.getLevel() ) );
+							                       player.getSpriteData().getLevel() ) );
 						}
 						sprite.die( entities );
 					}
@@ -405,7 +405,7 @@ public class GameScreen extends StagedScreen
 			Enemy e = new Enemy( skin, index );
 			e.increaseBdmg( -5 + player.getPoints() / 50 );
 			e.increaseMaxHp( player.getPoints() / 20 );
-			e.increaseCurrentHp( player.getPoints() / 20 );
+			e.getSpriteData().resetHp();
 			// set spawn for enemy
 			map.setSpawn( player.getX(), player.getY() );
 			e.setPosition( map.getSpawnX(), map.getSpawnY() );

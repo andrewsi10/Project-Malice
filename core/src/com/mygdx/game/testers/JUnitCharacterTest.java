@@ -86,7 +86,7 @@ public class JUnitCharacterTest {
 	public void testTranslate() {
 		// initializes new Character and moves it
 		Character c = new Player();
-		float moveSpeed = c.getSpeed();
+		float moveSpeed = c.getSpriteData().getSpeed();
 		int dx = 1;
 		int dy = 1;
 		c.translate(dx, dy);
@@ -108,15 +108,15 @@ public class JUnitCharacterTest {
 		MimicGdx.isTesting = true;
 		Character c = new Player();
 		c.takeDamage(25);
-		int level = c.getLevel() + 1;
+		int level = c.getSpriteData().getLevel() + 1;
 		int BDmg = c.getBDmg() + 2;
 		int increasedHp = c.getCurrentHp()
-				+ (int) (10 * (c.getCurrentHp() / c.getMaxHp() + 1));
-		int maxHp = c.getMaxHp() + 10;
+				+ (int) (10 * (c.getSpriteData().getHpRatio() + 1));
+		int maxHp = c.getSpriteData().getMaxHp() + 10;
 		c.increaseCurrentLevel();
-		assertEquals(c.getLevel(), level);
+		assertEquals(c.getSpriteData().getLevel(), level);
 		assertEquals(c.getBDmg(), BDmg);
-		assertEquals(c.getMaxHp(), maxHp);
+		assertEquals(c.getSpriteData().getMaxHp(), maxHp);
 		assertEquals(c.getCurrentHp(), increasedHp);
 		MimicGdx.isTesting = false;
 	}

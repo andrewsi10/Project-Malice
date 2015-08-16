@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Projectile;
 import com.mygdx.game.screens.StagedScreen;
+import com.mygdx.game.sprites.SpriteData.Stats;
 import com.mygdx.game.Audio;
 
 /**
@@ -99,16 +100,16 @@ public abstract class Character extends StatsSprite {
                       int speed, 
                       int reloadSpeed )
     {
-        setStat( Stats.MAXHP, maxHp );
-        resetHp();
-        setStat( Stats.EXPERIENCE, experience );
-        setStat( Stats.LEVEL, level );
+        SpriteData s = getSpriteData();
+        s.setStat( Stats.MAXHP, maxHp );
+        s.resetHp();
+        s.setStat( Stats.EXPERIENCE, experience );
+        s.setStat( Stats.LEVEL, level );
         setSpeed( speed );
-        setStat( Stats.RELOADSPEED, reloadSpeed );
+        s.setStat( Stats.RELOADSPEED, reloadSpeed );
         resetDirection();
 
-        updateLevelLabel();
-        updateHpLabel();
+        updateLabels();
     }
 
 	// --------------------- Art ----------------------//
@@ -142,19 +143,18 @@ public abstract class Character extends StatsSprite {
 			renderer.rect( hpX, hpY, hpW, hpH );
 			renderer.setColor( hpColor );
 			renderer.rect( hpX + 1, hpY + 1, 
-			        ( hpW - 2 ) * getHp() / getMaxHp(), 
+			        ( hpW - 2 ) * getSpriteData().getHpRatio(), 
 			        hpH - 2 );
 			hpLabel.setPosition( hpX + hpW + 2, hpY + BARHEIGHT / 2 );
 			hpLabel.draw( batch, 1 );
 		}
 		// if experience is between (0,expToLevel)
-		if ( getExperience() < getExpToLevel() && getExperience() > 0 ) {
+		if ( getSpriteData().expIsInRange() ) {
 			hpY -= BARHEIGHT + 3;
 			renderer.setColor(Color.GRAY);
 			renderer.rect(hpX, hpY, hpW, hpH);
 			renderer.setColor(Color.CYAN);
-			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getExperience()
-					/ getExpToLevel(), hpH - 2);
+			renderer.rect(hpX + 1, hpY + 1, (hpW - 2) * getSpriteData().getExpRatio(), hpH - 2);
 		}
 		if ( levelLabel.isVisible() ) { // level > 0
 		    levelLabel.setPosition( getCenterX() - levelLabel.getPrefWidth() / 2, 
@@ -198,7 +198,7 @@ public abstract class Character extends StatsSprite {
      */
     public void shoot( ArrayList<Entity> entities, double dir, long time ) 
     {
-        if ( time - previousTime >= getReloadSpeed() ) {
+        if ( time - previousTime >= getSpriteData().getReloadSpeed() ) {
             previousTime = time;
             Audio.playAudio( projectile );
             entities.add( new Projectile( this, dir, projectileAnimation ) );
@@ -221,11 +221,9 @@ public abstract class Character extends StatsSprite {
 	 */
 	public void increaseCurrentLevel() {
 		// might need balancing
-	    this.getStatLoader().levelUpSprite( this );
-		updateLevelLabel();
-		Audio.playAudio( "levelup" );
-		int hpIncrement = (int)( 10 * ( getHp() / getMaxHp() + 1 ) );
-		increaseCurrentHp( hpIncrement );
+	    this.levelUp( true );
+        updateLabels();
+        Audio.playAudio( "levelup" );
 	}
 
 	/**
@@ -235,7 +233,7 @@ public abstract class Character extends StatsSprite {
 	 *            integer to increase maxHp by
 	 */
 	public void increaseMaxHp( int i ) {
-	    increaseStat( Stats.MAXHP, i );
+	    getSpriteData().increaseStat( Stats.MAXHP, i );
         updateHpLabel();
 	}
 
@@ -246,10 +244,8 @@ public abstract class Character extends StatsSprite {
 	 * @param i
 	 *            absolute value of integer to increase currentHp by
 	 */
-	public void increaseCurrentHp( int i ) {
-        increaseStat( Stats.HP, i );
-		if ( getHp() > getMaxHp() )
-			resetHp();
+	public void heal( int i ) {
+	    getSpriteData().increaseHp( i );
         updateHpLabel();
 	}
 
@@ -260,7 +256,7 @@ public abstract class Character extends StatsSprite {
      *            absolute value of damage taken
      */
     public void takeDamage( int damage ) {
-        increaseCurrentHp( -damage );
+        heal( -damage );
     }
 
 	/**
@@ -269,7 +265,7 @@ public abstract class Character extends StatsSprite {
 	 * @return true if currentHp <= 0. False otherwise.
 	 */
 	public boolean isDead() {
-		return getHp() <= 0;
+		return getSpriteData().getHp() <= 0;
 	}
 
 	/**
@@ -279,7 +275,7 @@ public abstract class Character extends StatsSprite {
 	 *            value to increase baseDmg by
 	 */
 	public void increaseBdmg(int i) {
-	    increaseStat( Stats.ATTACK, i );
+	    getSpriteData().increaseStat( Stats.ATTACK, i );
 	}
 	
 	/**
@@ -302,7 +298,7 @@ public abstract class Character extends StatsSprite {
 	 * Updates the text and visibility of LevelLabel
 	 */
 	private void updateLevelLabel() {
-	    int level = getLevel();
+	    int level = getSpriteData().getLevel();
         levelLabel.setText( "Level " + level );
         levelLabel.setVisible( level > 0 );
 	}
@@ -311,22 +307,13 @@ public abstract class Character extends StatsSprite {
      * Updates the text and visibility of hpLabel
      */
 	private void updateHpLabel() {
-	    int currentHp = getHp();
-	    int maxHp = getMaxHp();
+	    int currentHp = getSpriteData().getHp();
+	    int maxHp = getSpriteData().getMaxHp();
         hpLabel.setText( currentHp + "/" + maxHp );
         hpLabel.setVisible( currentHp < maxHp );
 	}
 
 	// -----------------------Getters -----------------//
-
-	/**
-	 * damage dealt by Character
-	 * 
-	 * @return baseDmg with an added random value scaled by randMod
-	 */
-	public int getDamageDealt() {
-		return getAttack() + (int)( getLuck() * Math.random() );
-	}
 
 	// --------------------For Testing --------------//
 	/**
@@ -342,7 +329,7 @@ public abstract class Character extends StatsSprite {
 	public String toString() {
 		String s = "Direction: " + getDirection();
 		for ( Stats stat : Stats.values() ) {
-		    s += stat + ": " + getStat( stat );
+		    s += stat + ": " + getSpriteData().getStat( stat );
 		}
 		s += "Previous Time: " + previousTime;
 
@@ -354,9 +341,10 @@ public abstract class Character extends StatsSprite {
 	 * moveSpeed 10, and level 1.
 	 */
 	public Character() {
+	    SpriteData s = getSpriteData();
 		setSpeed(10);
-		setStat( Stats.LEVEL, 1 );
-		setStat( Stats.RELOADSPEED, 1000 );
+		s.setStat( Stats.LEVEL, 1 );
+		s.setStat( Stats.RELOADSPEED, 1000 );
 	}
 
     /**
@@ -365,7 +353,7 @@ public abstract class Character extends StatsSprite {
      * @return currentHp
      */
     public int getCurrentHp() {
-        return getHp();
+        return getSpriteData().getHp();
     }
 
     /**
@@ -374,7 +362,7 @@ public abstract class Character extends StatsSprite {
      * @return baseDmg
      */
     public int getBDmg() {
-        return getAttack();
+        return getSpriteData().getAttack();
     }
 
 }

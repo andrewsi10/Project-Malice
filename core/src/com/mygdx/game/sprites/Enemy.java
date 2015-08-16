@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.ItemSprite;
 import com.mygdx.game.entities.ItemSprite.Item;
+import com.mygdx.game.sprites.SpriteData.Stats;
 
 /**
  *  This class represents an Enemy in the game that will attack the Player when
@@ -75,6 +76,8 @@ public class Enemy extends Character {
         super( skin, Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
         item = ITEMS[index];
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
+        getSpriteData().setStat( Stats.ATTACK, 20 ); // default stats
+        getSpriteData().setStat( Stats.LUCK, 4 );
 	}
     
 	/**

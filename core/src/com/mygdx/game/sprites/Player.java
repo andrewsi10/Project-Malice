@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.loaders.StatLoader;
+import com.mygdx.game.sprites.SpriteData.Stats;
 import com.mygdx.game.Controller;
 
 /**
@@ -90,7 +91,6 @@ public class Player extends Character {
 	{
 	    super( skin, Color.GREEN );
         controller = c;
-        setStat( Stats.EXPTOLEVEL, 100 );
         pointsLabel = new Label( "", skin, "label" );
         updatePointsLabel();
 	}
@@ -102,7 +102,7 @@ public class Player extends Character {
 	 */
 	public Player() {
 		setSpeed( 5 );
-		setStat( Stats.EXPTOLEVEL, 100 );
+		getSpriteData().setStat( Stats.EXPTOLEVEL, 100 );
 	}
 	
 	/**
@@ -114,8 +114,11 @@ public class Player extends Character {
 	 */
 	public void reload() // reloads with default settings
 	{
-	    this.getStatLoader().setSprite( this );
-	    // this.load( 50, 0, 1, 5, 500 );
+	    this.getSpriteData().resetSprite();
+        getSpriteData().setStat( Stats.EXPTOLEVEL, 100 );
+        this.resetDirection();
+        this.updateLabels();
+        this.syncSpeeds();
 	    this.playerPoints = 0;
 	    controller.reset();
 	}
@@ -128,14 +131,9 @@ public class Player extends Character {
 	 */
 	public void change( Name n )
 	{
-        setStatLoader( LOADERS.get( n ) );
+        setSpriteData( LOADERS.get( n ) );
 	    this.setProjectile( n.projectileName, PROJECTILE_ANIMATIONS.get( n ) );
 	    this.initializeAnimations( PLAYER_ANIMATIONS.get( n ) );
-	    this.getStatLoader().setSprite( this );
-	    this.resetHp();
-	    this.resetDirection();
-	    this.updateLabels();
-	    this.setMoveSpeed( this.getSpeed() );
 	}
 
 	/**
@@ -182,11 +180,12 @@ public class Player extends Character {
 	 *            current value of experience
 	 */
 	public void increaseExp(int exp) {
-		this.setExperience(getExperience() + exp);
-		if (getExperience() >= getExpToLevel()) {
-			increaseStat( Stats.EXPERIENCE, -getExpToLevel() );
+	    SpriteData s = getSpriteData();
+	    s.increaseExp( exp );
+		while ( s.canLevel() ) {
+		    int toNextLevel = s.getExpToLevel() * s.getLevel() / 2;
 			increaseCurrentLevel();
-			setStat( Stats.EXPTOLEVEL, getExpToLevel() * getLevel() / 2 );
+			s.setStat( Stats.EXPTOLEVEL, toNextLevel );
 		}
 	}
 	

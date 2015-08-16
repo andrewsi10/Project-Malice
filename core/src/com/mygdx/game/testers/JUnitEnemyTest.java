@@ -25,8 +25,8 @@ public class JUnitEnemyTest {
 	@Test
 	public void testEnemy() {
 		Enemy e = new Enemy();
-		assertEquals(e.getExperience(), 20);
-		assertEquals(e.getSpeed(), 3, .001);
+		assertEquals(e.getSpriteData().getExperience(), 20);
+		assertEquals(e.getSpriteData().getSpeed(), 3, .001);
 		assertTrue(e.getDirection() >= 0 && e.getDirection() < 8);
 		assertTrue(e.getTravelTime() >= Enemy.minTravelTime
 				&& e.getTravelTime() < Enemy.minTravelTime

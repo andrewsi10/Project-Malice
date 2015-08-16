@@ -89,7 +89,7 @@ public class Projectile extends Entity
     {
 	    // all not colliding conditions
         if ( c != this.myCharacter && collidesWith( c ) ) {
-            c.takeDamage( myCharacter.getDamageDealt() );
+            c.takeDamage( myCharacter.getSpriteData().getDamageDealt() );
             return true;
         }
         return false;

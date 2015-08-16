@@ -4,49 +4,19 @@ import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.mygdx.game.sprites.StatsSprite;
-import com.mygdx.game.sprites.StatsSprite.Stats;
+import com.mygdx.game.sprites.SpriteData;
+import com.mygdx.game.sprites.SpriteData.Stats;
 
 public class StatLoader
 {
     public static final String PACKAGE = "values/";
     
     private FileHandle file;
-    private EnumMap<Stats, Integer> startStats = new EnumMap<Stats, Integer>(Stats.class);
-    private EnumMap<Stats, Integer> levelUp = new EnumMap<Stats, Integer>(Stats.class);
-    
-//    private StatsSprite sprite; // TODO maybe implement a direct connection with sprite
+    private SpriteData data = new SpriteData();
     
     public StatLoader( String filePath ) {
         file = Gdx.files.internal( PACKAGE + filePath );
         loadFile();
-    }
-    
-    public void setSprite( StatsSprite sprite ) {
-//        System.out.println( "Setting Sprite" );
-        setSprite( sprite, 1 );
-    }
-    
-    public void setSprite( StatsSprite sprite, int newLevel ) {
-        for ( Stats s : Stats.values() ) {
-            Integer start = startStats.get( s );
-            Integer level = levelUp.get( s );
-            if ( start != null && level != null )
-            {
-//                System.out.println( s + ": " + ( start + (newLevel-1)*level ) );
-                sprite.setStat( s, start + (newLevel-1)*level );
-            }
-        }
-    }
-    
-    public void levelUpSprite( StatsSprite sprite ) {
-//        System.out.println( "Leveling Sprite" );
-        setSprite( sprite, sprite.getLevel() + 1 );
-//        for ( Stats s : Stats.values() ) {
-//            Integer i = levelUp.get( s );
-//            if ( i != null )
-//                sprite.increaseStat( s, i );
-//        }
     }
     
     /**
@@ -66,6 +36,9 @@ public class StatLoader
         int stat = 0;
         int value;
         boolean isIncrease = false;
+        
+        EnumMap<Stats, Integer> startStats = data.getStartStats();
+        EnumMap<Stats, Integer> levelStats = data.getLevelStats();
         for ( String s : inputs ) {
             try {
                 value = Integer.parseInt( s );
@@ -73,7 +46,7 @@ public class StatLoader
                     startStats.put( stats[stat], value );
                 } 
                 else {
-                    levelUp.put( stats[stat], value );
+                    levelStats.put( stats[stat], value );
                 }
                 isIncrease = !isIncrease;
             }
@@ -86,8 +59,39 @@ public class StatLoader
             }
         }
         // special convenience conditions
-        levelUp.put( Stats.LEVEL, 1 ); // level up increases level by one
+        levelStats.put( Stats.LEVEL, 1 ); // level up increases level by one
     }
+    
+    public SpriteData getData() {
+        return data;
+    }
+    
+//  public void setSprite( StatsSprite sprite ) {
+////      System.out.println( "Setting Sprite" );
+//      setSprite( sprite, 1 );
+//  }
+//  
+//  public void setSprite( StatsSprite sprite, int newLevel ) {
+//      for ( Stats s : Stats.values() ) {
+//          Integer start = startStats.get( s );
+//          Integer level = levelStats.get( s );
+//          if ( start != null && level != null )
+//          {
+////              System.out.println( s + ": " + ( start + (newLevel-1)*level ) );
+//              sprite.setStat( s, start + (newLevel-1)*level );
+//          }
+//      }
+//  }
+//  
+//  public void levelUpSprite( StatsSprite sprite ) {
+////      System.out.println( "Leveling Sprite" );
+//      setSprite( sprite, sprite.getLevel() + 1 );
+////      for ( Stats s : Stats.values() ) {
+////          Integer i = levelUp.get( s );
+////          if ( i != null )
+////              sprite.increaseStat( s, i );
+////      }
+//  }
     
     // ---------------------------- Testing -------------------------- //
     
@@ -96,12 +100,8 @@ public class StatLoader
      */
     public StatLoader() {}
     
-    /**
-     * For Testing
-     * @return
-     */
-    public String printMaps() {
-        return startStats + "\n" + levelUp;
+    public String toString() {
+        return file + "\n" + data;
     }
     
     /**
@@ -109,16 +109,15 @@ public class StatLoader
      * @param args
      */
     public static void main( String[] args ) {
-        String file = "Level 1\n"
-                    + "Experience 0\n" 
+        String file = "Level 1\n" 
                     + "MaxHp 50 10\n" 
                     + "Attack 20 2\n" 
                     + "Speed 5 0\n" 
                     + "ReloadSpeed 500 0\n" 
                     + "Luck 4 0";
         StatLoader loader = new StatLoader();
-        System.out.println( loader.printMaps() );
+        System.out.println( loader );
         loader.loadInput( file );
-        System.out.println( loader.printMaps() );
+        System.out.println( loader );
     }
 }

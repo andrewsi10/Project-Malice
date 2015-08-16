@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.sprites.Character;
-import com.mygdx.game.sprites.StatsSprite.Stats;
+import com.mygdx.game.sprites.SpriteData.Stats;
 
 public class ItemSprite extends Entity
 {
@@ -23,7 +23,7 @@ public class ItemSprite extends Entity
             boolean b = false;
             switch ( this ) {
                 case HealthKit:
-                    b = !c.atFullHp();
+                    b = !c.getSpriteData().atFullHp();
             }
             return b;
         }
@@ -83,7 +83,7 @@ public class ItemSprite extends Entity
     {
         if ( !sameTeamWith( c ) && collidesWith( c ) 
                         && item.specificallyCollidesWith( c ) ) {
-            c.increaseStat( stats.get( item ), effects.get( item ) );
+            c.getSpriteData().increaseStat( stats.get( item ), effects.get( item ) );
             c.updateLabels();
             return true;
         }
