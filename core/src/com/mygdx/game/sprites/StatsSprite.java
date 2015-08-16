@@ -3,6 +3,7 @@ package com.mygdx.game.sprites;
 import java.util.EnumMap;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.mygdx.game.loaders.StatLoader;
 
 public class StatsSprite extends AnimatedSprite
 {
@@ -20,6 +21,8 @@ public class StatsSprite extends AnimatedSprite
     
     private EnumMap<Stats, Integer> stats = new EnumMap<Stats, Integer>( Stats.class );
 
+    private StatLoader myStats; // NOTE: may be better with a SpriteData Class to store all stats
+    
     public StatsSprite( double dir, Animation a )
     {
         super( dir, a );
@@ -61,8 +64,20 @@ public class StatsSprite extends AnimatedSprite
         setStat( Stats.HP, getMaxHp() );
     }
     
+    /**
+     * Returns whether this sprite has full Hp
+     * @return hp >= maxHp
+     */
+    public boolean atFullHp() {
+        return getHp() >= getMaxHp();
+    }
+    
     // ----------------------- Setters ------------------------- //
 
+    public void setStatLoader( StatLoader s ) {
+        myStats = s;
+    }
+    
     /**
      * setter for experience
      * 
@@ -112,15 +127,15 @@ public class StatsSprite extends AnimatedSprite
         increaseStat( s, 1 );
     }
     
-    /**
-     * Returns whether this sprite has full Hp
-     * @return hp >= maxHp
-     */
-    public boolean atFullHp() {
-        return getHp() >= getMaxHp();
+    public void levelUp() {
+        myStats.levelUpSprite( this );
     }
 
     // ----------------------- Getters ------------------------- //
+    public StatLoader getStatLoader() {
+        return myStats;
+    }
+    
     /**
      * Returns the requested stat's value
      * @param s

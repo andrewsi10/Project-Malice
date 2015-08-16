@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.loaders.StatLoader;
 import com.mygdx.game.Controller;
 
 /**
@@ -45,22 +46,26 @@ public class Player extends Character {
     public static final Name[] NAMES = Name.values();
     public static final EnumMap<Name, Animation[]> PLAYER_ANIMATIONS = new EnumMap<Name, Animation[]>(Name.class);
     public static final EnumMap<Name, Animation> PROJECTILE_ANIMATIONS = new EnumMap<Name, Animation>(Name.class);
+    public static final EnumMap<Name, StatLoader> LOADERS = new EnumMap<Name, StatLoader>(Name.class);
     
     public static void loadMaps() {
         String s;
         Array<AtlasRegion> a;
         for ( Name n : NAMES )
         {
+            // Player Animations
             a = new TextureAtlas( "img/sprites/Players/" + n + "/" + n + ".atlas" ).getRegions();
             PLAYER_ANIMATIONS.put( n, new Animation[]{
                 new Animation( FRAME_DURATION, a.get( 0 ), a.get( 1 ) ),
                 new Animation( FRAME_DURATION, a.get( 2 ), a.get( 3 ) ),
                 new Animation( FRAME_DURATION, a.get( 4 ), a.get( 5 ) ),
                 new Animation( FRAME_DURATION, a.get( 6 ), a.get( 7 ) ) } );
-            
+            // Projectile Animations
             s = n.projectileName + "/" + n.projectileName + ".atlas";
             a = new TextureAtlas( "img/sprites/Projectiles/" + s ).getRegions();
             PROJECTILE_ANIMATIONS.put( n, new Animation( FRAME_DURATION, a ) );
+            // Loaders
+            LOADERS.put( n, new StatLoader( n + ".txt" ) );
         }
     }
 
@@ -109,7 +114,8 @@ public class Player extends Character {
 	 */
 	public void reload() // reloads with default settings
 	{
-	    this.load( 50, 0, 1, 5, 500 );
+	    this.getStatLoader().setSprite( this );
+	    // this.load( 50, 0, 1, 5, 500 );
 	    this.playerPoints = 0;
 	    controller.reset();
 	}
@@ -122,8 +128,14 @@ public class Player extends Character {
 	 */
 	public void change( Name n )
 	{
+        setStatLoader( LOADERS.get( n ) );
 	    this.setProjectile( n.projectileName, PROJECTILE_ANIMATIONS.get( n ) );
 	    this.initializeAnimations( PLAYER_ANIMATIONS.get( n ) );
+	    this.getStatLoader().setSprite( this );
+	    this.resetHp();
+	    this.resetDirection();
+	    this.updateLabels();
+	    this.setMoveSpeed( this.getSpeed() );
 	}
 
 	/**

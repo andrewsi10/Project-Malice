@@ -52,10 +52,7 @@ public class CharacterSelect extends StagedScreen
         {
             final Player.Name n = Player.NAMES[i];
             final TextButton b = new TextButton( n.buttonName, skin );
-            if ( isAndroid )
-            {
-            	b.getLabel().setFontScale( fontScale );
-            }
+            scaleLabels( b.getLabel() );
             b.setPosition( 
                 Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
                 Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40

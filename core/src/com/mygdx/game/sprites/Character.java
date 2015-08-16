@@ -35,14 +35,6 @@ public abstract class Character extends StatsSprite {
 	
 	private Label levelLabel, hpLabel;
 
-//	private int maxHp; // max health
-//	private int currentHp; // current health
-//	private int experience;
-//    private int level;
-//	private int expToLevel = -1;
-//	private int baseDmg = 20; // base damage
-//	private int randMod = 4; // random damage modifier
-//	private int reloadSpeed;
 	private double previousTime = 0;
 	private String projectile;
     private Animation projectileAnimation;
@@ -229,12 +221,10 @@ public abstract class Character extends StatsSprite {
 	 */
 	public void increaseCurrentLevel() {
 		// might need balancing
-		incrementStat( Stats.LEVEL );
+	    this.getStatLoader().levelUpSprite( this );
 		updateLevelLabel();
 		Audio.playAudio( "levelup" );
 		int hpIncrement = (int)( 10 * ( getHp() / getMaxHp() + 1 ) );
-		increaseBdmg( 2 );
-		increaseMaxHp( 10 );
 		increaseCurrentHp( hpIncrement );
 	}
 

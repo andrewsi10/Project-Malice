@@ -9,7 +9,7 @@ import com.mygdx.game.sprites.StatsSprite.Stats;
 
 public class StatLoader
 {
-    public static final String PACKAGE = "/values/";
+    public static final String PACKAGE = "values/";
     
     private FileHandle file;
     private EnumMap<Stats, Integer> startStats = new EnumMap<Stats, Integer>(Stats.class);
@@ -23,28 +23,30 @@ public class StatLoader
     }
     
     public void setSprite( StatsSprite sprite ) {
-        for ( Stats s : Stats.values() ) {
-            Integer i = startStats.get( s );
-            if ( i != null )
-                sprite.setStat( s, i );
-        }
+//        System.out.println( "Setting Sprite" );
+        setSprite( sprite, 1 );
     }
     
     public void setSprite( StatsSprite sprite, int newLevel ) {
         for ( Stats s : Stats.values() ) {
-            Integer start = startStats.get( s ) + (newLevel-1)*levelUp.get( s );
+            Integer start = startStats.get( s );
             Integer level = levelUp.get( s );
-            if ( start != null )
+            if ( start != null && level != null )
+            {
+//                System.out.println( s + ": " + ( start + (newLevel-1)*level ) );
                 sprite.setStat( s, start + (newLevel-1)*level );
+            }
         }
     }
     
     public void levelUpSprite( StatsSprite sprite ) {
-        for ( Stats s : Stats.values() ) {
-            Integer i = startStats.get( s );
-            if ( i != null )
-                sprite.increaseStat( s, i );
-        }
+//        System.out.println( "Leveling Sprite" );
+        setSprite( sprite, sprite.getLevel() + 1 );
+//        for ( Stats s : Stats.values() ) {
+//            Integer i = levelUp.get( s );
+//            if ( i != null )
+//                sprite.increaseStat( s, i );
+//        }
     }
     
     /**
@@ -83,6 +85,8 @@ public class StatLoader
                 isIncrease = false;
             }
         }
+        // special convenience conditions
+        levelUp.put( Stats.LEVEL, 1 ); // level up increases level by one
     }
     
     // ---------------------------- Testing -------------------------- //
