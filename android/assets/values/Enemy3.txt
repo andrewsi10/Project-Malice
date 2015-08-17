@@ -1,0 +1,7 @@
+Level 0
+Experience 20
+MaxHp 50 10
+Attack 20 2
+Speed 3 0
+ReloadSpeed 1000 0
+Luck 4 0

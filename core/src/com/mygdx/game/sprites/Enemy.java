@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.ItemSprite;
 import com.mygdx.game.entities.ItemSprite.Item;
-import com.mygdx.game.sprites.SpriteData.Stats;
+import com.mygdx.game.loaders.StatLoader;
 
 /**
  *  This class represents an Enemy in the game that will attack the Player when
@@ -31,8 +31,9 @@ public class Enemy extends Character {
     public static final Animation[] ANIMATIONS = new Animation[NUMENEMIES];
     public static final Animation PROJECTILE = new Animation( FRAME_DURATION, 
         new TextureAtlas( "img/sprites/Projectiles/EnemyBullet/EnemyBullet.atlas" ).getRegions() );
-    public static final Item[] ITEMS = new Item[NUMENEMIES];
-    public static final int DROP_RATE = 25;
+    public static final Item[] ITEMS = new Item[NUMENEMIES]; // 2D array for more items
+    public static final int DROP_RATE = 25; // array for different drop rates
+    public static final StatLoader[] LOADERS = new StatLoader[NUMENEMIES];
     
     public static void loadAnimations()
     {
@@ -44,6 +45,8 @@ public class Enemy extends Character {
             a = new TextureAtlas( s ).getRegions();
             ANIMATIONS[i-1] = new Animation( FRAME_DURATION, a );
             ITEMS[i-1] = Item.HealthKit;
+            
+            LOADERS[i-1] = new StatLoader( "Enemy" + i + ".txt" );
         }
     }
 
@@ -76,8 +79,8 @@ public class Enemy extends Character {
         super( skin, Color.RED, 50, 20, 0, 3, 1000, "EnemyBullet", PROJECTILE, ANIMATIONS[index] );
         item = ITEMS[index];
         setRandomDirection(); // TODO note: travelTime may not be initialized before performing this method
-        getSpriteData().setStat( Stats.ATTACK, 20 ); // default stats
-        getSpriteData().setStat( Stats.LUCK, 4 );
+        setSpriteData( LOADERS[index] );
+        getSpriteData().resetSprite();
 	}
     
 	/**
