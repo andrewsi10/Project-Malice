@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -82,7 +81,7 @@ public class Options
      * Loads default settings
      */
     public static void defaultSettings() {
-        float zoom = Gdx.app.getType().equals( ApplicationType.Android ) ? 0.7f : 1.1f;
+        float zoom = Malice.isAndroid ? 0.7f : 1.1f;
         setSettings( 100, 100, zoom );
     }
     

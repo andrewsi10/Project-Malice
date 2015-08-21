@@ -34,19 +34,28 @@ import com.mygdx.game.Malice;
  */
 public class StagedScreen extends ScreenAdapter
 {
-    /**
-     * Volume percent of this screen (must be in the range [0,100] to work 
-     * properly)
-     */
-    private final int VOLUME;
-    
     public static final boolean isAndroid = Malice.isAndroid;
-    public static final float fontScale = 1.7f;
+    /**
+     * Scaling the font for labels in android: 1 = 100% (same a desktop); 
+     * greater than 1 means larger labels;
+     * lesser than 1 means smaller labels;
+     */
+    public static final float fontScale = 1.1f;
     public static void scaleLabels( Label... labels ) {
         if ( isAndroid )
             for ( Label l : labels )
                 l.setFontScale( l.getFontScaleX() * fontScale );
     }
+    
+    public static final int BUTTON_WIDTH = 300;
+    public static final int BUTTON_HEIGHT = 70;
+    
+    
+    /**
+     * Volume percent of this screen (must be in the range [0,100] to work 
+     * properly)
+     */
+    private final int VOLUME;
     
     protected final Malice game;
     protected Skin skin;

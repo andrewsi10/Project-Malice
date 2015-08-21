@@ -8,6 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class AndroidController extends Controller
 {
+    /**
+     * Diameter of the Touchpads, does not adjust their knob sizes 
+     * (due to uncertainty of how to do so dynamically), 
+     * so must be greater than knob size
+     */
+    public static final int TOUCHPAD_DIAMETER = 200; // size of the touchpad 
+    public static final int TOUCHPAD_DEADZONE_RADIUS = 10;
+    public static final int TOUCHPAD_MARGIN = 30;
+    
     private Touchpad movementTouchpad;
     private Touchpad shootTouchpad;
     private Button pauseButton;
@@ -15,12 +24,15 @@ public class AndroidController extends Controller
     {
         super( g );
         // Create new TouchPad with the created style
-        movementTouchpad = new Touchpad( 10, skin, "touchPad" );
-        movementTouchpad.setBounds( 30, 30, 300, 300 );
+        movementTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin, "touchPad" );
+        movementTouchpad.setBounds( TOUCHPAD_MARGIN, TOUCHPAD_MARGIN, 
+                                    TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );
         addActor( movementTouchpad );
 
-        shootTouchpad = new Touchpad( 10, skin, "touchPad" );
-        shootTouchpad.setBounds( getWidth() - 330, 30, 300, 300 );
+        shootTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin, "touchPad" );
+        shootTouchpad.setBounds( getWidth() - TOUCHPAD_MARGIN - TOUCHPAD_DIAMETER, 
+                                 TOUCHPAD_MARGIN, 
+                                 TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );
         addActor( shootTouchpad );
 
         pauseButton = new Button( skin );
