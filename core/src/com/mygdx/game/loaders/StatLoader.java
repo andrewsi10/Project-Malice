@@ -14,8 +14,9 @@ public class StatLoader
     private FileHandle file;
     private SpriteData data = new SpriteData();
     
-    public StatLoader( String filePath ) {
+    public StatLoader( String filePath, String name ) {
         file = Gdx.files.internal( PACKAGE + filePath );
+        data.setName( name );
         loadFile();
     }
     

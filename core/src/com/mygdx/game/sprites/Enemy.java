@@ -46,7 +46,7 @@ public class Enemy extends Character {
             ANIMATIONS[i-1] = new Animation( FRAME_DURATION, a );
             ITEMS[i-1] = Item.HealthKit;
             
-            LOADERS[i-1] = new StatLoader( "Enemy" + i + ".txt" );
+            LOADERS[i-1] = new StatLoader( "Enemy" + i + ".txt", "Enemy" + i );
         }
     }
 

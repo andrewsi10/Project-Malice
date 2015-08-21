@@ -18,6 +18,7 @@ public class SpriteData
         LUCK // random damage modifier
     }
     
+    private String name;
     private EnumMap<Stats, Integer> myStats = new EnumMap<Stats, Integer>( Stats.class );
     private EnumMap<Stats, Integer> startingStats = new EnumMap<Stats, Integer>(Stats.class);
     private EnumMap<Stats, Integer> levelingStats = new EnumMap<Stats, Integer>(Stats.class);
@@ -31,6 +32,7 @@ public class SpriteData
      * Fills all the stats with 0
      */
     private void fillStats() {
+        name = "";
         for ( Stats s : Stats.values() ) {
             myStats.put( s, 0 );
             startingStats.put( s, 0 );
@@ -39,6 +41,7 @@ public class SpriteData
     }
     
     public void copy( SpriteData data ) {
+        name = data.name;
         for ( Stats s : Stats.values() ) {
             myStats.put( s, data.myStats.get( s ) );
             startingStats.put( s, data.startingStats.get( s ) );
@@ -68,6 +71,10 @@ public class SpriteData
     }
     
     // ----------------------- Setters ------------------------- //
+    
+    public void setName( String newName ) {
+        name = newName;
+    }
     
     public void setSpriteValues( StatLoader loader ) {
         copy( loader.getData() );
@@ -200,6 +207,11 @@ public class SpriteData
         return myStats.get( s );
     }
     // --------------- Personal getters for all the Stats ------------------- //
+    
+    public String getName() {
+        return name;
+    }
+    
     /** Returns the level of this sprite */
     public int getLevel() {
         return myStats.get( Stats.LEVEL );

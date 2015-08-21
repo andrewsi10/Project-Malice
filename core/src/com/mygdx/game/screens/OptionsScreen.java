@@ -160,10 +160,7 @@ public class OptionsScreen extends StagedScreen
     {
         if ( backButton != null ) backButton.remove();
         backButton = new TextButton( "Back", skin ); 
-        if ( isAndroid )
-        {
-        	backButton.getLabel().setFontScale( fontScale );
-        }
+        scaleLabels( backButton.getLabel() );
         backButton.setPosition(
                 stage.getWidth() / 2 - backButton.getWidth() / 2,
                 stage.getHeight() / 6 );

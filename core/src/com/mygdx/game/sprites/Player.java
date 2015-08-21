@@ -66,7 +66,7 @@ public class Player extends Character {
             a = new TextureAtlas( "img/sprites/Projectiles/" + s ).getRegions();
             PROJECTILE_ANIMATIONS.put( n, new Animation( FRAME_DURATION, a ) );
             // Loaders
-            LOADERS.put( n, new StatLoader( n + ".txt" ) );
+            LOADERS.put( n, new StatLoader( n + ".txt", n.buttonName ) );
         }
     }
 
