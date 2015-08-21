@@ -48,11 +48,22 @@ public class GameOver extends StagedScreen
 	public GameOver( Malice g, Skin s )
 	{
 	    super( g, s, -1 );
+	    
+	    float width = stage.getWidth();
+	    float height = stage.getHeight();
 
         switchButton = new TextButton( "Switch Characters", skin ); 
-        switchButton.setPosition(
-            stage.getWidth() * 2 / 3 - switchButton.getWidth() / 2,
-            stage.getHeight() / 3 );
+        leaderButton = new TextButton( "Leader Board", skin );
+        backButton = new TextButton( "Back To Main Menu", skin );
+        
+        setDefualtSizes( switchButton, leaderButton, backButton );
+        
+        // positions
+        switchButton.setPosition( width * 2 / 3 - BUTTON_WIDTH / 2, height / 3 );
+        leaderButton.setPosition( width / 3 - BUTTON_WIDTH / 2,     height / 6 );
+        backButton.setPosition( width * 2 / 3 - BUTTON_WIDTH / 2,   height / 6 );
+        
+        // listeners
         switchButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -61,11 +72,6 @@ public class GameOver extends StagedScreen
                 switchButton.toggle();
             }
         } );
-        
-        leaderButton = new TextButton( "Leader Board", skin );
-        leaderButton.setPosition(
-                stage.getWidth() / 3 - leaderButton.getWidth() / 2,
-                stage.getHeight() / 6 );
         leaderButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -74,11 +80,6 @@ public class GameOver extends StagedScreen
                 leaderButton.toggle();
             }
         } );
-        
-        backButton = new TextButton( "Back To Main Menu", skin );
-        backButton.setPosition(
-                stage.getWidth() * 2 / 3 - backButton.getWidth() / 2,
-                stage.getHeight() / 6 );
         backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)

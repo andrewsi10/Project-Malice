@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -46,9 +47,14 @@ public class StagedScreen extends ScreenAdapter
             for ( Label l : labels )
                 l.setFontScale( l.getFontScaleX() * fontScale );
     }
-    
+    /** Default Button width */
     public static final int BUTTON_WIDTH = 300;
+    /** Default Button height */
     public static final int BUTTON_HEIGHT = 70;
+    public static final void setDefualtSizes( Button... buttons ) {
+        for ( Button b : buttons )
+            b.setSize( BUTTON_WIDTH, BUTTON_HEIGHT );
+    }
     
     
     /**

@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -47,15 +46,19 @@ public class CharacterSelect extends StagedScreen
 	public CharacterSelect( Malice g, Skin s )
 	{
 	    super( g, s, 70 );
+	    
+	    float width = stage.getWidth();
+	    float height = stage.getHeight();
         
         for ( int i = 0; i < NUMBUTTONS; i++ )
         {
             final Player.Name n = Player.NAMES[i];
             final TextButton b = new TextButton( n.buttonName, skin );
+            setDefualtSizes( b );
             scaleLabels( b.getLabel() );
             b.setPosition( 
-                Gdx.graphics.getWidth() * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - b.getWidth() / 2,
-                Gdx.graphics.getHeight() * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
+                width * ( i < NUMBUTTONS / 2 ? 3 : 7 ) / 10 - BUTTON_WIDTH / 2,
+                height * ( 63 - 18 * ( i % ( NUMBUTTONS / 2 ) ) ) / 100 ); // 5/8 - i*7/40
             b.addListener( new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y)
@@ -67,9 +70,19 @@ public class CharacterSelect extends StagedScreen
             stage.addActor( b );
         }
         randomButton = new TextButton( "Random Character", skin );
+        backButton = new TextButton( "Back to Main Menu", skin );
+        
+        setDefualtSizes( backButton, randomButton );
+        
+        // position
         randomButton.setPosition(
-                Gdx.graphics.getWidth() * 3 / 10 - randomButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 12 );
+                width * 3 / 10 - BUTTON_WIDTH / 2,
+                height / 12 );
+        backButton.setPosition(
+                width * 7 / 10 - BUTTON_WIDTH / 2,
+                height / 12 );
+        
+        // listeners
         randomButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -79,11 +92,6 @@ public class CharacterSelect extends StagedScreen
                 randomButton.toggle();
             }
         } );
-
-        backButton = new TextButton( "Back to Main Menu", skin );
-        backButton.setPosition(
-                Gdx.graphics.getWidth() * 7 / 10 - backButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 12 );
         backButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)

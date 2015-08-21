@@ -41,20 +41,23 @@ public class OptionsScreen extends StagedScreen
         // initialize buttons
         musicButton = new TextButton( "Music", skin );
         soundButton = new TextButton( "Sound", skin );
+        setDefualtSizes( musicButton, soundButton );
         // initialize sliders
         musicSlider = new Slider( 0, 100, 5, false, skin );
         soundSlider = new Slider( 0, 100, 5, false, skin );
         zoomSlider = new Slider( 20, 200, 5, false, skin ); // TODO
         
         // xy -coordinates of settings
-        float centerX = stage.getWidth() / 2;
-        float titleY = stage.getHeight() * 7 / 8;
-        float buttonX = stage.getWidth() / 4 - musicButton.getWidth() / 2;
-        float musicY = stage.getHeight() * 2 / 3;
-        float sliderX = stage.getWidth() / 2;
-        float soundY = stage.getHeight() / 2;
-        float sliderWidth = musicButton.getWidth();
-        float zoomY = stage.getHeight() / 3;
+        float width = stage.getWidth();
+        float height = stage.getHeight();
+        float centerX = width / 2;
+        float titleY = height * 7 / 8;
+        float buttonX = width / 4 - BUTTON_WIDTH / 2;
+        float musicY = height * 2 / 3;
+        float sliderX = width / 2;
+        float soundY = height / 2;
+        float sliderWidth = BUTTON_WIDTH;
+        float zoomY = height / 3;
         
         // Scaling
         titleLabel.setFontScale( 4.0f ); // title scale
@@ -89,7 +92,6 @@ public class OptionsScreen extends StagedScreen
                 musicButton.toggle();
             }
         } );
-        
         soundButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -113,7 +115,6 @@ public class OptionsScreen extends StagedScreen
                 Audio.playTheme();
             }
         } );
-
         soundSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )
@@ -125,7 +126,6 @@ public class OptionsScreen extends StagedScreen
                     Audio.playAudio( "levelup" );
             }
         } );
-        
         zoomSlider.addListener( new ChangeListener() {
             @Override
             public void changed( ChangeEvent event, Actor actor )

@@ -122,19 +122,22 @@ public class GameScreen extends StagedScreen
         backButton = new TextButton( "Back to Main Menu", skin );
         resumeLabel = new Label( "", skin, "label" );
         pointsLabel = player.getPointsLabel(); // this screen will manage the color, positioning, and drawing of this label
+        setDefualtSizes( settingsButton, backButton );
         
         // Scaling
         scaleLabels( settingsButton.getLabel(), backButton.getLabel(), resumeLabel, pointsLabel );
 
         // xy -coordinates
-        float centerX = stage.getWidth() / 2;
-        float centerY = stage.getHeight() / 2;
+        float width = stage.getWidth();
+        float height = stage.getHeight();
+        float centerX = width / 2;
+        float centerY = height / 2;
         
         // Positioning
-        settingsButton.setPosition( centerX - settingsButton.getWidth() / 2, centerY );
-        backButton.setPosition( centerX - backButton.getWidth() / 2, centerY / 2 );
-        resumeLabel.setPosition( centerX - 100, stage.getHeight() * 2 / 3 );
-        pointsLabel.setPosition( 5, stage.getHeight() - pointsLabel.getPrefHeight() / 2 );
+        settingsButton.setPosition( centerX - BUTTON_WIDTH / 2, centerY );
+        backButton.setPosition( centerX - BUTTON_WIDTH / 2, centerY / 2 );
+        resumeLabel.setPosition( centerX - 100, height * 2 / 3 );
+        pointsLabel.setPosition( 5, height - pointsLabel.getPrefHeight() / 2 );
         
         // Listeners
 	    settingsButton.addListener( new ClickListener() {

@@ -38,10 +38,25 @@ public class MainMenu extends StagedScreen
 	public MainMenu( Malice g, Skin s )
 	{
 	    super( g, s, 55 );
+	    float width = stage.getWidth();
+	    float height = stage.getHeight();
+	    
         playButton = new TextButton( "Play", skin );
-        playButton.setPosition(
-            stage.getWidth() / 2 - playButton.getWidth() / 2,
-            stage.getHeight() / 2 );
+        leaderButton = new TextButton( "Leader Board", skin );
+        settingsButton = new ImageButton( skin, "settingsButtonStyle" );
+        exitButton = new TextButton( "Exit", skin );
+        
+        // sizes
+        setDefualtSizes( playButton, leaderButton, exitButton );
+        settingsButton.setSize( 100, 100 );
+        
+        // positions
+        playButton.setPosition(     width / 2 - BUTTON_WIDTH / 2, height / 2 );
+        leaderButton.setPosition(   width / 2 - BUTTON_WIDTH / 2, height * 3 / 8 );
+        settingsButton.setPosition( width - settingsButton.getWidth(), 0 );
+        exitButton.setPosition(     width / 2 - BUTTON_WIDTH / 2, height / 4 );
+        
+        // listeners
         playButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -50,11 +65,6 @@ public class MainMenu extends StagedScreen
                 playButton.toggle();
             }
         } );
-        
-        leaderButton = new TextButton( "Leader Board", skin );
-        leaderButton.setPosition(
-            stage.getWidth() / 2 - leaderButton.getWidth() / 2,
-            stage.getHeight() * 3 / 8 );
         leaderButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -63,10 +73,6 @@ public class MainMenu extends StagedScreen
                 leaderButton.toggle();
             }
         } );
-
-        settingsButton = new ImageButton( skin, "settingsButtonStyle" ); 
-        settingsButton.setSize( 100, 100 );
-        settingsButton.setPosition( stage.getWidth() - settingsButton.getWidth(), 0 );
         settingsButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -75,11 +81,6 @@ public class MainMenu extends StagedScreen
                 settingsButton.toggle();
             }
         } );
-
-        exitButton = new TextButton( "Exit", skin );
-        exitButton.setPosition(
-            stage.getWidth() / 2 - exitButton.getWidth() / 2,
-            stage.getHeight() / 4 );
         exitButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
