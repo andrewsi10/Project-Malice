@@ -56,7 +56,7 @@ public class GameOver extends StagedScreen
         leaderButton = new TextButton( "Leader Board", skin );
         backButton = new TextButton( "Back To Main Menu", skin );
         
-        setDefualtSizes( switchButton, leaderButton, backButton );
+        setDefaultSizes( switchButton, leaderButton, backButton );
         
         // positions
         switchButton.setPosition( width * 2 / 3 - BUTTON_WIDTH / 2, height / 3 );

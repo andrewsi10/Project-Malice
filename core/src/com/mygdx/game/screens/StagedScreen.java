@@ -51,7 +51,7 @@ public class StagedScreen extends ScreenAdapter
     public static final int BUTTON_WIDTH = 300;
     /** Default Button height */
     public static final int BUTTON_HEIGHT = 70;
-    public static final void setDefualtSizes( Button... buttons ) {
+    public static final void setDefaultSizes( Button... buttons ) {
         for ( Button b : buttons )
             b.setSize( BUTTON_WIDTH, BUTTON_HEIGHT );
     }

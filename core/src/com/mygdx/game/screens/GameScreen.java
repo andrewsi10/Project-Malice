@@ -122,7 +122,7 @@ public class GameScreen extends StagedScreen
         backButton = new TextButton( "Back to Main Menu", skin );
         resumeLabel = new Label( "", skin, "label" );
         pointsLabel = player.getPointsLabel(); // this screen will manage the color, positioning, and drawing of this label
-        setDefualtSizes( settingsButton, backButton );
+        setDefaultSizes( settingsButton, backButton );
         
         // Scaling
         scaleLabels( settingsButton.getLabel(), backButton.getLabel(), resumeLabel, pointsLabel );

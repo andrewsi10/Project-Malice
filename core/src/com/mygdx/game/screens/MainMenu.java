@@ -47,7 +47,7 @@ public class MainMenu extends StagedScreen
         exitButton = new TextButton( "Exit", skin );
         
         // sizes
-        setDefualtSizes( playButton, leaderButton, exitButton );
+        setDefaultSizes( playButton, leaderButton, exitButton );
         settingsButton.setSize( 100, 100 );
         
         // positions

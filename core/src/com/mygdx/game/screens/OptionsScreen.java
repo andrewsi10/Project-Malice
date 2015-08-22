@@ -41,7 +41,7 @@ public class OptionsScreen extends StagedScreen
         // initialize buttons
         musicButton = new TextButton( "Music", skin );
         soundButton = new TextButton( "Sound", skin );
-        setDefualtSizes( musicButton, soundButton );
+        setDefaultSizes( musicButton, soundButton );
         // initialize sliders
         musicSlider = new Slider( 0, 100, 5, false, skin );
         soundSlider = new Slider( 0, 100, 5, false, skin );
