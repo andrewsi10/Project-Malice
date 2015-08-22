@@ -25,7 +25,6 @@ public class DisplaySprite extends StatsSprite
         skin = s;
         this.delay = delay;
         this.labels = new ArrayList<Label>();
-        setCenterPosition( Malice.GAME_WIDTH * 3 / 4, Malice.GAME_HEIGHT * 3 / 4 );
     }
     
     public void render( float delta ) {
@@ -43,6 +42,7 @@ public class DisplaySprite extends StatsSprite
         SpriteData data = this.getSpriteData();
         Label l = new Label( data.getName(), skin, "label" );
         l.setPosition( x, Malice.GAME_HEIGHT * 7 / 8 );
+        l.setVisible( false );
         labels.add( l );
 
         EnumMap<Stats, Integer> startingStats = data.getStartStats();
@@ -56,7 +56,13 @@ public class DisplaySprite extends StatsSprite
         }
     }
     
+    public void setVisible( boolean isVisible ) {
+        for ( Label l : labels ) {
+            l.setVisible( isVisible );
+        }
+    }
+    
     public Label[] getLabels() {
-        return (Label[])labels.toArray();
+        return (Label[])labels.toArray( new Label[labels.size()]);
     }
 }
