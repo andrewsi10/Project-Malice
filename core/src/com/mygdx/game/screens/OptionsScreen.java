@@ -1,8 +1,6 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -174,15 +172,5 @@ public class OptionsScreen extends StagedScreen
         } );
         stage.addActor( backButton );
         return this;
-    }
-
-    @Override
-    public void render( float delta )
-    {
-        Gdx.gl.glClearColor( 0, 0, 0, 1 );
-        Gdx.gl.glClear( GL30.GL_COLOR_BUFFER_BIT );
-        super.render( delta );
-//        musicButton.setText( "Music: " + ( Audio.MUSIC_MUTED ? "UNMUTE" : "MUTE" ) );
-//        soundButton.setText( "Sound: " + ( Audio.SOUND_MUTED ? "UNMUTE" : "MUTE" ) );
     }
 }

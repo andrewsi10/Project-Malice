@@ -18,30 +18,29 @@ public class DisplaySprite extends StatsSprite
     
     public DisplaySprite( Skin s, int delay, Animation... a )
     {
-        this( s, delay );
-        this.initializeAnimations( a );
-    }
-    public DisplaySprite( Skin s, int delay ) {
-        skin = s;
+        this.skin = s;
         this.delay = delay;
+        this.initializeAnimations( a );
         this.labels = new ArrayList<Label>();
+        this.setDirection( 180 );
     }
     
     public void render( float delta ) {
         currentTime += delta;
         if ( currentTime > delay ) {
             currentTime -= delay;
-            setDirection( getDirection() + 1 );
+            setDirection( getDirection() + 90 );
         }
         setAnimations();
     }
     
     public void createLabels() {
         int x = Malice.GAME_WIDTH * 3 / 4;
-        int y = Malice.GAME_HEIGHT / 2;
+        int y = Malice.GAME_HEIGHT * 3 / 4;
         SpriteData data = this.getSpriteData();
         Label l = new Label( data.getName(), skin, "label" );
-        l.setPosition( x, Malice.GAME_HEIGHT * 7 / 8 );
+        l.setFontScale( 3 );
+        l.setPosition( x - l.getPrefWidth() / 2, Malice.GAME_HEIGHT * 7 / 8 );
         l.setVisible( false );
         labels.add( l );
 
@@ -50,9 +49,10 @@ public class DisplaySprite extends StatsSprite
         for ( int i = 0; i < stats.length; i++ ) {
             Stats s = stats[i];
             l = new Label( s + " " + startingStats.get( s ), skin, "label" );
+            l.setFontScale( 1.5f );
             l.setPosition( x, y );
             labels.add( l );
-            y -= l.getPrefHeight() - 5;
+            y -= ( l.getPrefHeight() + 20 );
         }
     }
     
@@ -63,6 +63,6 @@ public class DisplaySprite extends StatsSprite
     }
     
     public Label[] getLabels() {
-        return (Label[])labels.toArray( new Label[labels.size()]);
+        return (Label[])labels.toArray( new Label[labels.size()] );
     }
 }

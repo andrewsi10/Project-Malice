@@ -82,7 +82,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, Skin s, int volume ) {
-        this( g, s, null, "img/titlescreen.png", volume );
+        this( g, s, null, "img/mainbackground.png", volume );
     }
     
     /**

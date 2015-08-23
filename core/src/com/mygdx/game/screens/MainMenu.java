@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,6 +24,7 @@ import com.mygdx.game.Malice;
  */
 public class MainMenu extends StagedScreen
 {
+    private Label titleLabel;
 	private TextButton playButton, leaderButton, exitButton;
 	private ImageButton settingsButton;
 
@@ -41,20 +43,26 @@ public class MainMenu extends StagedScreen
 	    float width = stage.getWidth();
 	    float height = stage.getHeight();
 	    
+	    titleLabel = new Label( Malice.TITLE, skin, "label" );
         playButton = new TextButton( "Play", skin );
         leaderButton = new TextButton( "Leader Board", skin );
         settingsButton = new ImageButton( skin, "settingsButtonStyle" );
         exitButton = new TextButton( "Exit", skin );
         
         // sizes
+        titleLabel.setFontScale( 4 );
         setDefaultSizes( playButton, leaderButton, exitButton );
         settingsButton.setSize( 100, 100 );
         
         // positions
-        playButton.setPosition(     width / 2 - BUTTON_WIDTH / 2, height / 2 );
-        leaderButton.setPosition(   width / 2 - BUTTON_WIDTH / 2, height * 3 / 8 );
+        float centerX = width / 2;
+        float centerButtonX = width / 2 - BUTTON_WIDTH / 2;
+        float titleX = centerX - titleLabel.getPrefWidth() / 2;
+        titleLabel.setPosition(     titleX,        height * 3 / 4 );
+        playButton.setPosition(     centerButtonX, height / 2 );
+        leaderButton.setPosition(   centerButtonX, height * 3 / 8 );
         settingsButton.setPosition( width - settingsButton.getWidth(), 0 );
-        exitButton.setPosition(     width / 2 - BUTTON_WIDTH / 2, height / 4 );
+        exitButton.setPosition(     centerButtonX, height / 4 );
         
         // listeners
         playButton.addListener( new ClickListener() {
@@ -89,10 +97,12 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        scaleLabels( playButton.getLabel(), 
+        scaleLabels( titleLabel,
+                     playButton.getLabel(), 
                      leaderButton.getLabel(),
                      exitButton.getLabel() );
-        
+
+        stage.addActor( titleLabel );
         stage.addActor( playButton );
         stage.addActor( leaderButton );
         stage.addActor( settingsButton );
