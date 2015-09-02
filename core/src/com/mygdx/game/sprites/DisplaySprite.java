@@ -38,9 +38,8 @@ public class DisplaySprite extends StatsSprite
         int x = Malice.GAME_WIDTH * 3 / 4;
         int y = Malice.GAME_HEIGHT * 3 / 4;
         SpriteData data = this.getSpriteData();
-        Label l = new Label( data.getName(), skin, "label" );
-        l.setFontScale( 3 );
-        l.setPosition( x - l.getPrefWidth() / 2, Malice.GAME_HEIGHT * 7 / 8 );
+        Label l = new Label( data.getName(), skin, "titleLabel" );
+        l.setPosition( x - l.getPrefWidth() / 2, Malice.GAME_HEIGHT - l.getPrefHeight() - 20 );
         l.setVisible( false );
         labels.add( l );
 
@@ -49,7 +48,6 @@ public class DisplaySprite extends StatsSprite
         for ( int i = 0; i < stats.length; i++ ) {
             Stats s = stats[i];
             l = new Label( s + " " + startingStats.get( s ), skin, "label" );
-            l.setFontScale( 1.5f );
             l.setPosition( x, y );
             labels.add( l );
             y -= ( l.getPrefHeight() + 20 );

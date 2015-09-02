@@ -91,7 +91,7 @@ public class Player extends Character {
 	{
 	    super( skin, Color.GREEN );
         controller = c;
-        pointsLabel = new Label( "", skin, "label" );
+        pointsLabel = new Label( "", skin, "smallLabel" );
         updatePointsLabel();
 	}
 

@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -89,8 +88,7 @@ public class GameOver extends StagedScreen
             }
         } );
         
-        message = new Label( "", skin, "label" );
-        message.setColor( Color.WHITE );
+        message = new Label( "", skin, "smallLabel" );
 
         scaleLabels( switchButton.getLabel(), leaderButton.getLabel(), backButton.getLabel(), message );
         

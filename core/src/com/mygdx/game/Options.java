@@ -116,7 +116,7 @@ public class Options
     private static void createSkin()
     {
         SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-        FONT = new BitmapFont();
+        FONT = SKIN.getFont( "default-font" );
         SKIN.add( "default", FONT );
 
         // Create a texture
@@ -166,6 +166,8 @@ public class Options
         
         LabelStyle labelStyle = new LabelStyle( FONT, Color.WHITE );
         SKIN.add( "label", labelStyle );
+        SKIN.add( "titleLabel", new LabelStyle( SKIN.getFont( "title-font" ), Color.WHITE ) );
+        SKIN.add( "smallLabel", new LabelStyle( SKIN.getFont( "small-font" ), Color.WHITE ) );
     }
     
 }

@@ -43,14 +43,13 @@ public class MainMenu extends StagedScreen
 	    float width = stage.getWidth();
 	    float height = stage.getHeight();
 	    
-	    titleLabel = new Label( Malice.TITLE, skin, "label" );
+	    titleLabel = new Label( Malice.TITLE, skin, "titleLabel" );
         playButton = new TextButton( "Play", skin );
         leaderButton = new TextButton( "Leader Board", skin );
         settingsButton = new ImageButton( skin, "settingsButtonStyle" );
         exitButton = new TextButton( "Exit", skin );
         
         // sizes
-        titleLabel.setFontScale( 4 );
         setDefaultSizes( playButton, leaderButton, exitButton );
         settingsButton.setSize( 100, 100 );
         

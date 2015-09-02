@@ -34,7 +34,7 @@ public class OptionsScreen extends StagedScreen
         super( g, s, -1 );
         background.setVisible( false );
 
-        titleLabel = new Label( "Settings", s, "label" );
+        titleLabel = new Label( "Settings", s, "titleLabel" );
         zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s, "label" );
         // initialize buttons
         musicButton = new TextButton( "Music", skin );
@@ -49,7 +49,7 @@ public class OptionsScreen extends StagedScreen
         float width = stage.getWidth();
         float height = stage.getHeight();
         float centerX = width / 2;
-        float titleY = height * 7 / 8;
+        float titleY = height * 7 / 8 - titleLabel.getPrefHeight() / 2;
         float buttonX = width / 4 - BUTTON_WIDTH / 2;
         float musicY = height * 2 / 3;
         float sliderX = width / 2;
@@ -58,7 +58,6 @@ public class OptionsScreen extends StagedScreen
         float zoomY = height / 3;
         
         // Scaling
-        titleLabel.setFontScale( 4.0f ); // title scale
         scaleLabels( titleLabel, musicButton.getLabel(), soundButton.getLabel(), zoomLabel );
         
         // setPositions
