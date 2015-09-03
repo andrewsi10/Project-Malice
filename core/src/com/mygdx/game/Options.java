@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.entities.ItemSprite;
 import com.mygdx.game.screens.GameScreen;
@@ -108,8 +108,7 @@ public class Options
         SKIN = new Skin( Gdx.files.internal( "ui/uiskin1.json" ) );
         
         // everything is initialized in the file for the skin
-        
-        SKIN.add( "label", SKIN.get( LabelStyle.class ) );// line should be removed but kept for convenience
+        SKIN.add( "background", new Texture( "img/mainbackground.png" ) );
     }
     
 }

@@ -47,7 +47,7 @@ public class DisplaySprite extends StatsSprite
         Stats[] stats = Stats.values();
         for ( int i = 0; i < stats.length; i++ ) {
             Stats s = stats[i];
-            l = new Label( s + " " + startingStats.get( s ), skin, "label" );
+            l = new Label( s + " " + startingStats.get( s ), skin );
             l.setPosition( x, y );
             labels.add( l );
             y -= ( l.getPrefHeight() + 20 );

@@ -34,7 +34,6 @@ import com.mygdx.game.Malice;
  */
 public class StagedScreen extends ScreenAdapter
 {
-    public static final boolean isAndroid = Malice.isAndroid;
     /** Default Button width */
     public static final int BUTTON_WIDTH = 300;
     /** Default Button height */
@@ -70,7 +69,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, Skin s, int volume ) {
-        this( g, s, null, "img/mainbackground.png", volume );
+        this( g, s, null, s.get( "background", Texture.class ), volume );
     }
     
     /**
@@ -83,8 +82,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, String img, int volume ) {
-        this( g, null, null, new Image( new SpriteDrawable( new Sprite( 
-                                        new Texture( img ) ) ) ), volume );
+        this( g, null, null, new Texture( img ), volume );
     }
     
     /**
@@ -98,8 +96,7 @@ public class StagedScreen extends ScreenAdapter
      *                  if Volume is -1, it will not change
      */
     public StagedScreen( Malice g, Skin s, Stage stg, String img, int volume ) {
-        this( g, s, stg, new Image( new SpriteDrawable( 
-                                new Sprite( new Texture( img ) ) ) ), volume );
+        this( g, s, stg, new Texture( img ), volume );
     }
     
     /**
@@ -112,11 +109,11 @@ public class StagedScreen extends ScreenAdapter
      * @param volume new volume percent of this screen; 
      *                  if Volume is -1, it will not change
      */
-    private StagedScreen( Malice g, Skin s, Stage stg, Image img, int volume ) {
+    private StagedScreen( Malice g, Skin s, Stage stg, Texture t, int volume ) {
         game = g;
         skin = s;
         stage = stg;
-        background = img;
+        background = new Image( new SpriteDrawable( new Sprite( t ) ) );
         VOLUME = volume;
         
         if ( stage == null ) {

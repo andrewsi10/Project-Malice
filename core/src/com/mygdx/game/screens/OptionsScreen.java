@@ -35,7 +35,7 @@ public class OptionsScreen extends StagedScreen
         background.setVisible( false );
 
         titleLabel = new Label( "Settings", s, "titleLabel" );
-        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s, "label" );
+        zoomLabel = new Label( "Zoom: " + GameScreen.ZOOM, s );
         // initialize buttons
         musicButton = new TextButton( "Music", skin );
         soundButton = new TextButton( "Sound", skin );
