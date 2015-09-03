@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -36,17 +35,6 @@ import com.mygdx.game.Malice;
 public class StagedScreen extends ScreenAdapter
 {
     public static final boolean isAndroid = Malice.isAndroid;
-    /**
-     * Scaling the font for labels in android: 1 = 100% (same a desktop); 
-     * greater than 1 means larger labels;
-     * lesser than 1 means smaller labels;
-     */
-    public static final float fontScale = 1.1f;
-    public static void scaleLabels( Label... labels ) {
-        if ( isAndroid )
-            for ( Label l : labels )
-                l.setFontScale( l.getFontScaleX() * fontScale );
-    }
     /** Default Button width */
     public static final int BUTTON_WIDTH = 300;
     /** Default Button height */

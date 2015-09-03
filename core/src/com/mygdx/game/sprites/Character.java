@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Projectile;
-import com.mygdx.game.screens.StagedScreen;
 import com.mygdx.game.sprites.SpriteData.Stats;
 import com.mygdx.game.Audio;
 
@@ -82,8 +81,6 @@ public abstract class Character extends StatsSprite {
         levelLabel.setColor( Color.MAGENTA );
         hpLabel = new Label( "", skin, "smallLabel" );
         hpLabel.setColor( Color.MAROON );
-        
-        StagedScreen.scaleLabels( levelLabel, hpLabel );
 	}
 
     /**

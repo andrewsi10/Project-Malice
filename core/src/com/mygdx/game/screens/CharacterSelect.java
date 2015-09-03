@@ -103,8 +103,6 @@ public class CharacterSelect extends StagedScreen
             }
         } );
 
-        scaleLabels( playButton.getLabel(), backButton.getLabel() );
-
         spriteToDraw = sprites[0];
         spriteToDraw.setVisible( true );
         currentName = Player.NAMES[0];
@@ -158,7 +156,6 @@ public class CharacterSelect extends StagedScreen
             sprites[i].setSize( SPRITE_SIZE * 2, SPRITE_SIZE * 2 );
 	    }
         setDefaultSizes( button );
-        scaleLabels( button.getLabel() );
         button.setPosition( x, y );
         setDisplaySprite( sprites[i], width * 5 / 8, height * 5 / 8 );
         button.addListener( new ClickListener() {
@@ -179,7 +176,6 @@ public class CharacterSelect extends StagedScreen
 	{
         s.setCenterPosition( x, y );
         Label[] labels = s.getLabels();
-        scaleLabels( labels );
         for ( Label l : labels ) {
             stage.addActor( l );
         }

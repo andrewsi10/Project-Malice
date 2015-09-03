@@ -96,11 +96,6 @@ public class MainMenu extends StagedScreen
             }
         } );
 
-        scaleLabels( titleLabel,
-                     playButton.getLabel(), 
-                     leaderButton.getLabel(),
-                     exitButton.getLabel() );
-
         stage.addActor( titleLabel );
         stage.addActor( playButton );
         stage.addActor( leaderButton );

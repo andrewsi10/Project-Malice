@@ -123,9 +123,6 @@ public class GameScreen extends StagedScreen
         resumeLabel = new Label( "", skin, "smallLabel" );
         pointsLabel = player.getPointsLabel(); // this screen will manage the color, positioning, and drawing of this label
         setDefaultSizes( settingsButton, backButton );
-        
-        // Scaling
-        scaleLabels( settingsButton.getLabel(), backButton.getLabel(), resumeLabel, pointsLabel );
 
         // xy -coordinates
         float width = stage.getWidth();

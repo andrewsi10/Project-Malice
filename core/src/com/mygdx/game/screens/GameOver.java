@@ -89,8 +89,6 @@ public class GameOver extends StagedScreen
         } );
         
         message = new Label( "", skin, "smallLabel" );
-
-        scaleLabels( switchButton.getLabel(), leaderButton.getLabel(), backButton.getLabel(), message );
         
         stage.addActor( switchButton );
         stage.addActor( leaderButton );
@@ -115,7 +113,6 @@ public class GameOver extends StagedScreen
 	    if ( textField != null ) textField.remove();
         retryButton = new TextButton( "Try Again", skin );
         setDefaultSizes( backButton );
-        scaleLabels( retryButton.getLabel() );
         retryButton.setPosition(
             stage.getWidth() / 3 - retryButton.getWidth() / 2,
             stage.getHeight() / 3 );

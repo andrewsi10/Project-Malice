@@ -57,9 +57,6 @@ public class OptionsScreen extends StagedScreen
         float sliderWidth = BUTTON_WIDTH;
         float zoomY = height / 3;
         
-        // Scaling
-        scaleLabels( titleLabel, musicButton.getLabel(), soundButton.getLabel(), zoomLabel );
-        
         // setPositions
         titleLabel.setPosition( centerX - titleLabel.getPrefWidth() / 2, titleY );
         zoomLabel.setPosition( buttonX, zoomY );
@@ -158,7 +155,6 @@ public class OptionsScreen extends StagedScreen
         if ( backButton != null ) backButton.remove();
         backButton = new TextButton( "Back", skin ); 
         setDefaultSizes( backButton );
-        scaleLabels( backButton.getLabel() );
         backButton.setPosition(
                 stage.getWidth() / 2 - backButton.getWidth() / 2,
                 stage.getHeight() / 6 );
