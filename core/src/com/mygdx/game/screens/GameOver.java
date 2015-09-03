@@ -114,6 +114,7 @@ public class GameOver extends StagedScreen
 	    if ( retryButton != null ) retryButton.remove();
 	    if ( textField != null ) textField.remove();
         retryButton = new TextButton( "Try Again", skin );
+        setDefaultSizes( backButton );
         scaleLabels( retryButton.getLabel() );
         retryButton.setPosition(
             stage.getWidth() / 3 - retryButton.getWidth() / 2,

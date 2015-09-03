@@ -157,6 +157,7 @@ public class OptionsScreen extends StagedScreen
     {
         if ( backButton != null ) backButton.remove();
         backButton = new TextButton( "Back", skin ); 
+        setDefaultSizes( backButton );
         scaleLabels( backButton.getLabel() );
         backButton.setPosition(
                 stage.getWidth() / 2 - backButton.getWidth() / 2,

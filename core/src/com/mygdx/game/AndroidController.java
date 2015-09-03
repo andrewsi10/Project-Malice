@@ -24,12 +24,12 @@ public class AndroidController extends Controller
     {
         super( g );
         // Create new TouchPad with the created style
-        movementTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin, "touchPad" );
+        movementTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin );
         movementTouchpad.setBounds( TOUCHPAD_MARGIN, TOUCHPAD_MARGIN, 
                                     TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );
         addActor( movementTouchpad );
 
-        shootTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin, "touchPad" );
+        shootTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin );
         shootTouchpad.setBounds( getWidth() - TOUCHPAD_MARGIN - TOUCHPAD_DIAMETER, 
                                  TOUCHPAD_MARGIN, 
                                  TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );

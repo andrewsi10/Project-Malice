@@ -2,16 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.mygdx.game.entities.ItemSprite;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.sprites.Enemy;
@@ -31,7 +23,6 @@ public class Options
      * Skin containing the resources for many of this game's assets
      */
     public static Skin SKIN;
-    private static BitmapFont FONT;
     
     /**
      * The FileHandle for the settings file
@@ -62,7 +53,6 @@ public class Options
      */
     public static void dispose() {
         SKIN.dispose();
-        FONT.dispose();
         Map.disposeBiomes();
     }
     
@@ -115,59 +105,11 @@ public class Options
      */
     private static void createSkin()
     {
-        SKIN = new Skin( Gdx.files.internal( "ui/uiskin.json" ) );
-        FONT = SKIN.getFont( "default-font" );
-        SKIN.add( "default", FONT );
-
-        // Create a texture
-        Pixmap pixmap = new Pixmap( (int) Gdx.graphics.getWidth() / 4,
-                (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888 );
-        pixmap.setColor( Color.WHITE );
-        pixmap.fill();
-        SKIN.add( "background", new Texture( pixmap ) );
-        pixmap.dispose();
-
-        // Create a button style
-        TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.up = SKIN.newDrawable( "background", Color.GRAY );
-        textButtonStyle.down = SKIN.newDrawable( "background", Color.DARK_GRAY );
-        textButtonStyle.checked = SKIN.newDrawable( "background", Color.DARK_GRAY );
-        textButtonStyle.over = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
-        textButtonStyle.font = SKIN.getFont( "default" );
-        SKIN.add( "default", textButtonStyle );
+        SKIN = new Skin( Gdx.files.internal( "ui/uiskin1.json" ) );
         
-        // Create Settings Button icon
-        SKIN.add( "settingsIcon", new Texture( "ui/settingsIcon.png" ) );
+        // everything is initialized in the file for the skin
         
-        ImageButtonStyle imageButtonStyle = new ImageButtonStyle();
-        imageButtonStyle.up           = SKIN.newDrawable( "background", Color.GRAY );
-        imageButtonStyle.down         = SKIN.newDrawable( "background", Color.DARK_GRAY );
-        imageButtonStyle.checked      = SKIN.newDrawable( "background", Color.DARK_GRAY );
-        imageButtonStyle.over         = SKIN.newDrawable( "background", Color.LIGHT_GRAY );
-        imageButtonStyle.imageUp      = SKIN.getDrawable( "settingsIcon" );
-        imageButtonStyle.imageDown    = SKIN.getDrawable( "settingsIcon" );
-        imageButtonStyle.imageChecked = SKIN.getDrawable( "settingsIcon" );
-        SKIN.add( "settingsButtonStyle", imageButtonStyle );
-        
-        // Create TouchPad Style
-        // Set background image
-        SKIN.add( "touchBackground", new Texture( "ui/touchBackground.png" ) );
-        // Set knob image
-        SKIN.add( "touchKnob", new Texture( "ui/touchKnob.png" ) );
-        TouchpadStyle touchpadStyle = new TouchpadStyle();
-        // Create Drawable's from TouchPad skin
-        Drawable touchBackground = SKIN.getDrawable( "touchBackground" );
-        Drawable touchKnob = SKIN.getDrawable( "touchKnob" );
-        // Apply the Drawables to the TouchPad Style
-        touchpadStyle.background = touchBackground;
-        touchpadStyle.knob = touchKnob;
-        
-        SKIN.add( "touchPad", touchpadStyle );
-        
-        LabelStyle labelStyle = new LabelStyle( FONT, Color.WHITE );
-        SKIN.add( "label", labelStyle );
-        SKIN.add( "titleLabel", new LabelStyle( SKIN.getFont( "title-font" ), Color.WHITE ) );
-        SKIN.add( "smallLabel", new LabelStyle( SKIN.getFont( "small-font" ), Color.WHITE ) );
+        SKIN.add( "label", SKIN.get( LabelStyle.class ) );// line should be removed but kept for convenience
     }
     
 }
