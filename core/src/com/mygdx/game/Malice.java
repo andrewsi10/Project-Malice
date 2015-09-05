@@ -11,7 +11,6 @@ import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.LeaderScreen;
 import com.mygdx.game.screens.MainMenu;
 import com.mygdx.game.screens.OptionsScreen;
-import com.mygdx.game.screens.Splash;
 
 /**
  * The Malice class extends Game and handles all the screens in the Gauntlet
@@ -33,8 +32,6 @@ public class Malice extends Game
 	public static final int GAME_WIDTH = 1280;
 	public static final int GAME_HEIGHT = 720;
     public static boolean isAndroid;
-
-	public Splash splash;
     public MainMenu mainMenu; // note: can use a single array for all the screens
     public OptionsScreen optionsScreen;
     public LeaderScreen leaderScreen;
@@ -54,14 +51,12 @@ public class Malice extends Game
 	{
 	    isAndroid = Gdx.app.getType().equals( ApplicationType.Android );
 	    viewport = new FitViewport( Malice.GAME_WIDTH, Malice.GAME_HEIGHT );
-	    splash = new Splash( this );
         Options.initialize();
-        setScreen( splash );
+	    mainMenu = new MainMenu( this, Options.SKIN );
+        setScreen( mainMenu );
         Controller c = ( isAndroid ) 
                         ? new AndroidController( this, Options.SKIN ) 
                         : new DesktopController( this );
-                        
-	    mainMenu = new MainMenu( this, Options.SKIN );
 	    optionsScreen = new OptionsScreen( this, Options.SKIN );
 	    leaderScreen = new LeaderScreen( this, Options.SKIN );
 	    characterSelect = new CharacterSelect( this, Options.SKIN );
@@ -79,7 +74,6 @@ public class Malice extends Game
 	{
 	    if ( OptionsScreen.hasChanged )
 	        Options.saveSettings();
-	    this.splash.dispose();
 	    this.mainMenu.dispose();
 	    this.optionsScreen.dispose();
 	    this.leaderScreen.dispose();

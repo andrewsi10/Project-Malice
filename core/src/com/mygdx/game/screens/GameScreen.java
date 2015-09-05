@@ -106,7 +106,7 @@ public class GameScreen extends StagedScreen
 	public GameScreen( Malice g, Skin s, Controller c )
 	{
 	    super( g, s, c, "img/pausescreen.png", 40 );
-        enemyMinCount = 10; enemyMaxCount = -2;
+        enemyMinCount = 20; enemyMaxCount = -2;
         
         controller = c;
         entities = new ArrayList<Entity>();

@@ -78,7 +78,7 @@ public abstract class Character extends StatsSprite {
 	public Character( Skin skin, Color hpColor ) {
         this.hpColor = hpColor;
         levelLabel = new Label( "", skin, "smallLabel" );
-        levelLabel.setColor( Color.MAGENTA );
+        levelLabel.setColor( Color.BLUE );
         hpLabel = new Label( "", skin, "smallLabel" );
         hpLabel.setColor( Color.MAROON );
 	}
