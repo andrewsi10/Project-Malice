@@ -265,7 +265,7 @@ public class GameScreen extends StagedScreen
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
-		map.draw( batch );
+		map.draw( batch, cam.position.x, cam.position.y, stage.getWidth(), stage.getHeight() );
 
 		spawnEnemies();
         for ( Entity entity : entities )
@@ -321,7 +321,7 @@ public class GameScreen extends StagedScreen
 
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
-		map.draw( batch );
+        map.draw( batch, cam.position.x, cam.position.y, stage.getWidth(), stage.getHeight() );
 		
 		spawnEnemies();
 		for ( int i = 0; i < entities.size(); i++ )

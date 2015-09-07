@@ -4,11 +4,10 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.entities.Entity;
 
@@ -33,6 +32,14 @@ public class Map
     // ----------------------- Enums and static finals --------------- //
     /** Package for all images */
     public static final String PACKAGE = "map/";
+    
+    /** Conversion number from pixels to tiles */
+    public static final int TILE_SIZE = 64;
+    /** Spawn distance from player in tiles */
+    public static final int SPAWN_DISTANCE = 7;
+    /** Determines how far the outer border is drawn (meant to cover black space) */
+    public static final int OUTER_BORDER = 9;
+    
     // generation types
     public enum Generation {
         STORY, DUNGEON, ARENA, RANDOM
@@ -46,42 +53,36 @@ public class Map
         BLOCK, SPACE
     }
     
-    private static final EnumMap<Biome, Pixmap> biomes = new EnumMap<Biome, Pixmap>(Biome.class);
+    private static final EnumMap<Biome, TextureRegion[][]> biomeImages 
+                           = new EnumMap<Biome, TextureRegion[][]>(Biome.class);
     
     public static void loadBiomes() { // initialize EnumMaps
-        Texture texture;
+        Texture texture; 
         for ( Biome b : Biome.values() ) {
             if ( b == Biome.RANDOM ) continue;
             String s = b.toString();
             texture = new Texture( PACKAGE + s.charAt( 0 ) + s.substring( 1 ).toLowerCase() + ".png" );
-            texture.getTextureData().prepare();
-            biomes.put( b, texture.getTextureData().consumePixmap() );
-            texture.dispose();
+            
+            biomeImages.put( b, TextureRegion.split( texture, TILE_SIZE, TILE_SIZE ) );
+            
         }
     }
     public static void disposeBiomes() {
         for ( Biome b : Biome.values() ) {
-            if ( b != Biome.RANDOM )
-                biomes.get( b ).dispose();
+            if ( b == Biome.RANDOM ) continue;
+            biomeImages.get( b )[0][0].getTexture().dispose();
         }
     }
     
     
-    /** Conversion number from pixels to tiles */
-    public static final int PIXELS_TO_TILES = 64;
-    /** Spawn distance from player in tiles */
-    public static final int SPAWN_DISTANCE = 7;
-    /** Determines how far the outer border is drawn (meant to cover black space) */
-    public static final int OUTER_BORDER = 9;
-    
     // --------------- private variables --------------- //
     private boolean[][] areSpaces;
-    private Pixmap biome;
     private int spawnX;
     private int spawnY;
     
-    private Texture map;
-    private Texture expanse;
+    private TextureRegion[][] biome;
+    private TextureRegion[][] mapFloor;
+    private TextureRegion[][] mapWalls;
     private boolean biomeChanged;
 
     // -------------------- Constructors ------------------- //
@@ -94,6 +95,8 @@ public class Map
     public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
+        mapFloor = new TextureRegion[rows][cols];
+        mapWalls = new TextureRegion[rows][cols];
     }
 
     /**
@@ -103,6 +106,12 @@ public class Map
     public Map( int size )
     {
         areSpaces = new boolean[size][size];
+    }
+    
+    public void reset()
+    {
+        areSpaces = new boolean[getMapTileWidth()][getMapTileHeight()];
+        biomeChanged = true;
     }
     
     // --------------------- Generating ----------------- //
@@ -117,20 +126,20 @@ public class Map
      */
     public void generate( Generation type, Biome b )
     {
-        areSpaces = new boolean[getMapTileWidth()][getMapTileHeight()];
-        map = null;
+        reset();
         if ( b == Biome.RANDOM )
             b = Biome.values()[randomNumber(Biome.values().length - 1) + 1];
-        biomeChanged = ( biome != biomes.get( b ) );
-        biome = biomes.get( b );
+//        biomeChanged = ( myBiome != biomeImages.get( b ) );
+        
+        biome = biomeImages.get( b );
         switch ( type )
         {
-            case STORY:
-                // not implemented
-                break;
-            case ARENA:
-                generateArena();
-                break;
+//            case STORY:
+//                // not implemented
+//                break;
+//            case ARENA:
+//                generateArena();
+//                break;
 //            case RANDOM:
 //                type = Generation.values()[randomNumber(Generation.values().length - 2) + 2];
             default:
@@ -150,45 +159,18 @@ public class Map
      */
     public void createMap()
     {
-        Pixmap pixmap1 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGBA8888 );
-        Pixmap pixmap2 = new Pixmap( getMapPixelWidth(), getMapPixelHeight(), Format.RGBA8888 );
         for ( int i = 0; i < getMapTileWidth(); i++ )
         {
-            for ( int j = 0; j < getMapTileHeight(); j++ )
+            for ( int j = getMapTileHeight() - 1; j >= 0; j-- )
             {
-                int x = tileToPixel(i);
-                int y = this.getMapPixelHeight() - tileToPixel(j+1);
-                pixmap1.drawPixmap( biome, x, y, 
-                    tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                    tileToPixel( Tile.SPACE.ordinal() ), 
-                    PIXELS_TO_TILES, PIXELS_TO_TILES );
+                mapFloor[i][j] = biome[Tile.SPACE.ordinal()][randomNumber( biome[0].length )];
                 if ( !areSpaces[i][j] )
                 {
-                    pixmap1.drawPixmap( biome, x, y, 
-                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                        tileToPixel( Tile.BLOCK.ordinal() ), 
-                        PIXELS_TO_TILES, PIXELS_TO_TILES );
-                }
-                if ( biomeChanged &&
-                   ( i <= OUTER_BORDER || i >= getMapTileWidth() - OUTER_BORDER 
-                  || j <= OUTER_BORDER || j >= getMapTileHeight() - OUTER_BORDER ) )
-                {
-                    pixmap2.drawPixmap( biome, x, y, 
-                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                        tileToPixel( Tile.SPACE.ordinal() ), 
-                        PIXELS_TO_TILES, PIXELS_TO_TILES );
-                    pixmap2.drawPixmap( biome, x, y, 
-                        tileToPixel(randomNumber(pixelToTile(biome.getWidth()))), 
-                        tileToPixel( Tile.BLOCK.ordinal() ), 
-                        PIXELS_TO_TILES, PIXELS_TO_TILES );
+                    mapWalls[i][j] = biome[Tile.BLOCK.ordinal()][randomNumber( biome[0].length )];
                 }
             }
         }
-        map = new Texture( pixmap1 );
-        if ( biomeChanged )
-            expanse = new Texture( pixmap2 );
-        pixmap1.dispose();
-        pixmap2.dispose();
+        biomeChanged = false;
     }
     
     public void generateArena()
@@ -413,7 +395,7 @@ public class Map
     {
         if ( s instanceof Entity && !( (Entity)s ).collidesWithWalls() )
             return false;
-        check.setSize( PIXELS_TO_TILES );
+        check.setSize( TILE_SIZE );
         int x = pixelToTile( s.getX() );
         int y = pixelToTile( s.getY() );
         for ( int i = x - 1; i <= x + 1; i++ )
@@ -439,17 +421,38 @@ public class Map
      * (expanse covers dark areas outside of map with walls
      * @param batch SpriteBatch used to draw the map
      */
-    public void draw( Batch batch )
+    public void draw( Batch batch, float camX, float camY, float camW, float camH )
     {
-        if ( map == null )
+        if ( biomeChanged )
             createMap();
-        int x = tileToPixel( OUTER_BORDER );
-        int y = tileToPixel( OUTER_BORDER );
-        batch.draw( expanse, -x, -y );
-        batch.draw( expanse, x, -y );
-        batch.draw( expanse, -x, y );
-        batch.draw( expanse, x, y );
-        batch.draw( map, 0, 0 );
+        float drawX = camX - camW / 2;
+        float drawY = camY - camH / 2;
+        int x = pixelToTile( drawX ) - 2;
+        int y = pixelToTile( drawY ) - 2;
+        int w = pixelToTile( camW ) + 4;
+        int h = pixelToTile( camH ) + 4;
+        for ( int i = x; i < x + w; i++ )
+        {
+            for ( int j = y; j < y + h; j++ )
+            {
+                if ( this.inTileBounds( i, j ) ) 
+                {
+                    batch.draw( mapFloor[i][j], TILE_SIZE * i, TILE_SIZE * j );
+                    if ( !areSpaces[i][j] )
+                        batch.draw( mapWalls[i][j], TILE_SIZE * i, 
+                                                    TILE_SIZE * j );
+                }
+                else //draw expanse to fill black space
+                {
+                    int a = 3 * Math.abs( i * j ) % biome[Tile.SPACE.ordinal()].length;// pseudo random algorithms
+                    int b = 9 * Math.abs( i * j ) % biome[Tile.BLOCK.ordinal()].length;
+                    batch.draw( biome[Tile.SPACE.ordinal()][a], TILE_SIZE * i, 
+                                                                TILE_SIZE * j );
+                    batch.draw( biome[Tile.BLOCK.ordinal()][b], TILE_SIZE * i, 
+                                                                TILE_SIZE * j );
+                }
+            }
+        }
     }
     
     /**
@@ -458,10 +461,7 @@ public class Map
      */
     public void dispose()
     {
-        if ( map != null ) {
-            map.dispose();
-            expanse.dispose();
-        }
+        
     }
     
     
@@ -525,7 +525,7 @@ public class Map
      */
     public static int tileToPixel( int tile )
     {
-        return tile * PIXELS_TO_TILES;// + block.getWidth() / 2;
+        return tile * TILE_SIZE;// + block.getWidth() / 2;
     }
     
     /**
@@ -535,7 +535,7 @@ public class Map
      */
     public static int pixelToTile( float pixel )
     {
-        return (int)( pixel / PIXELS_TO_TILES );
+        return (int)( pixel / TILE_SIZE );
     }
     
     /**

@@ -300,8 +300,8 @@ public class JUnitMapTest
     {
         for ( int i = 0; i < MAP_SIZE; i++ )
         {
-            assertEquals( "tileToPixel() failed conversion", Map.tileToPixel( i ), i * Map.PIXELS_TO_TILES );
-            assertEquals( "pixelToTile() failed conversion", Map.pixelToTile( i*Map.PIXELS_TO_TILES ), i );
+            assertEquals( "tileToPixel() failed conversion", Map.tileToPixel( i ), i * Map.TILE_SIZE );
+            assertEquals( "pixelToTile() failed conversion", Map.pixelToTile( i*Map.TILE_SIZE ), i );
         }
     }
     
