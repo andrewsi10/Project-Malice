@@ -46,7 +46,7 @@ public class MainMenu extends StagedScreen
 	    titleLabel = new Label( Malice.TITLE, skin, "titleLabel" );
         playButton = new TextButton( "Play", skin );
         leaderButton = new TextButton( "Leader Board", skin );
-        settingsButton = new ImageButton( skin );
+        settingsButton = new ImageButton( skin, "settings" );
         exitButton = new TextButton( "Exit", skin );
         
         // sizes

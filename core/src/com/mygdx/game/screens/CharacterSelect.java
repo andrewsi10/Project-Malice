@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -41,7 +42,8 @@ public class CharacterSelect extends StagedScreen
      */
     private static final int NUMBUTTONS = Player.NAMES.length;
 
-	private TextButton playButton, backButton;
+	private TextButton playButton;
+	private ImageButton backButton;
 	private DisplaySprite[] sprites;
 	private DisplaySprite spriteToDraw;
 	private Player.Name currentName;
@@ -62,7 +64,7 @@ public class CharacterSelect extends StagedScreen
 	    float width = stage.getWidth();
 	    float height = stage.getHeight();
 	    float inc = height / ( NUMBUTTONS + 2 );
-	    float x = width * 3 / 10 - BUTTON_WIDTH / 2;
+	    float x = width * 1 / 5 - BUTTON_WIDTH / 2;
 	    float y = height - inc;
 
         sprites = new DisplaySprite[NUMBUTTONS + 1];
@@ -73,13 +75,14 @@ public class CharacterSelect extends StagedScreen
             y -= inc;
         }
         playButton = new TextButton( "Play", skin );
-        backButton = new TextButton( "Back to Main Menu", skin );
+        backButton = new ImageButton( skin, "back" );
         
-        setDefaultSizes( playButton, backButton );
+        setDefaultSizes( playButton );
+        backButton.setSize( 75, 75 );
         
         // position
         playButton.setPosition( width * 3 / 4, height / 24 );
-        backButton.setPosition( 0, 0 );
+        backButton.setPosition( 2, 2 );
         
         // listeners
         playButton.addListener( new ClickListener() {
@@ -157,7 +160,7 @@ public class CharacterSelect extends StagedScreen
 	    }
         setDefaultSizes( button );
         button.setPosition( x, y );
-        setDisplaySprite( sprites[i], width * 5 / 8, height * 5 / 8 );
+        setDisplaySprite( sprites[i], width / 2, height * 5 / 8 );
         button.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)

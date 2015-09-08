@@ -18,12 +18,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     toggle: { down: buttonDown, checked: buttonHover, up: buttonUp }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-    default: { down: buttonDown, up: buttonUp, font: default-font, fontColor: white },
+    default: { down: buttonDown, up: buttonUp, checked: buttonHover, font: default-font, fontColor: white },
     toggle: { down: buttonDown, up: buttonUp, checked: buttonHover, font: default-font, fontColor: white, downFontColor: red }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
-    default: { down: buttonDown, up: buttonUp, imageUp: settingsIcon, imageDown: settingsIcon, imageChecked: settingsIcon },
-    toggle: { down: buttonDown, up: buttonUp, checked: buttonHover, imageUp: settingsIcon, imageDown: settingsIcon, imageChecked: settingsIcon }
+    default: { down: buttonDown, up: buttonUp },
+    toggle: { down: buttonDown, up: buttonUp, checked: buttonHover },
+    settings: { down: buttonDown, up: buttonUp, checked: buttonHover, imageUp: settingsIcon, imageDown: settingsIconPressed, imageChecked: settingsIconHover },
+    back: { down: buttonDown, up: buttonUp, checked: buttonHover, imageUp: back, imageDown: backPressed, imageChecked: backHover }
 },
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
     default-horizontal: { background: sliderBody, knob: sliderKnob }

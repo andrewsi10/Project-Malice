@@ -94,8 +94,6 @@ public class Map
     public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
-//        mapFloor = new TextureRegion[rows][cols];
-//        mapWalls = new TextureRegion[rows][cols];
         tiles = new MapTile[rows][cols];
         for ( MapTile[] m : tiles )
         {

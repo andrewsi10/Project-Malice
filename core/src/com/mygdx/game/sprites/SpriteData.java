@@ -7,15 +7,21 @@ import com.mygdx.game.loaders.StatLoader;
 public class SpriteData
 {
     public enum Stats {
-        LEVEL, 
-        EXPERIENCE, 
-        EXPTOLEVEL, 
-        HP, 
-        MAXHP, 
-        ATTACK, // base damage
-        SPEED, 
-        RELOADSPEED, 
-        LUCK // random damage modifier
+        LEVEL(true), 
+        EXPERIENCE(true), 
+        EXPTOLEVEL(true), 
+        HP(true), 
+        MAXHP(false), 
+        ATTACK(false), // base damage
+        SPEED(false), 
+        RELOADSPEED(false), 
+        LUCK(false); // random damage modifier
+        public static final Stats[] VALUES = Stats.values();
+        public final boolean isInGame;
+        Stats( boolean inGame ) {
+            this.isInGame = inGame;
+        }
+        
     }
     
     private String name;

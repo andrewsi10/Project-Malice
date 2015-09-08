@@ -3,44 +3,51 @@ uiskin1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-backButton
-  rotate: false
-  xy: 1, 479
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
 settingsIcon
   rotate: false
-  xy: 1, 27
+  xy: 1, 551
+  size: 450, 450
+  orig: 450, 450
+  offset: 0, 0
+  index: -1
+settingsIconHover
+  rotate: false
+  xy: 1, 99
+  size: 450, 450
+  orig: 450, 450
+  offset: 0, 0
+  index: -1
+settingsIconPressed
+  rotate: false
+  xy: 453, 551
   size: 450, 450
   orig: 450, 450
   offset: 0, 0
   index: -1
 touchBackground
   rotate: false
-  xy: 515, 791
+  xy: 453, 349
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 buttonDown
   rotate: false
-  xy: 717, 921
+  xy: 1, 27
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
   index: -1
 buttonHover
   rotate: false
-  xy: 717, 849
+  xy: 655, 479
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 717, 777
+  xy: 655, 407
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
@@ -54,21 +61,42 @@ sliderBody
   index: -1
 textField
   rotate: false
-  xy: 515, 725
+  xy: 453, 283
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
 touchKnob
   rotate: false
-  xy: 515, 651
+  xy: 303, 25
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
+back
+  rotate: false
+  xy: 905, 937
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+backHover
+  rotate: false
+  xy: 453, 217
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+backPressed
+  rotate: false
+  xy: 583, 283
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 checkOff
   rotate: false
-  xy: 453, 463
+  xy: 655, 391
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -82,49 +110,49 @@ checkOn
   index: -1
 minus
   rotate: false
-  xy: 645, 775
+  xy: 377, 83
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 plus
   rotate: false
-  xy: 515, 635
+  xy: 905, 921
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 sliderKnob
   rotate: false
-  xy: 589, 705
+  xy: 971, 983
   size: 9, 18
   orig: 9, 18
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 1019, 988
+  xy: 303, 20
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 select-selection
   rotate: false
-  xy: 303, 22
+  xy: 453, 212
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 453, 458
+  xy: 519, 278
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 469, 476
+  xy: 649, 346
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

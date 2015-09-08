@@ -22,7 +22,7 @@ public class DisplaySprite extends StatsSprite
         this.delay = delay;
         this.initializeAnimations( a );
         this.labels = new ArrayList<Label>();
-        this.setDirection( 180 );
+        this.setDirection( Direction.SOUTH.getDirection() );
     }
     
     public void render( float delta ) {
@@ -35,8 +35,8 @@ public class DisplaySprite extends StatsSprite
     }
     
     public void createLabels() {
-        int x = Malice.GAME_WIDTH * 3 / 4;
-        int y = Malice.GAME_HEIGHT * 3 / 4;
+        int x = Malice.GAME_WIDTH * 5 / 8;
+        int y = Malice.GAME_HEIGHT * 5 / 8;
         SpriteData data = this.getSpriteData();
         Label l = new Label( data.getName(), skin, "titleLabel" );
         l.setPosition( x - l.getPrefWidth() / 2, Malice.GAME_HEIGHT - l.getPrefHeight() - 20 );
@@ -44,11 +44,12 @@ public class DisplaySprite extends StatsSprite
         labels.add( l );
 
         EnumMap<Stats, Integer> startingStats = data.getStartStats();
-        Stats[] stats = Stats.values();
-        for ( int i = 0; i < stats.length; i++ ) {
-            Stats s = stats[i];
+        for ( Stats s : Stats.VALUES ) {
+            if ( s.isInGame )
+                continue; // skip exp, exptolevel, and hp
             l = new Label( s + " " + startingStats.get( s ), skin );
             l.setPosition( x, y );
+            l.setVisible( false );
             labels.add( l );
             y -= ( l.getPrefHeight() + 20 );
         }
