@@ -81,8 +81,7 @@ public class Map
     private int spawnY;
     
     private TextureRegion[][] biome;
-    private TextureRegion[][] mapFloor;
-    private TextureRegion[][] mapWalls;
+    private MapTile[][] tiles;
     private boolean biomeChanged;
 
     // -------------------- Constructors ------------------- //
@@ -95,8 +94,16 @@ public class Map
     public Map( int rows, int cols)
     {
         areSpaces = new boolean[rows][cols];
-        mapFloor = new TextureRegion[rows][cols];
-        mapWalls = new TextureRegion[rows][cols];
+//        mapFloor = new TextureRegion[rows][cols];
+//        mapWalls = new TextureRegion[rows][cols];
+        tiles = new MapTile[rows][cols];
+        for ( MapTile[] m : tiles )
+        {
+            for ( int i = 0; i < m.length; i++ )
+            {
+                m[i] = new MapTile();
+            }
+        }
     }
 
     /**
@@ -163,10 +170,10 @@ public class Map
         {
             for ( int j = getMapTileHeight() - 1; j >= 0; j-- )
             {
-                mapFloor[i][j] = biome[Tile.SPACE.ordinal()][randomNumber( biome[0].length )];
+                tiles[i][j].setFloor( biome[Tile.SPACE.ordinal()][randomNumber( biome[0].length )] );
                 if ( !areSpaces[i][j] )
                 {
-                    mapWalls[i][j] = biome[Tile.BLOCK.ordinal()][randomNumber( biome[0].length )];
+                    tiles[i][j].setWall( biome[Tile.BLOCK.ordinal()][randomNumber( biome[0].length )] );
                 }
             }
         }
@@ -437,10 +444,7 @@ public class Map
             {
                 if ( this.inTileBounds( i, j ) ) 
                 {
-                    batch.draw( mapFloor[i][j], TILE_SIZE * i, TILE_SIZE * j );
-                    if ( !areSpaces[i][j] )
-                        batch.draw( mapWalls[i][j], TILE_SIZE * i, 
-                                                    TILE_SIZE * j );
+                    tiles[i][j].draw( batch, TILE_SIZE * i, TILE_SIZE * j );
                 }
                 else //draw expanse to fill black space
                 {

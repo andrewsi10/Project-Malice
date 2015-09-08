@@ -5,119 +5,126 @@ filter: Nearest,Nearest
 repeat: none
 backButton
   rotate: false
-  xy: 1, 489
+  xy: 1, 479
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 settingsIcon
   rotate: false
-  xy: 1, 37
+  xy: 1, 27
   size: 450, 450
   orig: 450, 450
   offset: 0, 0
   index: -1
 touchBackground
   rotate: false
-  xy: 515, 801
+  xy: 515, 791
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 buttonDown
   rotate: false
-  xy: 717, 931
+  xy: 717, 921
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
   index: -1
 buttonHover
   rotate: false
-  xy: 717, 859
+  xy: 717, 849
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
   index: -1
 buttonUp
   rotate: false
-  xy: 717, 787
+  xy: 717, 777
   size: 300, 70
   orig: 300, 70
   offset: 0, 0
   index: -1
+sliderBody
+  rotate: false
+  xy: 1, 17
+  size: 300, 8
+  orig: 300, 8
+  offset: 0, 0
+  index: -1
+textField
+  rotate: false
+  xy: 515, 725
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
 touchKnob
   rotate: false
-  xy: 515, 727
+  xy: 515, 651
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 checkOff
   rotate: false
-  xy: 1, 21
+  xy: 453, 463
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 checkOn
   rotate: false
-  xy: 453, 473
+  xy: 1, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 minus
   rotate: false
-  xy: 515, 711
+  xy: 645, 775
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 plus
   rotate: false
-  xy: 589, 785
+  xy: 515, 635
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 sliderKnob
   rotate: false
-  xy: 1, 1
+  xy: 589, 705
   size: 9, 18
   orig: 9, 18
   offset: 0, 0
   index: -1
-sliderBody
-  rotate: false
-  xy: 17, 27
-  size: 8, 8
-  orig: 8, 8
-  offset: 0, 0
-  index: -1
 cursor
   rotate: false
-  xy: 1019, 998
+  xy: 1019, 988
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 select-selection
   rotate: false
-  xy: 453, 468
+  xy: 303, 22
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 469, 484
+  xy: 453, 458
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 515, 708
+  xy: 469, 476
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
