@@ -18,6 +18,12 @@ public class MapTile
         this( m.floor, m.wall );
     }
     
+    public void reset()
+    {
+        floor = null;
+        wall = null;
+    }
+    
     public boolean isSpace() 
     {
         return wall == null;

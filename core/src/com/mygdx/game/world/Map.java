@@ -168,6 +168,7 @@ public class Map
         {
             for ( int j = getMapTileHeight() - 1; j >= 0; j-- )
             {
+                tiles[i][j].reset();
                 tiles[i][j].setFloor( biome[Tile.SPACE.ordinal()][randomNumber( biome[0].length )] );
                 if ( !areSpaces[i][j] )
                 {
