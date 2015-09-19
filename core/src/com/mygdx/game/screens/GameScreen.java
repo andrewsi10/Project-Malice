@@ -405,6 +405,7 @@ public class GameScreen extends StagedScreen
 			Enemy e = new Enemy( skin, index );
 			e.increaseBdmg( -5 + player.getPoints() / 50 );
 			e.increaseMaxHp( player.getPoints() / 20 );
+			e.heal( player.getPoints() / 20 );
 			e.getSpriteData().resetHp();
 			// set spawn for enemy
 			map.setSpawn( player.getX(), player.getY() );
