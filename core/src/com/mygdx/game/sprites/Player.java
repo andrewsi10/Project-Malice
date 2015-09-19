@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.loaders.StatLoader;
 import com.mygdx.game.sprites.SpriteData.Stats;
+import com.mygdx.game.AndroidController;
 import com.mygdx.game.Controller;
 
 /**
@@ -120,7 +121,11 @@ public class Player extends Character {
         this.updateLabels();
         this.syncSpeeds();
 	    this.playerPoints = 0;
-	    controller.reset();
+	    // poor implementation, if someone thinks of better solution please fix
+	    if (controller instanceof AndroidController)
+	    {
+		    ( (AndroidController) controller ).resetTouchpad();
+	    }
 	}
 	
 	/**

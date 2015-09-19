@@ -20,9 +20,11 @@ public class AndroidController extends Controller
     private Touchpad movementTouchpad;
     private Touchpad shootTouchpad;
     private Button pauseButton;
+    private Skin s;
     public AndroidController( Malice g, Skin skin )
     {
         super( g );
+        s = skin;
         // Create new TouchPad with the created style
         movementTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, skin );
         movementTouchpad.setBounds( TOUCHPAD_MARGIN, TOUCHPAD_MARGIN, 
@@ -46,6 +48,27 @@ public class AndroidController extends Controller
             }
         });
         addActor( pauseButton );
+    }
+    
+    /**
+     * Poor implementation to reset touch pad after player presses "try again" - deletes the old touch pads and creates new ones
+     */
+    public void resetTouchpad()
+    {
+    	movementTouchpad.remove();
+    	shootTouchpad.remove();
+    	// Create new TouchPad with the created style
+        movementTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, s );
+        movementTouchpad.setBounds( TOUCHPAD_MARGIN, TOUCHPAD_MARGIN, 
+                                    TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );
+        addActor( movementTouchpad );
+
+        shootTouchpad = new Touchpad( TOUCHPAD_DEADZONE_RADIUS, s );
+        shootTouchpad.setBounds( getWidth() - TOUCHPAD_MARGIN - TOUCHPAD_DIAMETER, 
+                                 TOUCHPAD_MARGIN, 
+                                 TOUCHPAD_DIAMETER, TOUCHPAD_DIAMETER );
+        addActor( shootTouchpad );
+        pauseButton.toFront();
     }
 
     /**

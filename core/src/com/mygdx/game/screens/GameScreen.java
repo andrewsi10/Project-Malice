@@ -179,9 +179,9 @@ public class GameScreen extends StagedScreen
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         player.reload();
         sprites.add( player );
-
         spawnEnemies();
-        
+        // clunky way of cleaning up the projectiles from the previous round
+        entities = new ArrayList<Entity>();
         resume();
         return this;
     }
