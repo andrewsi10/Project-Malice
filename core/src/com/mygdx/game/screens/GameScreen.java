@@ -179,6 +179,7 @@ public class GameScreen extends StagedScreen
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         player.reload();
         sprites.add( player );
+        player.updatePointsLabel();
         spawnEnemies();
         // clunky way of cleaning up the projectiles from the previous round
         entities = new ArrayList<Entity>();
@@ -435,7 +436,10 @@ public class GameScreen extends StagedScreen
         checkRectangle.setSize( cam.viewportWidth * ZOOM, cam.viewportHeight * ZOOM );
         checkRectangle.setPosition( cam.position.x - cam.viewportWidth * ZOOM / 2, 
                                     cam.position.y - cam.viewportHeight * ZOOM / 2);
-        if ( sprite.getBoundingRectangle().overlaps( checkRectangle ) ) {
+        Rectangle boundingRectangle = sprite.getBoundingRectangle();
+        boundingRectangle.height += 10; // TODO change value such that HP bar appears properly
+        boundingRectangle.width += 70; // TODO change value such that HP bar appears properly
+        if ( boundingRectangle.overlaps( checkRectangle ) ) {
             sprite.draw( batch );
             return true;
         }
