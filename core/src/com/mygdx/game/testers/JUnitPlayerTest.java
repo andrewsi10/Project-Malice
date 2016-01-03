@@ -39,7 +39,7 @@ public class JUnitPlayerTest {
 	public void testIncreasePoints() {
 		Player p = new Player();
 		int points = p.getPoints();
-		p.increasePoints();
+		p.increasePoints(4);
 		assertEquals(p.getPoints(), points + 10);
 	}
 

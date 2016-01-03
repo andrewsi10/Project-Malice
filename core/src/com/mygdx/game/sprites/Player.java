@@ -50,6 +50,9 @@ public class Player extends Character {
     public static final EnumMap<Name, Animation> PROJECTILE_ANIMATIONS = new EnumMap<Name, Animation>(Name.class);
     public static final EnumMap<Name, StatLoader> LOADERS = new EnumMap<Name, StatLoader>(Name.class);
     
+    /**
+     * Loads animations for the player's sprite
+     */
     public static void loadMaps() {
         String s;
         Array<AtlasRegion> a;
@@ -93,7 +96,7 @@ public class Player extends Character {
 	    super( skin, Color.GREEN );
         controller = c;
         pointsLabel = new Label( "", skin, "smallLabel" );
-        updatePointsLabel();
+        updatePointsLabel(1);
 	}
 
 	/**
@@ -169,11 +172,11 @@ public class Player extends Character {
 	public void die( ArrayList<Entity> entities ) {}
 
 	/**
-	 * increases displayed player points by a unit of 10
+	 * increases displayed player points by 10 times the player's score multiplier
 	 */
-	public void increasePoints() {
-		playerPoints += 10;
-		updatePointsLabel();
+	public void increasePoints(int scoreMultiplier) {
+		playerPoints += 10 * scoreMultiplier;
+		updatePointsLabel(scoreMultiplier);
 	}
 
 	/**
@@ -194,8 +197,11 @@ public class Player extends Character {
 		}
 	}
 	
-	public void updatePointsLabel() {
-	    pointsLabel.setText( "POINTS: " + playerPoints );
+	/**
+	 * Updates the number of points displayed on the screen
+	 */
+	public void updatePointsLabel(int scoreMultiplier) {
+	    pointsLabel.setText( "POINTS: " + playerPoints + "\nx" + scoreMultiplier + " Combo" );
 	}
 
 	// --------------------Getters & Setters------------------ //

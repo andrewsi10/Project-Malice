@@ -90,8 +90,8 @@ public class GameScreen extends StagedScreen
 	}
 
 	private State state;
-    private int enemyMinCount, enemyMaxCount;
-	private long timeResumed;
+    private int enemyMinCount, enemyMaxCount, scoreMultiplier = 1;
+	private long timeResumed, lastEnemyDeath = 0;
 
 	/**
 	 * Creates a CharacterSelect screen and stores the Malice object that
@@ -179,7 +179,7 @@ public class GameScreen extends StagedScreen
         player.setPosition( map.getSpawnX(), map.getSpawnY() );
         player.reload();
         sprites.add( player );
-        player.updatePointsLabel();
+        player.updatePointsLabel(scoreMultiplier);
         spawnEnemies();
         // clunky way of cleaning up the projectiles from the previous round
         entities = new ArrayList<Entity>();
@@ -323,7 +323,11 @@ public class GameScreen extends StagedScreen
 		batch.begin();
 		renderer.begin( ShapeType.Filled );
         map.draw( batch, cam.position.x, cam.position.y, stage.getWidth(), stage.getHeight() );
-		
+		if (System.currentTimeMillis() - lastEnemyDeath > 2500)
+		{
+			scoreMultiplier = 1;
+			player.updatePointsLabel(scoreMultiplier);
+		}
 		spawnEnemies();
 		for ( int i = 0; i < entities.size(); i++ )
 		{
@@ -342,9 +346,18 @@ public class GameScreen extends StagedScreen
 						sprites.remove( sprite );
 						if ( sprite != player )
 						{
-							player.increasePoints();
+							player.increasePoints(scoreMultiplier);
+							long time = System.currentTimeMillis();
+							if (time - lastEnemyDeath < 2500)
+							{
+								scoreMultiplier++;
+								player.updatePointsLabel(scoreMultiplier);
+							}
+							lastEnemyDeath = time;
 							player.increaseExp( sprite.getSpriteData().getExperience() );
 							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
+							// TODO points system needs rework - too many enemies spawn b/c of multiplier
+							// TODO store highest score multiplier player achieved and show it after player dies
 						} else // if ( sprite instanceof Player )
 						{
 						    Audio.stopTheme(); // stops the theme music
@@ -371,6 +384,9 @@ public class GameScreen extends StagedScreen
         stage.draw();
 	}
 	
+	/**
+	 * TODO
+	 */
 	private void setMatrixAndCam()
 	{
         Gdx.gl.glClearColor( 0, 0, 0, 1 );
@@ -385,6 +401,9 @@ public class GameScreen extends StagedScreen
         renderer.setProjectionMatrix( cam.combined );
 	}
 	
+	/**
+	 * Spawns more enemies if number of enemies is too low
+	 */
 	private void spawnEnemies()
 	{
         if ( sprites.size() < 3 )
@@ -417,6 +436,7 @@ public class GameScreen extends StagedScreen
 	
 
     private Rectangle checkRectangle = new Rectangle(); // TODO see if this works to lessen Sprite rendering
+    													// seems to work so far
 	/**
 	 * Draws all the Characters and moves them if requested
 	 * @param move whether to move the Characters
@@ -432,13 +452,18 @@ public class GameScreen extends StagedScreen
         }
 	}
 	
+	/**
+	 * Draws the sprite and returns true if the sprite or its HP bar is within view of the camera
+	 * @param sprite the Sprite under consideration for being drawn
+	 * @return whether or not the sprite was drawn
+	 */
 	private boolean drawSprite( Sprite sprite ) {
         checkRectangle.setSize( cam.viewportWidth * ZOOM, cam.viewportHeight * ZOOM );
         checkRectangle.setPosition( cam.position.x - cam.viewportWidth * ZOOM / 2, 
                                     cam.position.y - cam.viewportHeight * ZOOM / 2);
         Rectangle boundingRectangle = sprite.getBoundingRectangle();
-        boundingRectangle.height += 10; // TODO change value such that HP bar appears properly
-        boundingRectangle.width += 70; // TODO change value such that HP bar appears properly
+        boundingRectangle.height += 10; // TODO HP bar appears semi-properly
+        boundingRectangle.width += 70; // TODO HP bar appears semi-properly
         if ( boundingRectangle.overlaps( checkRectangle ) ) {
             sprite.draw( batch );
             return true;
