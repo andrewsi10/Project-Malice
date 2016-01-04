@@ -100,12 +100,13 @@ public class GameOver extends StagedScreen
      * Updates this Screen according to the parameters
      * @param points integer amount of points the player had
      * @param level integer representing the player's level
+     * @param i 
      * @return this Screen for the game to be set to
      */
-	public GameOver update( final int points, int level )
+	public GameOver update( final int points, int level, int multiplier )
 	{
 	    message.setText( "You earned " + points + " points and reached level " 
-	                    + level + ". Better luck next time!" );
+	                    + level + ". Your highest combo was " + multiplier + "x. Better luck next time!" );
         message.setPosition( stage.getWidth() / 2 - message.getPrefWidth() / 2, 
                              stage.getHeight() * 67 / 100 );
         

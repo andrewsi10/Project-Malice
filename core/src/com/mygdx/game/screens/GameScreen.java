@@ -90,7 +90,7 @@ public class GameScreen extends StagedScreen
 	}
 
 	private State state;
-    private int enemyMinCount, enemyMaxCount, scoreMultiplier = 1;
+    private int enemyMinCount, enemyMaxCount, scoreMultiplier = 1, highestMultiplier = 1;
 	private long timeResumed, lastEnemyDeath = 0;
 
 	/**
@@ -351,18 +351,25 @@ public class GameScreen extends StagedScreen
 							if (time - lastEnemyDeath < 2500)
 							{
 								scoreMultiplier++;
+								if (scoreMultiplier > highestMultiplier)
+								{
+									highestMultiplier = scoreMultiplier;
+								}
 								player.updatePointsLabel(scoreMultiplier);
 							}
 							lastEnemyDeath = time;
 							player.increaseExp( sprite.getSpriteData().getExperience() );
-							spawnEnemies( (int) ( Math.random() * ( player.getPoints() / 100 ) ) + 1 );
-							// TODO points system needs rework - too many enemies spawn b/c of multiplier
-							// TODO store highest score multiplier player achieved and show it after player dies
+							int numSpawn = (int) ( Math.random() * sprites.size() / 7 ) + 1;
+							spawnEnemies( numSpawn );
+//							System.out.println("player points " + player.getPoints() + " " + numSpawn + " enemies spawned");
+//							System.out.println("size of sprites arraylist " + sprites.size());
+							// TODO change spawn system after updating enemies
 						} else // if ( sprite instanceof Player )
 						{
 						    Audio.stopTheme(); // stops the theme music
 							game.setScreen( game.gameOver.update( 
 							                       player.getPoints(), 
+							                       highestMultiplier,
 							                       player.getSpriteData().getLevel() ) );
 						}
 						sprite.die( entities );
@@ -421,6 +428,7 @@ public class GameScreen extends StagedScreen
 	{
 		for ( int i = 0; i < limit; i++ )
 		{
+			//TODO enemies spawn too close to the player sometimes
 			int index = (int) ( Math.random() * Enemy.NUMENEMIES );
 			Enemy e = new Enemy( skin, index );
 			e.increaseBdmg( -5 + player.getPoints() / 50 );
