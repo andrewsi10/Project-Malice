@@ -3,6 +3,7 @@ package com.mygdx.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.game.Malice;
+import com.mygdx.game.services.DesktopGoogleServices;
 
 /**
  *  Class runs the Game on a desktop computer
@@ -27,6 +28,6 @@ public class DesktopLauncher
 		config.vSyncEnabled = true;
 		config.width = Malice.GAME_WIDTH;
 		config.height = Malice.GAME_HEIGHT;
-		new LwjglApplication( new Malice(), config );
+		new LwjglApplication( new Malice( new DesktopGoogleServices() ), config );
 	}
 }

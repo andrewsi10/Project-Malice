@@ -11,6 +11,7 @@ import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.LeaderScreen;
 import com.mygdx.game.screens.MainMenu;
 import com.mygdx.game.screens.OptionsScreen;
+import com.mygdx.game.services.IGoogleServices;
 
 /**
  * The Malice class extends Game and handles all the screens in the Gauntlet
@@ -31,6 +32,7 @@ public class Malice extends Game
 	public static final String TITLE = "Gauntlet", VERSION = "1.0.1.9";
 	public static final int GAME_WIDTH = 1280;
 	public static final int GAME_HEIGHT = 720;
+	public static IGoogleServices googleServices;
     public static boolean isAndroid;
     public MainMenu mainMenu; // note: can use a single array for all the screens
     public OptionsScreen optionsScreen;
@@ -40,6 +42,11 @@ public class Malice extends Game
 	public GameOver gameOver;
 	
 	public Viewport viewport;
+	
+	public Malice(IGoogleServices googleServices)
+	{
+	    Malice.googleServices = googleServices;
+	}
 	
 	/**
 	 * Sets the screen to a new Splash Screen.
